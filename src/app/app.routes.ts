@@ -2,10 +2,15 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: 'landing',
-    loadChildren: () =>
-      import('./features/landing-page/landing-page.route').then(
-        (m) => m.landingPageRoute,
+    path: '',
+    redirectTo: 'homepage',
+    pathMatch: 'full',
+  },
+  {
+    path: 'homepage',
+    loadComponent: () =>
+      import('./features/homepage/homepage.component').then(
+        (c) => c.HomepageComponent,
       ),
   },
   {
