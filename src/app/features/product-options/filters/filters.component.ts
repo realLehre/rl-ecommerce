@@ -9,7 +9,7 @@ import { NgClass } from '@angular/common';
   styleUrl: './filters.component.scss',
 })
 export class FiltersComponent implements OnInit {
-  isShowing: boolean[] = [false];
+  isShowing: boolean[] = [true];
 
   ngOnInit() {
     console.log(this.isShowing);

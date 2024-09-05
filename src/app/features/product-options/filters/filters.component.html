@@ -21,4 +21,26 @@
       <li class="text-type_grey text-sm">New to old</li>
     </ul>
   </div>
+
+  <div>
+    <div
+      class="flex items-center justify-between cursor-pointer"
+      (click)="onToggleFilter(1)"
+    >
+      <h4 class="text-type_title_gray font-semibold">Date</h4>
+      <i
+        class="fa fa-caret-up transition-all duration-300"
+        [ngClass]="{
+          'rotate-180': isShowing[1],
+        }"
+      ></i>
+    </div>
+    <ul
+      class="transition-all duration-300 ease-in-out h-0 overflow-hidden"
+      [ngClass]="{ '!h-10': isShowing[1] }"
+    >
+      <li class="text-type_grey text-sm">Old to new</li>
+      <li class="text-type_grey text-sm">New to old</li>
+    </ul>
+  </div>
 </div>
