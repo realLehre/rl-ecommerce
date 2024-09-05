@@ -1,1 +1,24 @@
-<p>filters works!</p>
+<div>
+  <h1 class="font-playfair title text-lg">FILTER BY</h1>
+  <div class="mt-1 space-y-1">
+    <div
+      class="flex items-center justify-between cursor-pointer"
+      (click)="onToggleFilter(0)"
+    >
+      <h4 class="text-type_title_gray font-semibold">Age</h4>
+      <i
+        class="fa fa-caret-up transition-all duration-300"
+        [ngClass]="{
+          'rotate-180': isShowing[0],
+        }"
+      ></i>
+    </div>
+    <ul
+      class="transition-all duration-300 ease-in-out h-0 overflow-hidden"
+      [ngClass]="{ '!h-10': isShowing[0] }"
+    >
+      <li class="text-type_grey text-sm">Old to new</li>
+      <li class="text-type_grey text-sm">New to old</li>
+    </ul>
+  </div>
+</div>

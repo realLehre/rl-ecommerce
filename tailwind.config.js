@@ -8,6 +8,7 @@ module.exports = {
       colors: {
         primary: "#800020",
         type_title: "#1C1C1C",
+        type_title_gray: "#333333",
         type_grey: "#555555",
         type_caption: "#666666",
         bg_subtle: "#EDEDED",
