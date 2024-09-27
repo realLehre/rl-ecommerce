@@ -20,7 +20,8 @@ import { CheckboxModule } from 'primeng/checkbox';
 export class FiltersComponent implements OnInit {
   isShowing: boolean[] = [true];
   // rangeValues = new FormControl([20, 30]);
-  rangeValues = [20, 30];
+  rangeValues = [20, 300];
+  value: number = 50;
 
   ngOnInit() {
     console.log(this.isShowing);

@@ -1,0 +1,33 @@
+<div class="flex flex-col items-center">
+  <div class="relative w-full h-64">
+    <div
+      class="absolute top-0 left-0 w-full h-full bg-type_grey clip-polygon z-[100]"
+    ></div>
+    <div
+      class="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[99%] h-[99%] bg-white clip-polygon z-[101]"
+    ></div>
+
+    <div
+      class="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[93%] h-[93%] bg-type_grey clip-polygon z-[102]"
+    ></div>
+
+    <div
+      class="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[92%] h-[92%] bg-type_grey clip-polygon z-[103]"
+    >
+      <img
+        [src]="product().image"
+        [alt]="product().name"
+        class="w-full h-full object-cover"
+      />
+    </div>
+  </div>
+
+  <div class="">
+    <h3 class="text-lg font-semibold mb-2">{{ product().name }}</h3>
+    <p class="text-gray-600 mb-2">${{ product().price / 100 }}</p>
+    <div class="flex items-center">
+      <span class="text-yellow-500 mr-1">★</span>
+      <span class="text-gray-600">{{ product().rating }}</span>
+    </div>
+  </div>
+</div>

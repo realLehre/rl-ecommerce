@@ -22,8 +22,23 @@
     </ul>
   </div>
 
-  <div class="card flex justify-content-center">
-    <p-slider [(ngModel)]="rangeValues" [range]="true" styleClass="w-14rem" />
+  <div class="space-y-1 my-3">
+    <h4 class="text-type_title_gray font-semibold">Price</h4>
+    <div class="price-slider">
+      <div class="text-type_grey text-sm mb-2">
+        <span>{{ rangeValues[0] }}</span>
+        <span> - </span>
+        <span>{{ rangeValues[1] }}</span>
+      </div>
+      <div>
+        <p-slider
+          [(ngModel)]="rangeValues"
+          [range]="true"
+          styleClass="w-full"
+        />
+      </div>
+    </div>
+    <!--    <p-slider [(ngModel)]="value" class="w-full" />-->
   </div>
 
   <div>
