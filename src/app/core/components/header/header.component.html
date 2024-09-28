@@ -1,29 +1,66 @@
-<div class="flex items-center justify-center">
-  <div class="flex items-center justify-between w-[85%] py-4">
+<div
+  class="flex items-center justify-center bg-bg_main shadow-sm shadow-stone-500 h-[75px]"
+>
+  <div class="flex items-center justify-between tablet:w-[85%] w-[95%] py-4">
+    <div class="tablet:hidden block">
+      <img
+        src="assets/images/icons/bars.svg"
+        alt=""
+        class="w-6 min-w-6 h-6 min-h-6"
+        (click)="onOpenMenu()"
+      />
+    </div>
     <div>
-      <img src="assets/images/icons/logo.png" alt="" class="w-[120px]" />
+      <img
+        src="assets/images/icons/logo.png"
+        alt=""
+        class="w-[100px] tablet:w-[120px]"
+      />
     </div>
 
-    <div class="relative w-1/2 h-[43px]">
-      <img
-        src="assets/images/icons/search.svg"
-        alt=""
-        class="absolute left-3 top-0 translate-y-[43%]"
-      />
-      <input
-        class="w-full focus:outline-0 rounded-full bg-bg_subtle border border-border_subtle h-full pl-12 text-type_caption font-medium placeholder:text-type_caption"
-        placeholder="Search"
-      />
+    <div
+      class="tablet:w-1/2 tablet:h-[43px] h-full py-2 px-3 tablet:bg-transparent bg-bg_main tablet:relative absolute w-full top-0 left-0 -translate-y-[100%] tablet:translate-y-0 transition ease-in-out flex items-center justify-center"
+      [ngClass]="{ 'translate-y-0': searchShown }"
+    >
+      <div class="relative w-full h-10 flex items-center space-x-10">
+        <div class="w-full h-full">
+          <img
+            src="assets/images/icons/search.svg"
+            alt=""
+            class="absolute left-3 top-1/2 -translate-y-1/2"
+          />
+          <input
+            class="w-full focus:outline-0 rounded-full bg-bg_subtle border border-border_subtle h-full pl-12 text-type_caption font-medium placeholder:text-type_caption"
+            placeholder="Search"
+          />
+        </div>
+        <img
+          src="assets/images/icons/close.svg"
+          alt=""
+          class="w-4 min-w-4 h-4 min-h-4 tablet:hidden block"
+          (click)="onToggleSearch()"
+        />
+      </div>
     </div>
 
     <div class="flex items-center space-x-4">
+      <img
+        src="assets/images/icons/search.svg"
+        alt=""
+        class="tablet:hidden block cursor-pointer"
+        (click)="onToggleSearch()"
+      />
       <div class="cursor-pointer">
-        <img src="assets/images/icons/shopping-cart.svg" alt="" />
+        <img
+          src="assets/images/icons/shopping-cart.svg"
+          alt=""
+          class="w-6 h-6"
+        />
       </div>
       <div
-        class="flex items-center justify-center h-8 w-8 rounded-full border-[3px] border-[#333333] cursor-pointer"
+        class="flex items-center justify-center h-6 w-6 rounded-full border-[3px] border-[#333333] cursor-pointer"
       >
-        <img src="assets/images/icons/user.svg" alt="" />
+        <img src="assets/images/icons/user.svg" alt="" class="w-4 h-4" />
       </div>
     </div>
   </div>

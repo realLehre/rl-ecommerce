@@ -19,7 +19,7 @@ export class ProductsShowcaseComponent implements OnInit {
     {
       image: 'assets/images/toy-1.jpeg',
       name: 'Power Rangers',
-      price: 10000,
+      price: 100000,
       rating: 23,
       id: '27162272728822',
     },

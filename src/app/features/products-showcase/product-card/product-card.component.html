@@ -1,4 +1,4 @@
-<div class="flex flex-col items-center">
+<div class="flex flex-col space-y-3">
   <div class="relative w-full h-64">
     <div
       class="absolute top-0 left-0 w-full h-full bg-type_grey clip-polygon z-[100]"
@@ -14,6 +14,12 @@
     <div
       class="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[92%] h-[92%] bg-type_grey clip-polygon z-[103]"
     >
+      <div
+        class="absolute top-[10%] left-1 bg-yellow-400 text-black py-1 px-3 transform -rotate-[35deg] text-xs text-center leading-[1]"
+      >
+        <div>SOLD</div>
+        <div>OUT</div>
+      </div>
       <img
         [src]="product().image"
         [alt]="product().name"
@@ -22,12 +28,35 @@
     </div>
   </div>
 
-  <div class="">
-    <h3 class="text-lg font-semibold mb-2">{{ product().name }}</h3>
-    <p class="text-gray-600 mb-2">${{ product().price / 100 }}</p>
-    <div class="flex items-center">
-      <span class="text-yellow-500 mr-1">★</span>
-      <span class="text-gray-600">{{ product().rating }}</span>
+  <div class="w-full">
+    <h3
+      class="text-base md:text-lg font-medium text-type_title_gray w-full break-words"
+    >
+      {{ product().name }}
+    </h3>
+    <div class="flex items-center space-x-1 mb-3">
+      <div class="space-x-[2px]">
+        @for (item of [1, 2, 3, 4, 5]; track item) {
+          <span class="text-[#CE8600]">★</span>
+        }
+      </div>
+      <span class="text-type_title_gray">({{ product().rating }})</span>
+    </div>
+    <div class="flex items-center justify-between space-x-2">
+      <p class="text-type_title md:text-lg text-base font-semibold">
+        {{ product().price | currency: "₦" : "symbol" : "1.0-0" }}
+      </p>
+
+      <button
+        class="flex items-center rounded-full justify-between space-x-2 border-[2px] border-primary px-3 py-2 whitespace-nowrap text-xs"
+      >
+        <span>Add to Cart</span>
+        <img
+          src="assets/images/icons/shopping-cart.svg"
+          alt=""
+          class="w-[18px]"
+        />
+      </button>
     </div>
   </div>
 </div>

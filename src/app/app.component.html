@@ -1,5 +1,10 @@
-<div>
-  <section><app-header /></section>
+<div class="relative h-full w-full">
+  <header class="fixed left-0 top-0 z-[200] w-full"><app-header /></header>
 
-  <section><router-outlet /></section>
+  <section class="pt-[75px] z-[180] relative"><router-outlet /></section>
+
+  <app-mobile-nav
+    class="fixed w-full h-full bg-bg_main z-[250] left-0 top-0 hidden"
+    [ngClass]="{ '!block': isMenuOpened() }"
+  />
 </div>
