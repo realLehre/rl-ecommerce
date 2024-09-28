@@ -1,14 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ProductCardComponent } from './product-card/product-card.component';
+import { MobileFiltersComponent } from '../product-options/mobile-filters/mobile-filters.component';
+import { LayoutService } from '../../shared/services/layout.service';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-products-showcase',
   standalone: true,
-  imports: [ProductCardComponent],
+  imports: [ProductCardComponent, MobileFiltersComponent, NgClass],
   templateUrl: './products-showcase.component.html',
   styleUrl: './products-showcase.component.scss',
 })
 export class ProductsShowcaseComponent implements OnInit {
+  private layoutService = inject(LayoutService);
+  isMobileFilterOpened = this.layoutService.mobileFilterOpened;
   products: {
     image: string;
     name: string;
@@ -130,4 +135,8 @@ export class ProductsShowcaseComponent implements OnInit {
     },
   ];
   ngOnInit() {}
+
+  onOpenMobileFilter() {
+    this.layoutService.mobileFilterOpened.set(true);
+  }
 }

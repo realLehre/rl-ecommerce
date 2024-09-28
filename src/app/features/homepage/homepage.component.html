@@ -4,9 +4,11 @@
   ></section>
 
   <div
-    class="flex items-start space-x-10 w-[85%] max-w-[1200px] mx-auto mt-[80px]"
+    class="flex items-start tablet:space-x-10 w-[90%] tablet:w-[85%] max-w-[1200px] mx-auto mt-[80px]"
   >
-    <div class="w-[30%] min-w-[200px] max-w-[210px] space-y-6">
+    <div
+      class="hidden tablet:block w-[30%] min-w-[200px] max-w-[210px] space-y-6"
+    >
       <div>
         <app-featured-product />
       </div>
@@ -18,7 +20,7 @@
       </div>
     </div>
 
-    <div class="w-[70%] grow">
+    <div class="w-full tablet:w-[70%] grow">
       <app-product-nav />
       <div class="mt-10 w-full">
         <app-products-showcase />

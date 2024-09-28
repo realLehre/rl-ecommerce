@@ -1,4 +1,4 @@
-<div>
+<div class="w-full">
   <h1 class="font-playfair title text-lg">FILTER BY</h1>
   <div class="mt-1 space-y-1">
     <div
@@ -22,7 +22,7 @@
     </ul>
   </div>
 
-  <div class="space-y-1 my-3">
+  <div class="space-y-1 my-5">
     <h4 class="text-type_title_gray font-semibold">Price</h4>
     <div class="price-slider">
       <div class="text-type_grey text-sm mb-2">
@@ -30,15 +30,14 @@
         <span> - </span>
         <span>{{ rangeValues[1] }}</span>
       </div>
-      <div>
+      <div class="w-full">
         <p-slider
           [(ngModel)]="rangeValues"
           [range]="true"
-          styleClass="w-full"
+          styleClass="w-4rem"
         />
       </div>
     </div>
-    <!--    <p-slider [(ngModel)]="value" class="w-full" />-->
   </div>
 
   <div>

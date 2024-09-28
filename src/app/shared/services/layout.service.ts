@@ -5,5 +5,7 @@ import { Injectable, signal } from '@angular/core';
 })
 export class LayoutService {
   menuOpened = signal<boolean>(false);
+  mobileFilterOpened = signal<boolean>(false);
+
   constructor() {}
 }
