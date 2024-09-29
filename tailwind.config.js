@@ -28,6 +28,7 @@ module.exports = {
         bg_subtle: "#EDEDED",
         bg_main: "#F6F1E9",
         border_subtle: "#DCDCDC",
+        grayish_blue: "#1B292F",
       },
     },
   },
