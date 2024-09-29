@@ -21,8 +21,8 @@
     <p class="text-xs tablet:text-base">Showing 17–32 of 45 results</p>
   </header>
   <app-mobile-filters
-    class="absolute tablet:hidden h-full w-[200px] -left-4 top-0 z-[110] -translate-x-[100%] transition-all ease-in-out"
-    [ngClass]="{ 'translate-x-0': isMobileFilterOpened() }"
+    class="absolute tablet:hidden h-full w-[200px] -left-4 top-0 z-[110] -translate-x-[600px] transition-all ease-in-out"
+    [ngClass]="{ '-translate-x-[15px]': isMobileFilterOpened() }"
   />
   <div
     class="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] mobile:grid-cols-[repeat(auto-fill,minmax(210px,1fr))] gap-x-6 gap-y-10"
