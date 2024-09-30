@@ -1,0 +1,19 @@
+<div>
+  <p-galleria
+    [value]="images"
+    [responsiveOptions]="responsiveOptions"
+    [containerStyle]="{
+      'max-width': '500px',
+    }"
+    [numVisible]="5"
+  >
+    <ng-template pTemplate="item" let-item>
+      <div class="w-[500px] h-[500px] min-w-[400px] min-h-[400px]">
+        <img [src]="item" class="w-full cover" />
+      </div>
+    </ng-template>
+    <ng-template pTemplate="thumbnail" let-item>
+      <img [src]="item" class="w-20 h-20 min-w-20 min-h-20 cover" />
+    </ng-template>
+  </p-galleria>
+</div>

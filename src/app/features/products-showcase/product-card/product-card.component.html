@@ -1,4 +1,7 @@
-<div class="flex flex-col space-y-1 mobile:space-y-3">
+<div
+  class="flex flex-col space-y-1 mobile:space-y-3"
+  (click)="onViewDetails(product().id)"
+>
   <div class="relative w-full h-[190px] mobile:h-64">
     <div
       class="absolute top-0 left-0 w-full h-full bg-type_grey clip-polygon z-[100]"

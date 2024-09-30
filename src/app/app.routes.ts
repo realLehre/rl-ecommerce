@@ -14,6 +14,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'product/:id',
+    loadComponent: () =>
+      import(
+        './features/products/product-details/product-details.component'
+      ).then((c) => c.ProductDetailsComponent),
+  },
+  {
     path: '**',
     loadComponent: () =>
       import('./features/page-not-found/page-not-found.component').then(
