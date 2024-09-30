@@ -47,6 +47,29 @@ body {
   width: 100%;
 }
 
+.p-galleria-item-next,
+.p-galleria-item-prev {
+  background-color: rgba(#800020, 0.2);
+  color: white;
+}
+
+.p-galleria-indicator {
+  &.p-highlight {
+    & button {
+      background: white;
+    }
+  }
+  & button {
+    background: #bbbbbb;
+    width: 10px;
+    height: 10px;
+
+    &:not(:last-child) {
+      margin-right: 5px;
+    }
+  }
+}
+
 ::-webkit-scrollbar {
   width: 10px;
 }
