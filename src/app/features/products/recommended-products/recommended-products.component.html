@@ -1,0 +1,86 @@
+<div>
+  <div class="flex items-center justify-between space-x-3">
+    <h3 class="text-lg text-type_grey font-semibold">You May Also Like</h3>
+
+    <div class="flex items-center space-x-4">
+      <div
+        class="w-12 h-12 rounded-full bg-bg_subtle flex items-center justify-center"
+        [class.opacity-50]="!showLeftArrow"
+        [class.cursor-not-allowed]="!showLeftArrow"
+        [class.cursor-pointer]="showLeftArrow"
+        (click)="scroll('left')"
+      >
+        <svg
+          width="32"
+          height="32"
+          viewBox="0 0 32 32"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          class="-rotate-180"
+        >
+          <path
+            d="M21.5627 14.6667L14.4107 7.51473L16.296 5.62939L26.6667 16.0001L16.296 26.3707L14.4107 24.4854L21.5627 17.3334H5.33337V14.6667H21.5627Z"
+            fill="#555555"
+          />
+        </svg>
+      </div>
+      <div
+        class="w-12 h-12 rounded-full bg-bg_subtle flex items-center justify-center"
+        [class.opacity-50]="!showRightArrow"
+        [class.cursor-not-allowed]="!showRightArrow"
+        [class.cursor-pointer]="showRightArrow"
+        (click)="scroll('right')"
+      >
+        <svg
+          width="32"
+          height="32"
+          viewBox="0 0 32 32"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M21.5627 14.6667L14.4107 7.51473L16.296 5.62939L26.6667 16.0001L16.296 26.3707L14.4107 24.4854L21.5627 17.3334H5.33337V14.6667H21.5627Z"
+            fill="#555555"
+          />
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div
+    #carouselContainer
+    class="overflow-x-hidden space-x-4 scrollbar-hide scroll-smooth touch-pan-x grid grid-flow-col auto-cols-[minmax(220px,1fr)] gap-x-3 mt-6"
+  >
+    @for (product of products; track product.id) {
+      <app-product-card [product]="product" />
+    }
+  </div>
+</div>
+
+<!-- product-carousel.component.html -->
+<!--<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">-->
+<!--  <h2 class="text-2xl font-bold mb-4">You May Also Like</h2>-->
+<!--  <div class="relative">-->
+<!--    <button-->
+<!--      class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-70 p-2 rounded-full shadow-md z-10 transition-opacity duration-300"-->
+<!--  -->
+<!--    >-->
+<!--      &#8592;-->
+<!--    </button>-->
+<!--    <div-->
+<!--      #carouselContainer-->
+<!--      class="flex overflow-x-auto scrollbar-hide scroll-smooth touch-pan-x"-->
+<!--      (touchend)="onTouchEnd()"-->
+<!--    >-->
+<!--		@for (product of products; track product.id) {-->
+<!--			<app-product-card [product]="product" />-->
+<!--		}-->
+<!--    </div>-->
+<!--    <button-->
+<!--      class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-70 p-2 rounded-full shadow-md z-10 transition-opacity duration-300"-->
+
+<!--    >-->
+<!--      &#8594;-->
+<!--    </button>-->
+<!--  </div>-->
+<!--</div>-->

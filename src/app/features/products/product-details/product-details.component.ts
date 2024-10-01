@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { BreadcrumbComponent } from '../../../shared/components/breadcrumb/breadcrumb.component';
 import { ProductDetailsImagesComponent } from './product-details-images/product-details-images.component';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
+import { RecommendedProductsComponent } from '../recommended-products/recommended-products.component';
 
 @Component({
   selector: 'app-product-details',
@@ -10,6 +11,7 @@ import { LoaderComponent } from '../../../shared/components/loader/loader.compon
     BreadcrumbComponent,
     ProductDetailsImagesComponent,
     LoaderComponent,
+    RecommendedProductsComponent,
   ],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.scss',
