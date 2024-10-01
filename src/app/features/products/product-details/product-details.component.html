@@ -10,7 +10,7 @@
       <app-product-details-images />
     </div>
 
-    <div class="w-full min-[700px]:w-1/2">
+    <div class="w-full">
       <div class="space-y-2 min-[700px]:space-y-4">
         <h1 class="text-2xl mobile:text-[40px] text-type_caption">
           Palm Slippers
@@ -25,6 +25,64 @@
           slippers, featuring a tropical leaf design, cushioned footbed, and
           non-slip sole, perfect for both indoor and outdoor use.
         </p>
+      </div>
+
+      <div class="w-full h-[1px] my-6 bg-border_subtle"></div>
+
+      <div class="space-y-1">
+        <h3 class="text-xs text-type_title font-semibold">CATEGORY</h3>
+        <p class="text-type_caption">Toy Builders</p>
+      </div>
+
+      <div class="space-y-1 mt-5">
+        <h3 class="text-xs text-type_title font-semibold">QUANTITY</h3>
+        <div
+          class="items-center text-type_caption text-xs border-[1px] border-border_subtle h-8 inline-flex overflow-hidden bg-white"
+        >
+          <div
+            class="p-2 cursor-pointer w-12 text-center mobile:w-auto"
+            (click)="onAdjustQuantity('decrease')"
+          >
+            <i class="fa fa-minus"></i>
+          </div>
+          <div
+            class="border-x-[1px] border-border_subtle text-base text-type_title_grey w-12 h-full flex items-center justify-center"
+          >
+            @if (!isLoading) {
+              <span>{{ quantity }}</span>
+            } @else {
+              <app-loader
+                [customStyle]="{ width: '18px', border: '3px solid #000' }"
+              />
+            }
+          </div>
+          <div
+            class="p-2 cursor-pointer w-12 text-center mobile:w-auto"
+            (click)="onAdjustQuantity('increase')"
+          >
+            <i class="fa fa-plus"></i>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="flex items-center justify-between mt-8 flex-wrap gap-x-3 gap-y-2 text-sm mobile:text-base"
+      >
+        <button
+          class="min-w-[190px] rounded-full text-white font-medium bg-primary py-2 flex-1 h-12 hidden mobile:block"
+        >
+          Proceed to Checkout
+        </button>
+        <button
+          class="min-w-[120px] rounded-full text-white font-medium bg-primary py-2 flex-1 h-12 block mobile:hidden"
+        >
+          Buy Now
+        </button>
+        <button
+          class="min-w-[120px] mobile:min-w-[190px] rounded-full font-medium border-primary border-[2px] text-type_title_gray py-2 flex-1 h-12"
+        >
+          Add to Cart
+        </button>
       </div>
     </div>
   </div>
