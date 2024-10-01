@@ -3,15 +3,15 @@
 >
   <app-breadcrumb [newRoute]="'product details'" />
 
-  <div class="flex items-start gap-10 flex-col min-[850px]:flex-row mt-8">
+  <div class="flex items-start flex-col min-[700px]:flex-row gap-10 mt-8">
     <div
-      class="min-[850px]:w-[500px] min-[850px]:h-[500px] min-[450px]:w-[400px] min-[450px]:h-[400px] w-full h-[300px] self-center"
+      class="min-[850px]:w-[500px] min-[450px]:w-[400px] w-full max-[450px]:h-[300px] self-center"
     >
       <app-product-details-images />
     </div>
 
-    <div class="w-1/2">
-      <div class="space-y-4">
+    <div class="w-full min-[700px]:w-1/2">
+      <div class="space-y-2 min-[700px]:space-y-4">
         <h1 class="text-2xl mobile:text-[40px] text-type_caption">
           Palm Slippers
         </h1>
