@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { BreadcrumbComponent } from '../../../shared/components/breadcrumb/breadcrumb.component';
 import { ProductDetailsImagesComponent } from './product-details-images/product-details-images.component';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 import { RecommendedProductsComponent } from '../recommended-products/recommended-products.component';
+import { ProductQuantityComponent } from '../../../shared/components/product-quantity/product-quantity.component';
 
 @Component({
   selector: 'app-product-details',
@@ -12,31 +13,15 @@ import { RecommendedProductsComponent } from '../recommended-products/recommende
     ProductDetailsImagesComponent,
     LoaderComponent,
     RecommendedProductsComponent,
+    ProductQuantityComponent,
   ],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.scss',
 })
 export class ProductDetailsComponent {
-  quantity: number = 10;
+  quantity: number = 1;
   isLoading: boolean = false;
-  onAdjustQuantity(action: string) {
-    if (this.quantity == 0) {
-      return;
-    }
-
-    this.setLoader();
-
-    if (action.toLowerCase() == 'increase') {
-      this.quantity++;
-    } else {
-      this.quantity--;
-    }
-  }
-
-  setLoader() {
-    this.isLoading = true;
-    setTimeout(() => {
-      this.isLoading = false;
-    }, 1000);
+  onAdjustQuantity(qty: number) {
+    this.quantity = qty;
   }
 }
