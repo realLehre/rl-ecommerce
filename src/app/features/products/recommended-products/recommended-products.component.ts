@@ -41,14 +41,17 @@ export class RecommendedProductsComponent {
     this.showLeftArrow = container.scrollLeft > 0;
     this.showRightArrow =
       container.scrollLeft < container.scrollWidth - container.clientWidth;
-    console.log(
-      `scroll width: ${container.scrollWidth}, \`scroll scrollLeft: ${container.scrollLeft}, \`client width: ${container.clientWidth}`,
-    );
+    // console.log(
+    //   `scroll width: ${container.scrollWidth}, \`scroll scrollLeft: ${container.scrollLeft}, \`client width: ${container.clientWidth}`,
+    // );
+    // console.log(container.scrollWidth - container.clientWidth);
   }
 
   scroll(direction: 'left' | 'right') {
     const container = this.carouselContainer.nativeElement;
     const scrollAmount = container.clientWidth;
+    this.showLeftArrow = direction == 'right';
+
     container.scrollBy({
       left: direction === 'left' ? -scrollAmount : scrollAmount,
       behavior: 'smooth',

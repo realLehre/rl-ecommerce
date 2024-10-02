@@ -21,6 +21,11 @@ export const routes: Routes = [
       ).then((c) => c.ProductDetailsComponent),
   },
   {
+    path: 'cart',
+    loadComponent: () =>
+      import('./features/cart/cart.component').then((c) => c.CartComponent),
+  },
+  {
     path: '**',
     loadComponent: () =>
       import('./features/page-not-found/page-not-found.component').then(
