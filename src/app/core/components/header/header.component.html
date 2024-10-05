@@ -61,9 +61,21 @@
       </div>
       <div
         class="flex items-center justify-center h-6 w-6 rounded-full border-[3px] border-[#333333] cursor-pointer"
+        (click)="menu.toggle($event)"
       >
         <img src="assets/images/icons/user.svg" alt="" class="w-4 h-4" />
       </div>
     </div>
   </div>
 </div>
+<p-menu #menu [popup]="true">
+  <ng-template pTemplate="start">
+    <div class="w-full items-center flex justify-center py-4">
+      <button
+        class="w-[80%] rounded-full text-white font-medium bg-primary py-2 block"
+      >
+        Sign In
+      </button>
+    </div>
+  </ng-template>
+</p-menu>
