@@ -1,1 +1,212 @@
-<p>address-form works!</p>
+<div>
+  <div class="flex items-center space-x-3">
+    <div class="h-8 w-8 flex items-center justify-center">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="w-6">
+        <path
+          d="M7.4 273.4C2.7 268.8 0 262.6 0 256s2.7-12.8 7.4-17.4l176-168c9.6-9.2 24.8-8.8 33.9 .8s8.8 24.8-.8 33.9L83.9 232 424 232c13.3 0 24 10.7 24 24s-10.7 24-24 24L83.9 280 216.6 406.6c9.6 9.2 9.9 24.3 .8 33.9s-24.3 9.9-33.9 .8l-176-168z"
+        />
+      </svg>
+    </div>
+    <h3>Add New Address</h3>
+  </div>
+
+  <div class="mt-5">
+    <form
+      [formGroup]="addressForm"
+      (ngSubmit)="onSubmit()"
+      class="max-w-4xl mx-auto p-6 space-y-4"
+    >
+      <div class="flex items-end flex-wrap gap-4">
+        <div class="flex-1 min-w-[145px]">
+          <label
+            for="firstName"
+            class="block text-sm font-medium text-gray-700 mb-1"
+            >First Name</label
+          >
+          <input
+            type="text"
+            id="firstName"
+            formControlName="firstName"
+            class="w-full px-3 py-2 border-[2px] border-gray-300 rounded-md focus:outline-none focus:border-primary bg-transparent"
+            [ngClass]="{ 'border-red-500': isInvalidAndTouched('firstName') }"
+          />
+          <p
+            class="mt-1 text-sm text-red-500"
+            *ngIf="isInvalidAndTouched('firstName')"
+          >
+            {{ getErrorMessage("firstName") }}
+          </p>
+        </div>
+        <div class="flex-1 min-w-[145px]">
+          <label
+            for="lastName"
+            class="block text-sm font-medium text-gray-700 mb-1"
+            >Last Name</label
+          >
+          <input
+            type="text"
+            id="lastName"
+            formControlName="lastName"
+            class="w-full px-3 py-2 border-[2px] border-gray-300 rounded-md focus:outline-none focus:border-primary bg-transparent"
+            [ngClass]="{ 'border-red-500': isInvalidAndTouched('lastName') }"
+          />
+          <p
+            class="mt-1 text-sm text-red-500"
+            *ngIf="isInvalidAndTouched('lastName')"
+          >
+            {{ getErrorMessage("lastName") }}
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-end flex-wrap gap-4">
+        <div class="flex-1 min-w-[145px]">
+          <label
+            for="phoneNumber"
+            class="block text-sm font-medium text-gray-700 mb-1"
+            >Phone Number</label
+          >
+          <div class="w-full">
+            <input
+              type="tel"
+              id="phoneNumber"
+              formControlName="phoneNumber"
+              class="px-3 py-2 border border-gray-300 rounded-r-md focus:outline-none focus:border-primary bg-transparent w-full"
+              [ngClass]="{
+                'border-red-500': isInvalidAndTouched('phoneNumber'),
+              }"
+            />
+          </div>
+          <p
+            class="mt-1 text-sm text-red-500"
+            *ngIf="isInvalidAndTouched('phoneNumber')"
+          >
+            {{ getErrorMessage("phoneNumber") }}
+          </p>
+        </div>
+        <div class="flex-1 min-w-[145px]">
+          <label
+            for="additionalPhoneNumber"
+            class="block text-sm font-medium text-gray-700 mb-1"
+            >Additional Phone Number</label
+          >
+          <div class="w-full">
+            <input
+              type="tel"
+              id="additionalPhoneNumber"
+              formControlName="additionalPhoneNumber"
+              class="px-3 py-2 border border-gray-300 rounded-r-md focus:outline-none focus:border-primary bg-transparent w-full"
+              [ngClass]="{
+                'border-red-500': isInvalidAndTouched('additionalPhoneNumber'),
+              }"
+            />
+          </div>
+          <p
+            class="mt-1 text-sm text-red-500"
+            *ngIf="isInvalidAndTouched('additionalPhoneNumber')"
+          >
+            {{ getErrorMessage("additionalPhoneNumber") }}
+          </p>
+        </div>
+      </div>
+
+      <div class="mb-6">
+        <label
+          for="deliveryAddress"
+          class="block text-sm font-medium text-gray-700 mb-1"
+          >Delivery Address</label
+        >
+        <textarea
+          id="deliveryAddress"
+          formControlName="deliveryAddress"
+          rows="3"
+          class="w-full px-3 py-2 border-[2px] border-gray-300 rounded-md focus:outline-none focus:border-primary bg-transparent"
+          [ngClass]="{
+            'border-red-500': isInvalidAndTouched('deliveryAddress'),
+          }"
+        ></textarea>
+        <p
+          class="mt-1 text-sm text-red-500"
+          *ngIf="isInvalidAndTouched('deliveryAddress')"
+        >
+          {{ getErrorMessage("deliveryAddress") }}
+        </p>
+      </div>
+
+      <div class="mb-6">
+        <label
+          for="additionalInformation"
+          class="block text-sm font-medium text-gray-700 mb-1"
+          >Additional Information</label
+        >
+        <textarea
+          id="additionalInformation"
+          formControlName="additionalInformation"
+          rows="3"
+          class="w-full px-3 py-2 border-[2px] border-gray-300 rounded-md focus:outline-none focus:border-primary bg-transparent"
+        ></textarea>
+      </div>
+
+      <div class="mb-6 flex flex-col md:flex-row md:space-x-4">
+        <div class="flex-1 mb-4 md:mb-0">
+          <label
+            for="region"
+            class="block text-sm font-medium text-gray-700 mb-1"
+            >Region</label
+          >
+          <input
+            type="text"
+            id="region"
+            formControlName="region"
+            class="w-full px-3 py-2 border-[2px] border-gray-300 rounded-md focus:outline-none focus:border-primary bg-transparent"
+            [ngClass]="{ 'border-red-500': isInvalidAndTouched('region') }"
+          />
+          <p
+            class="mt-1 text-sm text-red-500"
+            *ngIf="isInvalidAndTouched('region')"
+          >
+            {{ getErrorMessage("region") }}
+          </p>
+        </div>
+        <div class="flex-1">
+          <label for="city" class="block text-sm font-medium text-gray-700 mb-1"
+            >City</label
+          >
+          <input
+            type="text"
+            id="city"
+            formControlName="city"
+            class="w-full px-3 py-2 border-[2px] border-gray-300 rounded-md focus:outline-none focus:border-primary bg-transparent"
+            [ngClass]="{ 'border-red-500': isInvalidAndTouched('city') }"
+          />
+          <p
+            class="mt-1 text-sm text-red-500"
+            *ngIf="isInvalidAndTouched('city')"
+          >
+            {{ getErrorMessage("city") }}
+          </p>
+        </div>
+      </div>
+
+      <div class="mb-6">
+        <label class="inline-flex items-center">
+          <input
+            type="checkbox"
+            formControlName="isDefaultAddress"
+            class="form-checkbox h-5 w-5 text-blue-600"
+          />
+          <span class="ml-2 text-gray-700">Set as Default Address</span>
+        </label>
+      </div>
+
+      <div class="flex justify-end">
+        <button
+          type="submit"
+          class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        >
+          Save Address
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
