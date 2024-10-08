@@ -3,18 +3,15 @@
     <app-header />
   </header>
 
-  <!-- Main content should grow to fill the available space -->
   <section class="pt-[75px] z-[180] relative flex-grow mb-5">
     <router-outlet />
   </section>
 
-  <!-- Mobile navigation menu -->
   <app-mobile-nav
     class="fixed w-full h-full bg-bg_main z-[250] left-0 top-0 hidden"
     [ngClass]="{ '!block': isMenuOpened() }"
   ></app-mobile-nav>
 
-  <!-- Footer stays at the bottom -->
   <footer class="mt-auto">
     <app-footer />
   </footer>
