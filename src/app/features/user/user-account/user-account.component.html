@@ -1,0 +1,14 @@
+<div
+  class="w-[90%] tablet:w-[85%] max-w-[1200px] mx-auto mt-9 mobile:mt-[80px]"
+>
+  <app-breadcrumb [newRoute]="'account'" />
+
+  <div class="flex items-start space-x-3 justify-between mt-4">
+    <div class="w-1/3">
+      <app-user-nav />
+    </div>
+    <div class="w-2/3">
+      <router-outlet />
+    </div>
+  </div>
+</div>
