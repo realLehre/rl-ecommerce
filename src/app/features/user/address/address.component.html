@@ -6,6 +6,7 @@
       </h1>
       <button
         class="bg-primary text-xs mobile:text-sm hover:opacity-80 text-white font-semibold py-2 px-4 rounded"
+        (click)="isAddingAddress = true"
       >
         Add New Address
       </button>
@@ -19,6 +20,6 @@
       }
     </div>
   } @else {
-    <app-address-form />
+    <app-address-form (closeForm)="isAddingAddress = false" />
   }
 </div>

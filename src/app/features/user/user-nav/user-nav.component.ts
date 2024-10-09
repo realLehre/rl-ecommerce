@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   inject,
@@ -19,6 +20,7 @@ import {
   imports: [RouterLink, RouterLinkActive],
   templateUrl: './user-nav.component.html',
   styleUrl: './user-nav.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserNavComponent implements AfterViewInit {
   router = inject(Router);

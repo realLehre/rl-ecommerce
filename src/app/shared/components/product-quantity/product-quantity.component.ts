@@ -1,4 +1,10 @@
-import { Component, input, OnInit, output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  OnInit,
+  output,
+} from '@angular/core';
 import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
@@ -7,6 +13,7 @@ import { LoaderComponent } from '../loader/loader.component';
   imports: [LoaderComponent],
   templateUrl: './product-quantity.component.html',
   styleUrl: './product-quantity.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductQuantityComponent implements OnInit {
   quantity = input.required<number>();

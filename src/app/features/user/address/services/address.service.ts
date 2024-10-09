@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IAddress } from '../../models/address.interface';
+import { AbstractControl, ValidationErrors } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root',
@@ -32,4 +33,28 @@ export class AddressService {
     },
   ];
   constructor() {}
+
+  phoneNumberValidator(control: AbstractControl): ValidationErrors | null {
+    const value: string = control.value || '';
+    const validPhoneNumberPattern = /^[0-9+-]*$/;
+
+    if (value && !validPhoneNumberPattern.test(value)) {
+      return { invalidPhoneNumber: true }; // Invalid phone number
+    }
+    return null; // Valid phone number
+  }
+
+  getLocationInfo(place: any[]) {
+    const placeResult = { city: '', region: '' };
+    place.forEach((component: any) => {
+      const componentType = component.types[0];
+
+      if (componentType === 'locality') {
+        placeResult['city'] = component.long_name; // City
+      } else if (componentType === 'administrative_area_level_1') {
+        placeResult['region'] = component.long_name; // Region/State
+      }
+    });
+    return placeResult;
+  }
 }

@@ -1,4 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+} from '@angular/core';
 import { BreadcrumbComponent } from '../../shared/components/breadcrumb/breadcrumb.component';
 import { RouterLink } from '@angular/router';
 import { EmptyCartComponent } from './empty-cart/empty-cart.component';
@@ -20,6 +25,7 @@ import { ProductQuantityComponent } from '../../shared/components/product-quanti
   ],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartComponent implements OnInit {
   productService = inject(ProductsService);

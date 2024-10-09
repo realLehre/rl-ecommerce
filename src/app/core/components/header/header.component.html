@@ -72,57 +72,60 @@
           <p class="text-sm text-type_title_gray font-semibold">Hi, David</p>
           <i class="fa fa-angle-down"></i>
         </div>
+
+        <p-menu #menu [popup]="true">
+          <ng-template pTemplate="start">
+            <div class="py-3">
+              <div class="w-full items-center flex justify-center">
+                <button
+                  class="w-[85%] rounded-full text-white font-medium bg-primary py-2 block"
+                >
+                  Sign In
+                </button>
+              </div>
+
+              <div class="w-full border-t-[1px] border-border_subtle mt-3 pt-3">
+                <div
+                  class="flex items-center space-x-4 px-3 py-2 hover:bg-border_subtle cursor-pointer"
+                  routerLink="/user"
+                >
+                  <img src="assets/images/icons/user.svg" alt="" class="w-5" />
+                  <p class="text-type_caption">My Account</p>
+                </div>
+                <div
+                  class="flex items-center space-x-4 px-3 py-2 hover:bg-border_subtle cursor-pointer"
+                  routerLink="/orders"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 448 512"
+                    class="w-5"
+                  >
+                    <path
+                      d="M50.7 58.5L0 160l208 0 0-128L93.7 32C75.5 32 58.9 42.3 50.7 58.5zM240 160l208 0L397.3 58.5C389.1 42.3 372.5 32 354.3 32L240 32l0 128zm208 32L0 192 0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-224z"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="50"
+                    />
+                  </svg>
+
+                  <p class="text-type_caption">Orders</p>
+                </div>
+              </div>
+
+              <div
+                class="w-full border-t-[1px] border-border_subtle mt-3 pt-3 text-center"
+              >
+                <button
+                  class="bg-transparent border-0 text-primary font-semibold"
+                >
+                  LOGOUT
+                </button>
+              </div>
+            </div>
+          </ng-template>
+        </p-menu>
       </div>
     </div>
   </div>
 </div>
-<p-menu #menu [popup]="true">
-  <ng-template pTemplate="start">
-    <div class="py-3">
-      <div class="w-full items-center flex justify-center">
-        <button
-          class="w-[85%] rounded-full text-white font-medium bg-primary py-2 block"
-        >
-          Sign In
-        </button>
-      </div>
-
-      <div class="w-full border-t-[1px] border-border_subtle mt-3 pt-3">
-        <div
-          class="flex items-center space-x-4 px-3 py-2 hover:bg-border_subtle cursor-pointer"
-          routerLink="/user"
-        >
-          <img src="assets/images/icons/user.svg" alt="" class="w-5" />
-          <p class="text-type_caption">My Account</p>
-        </div>
-        <div
-          class="flex items-center space-x-4 px-3 py-2 hover:bg-border_subtle cursor-pointer"
-          routerLink="/orders"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 448 512"
-            class="w-5"
-          >
-            <path
-              d="M50.7 58.5L0 160l208 0 0-128L93.7 32C75.5 32 58.9 42.3 50.7 58.5zM240 160l208 0L397.3 58.5C389.1 42.3 372.5 32 354.3 32L240 32l0 128zm208 32L0 192 0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-224z"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="50"
-            />
-          </svg>
-
-          <p class="text-type_caption">Orders</p>
-        </div>
-      </div>
-
-      <div
-        class="w-full border-t-[1px] border-border_subtle mt-3 pt-3 text-center"
-      >
-        <button class="bg-transparent border-0 text-primary font-semibold">
-          LOGOUT
-        </button>
-      </div>
-    </div>
-  </ng-template>
-</p-menu>

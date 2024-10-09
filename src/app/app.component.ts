@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './core/components/header/header.component';
 import { MobileNavComponent } from './features/homepage/mobile-nav/mobile-nav.component';
@@ -18,6 +18,7 @@ import { FooterComponent } from './core/components/footer/footer.component';
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
   private layoutService = inject(LayoutService);
