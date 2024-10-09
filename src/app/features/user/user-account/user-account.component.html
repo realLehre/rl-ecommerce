@@ -1,7 +1,7 @@
 <div
   class="w-[90%] tablet:w-[85%] max-w-[1200px] mx-auto mt-9 mobile:mt-[80px]"
 >
-  <app-breadcrumb [newRoute]="'account'" />
+  <app-breadcrumb [pages]="[{ name: 'account', route: '/user' }]" />
   <h3 class="block mobile:hidden font-medium text-lg text-type_title mt-4">
     My Account
   </h3>

@@ -54,7 +54,7 @@ export class ProductsService {
       itemsLeft: 39,
     },
     {
-      image: 'assets/images/toy-4.jpeg',
+      image: 'assets/images/toy-4.jpg',
       name: 'Magic Wand',
       price: 1999,
       rating: 19,
@@ -126,7 +126,7 @@ export class ProductsService {
       itemsLeft: 40,
     },
     {
-      image: 'assets/images/toy-4.jpeg',
+      image: 'assets/images/toy-4.jpg',
       name: 'Ninja Warrior Set',
       price: 6999,
       rating: 19,

@@ -31,7 +31,7 @@
               type="text"
               id="firstName"
               formControlName="firstName"
-              class="w-full px-3 py-2 border-[2px] border-gray-300 rounded-md focus:outline-none bg-transparent"
+              class="w-full px-3 py-2 border-[2px] rounded-md focus:outline-none bg-bg_subtle"
               [ngClass]="{ 'border-red-500': isInvalidAndTouched('firstName') }"
             />
 
@@ -55,7 +55,7 @@
               type="text"
               id="lastName"
               formControlName="lastName"
-              class="w-full px-3 py-2 border-[2px] border-gray-300 rounded-md focus:outline-none bg-transparent"
+              class="w-full px-3 py-2 border-[2px] rounded-md focus:outline-none bg-bg_subtle"
               [ngClass]="{ 'border-red-500': isInvalidAndTouched('lastName') }"
             />
             @if (isInvalidAndTouched("lastName")) {
@@ -81,7 +81,7 @@
               type="tel"
               id="phoneNumber"
               formControlName="phoneNumber"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none bg-transparent"
+              class="w-full px-3 py-2 border rounded-md focus:outline-none bg-bg_subtle"
               [ngClass]="{
                 'border-red-500': isInvalidAndTouched('phoneNumber'),
               }"
@@ -107,7 +107,7 @@
               type="tel"
               id="additionalPhoneNumber"
               formControlName="additionalPhoneNumber"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none bg-transparent"
+              class="w-full px-3 py-2 border rounded-md focus:outline-none bg-bg_subtle"
               [ngClass]="{
                 'border-red-500': isInvalidAndTouched('additionalPhoneNumber'),
               }"
@@ -133,7 +133,7 @@
           <input
             id="deliveryAddress"
             formControlName="deliveryAddress"
-            class="w-full px-3 py-2 border-[2px] border-gray-300 rounded-md focus:outline-none bg-transparent"
+            class="w-full px-3 py-2 border-[2px] rounded-md focus:outline-none bg-bg_subtle"
             [ngClass]="{
               'border-red-500': isInvalidAndTouched('deliveryAddress'),
             }"
@@ -159,7 +159,7 @@
           <input
             id="additionalInformation"
             formControlName="additionalInformation"
-            class="w-full px-3 py-2 border-[2px] border-gray-300 rounded-md focus:outline-none bg-transparent"
+            class="w-full px-3 py-2 border-[2px] rounded-md focus:outline-none bg-bg_subtle"
           />
         </div>
       </div>
@@ -176,7 +176,7 @@
               type="text"
               id="region"
               formControlName="region"
-              class="w-full px-3 py-2 border-[2px] border-gray-300 rounded-md focus:outline-none bg-transparent"
+              class="w-full px-3 py-2 border-[2px] rounded-md focus:outline-none bg-bg_subtle"
               [ngClass]="{ 'border-red-500': isInvalidAndTouched('region') }"
             />
             @if (isInvalidAndTouched("region")) {
@@ -197,7 +197,7 @@
               type="text"
               id="city"
               formControlName="city"
-              class="w-full px-3 py-2 border-[2px] border-gray-300 rounded-md focus:outline-none bg-transparent"
+              class="w-full px-3 py-2 border-[2px] rounded-md focus:outline-none bg-bg_subtle"
               [ngClass]="{ 'border-red-500': isInvalidAndTouched('city') }"
             />
             @if (isInvalidAndTouched("city")) {

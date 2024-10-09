@@ -71,6 +71,14 @@ body {
   }
 }
 
+.p-menu {
+  position: absolute;
+  top: 55px !important;
+  right: 0;
+  z-index: 1010000000;
+  background-color: theme("colors.bg_subtle");
+}
+
 ::-webkit-scrollbar {
   width: 10px;
 }

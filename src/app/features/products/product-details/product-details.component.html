@@ -1,7 +1,7 @@
 <div
   class="w-[90%] tablet:w-[85%] max-w-[1200px] mx-auto mt-9 mobile:mt-[80px]"
 >
-  <app-breadcrumb [newRoute]="'product details'" />
+  <app-breadcrumb [pages]="[{ name: 'product details', route: '/product' }]" />
 
   <div class="flex items-start flex-col min-[700px]:flex-row gap-10 mt-8">
     <div
@@ -49,16 +49,19 @@
       >
         <button
           class="min-w-[190px] rounded-full text-white font-medium bg-primary py-2 flex-1 h-12 hidden mobile:block"
+          routerLink="/checkout"
         >
           Proceed to Checkout
         </button>
         <button
           class="min-w-[120px] rounded-full text-white font-medium bg-primary py-2 flex-1 h-12 block mobile:hidden"
+          routerLink="/checkout"
         >
           Buy Now
         </button>
         <button
           class="min-w-[120px] mobile:min-w-[190px] rounded-full font-medium border-primary border-[2px] text-type_title_gray py-2 flex-1 h-12"
+          routerLink="/cart"
         >
           Add to Cart
         </button>

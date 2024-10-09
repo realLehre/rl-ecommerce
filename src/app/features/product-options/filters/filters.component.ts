@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { SliderModule } from 'primeng/slider';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
 
 @Component({
@@ -16,6 +16,7 @@ import { CheckboxModule } from 'primeng/checkbox';
   ],
   templateUrl: './filters.component.html',
   styleUrl: './filters.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FiltersComponent implements OnInit {
   isShowing: boolean[] = [true];
@@ -24,7 +25,7 @@ export class FiltersComponent implements OnInit {
   value: number = 50;
 
   ngOnInit() {
-    console.log(this.isShowing);
+    // console.log(this.isShowing);
     // this.rangeValues.valueChanges.subscribe((val) => {
     //   console.log(val);
     // });
