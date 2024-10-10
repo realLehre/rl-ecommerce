@@ -1,0 +1,116 @@
+<div class="overflow-x-auto">
+  <table class="min-w-full bg-white">
+    <thead class="bg-gray-100">
+      <tr>
+        <th class="w-10 px-4 py-2"></th>
+        <th class="px-4 py-2 text-left">ORDER ID</th>
+        <th
+          (click)="sortTable('customerName')"
+          class="px-4 py-2 text-left cursor-pointer"
+        >
+          <div class="flex items-center space-x-1">
+            <span>CUSTOMER NAME</span>
+            <span class="flex flex-col">
+              <i
+                class="fa fa-caret-up text-xs"
+                [ngClass]="
+                  sortDirection === 'asc' && sortUsed
+                    ? 'opacity-100'
+                    : 'opacity-30'
+                "
+              ></i>
+              <i
+                class="fa fa-caret-down text-xs -mt-[10px]"
+                [ngClass]="
+                  sortDirection === 'desc' ? 'opacity-100' : 'opacity-30'
+                "
+              ></i>
+            </span>
+          </div>
+        </th>
+        <th
+          (click)="sortTable('totalPrice')"
+          class="px-4 py-2 text-left cursor-pointer"
+        >
+          <div class="flex items-center space-x-1">
+            <span>TOTAL PRICE</span>
+            <span class="flex flex-col">
+              <i
+                class="fa fa-caret-up text-xs"
+                [ngClass]="
+                  sortDirection === 'asc' && sortUsed
+                    ? 'opacity-100'
+                    : 'opacity-30'
+                "
+              ></i>
+              <i
+                class="fa fa-caret-down text-xs -mt-[10px]"
+                [ngClass]="
+                  sortDirection === 'desc' ? 'opacity-100' : 'opacity-30'
+                "
+              ></i>
+            </span>
+          </div>
+        </th>
+        <th
+          (click)="sortTable('orderDate')"
+          class="px-4 py-2 text-left cursor-pointer"
+        >
+          <div class="flex items-center space-x-1">
+            <span>ORDER DATE</span>
+
+            <span class="flex flex-col">
+              <i
+                class="fa fa-caret-up text-xs"
+                [ngClass]="
+                  sortDirection === 'asc' && sortUsed
+                    ? 'opacity-100'
+                    : 'opacity-30'
+                "
+              ></i>
+              <i
+                class="fa fa-caret-down text-xs -mt-[10px]"
+                [ngClass]="
+                  sortDirection === 'desc' ? 'opacity-100' : 'opacity-30'
+                "
+              ></i>
+            </span>
+          </div>
+        </th>
+        <th class="px-4 py-2 text-left">STATUS</th>
+        <th class="px-4 py-2 text-left">ACTION</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (order of orders; track order.id) {
+        <tr class="border-b">
+          <td class="px-4 py-2">
+            <input
+              type="checkbox"
+              class="form-checkbox h-4 w-4 text-blue-600"
+            />
+          </td>
+          <td class="px-4 py-2">{{ order.id }}</td>
+          <td class="px-4 py-2">{{ order.customerName }}</td>
+          <td class="px-4 py-2">₦{{ order.totalPrice }}</td>
+          <td class="px-4 py-2">{{ order.orderDate }}</td>
+          <td class="px-4 py-2">
+            <span
+              [class]="getStatusClass(order.status)"
+              class="px-2 py-1 rounded-full text-xs"
+            >
+              {{ order.status }}
+            </span>
+          </td>
+          <td class="px-4 py-2">
+            <button
+              class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-1 px-3 rounded"
+            >
+              View Details
+            </button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

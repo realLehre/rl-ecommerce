@@ -1,1 +1,10 @@
-<p>user-orders works!</p>
+<div
+  class="w-[90%] tablet:w-[85%] max-w-[1200px] mx-auto mt-9 mobile:mt-[80px]"
+>
+  <app-breadcrumb [pages]="[{ name: 'orders', route: '/orders' }]" />
+  <h3 class="block mobile:hidden font-medium text-lg text-type_title mt-4">
+    Orders
+  </h3>
+
+  <app-user-orders-table />
+</div>
