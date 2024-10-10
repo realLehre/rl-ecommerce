@@ -79,6 +79,19 @@ body {
   background-color: theme("colors.bg_subtle");
 }
 
+.p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-focus {
+  box-shadow: none;
+}
+
+.p-checkbox.p-checkbox-checked .p-checkbox-box {
+  background-color: theme("colors.primary");
+  border: 0;
+}
+
+.p-radiobutton .p-radiobutton-box.p-highlight {
+  background-color: theme("colors.primary");
+}
+
 ::-webkit-scrollbar {
   width: 10px;
 }

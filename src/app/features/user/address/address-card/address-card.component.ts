@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { IAddress } from '../../models/address.interface';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-address-card',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './address-card.component.html',
   styleUrl: './address-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

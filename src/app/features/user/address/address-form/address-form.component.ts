@@ -4,6 +4,7 @@ import {
   Component,
   ElementRef,
   inject,
+  input,
   OnInit,
   output,
   ViewChild,
@@ -20,6 +21,7 @@ import { PhoneNumberDirective } from './directives/phone-number.directive';
 import { AddressService } from '../services/address.service';
 import { ErrorMessageDirective } from './directives/error-message.directive';
 import { CheckboxModule } from 'primeng/checkbox';
+import { RouterLink } from '@angular/router';
 declare const google: any;
 
 @Component({
@@ -31,6 +33,7 @@ declare const google: any;
     PhoneNumberDirective,
     ErrorMessageDirective,
     CheckboxModule,
+    RouterLink,
   ],
   templateUrl: './address-form.component.html',
   styleUrl: './address-form.component.scss',
@@ -40,8 +43,9 @@ export class AddressFormComponent implements OnInit, AfterViewInit {
   private addressService = inject(AddressService);
   private fb = inject(FormBuilder);
   closeForm = output<void>();
+  formMode = input<string>();
   addressForm!: FormGroup;
-  @ViewChild('addressInput')
+  @ViewChild('addressInput', { static: false })
   addressInput!: ElementRef<HTMLInputElement>;
 
   constructor() {}

@@ -57,6 +57,8 @@
         <h2 class="text-lg font-medium">Address Book</h2>
         <button
           class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-white text-gray-900 shadow-sm border border-gray-200 hover:bg-gray-100 h-9 px-4 py-2"
+          [routerLink]="['/', 'user', 'address-management']"
+          [queryParams]="{ edit: true }"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

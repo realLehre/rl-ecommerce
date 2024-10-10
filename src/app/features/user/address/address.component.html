@@ -6,7 +6,8 @@
       </h1>
       <button
         class="bg-primary text-xs mobile:text-sm hover:opacity-80 text-white font-semibold py-2 px-4 rounded"
-        (click)="isAddingAddress = true"
+        [routerLink]="['/', 'user', 'address-management']"
+        [queryParams]="{ add: true }"
       >
         Add New Address
       </button>
@@ -20,6 +21,9 @@
       }
     </div>
   } @else {
-    <app-address-form (closeForm)="isAddingAddress = false" />
+    <app-address-form
+      (closeForm)="isAddingAddress = false"
+      [formMode]="addressFormMode"
+    />
   }
 </div>
