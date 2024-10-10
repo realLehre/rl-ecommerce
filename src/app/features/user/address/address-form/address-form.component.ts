@@ -57,7 +57,8 @@ export class AddressFormComponent implements OnInit, AfterViewInit {
       additionalPhoneNumber: ['', Validators.pattern(/^\d{10}$/)],
       deliveryAddress: ['', [Validators.required, Validators.minLength(5)]],
       additionalInformation: [''],
-      region: ['', Validators.required],
+      country: ['', Validators.required],
+      state: ['', Validators.required],
       city: ['', Validators.required],
       isDefaultAddress: [false],
     });
@@ -89,12 +90,15 @@ export class AddressFormComponent implements OnInit, AfterViewInit {
     }
   }
 
-  patchInputs(res: { city: string; region: string }) {
-    if (res.city != '') {
+  patchInputs(res: { city: string; state: string; country: string }) {
+    if (res.city != '' && res.city) {
       this.addressForm.patchValue({ city: res.city });
     }
-    if (res.region != '') {
-      this.addressForm.patchValue({ region: res.region });
+    if (res.state != '' && res.state) {
+      this.addressForm.patchValue({ state: res.state });
+    }
+    if (res.country != '' && res.country) {
+      this.addressForm.patchValue({ country: res.country });
     }
   }
 

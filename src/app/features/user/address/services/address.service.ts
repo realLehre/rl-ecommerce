@@ -45,14 +45,16 @@ export class AddressService {
   }
 
   getLocationInfo(place: any[]) {
-    const placeResult = { city: '', region: '' };
+    const placeResult = { city: '', state: '', country: '' };
     place.forEach((component: any) => {
       const componentType = component.types[0];
 
       if (componentType === 'locality') {
         placeResult['city'] = component.long_name; // City
       } else if (componentType === 'administrative_area_level_1') {
-        placeResult['region'] = component.long_name; // Region/State
+        placeResult['state'] = component.long_name; // Region/State
+      } else if (componentType == 'country') {
+        placeResult['country'] = component.long_name;
       }
     });
     return placeResult;
