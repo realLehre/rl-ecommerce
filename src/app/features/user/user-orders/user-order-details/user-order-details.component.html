@@ -22,5 +22,42 @@
     <div class="my-8">
       <app-order-tracker />
     </div>
+
+    <div class="bg-bg_subtle p-6 pt-9 rounded-md">
+      <div class="flex items-start flex-wrap justify-between gap-3">
+        <div class="flex-1 min-w-[50px] text-gray-600">
+          <h5 class="text-xs font-medium">ORDER ID</h5>
+          <p class="text-base sm:text-lg font-semibold break-all">
+            3456ssssssssssssssssssssssssssssssssssssss
+          </p>
+        </div>
+
+        <div class="h-10 w-[1px] border border-border_subtle"></div>
+        <div class="flex-1 min-w-[120px] text-gray-600">
+          <h5 class="text-xs font-medium">DATE</h5>
+          <p class="text-base sm:text-lg font-semibold">June 27, 2024</p>
+        </div>
+
+        <div class="h-10 w-[1px] border border-border_subtle"></div>
+        <div class="flex-1 min-w-[100px] text-gray-600">
+          <h5 class="text-xs font-medium">TOTAL</h5>
+          <p class="text-base sm:text-lg font-semibold">6,000</p>
+        </div>
+
+        <div class="h-10 w-[1px] border border-border_subtle"></div>
+
+        <div class="flex-1 min-w-[150px] text-gray-600">
+          <h5 class="text-xs font-medium">PAYMENT METHOD</h5>
+          <p class="text-base sm:text-lg font-semibold">Paystack</p>
+        </div>
+      </div>
+
+      <div class="mt-5">
+        <h3 class="text-type_title_grey font-semibold mb-1">
+          Your Order Details
+        </h3>
+        <app-generic-order-summary [paymentMethod]="'Paystack'" />
+      </div>
+    </div>
   </div>
 </div>

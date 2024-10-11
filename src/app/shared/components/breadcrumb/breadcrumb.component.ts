@@ -6,7 +6,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { NgClass } from '@angular/common';
+import { Location, NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-breadcrumb',
@@ -18,6 +18,7 @@ import { NgClass } from '@angular/common';
 })
 export class BreadcrumbComponent implements OnInit {
   router = inject(Router);
+  private location = inject(Location);
   pages = input.required<{ name: string; route: string }[]>();
   newPages: { name: string; route: string }[] = [];
   lastFragment: string = '';
@@ -38,5 +39,9 @@ export class BreadcrumbComponent implements OnInit {
       (item) =>
         routerUrlArr[routerUrlArr.length - 1] == fragArr[fragArr.length - 1],
     );
+  }
+
+  onNavigateBack() {
+    this.location.back();
   }
 }
