@@ -33,8 +33,7 @@ export class BreadcrumbComponent implements OnInit {
   getLastFragment(route: string) {
     const fragArr = route.split('/');
     const routerUrlArr = this.router.url.split('/');
-    console.log(route);
-    console.log(routerUrlArr);
+
     return routerUrlArr.some(
       (item) =>
         routerUrlArr[routerUrlArr.length - 1] == fragArr[fragArr.length - 1],

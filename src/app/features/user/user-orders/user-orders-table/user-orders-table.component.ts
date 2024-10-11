@@ -30,7 +30,9 @@ export class UserOrdersTableComponent {
 
   ngOnInit() {}
 
-  onChangeItemsToShow(total: number) {}
+  onChangeItemsToShow(total: number) {
+    this.config.itemsPerPage = total;
+  }
 
   sortTable(column: keyof IOrder): void {
     if (this.sortColumn === column) {
@@ -54,6 +56,10 @@ export class UserOrdersTableComponent {
 
   pageChange(event: any) {
     this.config.currentPage = event;
+    window.scrollTo({
+      top: 70,
+      behavior: 'smooth',
+    });
   }
 
   getStatusClass(status: string): string {
