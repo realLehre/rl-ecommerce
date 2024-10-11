@@ -4,20 +4,22 @@
   <div
     class="flex items-center justify-between tablet:w-[85%] max-w-[1200px] w-[90%] py-4"
   >
-    <div class="tablet:hidden block">
-      <img
-        src="assets/images/icons/bars.svg"
-        alt=""
-        class="w-6 min-w-6 h-6 min-h-6"
-        (click)="onOpenMenu()"
-      />
-    </div>
-    <div>
-      <img
-        src="assets/images/icons/logo.png"
-        alt=""
-        class="w-[100px] tablet:w-[120px]"
-      />
+    <div class="flex items-center space-x-5">
+      <button class="tablet:hidden block border-0 outline-0">
+        <img
+          src="assets/images/icons/bars.svg"
+          alt=""
+          class="w-6 min-w-6 h-6 min-h-6"
+          (click)="onOpenMenu()"
+        />
+      </button>
+      <div routerLink="/">
+        <img
+          src="assets/images/icons/logo.png"
+          alt=""
+          class="w-[100px] tablet:w-[120px]"
+        />
+      </div>
     </div>
 
     <div
