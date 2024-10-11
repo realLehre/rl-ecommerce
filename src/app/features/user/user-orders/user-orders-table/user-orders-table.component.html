@@ -119,7 +119,8 @@
             <td class="px-4 py-5">{{ order.orderDate }}</td>
             <td class="px-4 py-5">
               <span
-                [class]="getStatusClass(order.status)"
+                appOrderStatus
+                [orderStatus]="order.status"
                 class="px-2 py-1 rounded-full text-xs whitespace-nowrap"
               >
                 {{ order.status }}

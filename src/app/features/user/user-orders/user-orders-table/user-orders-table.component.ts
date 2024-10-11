@@ -4,11 +4,18 @@ import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule, PaginationInstance } from 'ngx-pagination';
 import { IOrder, UserOrdersService } from '../services/user-orders.service';
 import { RouterLink } from '@angular/router';
+import { OrderStatusDirective } from '../../../../shared/directives/order-status.directive';
 
 @Component({
   selector: 'app-user-orders-table',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxPaginationModule, RouterLink],
+  imports: [
+    CommonModule,
+    FormsModule,
+    NgxPaginationModule,
+    RouterLink,
+    OrderStatusDirective,
+  ],
   templateUrl: './user-orders-table.component.html',
   styleUrl: './user-orders-table.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -60,20 +67,5 @@ export class UserOrdersTableComponent {
       top: 70,
       behavior: 'smooth',
     });
-  }
-
-  getStatusClass(status: string): string {
-    switch (status.toLowerCase()) {
-      case 'payment pending':
-        return 'bg-pink-200 text-pink-800';
-      case 'payment confirmed':
-        return 'bg-blue-200 text-blue-800';
-      case 'packing order':
-        return 'bg-purple-200 text-purple-800';
-      case 'order delivered':
-        return 'bg-green-200 text-green-800';
-      default:
-        return 'bg-gray-200 text-gray-800';
-    }
   }
 }
