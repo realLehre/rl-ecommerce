@@ -1,60 +1,38 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NgxPaginationModule, PaginationInstance } from 'ngx-pagination';
+import { IOrder, UserOrdersService } from '../services/user-orders.service';
+import { RouterLink } from '@angular/router';
 
-interface Order {
-  id: number;
-  customerName: string;
-  totalPrice: number;
-  orderDate: string;
-  status: string;
-}
 @Component({
   selector: 'app-user-orders-table',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, NgxPaginationModule, RouterLink],
   templateUrl: './user-orders-table.component.html',
   styleUrl: './user-orders-table.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserOrdersTableComponent {
-  orders: Order[] = [
-    {
-      id: 4383,
-      customerName: 'John Doe',
-      totalPrice: 30000,
-      orderDate: '2024/02/15',
-      status: 'payment pending',
-    },
-    {
-      id: 4384,
-      customerName: 'Jane Smith',
-      totalPrice: 30000,
-      orderDate: '2024/02/15',
-      status: 'payment confirmed',
-    },
-    {
-      id: 4385,
-      customerName: 'Bob Johnson',
-      totalPrice: 30000,
-      orderDate: '2024/02/15',
-      status: 'Packing order',
-    },
-    {
-      id: 4386,
-      customerName: 'Alice Brown',
-      totalPrice: 30000,
-      orderDate: '2024/02/15',
-      status: 'Order Delivered',
-    },
-  ];
+  private orderService = inject(UserOrdersService);
+  orders: IOrder[] = this.orderService.orders;
 
   sortUsed: boolean = false;
-  sortColumn: keyof Order | '' = '';
+  sortColumn: keyof IOrder | '' = '';
   sortDirection: 'asc' | 'desc' = 'asc';
+  itemsToShow: number[] = [5, 10, 15, 20, 25];
+  totalItemsToShow: number = 5;
+  config: PaginationInstance = {
+    id: 'digitizationPagination',
+    itemsPerPage: 5,
+    currentPage: 1,
+  };
 
-  ngOnInit(): void {}
+  ngOnInit() {}
 
-  sortTable(column: keyof Order): void {
+  onChangeItemsToShow(total: number) {}
+
+  sortTable(column: keyof IOrder): void {
     if (this.sortColumn === column) {
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     } else {
@@ -62,9 +40,7 @@ export class UserOrdersTableComponent {
       this.sortDirection = 'asc';
     }
     this.sortUsed = true;
-    // this.sortColumn = column;
-    // this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-    // console.log(this.sortDirection);
+
     this.orders.sort((a, b) => {
       const valueA = a[column];
       const valueB = b[column];
@@ -74,6 +50,10 @@ export class UserOrdersTableComponent {
 
       return 0;
     });
+  }
+
+  pageChange(event: any) {
+    this.config.currentPage = event;
   }
 
   getStatusClass(status: string): string {

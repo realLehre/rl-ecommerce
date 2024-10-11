@@ -1,0 +1,13 @@
+<div
+  class="w-[90%] tablet:w-[85%] max-w-[1200px] mx-auto mt-9 mobile:mt-[80px]"
+>
+  <app-breadcrumb
+    [pages]="[
+      { name: 'orders', route: '/orders' },
+      { name: 'order details', route: '/orders/' + id },
+    ]"
+  />
+  <h3 class="block mobile:hidden font-medium text-lg text-type_title mt-4">
+    Order Details
+  </h3>
+</div>

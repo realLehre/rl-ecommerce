@@ -40,6 +40,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'orders/:id',
+    loadComponent: () =>
+      import(
+        './features/user/user-orders/user-order-details/user-order-details.component'
+      ).then((c) => c.UserOrderDetailsComponent),
+  },
+  {
     path: 'user',
     loadChildren: () =>
       import('./features/user/user.routes').then((c) => c.userRoutes),

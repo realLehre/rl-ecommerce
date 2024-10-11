@@ -4,7 +4,8 @@
       class="text-type_grey cursor-pointer uppercase flex items-center"
       [ngClass]="{
         'text-type_title font-semibold':
-          router.url.includes(page.route.slice(1)) &&
+          (getLastFragment(page.route) ||
+            page.name.toLowerCase() == 'account') &&
           page.name.toLowerCase() !== 'home',
       }"
       [routerLink]="[page.route]"
