@@ -20,7 +20,4 @@ import { FooterComponent } from './core/components/footer/footer.component';
   styleUrl: './app.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent {
-  private layoutService = inject(LayoutService);
-  isMenuOpened = this.layoutService.menuOpened;
-}
+export class AppComponent {}

@@ -1,0 +1,18 @@
+<div class="relative min-h-screen w-full flex flex-col">
+  <header class="fixed left-0 top-0 z-[200] w-full">
+    <app-header />
+  </header>
+
+  <section class="pt-[75px] z-[180] relative flex-grow mb-5">
+    <router-outlet />
+  </section>
+
+  <app-mobile-nav
+    class="fixed w-full h-full bg-bg_main z-[250] left-0 top-0 hidden"
+    [ngClass]="{ '!block': isMenuOpened() }"
+  ></app-mobile-nav>
+
+  <footer class="mt-auto">
+    <app-footer />
+  </footer>
+</div>
