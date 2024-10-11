@@ -1,4 +1,10 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  input,
+  OnInit,
+} from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { NgClass } from '@angular/common';
 
@@ -8,6 +14,7 @@ import { NgClass } from '@angular/common';
   imports: [RouterLink, NgClass],
   templateUrl: './breadcrumb.component.html',
   styleUrl: './breadcrumb.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BreadcrumbComponent implements OnInit {
   router = inject(Router);
