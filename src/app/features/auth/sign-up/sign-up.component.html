@@ -1,19 +1,19 @@
-<div class="bg-bg_subtle flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-  <div class="sm:mx-auto sm:w-full sm:max-w-md">
-    <h2 class="text-center text-3xl font-extrabold text-gray-900">Sign up</h2>
-  </div>
+<div class="rounded-lg flex flex-col justify-center py-6 px-0 mobile:px-6">
+  <h2 class="text-lg mobile:text-3xl font-semibold text-type_title_gray">
+    Sign up
+  </h2>
 
-  <div class="mt-4 w-full">
-    <div class="py-8 px-4 shadow sm:rounded-lg sm:px-10">
+  <div class="mt-6 w-full">
+    <div class="">
       <form
         [formGroup]="signupForm"
         (ngSubmit)="onSubmit()"
-        class="space-y-6 w-full"
+        class="space-y-6 w-full text-type_title_gray"
       >
         <div>
           <label
             for="firstName"
-            class="block text-sm font-medium text-gray-700"
+            class="block text-sm font-medium text-type_grey"
           >
             First Name
           </label>
@@ -24,13 +24,16 @@
               type="text"
               formControlName="firstName"
               required
-              class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              class="w-full px-3 py-2 border-[2px] rounded-md focus:outline-none bg-bg_subtle"
             />
           </div>
         </div>
 
         <div>
-          <label for="lastName" class="block text-sm font-medium text-gray-700">
+          <label
+            for="lastName"
+            class="block text-sm font-medium text-type_grey"
+          >
             Last Name
           </label>
           <div class="mt-1">
@@ -40,13 +43,13 @@
               type="text"
               formControlName="lastName"
               required
-              class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              class="w-full px-3 py-2 border-[2px] rounded-md focus:outline-none bg-bg_subtle"
             />
           </div>
         </div>
 
         <div>
-          <label for="email" class="block text-sm font-medium text-gray-700">
+          <label for="email" class="block text-sm font-medium text-type_grey">
             Email address
           </label>
           <div class="mt-1">
@@ -56,52 +59,109 @@
               type="email"
               formControlName="email"
               required
-              class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              class="w-full px-3 py-2 border-[2px] rounded-md focus:outline-none bg-bg_subtle"
             />
           </div>
         </div>
 
         <div>
-          <label for="password" class="block text-sm font-medium text-gray-700">
+          <label
+            for="password"
+            class="block text-sm font-medium text-type_grey"
+          >
             Password
           </label>
-          <div class="mt-1">
+          <div class="mt-1 relative">
             <input
               id="password"
               name="password"
-              type="password"
+              [type]="!showPassword[0] ? 'password' : 'text'"
               formControlName="password"
               required
-              class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              class="w-full px-3 py-2 border-[2px] rounded-md focus:outline-none bg-bg_subtle"
             />
+
+            <button
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-type_grey"
+              (click)="onTogglePasswordVisibility(0)"
+            >
+              @if (!showPassword[0]) {
+                <i class="fa fa-eye"></i>
+              } @else {
+                <i class="fa fa-eye-slash"></i>
+              }
+            </button>
           </div>
         </div>
 
         <div>
+          <label
+            for="confirmPassword"
+            class="block text-sm font-medium text-type_grey"
+          >
+            Confirm Password
+          </label>
+          <div class="mt-1 relative">
+            <input
+              id="confirmPassword"
+              name="confirmPassword"
+              [type]="!showPassword[1] ? 'password' : 'text'"
+              formControlName="confirmPassword"
+              required
+              class="w-full px-3 py-2 border-[2px] rounded-md focus:outline-none bg-bg_subtle"
+            />
+            <button
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-type_grey"
+              (click)="onTogglePasswordVisibility(1)"
+            >
+              @if (!showPassword[1]) {
+                <i class="fa fa-eye"></i>
+              } @else {
+                <i class="fa fa-eye-slash"></i>
+              }
+            </button>
+          </div>
+        </div>
+
+        <div class="mt-2 flex items-center space-x-10">
           <button
             type="submit"
             [disabled]="!signupForm.valid"
-            class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            class="w-full flex justify-center items-center py-2 px-4 rounded-md text-sm font-medium text-white bg-primary h-[42px] hover:bg-opacity-70"
           >
             Sign up
+          </button>
+
+          <button
+            class="flex items-center space-x-2 whitespace-nowrap hover:text-primary text-type_title_gray group"
+            routerLink="/auth/sign-in"
+          >
+            <p>Sign in</p>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 448 512"
+              class="w-3 -rotate-180 fill-type_title_gray group-hover:fill-primary"
+            >
+              <path
+                d="M7.4 273.4C2.7 268.8 0 262.6 0 256s2.7-12.8 7.4-17.4l176-168c9.6-9.2 24.8-8.8 33.9 .8s8.8 24.8-.8 33.9L83.9 232 424 232c13.3 0 24 10.7 24 24s-10.7 24-24 24L83.9 280 216.6 406.6c9.6 9.2 9.9 24.3 .8 33.9s-24.3 9.9-33.9 .8l-176-168z"
+              />
+            </svg>
           </button>
         </div>
       </form>
 
-      <div class="mt-6">
-        <div class="relative">
-          <div class="absolute inset-0 flex items-center">
-            <div class="w-full border-t border-gray-300"></div>
-          </div>
-          <div class="relative flex justify-center text-sm">
-            <span class="px-2 bg-white text-gray-500"> Or continue with </span>
-          </div>
+      <div class="mt-8">
+        <div class="flex items-center space-x-3">
+          <div class="w-full border-t border-gray-300"></div>
+
+          <p class="font-semibold text-type_title_gray whitespace-nowrap">OR</p>
+          <div class="w-full border-t border-gray-300"></div>
         </div>
 
-        <div class="mt-6">
+        <div class="mt-8">
           <button
             type="button"
-            class="w-full flex justify-center items-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            class="w-full flex justify-center items-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-transparent h-[42px] hover:border-primary"
           >
             <svg
               class="w-5 h-5 mr-2"
@@ -125,7 +185,7 @@
                 fill="#EA4335"
               />
             </svg>
-            Sign up with Google
+            Continue with Google
           </button>
         </div>
       </div>

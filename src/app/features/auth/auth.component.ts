@@ -1,12 +1,19 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { RouterLink, RouterOutlet } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, RouterLink],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AuthComponent {}
+export class AuthComponent {
+  private location = inject(Location);
+
+  onNavigateBack() {
+    this.location.back();
+  }
+}

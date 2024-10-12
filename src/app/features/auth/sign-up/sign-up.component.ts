@@ -5,11 +5,12 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-sign-up',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './sign-up.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './sign-up.component.scss',
@@ -17,6 +18,7 @@ import {
 export class SignUpComponent {
   fb = inject(FormBuilder);
   signupForm!: FormGroup;
+  showPassword: boolean[] = [];
 
   constructor() {}
 
@@ -25,7 +27,8 @@ export class SignUpComponent {
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
@@ -34,5 +37,9 @@ export class SignUpComponent {
       console.log(this.signupForm.value);
       // Here you would typically call a service to handle the sign-up process
     }
+  }
+
+  onTogglePasswordVisibility(index: number) {
+    this.showPassword[index] = !this.showPassword[index];
   }
 }

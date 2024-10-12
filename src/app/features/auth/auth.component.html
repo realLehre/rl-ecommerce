@@ -1,11 +1,32 @@
-<div class="flex items-start space-x-3 h-full overflow-hidden relative">
+<div class="flex items-start h-full overflow-hidden relative">
   <div
     class="sticky h-screen w-1/2 overflow-hidden bg-[url('assets/images/toy-7.jpeg')] bg-no-repeat bg-cover object-contain flex items-center justify-center flex-col text-white px-3 text-center max-[750px]:hidden"
   ></div>
 
   <div
-    class="flex items-center w-1/2 overflow-y-auto h-full py-[60px] max-[750px]:w-full text-white pl-10 max-[850px]:justify-center max-[850px]:pl-4 max-[850px]:pr-4"
+    class="flex flex-col items-center w-1/2 overflow-y-auto h-full max-[750px]:w-full text-white"
   >
-    <router-outlet />
+    <div
+      class="w-full pb-10 pt-5 px-5 max-w-[500px] min-[750px]:max-w-[600px] mx-auto"
+    >
+      <div class="mb-6 flex items-center justify-center">
+        <img
+          src="assets/images/icons/logo.png"
+          alt=""
+          class="w-[80px] tablet:w-[100px]"
+        />
+      </div>
+
+      <div>
+        <button
+          class="outline-0 flex items-center space-x-1 text-type_caption py-2"
+          (click)="onNavigateBack()"
+        >
+          <i class="fa fa-angle-left font-bold"></i>
+          <p class="text-sm font-semibold">Go Back</p>
+        </button>
+      </div>
+      <router-outlet />
+    </div>
   </div>
 </div>
