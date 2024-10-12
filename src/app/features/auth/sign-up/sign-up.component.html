@@ -106,6 +106,7 @@
             <button
               class="absolute right-3 top-1/2 -translate-y-1/2 text-type_grey"
               (click)="onTogglePasswordVisibility(0)"
+              type="button"
             >
               @if (!showPassword[0]) {
                 <i class="fa fa-eye"></i>
@@ -145,6 +146,7 @@
             <button
               class="absolute right-3 top-1/2 -translate-y-1/2 text-type_grey"
               (click)="onTogglePasswordVisibility(1)"
+              type="button"
             >
               @if (!showPassword[1]) {
                 <i class="fa fa-eye"></i>
@@ -175,8 +177,9 @@
           </button>
 
           <button
-            class="flex items-center space-x-2 whitespace-nowrap hover:text-primary text-type_title_gray group"
+            class="flex items-center space-x-2 whitespace-nowrap hover:text-primary text-type_title_gray group text-xs mobile:text-base font-semibold"
             routerLink="/auth/sign-in"
+            type="button"
           >
             <p>Sign in</p>
             <svg
