@@ -170,12 +170,17 @@
         <div class="mt-2 flex items-center space-x-10">
           <button
             type="submit"
-            [disabled]="!signupForm.valid"
-            class="w-full flex justify-center items-center py-2 px-4 rounded-md text-sm font-medium text-white bg-primary h-[42px] hover:bg-opacity-70"
+            class="w-full flex justify-center items-center space-x-2 py-2 px-4 rounded-md text-sm font-medium text-white bg-primary h-[42px] hover:bg-opacity-70 disabled:bg-gray-300 disabled:cursor-not-allowed"
+            [disabled]="signupForm.invalid"
           >
-            Sign up
+            @if (isLoading) {
+              <app-loader
+                [customStyle]="{ width: '18px', border: '3px solid #fff' }"
+              />
+            }
+            <span>Sign up</span>
           </button>
-
+          <p-toast />
           <button
             class="flex items-center space-x-2 whitespace-nowrap hover:text-primary text-type_title_gray group text-xs mobile:text-base font-semibold"
             routerLink="/auth/sign-in"

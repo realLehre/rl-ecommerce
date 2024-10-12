@@ -1,5 +1,6 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   inject,
   OnInit,
@@ -13,17 +14,32 @@ import {
 import { RouterLink } from '@angular/router';
 import { ErrorMessageDirective } from '../../user/address/address-form/directives/error-message.directive';
 import { NgClass } from '@angular/common';
+import { AuthService } from '../services/auth.service';
+import { LoaderComponent } from '../../../shared/components/loader/loader.component';
+import { ToastService } from '../../../shared/services/toast.service';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-sign-up',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, ErrorMessageDirective, NgClass],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    ErrorMessageDirective,
+    NgClass,
+    LoaderComponent,
+    ToastModule,
+  ],
   templateUrl: './sign-up.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './sign-up.component.scss',
 })
 export class SignUpComponent implements OnInit {
+  private authService = inject(AuthService);
+  private cdr = inject(ChangeDetectorRef);
+  private toastService = inject(ToastService);
   fb = inject(FormBuilder);
+  isLoading: boolean = false;
   signupForm!: FormGroup;
   showPassword: boolean[] = [];
   passwordMatch: boolean = true;
@@ -32,18 +48,39 @@ export class SignUpComponent implements OnInit {
 
   ngOnInit() {
     this.signupForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', [Validators.required, Validators.minLength(6)]],
+      firstName: [null, Validators.required],
+      lastName: [null, Validators.required],
+      email: [null, [Validators.required, Validators.email]],
+      password: ['Test1234', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: [
+        'Test1234',
+        [Validators.required, Validators.minLength(6)],
+      ],
     });
   }
 
   onSubmit() {
     if (this.signupForm.valid) {
-      console.log(this.signupForm.value);
-      // Here you would typically call a service to handle the sign-up process
+      this.isLoading = true;
+      const data = this.authService.formatSignUpData(this.signupForm.value);
+
+      this.authService.signUp(data).subscribe({
+        next: (res) => {
+          this.isLoading = false;
+          if (res.error) {
+            const message = this.authService.getError(res.error);
+
+            this.toastService.showToast({
+              type: 'error',
+              message: message,
+              summary: 'Error',
+            });
+          }
+          console.log(res);
+          this.cdr.detectChanges();
+        },
+        error: (err) => {},
+      });
     }
   }
 

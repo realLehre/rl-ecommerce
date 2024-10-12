@@ -4,7 +4,6 @@ import {
   RouterLink,
   RouterOutlet,
 } from '@angular/router';
-import { Location } from '@angular/common';
 import { slideInAnimation } from '../../route-animations';
 
 @Component({
@@ -18,11 +17,6 @@ import { slideInAnimation } from '../../route-animations';
 })
 export class AuthComponent {
   contexts = inject(ChildrenOutletContexts);
-  private location = inject(Location);
-
-  onNavigateBack() {
-    this.location.back();
-  }
 
   getRouteAnimationData() {
     return this.contexts.getContext('primary')?.route?.snapshot?.data?.[
