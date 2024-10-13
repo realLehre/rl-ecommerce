@@ -4,6 +4,7 @@ import {
   Component,
   inject,
   OnInit,
+  signal,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -39,7 +40,7 @@ export class SignUpComponent implements OnInit {
   private cdr = inject(ChangeDetectorRef);
   private toastService = inject(ToastService);
   fb = inject(FormBuilder);
-  isLoading: boolean = false;
+  isLoading = signal<boolean>(false);
   signupForm!: FormGroup;
   showPassword: boolean[] = [];
   passwordMatch: boolean = true;
@@ -61,12 +62,13 @@ export class SignUpComponent implements OnInit {
 
   onSubmit() {
     if (this.signupForm.valid) {
-      this.isLoading = true;
+      this.isLoading.set(true);
       const data = this.authService.formatSignUpData(this.signupForm.value);
 
       this.authService.signUp(data).subscribe({
         next: (res) => {
-          this.isLoading = false;
+          this.isLoading.set(false);
+
           if (res.error) {
             const message = this.authService.getError(res.error);
 
@@ -77,15 +79,19 @@ export class SignUpComponent implements OnInit {
             });
           }
           console.log(res);
-          this.cdr.detectChanges();
         },
-        error: (err) => {},
+        error: (err) => {
+          this.isLoading.set(false);
+        },
       });
     }
   }
 
   onKey(event: any) {
-    if (!this.signupForm.get('confirmPassword')?.dirty) {
+    if (
+      !this.signupForm.get('confirmPassword')?.dirty &&
+      !this.signupForm.get('confirmPassword')?.value
+    ) {
       return;
     }
     this.passwordMatch =

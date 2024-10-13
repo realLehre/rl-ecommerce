@@ -5,6 +5,7 @@ import { MobileNavComponent } from './features/homepage/mobile-nav/mobile-nav.co
 import { LayoutService } from './shared/services/layout.service';
 import { NgClass } from '@angular/common';
 import { FooterComponent } from './core/components/footer/footer.component';
+import { ToastComponent } from './shared/components/toast/toast.component';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +16,7 @@ import { FooterComponent } from './core/components/footer/footer.component';
     MobileNavComponent,
     NgClass,
     FooterComponent,
+    ToastComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

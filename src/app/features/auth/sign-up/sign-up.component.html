@@ -173,7 +173,7 @@
             class="w-full flex justify-center items-center space-x-2 py-2 px-4 rounded-md text-sm font-medium text-white bg-primary h-[42px] hover:bg-opacity-70 disabled:bg-gray-300 disabled:cursor-not-allowed"
             [disabled]="signupForm.invalid"
           >
-            @if (isLoading) {
+            @if (isLoading()) {
               <app-loader
                 [customStyle]="{ width: '18px', border: '3px solid #fff' }"
               />

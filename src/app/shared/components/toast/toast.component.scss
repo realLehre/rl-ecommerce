@@ -1,0 +1,12 @@
+.loader {
+  animation: shrink 5s linear forwards; /* Animation duration: 5 seconds */
+}
+
+@keyframes shrink {
+  from {
+    width: 100%; /* Start with full width */
+  }
+  to {
+    width: 0; /* Reduce width to 0% */
+  }
+}
