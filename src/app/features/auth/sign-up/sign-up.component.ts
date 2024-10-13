@@ -5,6 +5,7 @@ import {
   inject,
   OnInit,
   signal,
+  ViewContainerRef,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -40,6 +41,7 @@ export class SignUpComponent implements OnInit {
   private cdr = inject(ChangeDetectorRef);
   private toastService = inject(ToastService);
   fb = inject(FormBuilder);
+  private vcr = inject(ViewContainerRef);
   isLoading = signal<boolean>(false);
   signupForm!: FormGroup;
   showPassword: boolean[] = [];
@@ -58,6 +60,8 @@ export class SignUpComponent implements OnInit {
         [Validators.required, Validators.minLength(6)],
       ],
     });
+
+    this.toastService.vcr = this.vcr;
   }
 
   onSubmit() {
@@ -74,8 +78,12 @@ export class SignUpComponent implements OnInit {
 
             this.toastService.showToast({
               type: 'error',
-              message: message,
-              summary: 'Error',
+              message: message!,
+            });
+          } else {
+            this.toastService.showToast({
+              type: 'success',
+              message: 'Sign up successfully!',
             });
           }
           console.log(res);

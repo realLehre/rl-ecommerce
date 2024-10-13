@@ -1,8 +1,8 @@
 <div
-  class="shadow-stone-500 shadow-sm flex bg-white mobile:max-w-[330px] w-full mobile:w-auto"
+  class="shadow-stone-500 shadow-sm flex bg-white mobile:max-w-[350px] mobile:min-w-[350px] w-[90%] mobile:w-auto fixed top-4 right-1/2 mobile:translate-x-0 mobile:right-7 z-[1010101010101] toast-container"
 >
   <div
-    class="min-h-full flex items-center justify-center w-12"
+    class="min-h-full flex items-center justify-center w-12 min-w-12"
     [ngClass]="toastInfo().type == 'error' ? 'bg-red-100' : 'bg-green-100'"
   >
     @switch (toastInfo().type) {
@@ -45,7 +45,7 @@
     }
   </div>
 
-  <div class="space-y-2 py-4 px-4 relative overflow-hidden">
+  <div class="space-y-2 py-4 px-4 relative overflow-hidden grow">
     <div class="flex items-center justify-between spacex-2">
       <h3
         class="text-sm font-medium capitalize"
@@ -56,7 +56,10 @@
         {{ toastInfo().type }}
       </h3>
 
-      <button>
+      <button
+        (click)="onCloseToast()"
+        class="w-6 h-6 flex items-center justify-center"
+      >
         <img src="assets/images/icons/close.svg" alt="" />
       </button>
     </div>

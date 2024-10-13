@@ -6,7 +6,7 @@ import {
   SupabaseClient,
 } from '@supabase/supabase-js';
 import { environment } from '../../../../environments/environment';
-import { defer, from } from 'rxjs';
+import { catchError, defer, from, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -31,13 +31,15 @@ export class AuthService {
         this.supabase.auth.signUp({
           email: data.email,
           password: data.password,
+          options: {
+            data: {
+              lastName: data.lastName,
+              firstName: data.firstName,
+            },
+          },
         }),
       ),
     );
-    // return await this.supabase.auth.signUp({
-    //   email: data.email,
-    //   password: data.password,
-    // });
   }
 
   formatSignUpData(data: any) {
@@ -51,6 +53,8 @@ export class AuthService {
     switch (err.code) {
       case 'user_already_exists':
         return err.message;
+      case 'unexpected_failure':
+        return 'Something went wrong. Try again!';
     }
     return;
   }

@@ -1,5 +1,6 @@
-import { Component, input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { NgClass } from '@angular/common';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-toast',
@@ -9,8 +10,16 @@ import { NgClass } from '@angular/common';
   styleUrl: './toast.component.scss',
 })
 export class ToastComponent {
-  toastInfo = input<{ type: 'warn' | 'error' | 'success'; message: string }>({
+  private toastService = inject(ToastService);
+  toastInfo = signal<{
+    type: 'warn' | 'error' | 'success';
+    message: string;
+  }>({
     type: 'success',
     message: 'Item added to cart successfully',
   });
+
+  onCloseToast() {
+    this.toastService.hideToast();
+  }
 }

@@ -1,12 +1,48 @@
+.toast-container {
+  animation:
+    slideIn 0.4s ease-out forwards,
+    bounce 0.4s ease-out 0.3s;
+}
+
 .loader {
-  animation: shrink 5s linear forwards; /* Animation duration: 5 seconds */
+  animation: shrink 3s linear forwards;
+}
+
+@keyframes slideIn {
+  0% {
+    right: -300px;
+    opacity: 0;
+  }
+  80% {
+    right: 16px;
+    opacity: 1;
+  }
+  100% {
+    right: 16px;
+    opacity: 1;
+  }
+}
+
+@keyframes bounce {
+  0% {
+    right: 20px;
+  }
+  20% {
+    right: 10px;
+  }
+  40% {
+    right: 15px;
+  }
+  100% {
+    right: 20px;
+  }
 }
 
 @keyframes shrink {
   from {
-    width: 100%; /* Start with full width */
+    width: 100%;
   }
   to {
-    width: 0; /* Reduce width to 0% */
+    width: 0;
   }
 }
