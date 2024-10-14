@@ -20,6 +20,7 @@ import { AuthService } from '../services/auth.service';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 import { ToastService } from '../../../shared/services/toast.service';
 import { ToastModule } from 'primeng/toast';
+import { PasswordMatchDirective } from '../directives/password-match.directive';
 
 @Component({
   selector: 'app-sign-up',
@@ -31,6 +32,7 @@ import { ToastModule } from 'primeng/toast';
     NgClass,
     LoaderComponent,
     ToastModule,
+    PasswordMatchDirective,
   ],
   templateUrl: './sign-up.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -54,11 +56,8 @@ export class SignUpComponent implements OnInit {
       firstName: [null, Validators.required],
       lastName: [null, Validators.required],
       email: [null, [Validators.required, Validators.email]],
-      password: ['Test1234', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: [
-        'Test1234',
-        [Validators.required, Validators.minLength(6)],
-      ],
+      password: [null, [Validators.required, Validators.minLength(6)]],
+      confirmPassword: [null, [Validators.required, Validators.minLength(6)]],
     });
 
     this.toastService.vcr = this.vcr;
@@ -93,18 +92,6 @@ export class SignUpComponent implements OnInit {
         },
       });
     }
-  }
-
-  onKey(event: any) {
-    if (
-      !this.signupForm.get('confirmPassword')?.dirty &&
-      !this.signupForm.get('confirmPassword')?.value
-    ) {
-      return;
-    }
-    this.passwordMatch =
-      this.signupForm.get('password')?.value ===
-      this.signupForm.get('confirmPassword')?.value;
   }
 
   isInvalidAndTouched(controlName: string): boolean {

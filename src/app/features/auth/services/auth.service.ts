@@ -55,7 +55,8 @@ export class AuthService {
         return err.message;
       case 'unexpected_failure':
         return 'Something went wrong. Try again!';
+      default:
+        return "Something went wrong. Try again!'";
     }
-    return;
   }
 }
