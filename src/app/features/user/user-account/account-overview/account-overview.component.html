@@ -35,15 +35,17 @@
         <dl class="space-y-4">
           <div>
             <dt class="text-sm font-medium text-gray-500">Name</dt>
-            <dd class="text-base">John Doe</dd>
+            <dd class="text-base capitalize">
+              {{ user()?.fullName }}
+            </dd>
           </div>
           <div>
             <dt class="text-sm font-medium text-gray-500">Email</dt>
-            <dd class="text-base">johndoe&#64;example.com</dd>
+            <dd class="text-base">{{ user()?.email }}</dd>
           </div>
           <div>
             <dt class="text-sm font-medium text-gray-500">Phone</dt>
-            <dd class="text-base">+1 234 567 8900</dd>
+            <dd class="text-base">{{ user()?.phoneNumber }}</dd>
           </div>
         </dl>
       </div>
