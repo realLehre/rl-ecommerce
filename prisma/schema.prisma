@@ -1,0 +1,156 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String          @id @default(uuid())
+  email       String          @unique
+  name        String?
+  phoneNumber String?
+  createdAt   DateTime        @default(now())
+  updateAt    DateTime        @updatedAt
+  addresses   Address[]
+  ratings     ProductRating[]
+  carts       Cart[]
+}
+
+model Cart {
+  id           String     @id @default(uuid())
+  user         User       @relation(fields: [userId], references: [id])
+  userId       String
+  cartItems    CartItem[]
+  subtTotal    Int
+  shippingCost Int
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model CartItem {
+  id           String   @id @default(uuid())
+  total        Int
+  unit         Int
+  cart         Cart     @relation(fields: [cartId], references: [id])
+  cartId       String
+  product      Product  @relation(fields: [productId], references: [id])
+  productId    String
+  shippingCost Int      @default(100)
+  updatedAt    DateTime @updatedAt
+  createdAt    DateTime @default(now())
+
+  @@index([cartId])
+  @@index([productId])
+}
+
+model Address {
+  id                    String   @id @default(uuid())
+  user                  User     @relation(fields: [userId], references: [id])
+  userId                String
+  name                  String
+  phoneNumber           String
+  additionalPhoneNumber String?
+  deliveryAddress       String
+  additionalInformation String?
+  country               String
+  state                 String
+  city                  String
+  isDefault             Boolean  @default(false)
+  createdAt             DateTime @default(now())
+  updateAt              DateTime @updatedAt
+}
+
+model Product {
+  id            String          @id @default(uuid())
+  name          String
+  description   String
+  image         String
+  imageUrls     String[]
+  videoUrls     String[]
+  price         Int
+  previousPrice Int             @default(0)
+  isSoldOut     Boolean         @default(false)
+  unit          Int
+  category      Category[]
+  ratings       ProductRating[]
+  cartItems     CartItem[]
+  createdAt     DateTime        @default(now())
+  updateAt      DateTime        @updatedAt
+}
+
+model Category {
+  id            String        @id @default(uuid())
+  name          String        @unique
+  products      Product[]
+  subCategories SubCategory[]
+  createdAt     DateTime      @default(now())
+  updateAt      DateTime      @updatedAt
+}
+
+model SubCategory {
+  id        String     @id @default(uuid())
+  name      String     @unique
+  category  Category[]
+  createdAt DateTime   @default(now())
+  updateAt  DateTime   @updatedAt
+}
+
+model ProductRating {
+  id        String   @id @default(uuid())
+  rating    Int      @default(0)
+  comment   String?
+  createdAt DateTime @default(now())
+  product   Product  @relation(fields: [productId], references: [id])
+  productId String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+}
+
+// **** TO CALCULATE CartItem.Total ********
+// CREATE OR REPLACE FUNCTION calculate_cartitem_total() RETURNS TRIGGER AS $$
+// BEGIN
+//   -- Calculate the total for the cart item (price * unit)
+//   NEW.total := (SELECT price FROM Product WHERE id = NEW.productId) * NEW.unit;
+//   RETURN NEW;
+// END;
+// $$ LANGUAGE plpgsql;
+//
+// CREATE TRIGGER update_cartitem_total
+// BEFORE INSERT OR UPDATE ON "CartItem"
+// FOR EACH ROW
+// EXECUTE FUNCTION calculate_cartitem_total();
+
+// ***** TO CALCULATE Cart.Total ******
+// CREATE OR REPLACE FUNCTION update_cart_totals() RETURNS TRIGGER AS $$
+// BEGIN
+//   -- Calculate the subtotal for the cart (sum of CartItem totals)
+//   UPDATE "Cart"
+//   SET subtotal = (
+//       SELECT COALESCE(SUM(total), 0)
+//       FROM "CartItem"
+//       WHERE "CartItem".cartId = NEW.cartId
+//     ),
+//     total = (
+//       SELECT COALESCE(SUM(total + shippingCost), 0)
+//       FROM "CartItem"
+//       WHERE "CartItem".cartId = NEW.cartId
+//     )
+//   WHERE id = NEW.cartId;
+//
+//   RETURN NEW;
+// END;
+// $$ LANGUAGE plpgsql;
+//
+// CREATE TRIGGER calculate_cart_totals
+// AFTER INSERT OR UPDATE OR DELETE ON "CartItem"
+// FOR EACH ROW
+// EXECUTE FUNCTION update_cart_totals();

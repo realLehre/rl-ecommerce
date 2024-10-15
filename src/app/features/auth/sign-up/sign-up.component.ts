@@ -56,42 +56,52 @@ export class SignUpComponent implements OnInit {
       firstName: [null, Validators.required],
       lastName: [null, Validators.required],
       email: [null, [Validators.required, Validators.email]],
-      password: [null, [Validators.required, Validators.minLength(6)]],
-      confirmPassword: [null, [Validators.required, Validators.minLength(6)]],
+      password: ['Test1234', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: [
+        'Test1234',
+        [Validators.required, Validators.minLength(6)],
+      ],
     });
 
     this.toastService.vcr = this.vcr;
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (this.signupForm.valid) {
       this.isLoading.set(true);
       const data = this.authService.formatSignUpData(this.signupForm.value);
+      const { error } = await this.authService.signUp(data);
+      try {
+        if (error) {
+          this.toastService.showToast({
+            type: 'error',
+            message: this.authService.getError(error),
+          });
+          return;
+        }
 
-      this.authService.signUp(data).subscribe({
-        next: (res) => {
-          this.isLoading.set(false);
-
-          if (res.error) {
-            const message = this.authService.getError(res.error);
-
-            this.toastService.showToast({
-              type: 'error',
-              message: message!,
-            });
-          } else {
-            this.toastService.showToast({
-              type: 'success',
-              message: 'Sign up successfully!',
-            });
-          }
-          console.log(res);
-        },
-        error: (err) => {
-          this.isLoading.set(false);
-        },
-      });
+        this.toastService.showToast({
+          type: 'success',
+          message: 'Sign up successfully!',
+        });
+      } catch (error: any) {
+        this.toastService.showToast({
+          type: 'error',
+          message: error.message,
+        });
+      } finally {
+        this.isLoading.set(false);
+      }
     }
+  }
+
+  onSignInWithGoogle() {
+    this.authService.continueWithGoogle().then((res) => {
+      this.toastService.showToast({
+        type: 'success',
+        message: 'Logged in successfully!,',
+      });
+    });
   }
 
   isInvalidAndTouched(controlName: string): boolean {

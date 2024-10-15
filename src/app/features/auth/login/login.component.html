@@ -59,9 +59,14 @@
           <button
             type="submit"
             [disabled]="!loginForm.valid"
-            class="w-full flex justify-center items-center py-2 px-4 rounded-md text-sm font-medium text-white bg-primary h-[42px] hover:bg-opacity-70"
+            class="w-full flex justify-center items-center py-2 px-4 rounded-md text-sm font-medium text-white bg-primary h-[42px] hover:bg-opacity-70 space-x-2"
           >
-            Sign in
+            @if (isLoading()) {
+              <app-loader
+                [customStyle]="{ width: '18px', border: '3px solid #fff' }"
+              />
+            }
+            <span>Sign in</span>
           </button>
 
           <button

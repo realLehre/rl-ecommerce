@@ -24,7 +24,6 @@ export class PasswordMatchDirective {
     if (
       password?.value &&
       password?.value !== confirmPassword?.value &&
-      confirmPassword?.dirty &&
       confirmPassword?.value
     ) {
       return { passwordMatch: true };

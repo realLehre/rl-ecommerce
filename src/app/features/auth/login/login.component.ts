@@ -3,6 +3,7 @@ import {
   Component,
   inject,
   OnInit,
+  signal,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -11,34 +12,65 @@ import {
   Validators,
 } from '@angular/forms';
 
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { NgClass } from '@angular/common';
+import { AuthService } from '../services/auth.service';
+import { LoaderComponent } from '../../../shared/components/loader/loader.component';
+import { ToastService } from '../../../shared/services/toast.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, NgClass],
+  imports: [ReactiveFormsModule, RouterLink, NgClass, LoaderComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnInit {
   fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private toastService = inject(ToastService);
+  private router = inject(Router);
   loginForm!: FormGroup;
   showPassword: boolean[] = [];
+  isLoading = signal<boolean>(false);
 
   constructor() {}
 
   ngOnInit() {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      email: [null, [Validators.required, Validators.email]],
+      password: ['Test12345', [Validators.required, Validators.minLength(6)]],
     });
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (this.loginForm.valid) {
-      // Here you would typically call a service to handle the sign-up process
+      this.isLoading.set(true);
+      const data = {
+        email: this.loginForm.value.email,
+        password: this.loginForm.value.password,
+      };
+      const { error } = await this.authService.login(data);
+
+      try {
+        if (error) {
+          this.toastService.showToast({
+            type: 'error',
+            message: error.message,
+          });
+          return;
+        }
+
+        this.toastService.showToast({
+          type: 'success',
+          message: 'Signed in successfully!',
+        });
+        this.router.navigate(['/']);
+      } catch (error) {
+      } finally {
+        this.isLoading.set(false);
+      }
     }
   }
 
