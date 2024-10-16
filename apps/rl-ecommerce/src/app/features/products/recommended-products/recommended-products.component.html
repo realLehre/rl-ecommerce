@@ -1,0 +1,60 @@
+<div class="w-full">
+  <div class="flex items-center justify-between space-x-3">
+    <h3 class="text-base mobile:text-lg text-type_grey font-semibold">
+      You May Also Like
+    </h3>
+
+    <div class="flex items-center space-x-4">
+      <div
+        class="w-12 h-12 rounded-full bg-bg_subtle flex items-center justify-center"
+        [class.opacity-50]="!showLeftArrow"
+        [class.cursor-not-allowed]="!showLeftArrow"
+        [class.cursor-pointer]="showLeftArrow"
+        (click)="scroll('left')"
+      >
+        <svg
+          width="32"
+          height="32"
+          viewBox="0 0 32 32"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          class="-rotate-180"
+        >
+          <path
+            d="M21.5627 14.6667L14.4107 7.51473L16.296 5.62939L26.6667 16.0001L16.296 26.3707L14.4107 24.4854L21.5627 17.3334H5.33337V14.6667H21.5627Z"
+            fill="#555555"
+          />
+        </svg>
+      </div>
+      <div
+        class="w-12 h-12 rounded-full bg-bg_subtle flex items-center justify-center"
+        [class.opacity-50]="!showRightArrow"
+        [class.cursor-not-allowed]="!showRightArrow"
+        [class.cursor-pointer]="showRightArrow"
+        (click)="scroll('right')"
+      >
+        <svg
+          width="32"
+          height="32"
+          viewBox="0 0 32 32"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M21.5627 14.6667L14.4107 7.51473L16.296 5.62939L26.6667 16.0001L16.296 26.3707L14.4107 24.4854L21.5627 17.3334H5.33337V14.6667H21.5627Z"
+            fill="#555555"
+          />
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div
+    #carouselContainer
+    class="overflow-x-auto space-x-4 scrollbar-hide scroll-smooth grid grid-flow-col auto-cols-[minmax(220px,1fr)] gap-x-3 mt-6 snap-proximity snap-x hide-scrollbar w-full"
+  >
+    @for (product of products; track product.id) {
+    <app-product-card [product]="product" class="snap-center" />
+    }
+  </div>
+</div>

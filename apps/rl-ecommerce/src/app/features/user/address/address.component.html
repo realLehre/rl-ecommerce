@@ -1,0 +1,29 @@
+<div class="">
+  @if (!isAddingAddress) {
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-base mobile:text-2xl font-medium">
+      Addresses ({{ addresses.length }})
+    </h1>
+    <button
+      class="bg-primary text-xs mobile:text-sm hover:opacity-80 text-white font-semibold py-2 px-4 rounded"
+      [routerLink]="['/', 'user', 'address-management']"
+      [queryParams]="{ add: true }"
+    >
+      Add New Address
+    </button>
+  </div>
+
+  <div
+    class="gap-4 grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] mobile:grid-cols-[repeat(auto-fill,minmax(305px,1fr))]"
+  >
+    @for (address of addresses; track address.street) {
+    <app-address-card [address]="address" />
+    }
+  </div>
+  } @else {
+  <app-address-form
+    (closeForm)="isAddingAddress = false"
+    [formMode]="addressFormMode"
+  />
+  }
+</div>

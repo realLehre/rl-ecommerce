@@ -1,0 +1,26 @@
+<div class="flex justify-between items-start space-x-3">
+  @for (status of timeLine; track status.label; let i = $index) {
+  <div class="grow">
+    <div class="flex items-center space-x-3">
+      <img
+        appOrderStatusIcon
+        [timeLine]="timeLine"
+        [status]="status"
+        alt=""
+        class="w-6 tablet:w-8"
+      />
+      @if (i < timeLine.length - 1) {
+      <div
+        class="bg-border_subtle h-[2px] min-w-[40px] w-[40px] min-[700px]:w-[120px] grow shrink"
+      ></div>
+      }
+    </div>
+    <p class="text-type_title_gray font-medium my-2 text-sm">
+      {{ status.label }}
+    </p>
+    <p class="text-type_caption font-semibold text-xs tablet:text-base">
+      {{ status.date }}
+    </p>
+  </div>
+  }
+</div>

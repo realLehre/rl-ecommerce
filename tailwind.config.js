@@ -1,5 +1,5 @@
 module.exports = {
-  content: ["./src/**/*.{html,ts}"],
+  content: ["./apps/rl-ecommerce/src/**/*.{html,ts}"],
   theme: {
     fontFamily: {
       playfair: ["Playfair Display", "serif"],

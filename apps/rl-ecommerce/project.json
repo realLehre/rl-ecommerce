@@ -1,0 +1,96 @@
+{
+  "name": "rl-ecommerce",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "generators": {
+    "@schematics/angular:component": {
+      "style": "scss"
+    }
+  },
+  "sourceRoot": "apps/rl-ecommerce/src",
+  "prefix": "app",
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:application",
+      "options": {
+        "outputPath": "dist/apps/rl-ecommerce",
+        "index": "apps/rl-ecommerce/src/index.html",
+        "browser": "apps/rl-ecommerce/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/rl-ecommerce/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          "apps/rl-ecommerce/src/favicon.ico",
+          "apps/rl-ecommerce/src/assets"
+        ],
+        "styles": [
+          "apps/rl-ecommerce/src/styles.scss",
+          "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
+          "node_modules/primeng/resources/primeng.min.css"
+        ],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "fileReplacements": [
+            {
+              "replace": "apps/rl-ecommerce/src/environments/environment.ts",
+              "with": "apps/rl-ecommerce/src/environments/environment.development.ts"
+            }
+          ]
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "rl-ecommerce:build:production"
+        },
+        "development": {
+          "buildTarget": "rl-ecommerce:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "rl-ecommerce:build"
+      }
+    },
+    "test": {
+      "executor": "@angular-devkit/build-angular:karma",
+      "options": {
+        "polyfills": ["zone.js", "zone.js/testing"],
+        "tsConfig": "apps/rl-ecommerce/tsconfig.spec.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          "apps/rl-ecommerce/src/favicon.ico",
+          "apps/rl-ecommerce/src/assets"
+        ],
+        "styles": ["apps/rl-ecommerce/src/styles.scss"],
+        "scripts": []
+      }
+    }
+  }
+}

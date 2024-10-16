@@ -1,0 +1,168 @@
+<div
+  class="flex items-center justify-center bg-bg_main shadow-sm shadow-grey-300 h-[75px]"
+>
+  <div
+    class="flex items-center justify-between tablet:w-[85%] max-w-[1200px] w-[90%] py-4"
+  >
+    <div class="flex items-center space-x-5">
+      <button class="tablet:hidden block border-0 outline-0">
+        <img
+          src="assets/images/icons/bars.svg"
+          alt=""
+          class="w-6 min-w-6 h-6 min-h-6"
+          (click)="onOpenMenu()"
+        />
+      </button>
+      <div routerLink="/">
+        <img
+          src="assets/images/icons/logo.png"
+          alt=""
+          class="w-[100px] tablet:w-[120px]"
+        />
+      </div>
+    </div>
+
+    <div
+      class="tablet:w-1/2 tablet:h-[43px] h-full py-2 px-3 tablet:bg-transparent bg-bg_main tablet:relative absolute w-full top-0 left-0 -translate-y-[100%] tablet:translate-y-0 transition ease-in-out flex items-center justify-center"
+      [ngClass]="{ 'translate-y-0': searchShown }"
+    >
+      <div class="relative w-full h-10 flex items-center space-x-10">
+        <div class="w-full h-full">
+          <img
+            src="assets/images/icons/search.svg"
+            alt=""
+            class="absolute left-3 top-1/2 -translate-y-1/2"
+          />
+          <input
+            class="w-full focus:outline-0 rounded-full bg-bg_subtle border border-border_subtle h-full pl-12 text-type_caption font-medium placeholder:text-type_caption"
+            placeholder="Search"
+          />
+        </div>
+        <img
+          src="assets/images/icons/close.svg"
+          alt=""
+          class="w-4 min-w-4 h-4 min-h-4 tablet:hidden block"
+          (click)="onToggleSearch()"
+        />
+      </div>
+    </div>
+
+    <div class="flex items-center space-x-4">
+      <img
+        src="assets/images/icons/search.svg"
+        alt=""
+        class="tablet:hidden block cursor-pointer"
+        (click)="onToggleSearch()"
+      />
+      <div
+        class="cursor-pointer group w-8 h-8 flex items-center justify-center"
+        routerLink="/cart"
+      >
+        <svg
+          class="w-6 h-6"
+          viewBox="0 0 32 33"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5.33328 9.05198L1.00928 4.72932L2.89594 2.84265L7.21861 7.16665H27.5413C27.7491 7.16664 27.954 7.2152 28.1398 7.30847C28.3255 7.40175 28.4868 7.53714 28.6109 7.70385C28.735 7.87055 28.8184 8.06396 28.8545 8.26863C28.8905 8.4733 28.8783 8.68357 28.8186 8.88265L25.6186 19.5493C25.5363 19.8241 25.3675 20.065 25.1374 20.2363C24.9073 20.4075 24.6281 20.5 24.3413 20.5H7.99994V23.1667H22.6666V25.8333H6.66661C6.31299 25.8333 5.97385 25.6928 5.7238 25.4428C5.47375 25.1927 5.33328 24.8536 5.33328 24.5V9.05198ZM7.99994 9.83332V17.8333H23.3493L25.7493 9.83332H7.99994ZM7.33328 31.1667C6.80284 31.1667 6.29414 30.9559 5.91906 30.5809C5.54399 30.2058 5.33328 29.6971 5.33328 29.1667C5.33328 28.6362 5.54399 28.1275 5.91906 27.7524C6.29414 27.3774 6.80284 27.1667 7.33328 27.1667C7.86371 27.1667 8.37242 27.3774 8.74749 27.7524C9.12256 28.1275 9.33328 28.6362 9.33328 29.1667C9.33328 29.6971 9.12256 30.2058 8.74749 30.5809C8.37242 30.9559 7.86371 31.1667 7.33328 31.1667ZM23.3333 31.1667C22.8028 31.1667 22.2941 30.9559 21.9191 30.5809C21.544 30.2058 21.3333 29.6971 21.3333 29.1667C21.3333 28.6362 21.544 28.1275 21.9191 27.7524C22.2941 27.3774 22.8028 27.1667 23.3333 27.1667C23.8637 27.1667 24.3724 27.3774 24.7475 27.7524C25.1226 28.1275 25.3333 28.6362 25.3333 29.1667C25.3333 29.6971 25.1226 30.2058 24.7475 30.5809C24.3724 30.9559 23.8637 31.1667 23.3333 31.1667Z"
+            fill="#333333"
+            class="group-hover:!fill-primary"
+          />
+        </svg>
+      </div>
+
+      <div
+        class="flex items-center space-x-2 cursor-pointer group"
+        (click)="menu.toggle($event)"
+        #menuContainer
+      >
+        <div
+          class="flex items-center justify-center h-6 w-6 rounded-full border-[2.5px] border-[#333333] group-hover:border-primary"
+        >
+          <svg
+            class="w-4 h-4"
+            viewBox="0 0 24 25"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20 22.5H18V20.5C18 19.7044 17.6839 18.9413 17.1213 18.3787C16.5587 17.8161 15.7956 17.5 15 17.5H9C8.20435 17.5 7.44129 17.8161 6.87868 18.3787C6.31607 18.9413 6 19.7044 6 20.5V22.5H4V20.5C4 19.1739 4.52678 17.9021 5.46447 16.9645C6.40215 16.0268 7.67392 15.5 9 15.5H15C16.3261 15.5 17.5979 16.0268 18.5355 16.9645C19.4732 17.9021 20 19.1739 20 20.5V22.5ZM12 13.5C11.2121 13.5 10.4319 13.3448 9.7039 13.0433C8.97595 12.7417 8.31451 12.2998 7.75736 11.7426C7.20021 11.1855 6.75825 10.5241 6.45672 9.7961C6.15519 9.06815 6 8.28793 6 7.5C6 6.71207 6.15519 5.93185 6.45672 5.2039C6.75825 4.47595 7.20021 3.81451 7.75736 3.25736C8.31451 2.70021 8.97595 2.25825 9.7039 1.95672C10.4319 1.65519 11.2121 1.5 12 1.5C13.5913 1.5 15.1174 2.13214 16.2426 3.25736C17.3679 4.38258 18 5.9087 18 7.5C18 9.0913 17.3679 10.6174 16.2426 11.7426C15.1174 12.8679 13.5913 13.5 12 13.5V13.5ZM12 11.5C13.0609 11.5 14.0783 11.0786 14.8284 10.3284C15.5786 9.57828 16 8.56087 16 7.5C16 6.43913 15.5786 5.42172 14.8284 4.67157C14.0783 3.92143 13.0609 3.5 12 3.5C10.9391 3.5 9.92172 3.92143 9.17157 4.67157C8.42143 5.42172 8 6.43913 8 7.5C8 8.56087 8.42143 9.57828 9.17157 10.3284C9.92172 11.0786 10.9391 11.5 12 11.5V11.5Z"
+              class="group-hover:!fill-primary"
+              fill="#333333"
+            />
+          </svg>
+        </div>
+        @if (user()) {
+        <div class="items-center space-x-1 hidden mobile:flex">
+          <p
+            class="text-sm text-type_title_gray group-hover:text-primary font-semibold capitalize"
+          >
+            Hi, {{ userName }}
+          </p>
+          <i class="fa fa-angle-down group-hover:text-primary"></i>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-menu #menu [popup]="true" [appendTo]="menuContainer">
+  <ng-template pTemplate="start">
+    <div class="py-3">
+      @if (!user()) {
+      <div
+        class="w-full items-center flex justify-center pt-3 border-b-[1px] border-border_subtle"
+      >
+        <button
+          class="w-[85%] rounded-md text-white font-medium bg-primary py-2 block hover:bg-opacity-80"
+          routerLink="/auth"
+        >
+          Sign In
+        </button>
+      </div>
+      } @else {
+      <div class="w-full">
+        <div
+          class="flex items-center space-x-4 px-3 py-2 hover:bg-border_subtle cursor-pointer"
+          routerLink="/user"
+        >
+          <img src="assets/images/icons/user.svg" alt="" class="w-5" />
+          <p class="text-type_caption">My Account</p>
+        </div>
+        <div
+          class="flex items-center space-x-4 px-3 py-2 hover:bg-border_subtle cursor-pointer"
+          routerLink="/orders"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 448 512"
+            class="w-5"
+          >
+            <path
+              d="M50.7 58.5L0 160l208 0 0-128L93.7 32C75.5 32 58.9 42.3 50.7 58.5zM240 160l208 0L397.3 58.5C389.1 42.3 372.5 32 354.3 32L240 32l0 128zm208 32L0 192 0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-224z"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="50"
+            />
+          </svg>
+
+          <p class="text-type_caption">Orders</p>
+        </div>
+      </div>
+
+      <div
+        class="w-full border-t-[1px] border-border_subtle mt-3 pt-3 text-center"
+      >
+        <button
+          class="bg-transparent border-0 text-primary font-semibold"
+          (click)="onSignOut()"
+        >
+          LOGOUT
+        </button>
+      </div>
+      }
+    </div>
+  </ng-template>
+</p-menu>
