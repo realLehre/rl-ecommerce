@@ -4,21 +4,21 @@
       {{ address().name }}
     </h2>
     <p class="text-type_caption mt-2 break-words">
-      {{ address().street + address().city + address().state }}
+      {{ address().city! + address().state! }}
     </p>
     <p class="text-type_caption">
-      {{ address().phoneNumbers.join(' / ') }}
+      {{ address().phoneNumber }}
     </p>
   </div>
   <div class="mt-5 flex justify-between items-center">
     @if (address().isDefault) {
-    <span class="text-primary font-medium">Default Address</span>
+      <span class="text-primary font-medium">Default Address</span>
     } @else {
-    <button
-      class="text-type_grey border-type_grey border rounded-full py-1 px-3 hover:text-primary hover:border-primary font-medium"
-    >
-      Set as Default
-    </button>
+      <button
+        class="text-type_grey border-type_grey border rounded-full py-1 px-3 hover:text-primary hover:border-primary font-medium"
+      >
+        Set as Default
+      </button>
     }
     <div class="flex items-center space-x-2">
       <button

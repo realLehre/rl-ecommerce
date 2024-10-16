@@ -1,38 +1,58 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { IAddress } from '../../models/address.interface';
 import { AbstractControl, ValidationErrors } from '@angular/forms';
+import { environment } from '../../../../../environments/environment';
+import { AuthService } from '../../../auth/services/auth.service';
+import { HttpClient } from '@angular/common/http';
+import { CreateAddressDto } from '../../../../../../../api/src/app/api-address/create-address.dto';
+import { tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AddressService {
+  baseUrl = environment.apiUrl;
+  authService = inject(AuthService);
+  private http = inject(HttpClient);
   addresses: IAddress[] = [
     {
       name: 'David Omolere Egbuwalo',
-      street: 'Parakin, Ile Ifejddddddddddddddddddddddddddddddddddddddddddd',
       city: 'Ile Ife',
       state: 'Osun',
-      phoneNumbers: ['+234 9131778206', '+234 8168467330'],
+      phoneNumber: '+234 9131778206',
       isDefault: true,
     },
     {
       name: 'Jane Doe',
-      street: '123 Main Street',
       city: 'Lagos',
       state: 'Lagos',
-      phoneNumbers: ['+234 9012345678'],
+      phoneNumber: '+234 9131778206',
       isDefault: false,
     },
     {
       name: 'John Smith',
-      street: '456 Elm Street',
       city: 'Abuja',
       state: 'FCT',
-      phoneNumbers: ['+234 9087654321', '+234 9076543210'],
+      phoneNumber: '+234 9131778206',
       isDefault: false,
     },
   ];
   constructor() {}
+
+  getAddress() {
+    return this.http
+      .get<{
+        addresses: IAddress[];
+      }>(`${this.baseUrl}users/${this.authService.user()?.id}/address`)
+      .pipe(tap((res) => console.log(res)));
+  }
+
+  addAddress(data: CreateAddressDto) {
+    return this.http.post(
+      `${this.baseUrl}users/${this.authService.user()?.id}/address`,
+      data,
+    );
+  }
 
   phoneNumberValidator(control: AbstractControl): ValidationErrors | null {
     const value: string = control.value || '';

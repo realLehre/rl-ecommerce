@@ -1,105 +1,112 @@
 <div class="w-full">
-	<h1 class="text-base mobile:text-2xl font-medium mb-6">
-		{{ isEditingProfile() ? "Edit Profile" : "Account Overview" }}
-	</h1>
-	
-	@if (!isEditingProfile()) {
-		<div
-			class="gap-6 grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] mobile:grid-cols-[repeat(auto-fill,minmax(305px,1fr))]"
-		>
-			<!-- Account Details Card -->
-			<div class="rounded-lg bg-bg_subtle shadow-sm overflow-hidden">
-				<div
-					class="px-6 py-4 flex justify-between items-center border-b border-gray-300"
-				>
-					<h2 class="text-lg font-medium">Account Details</h2>
-					<button
-						class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-white text-gray-900 shadow-sm border border-gray-200 hover:bg-gray-100 h-9 px-4 py-2"
-						(click)="isEditingProfile.set(true)"
-					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="16"
-							height="16"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							class="mr-2"
-						>
-							<path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
-							<path d="m15 5 4 4"></path>
-						</svg>
-						Edit
-					</button>
-				</div>
-				<div class="p-6">
-					<dl class="space-y-4">
-						<div>
-							<dt class="text-sm font-medium text-gray-500">Name</dt>
-							<dd class="text-base capitalize">
-								{{ user()?.fullName }}
-							</dd>
-						</div>
-						<div>
-							<dt class="text-sm font-medium text-gray-500">Email</dt>
-							<dd class="text-base">{{ user()?.email }}</dd>
-						</div>
-						<div>
-							<dt class="text-sm font-medium text-gray-500">Phone</dt>
-							<dd class="text-base">{{ user()?.phoneNumber }}</dd>
-						</div>
-					</dl>
-				</div>
-			</div>
-			
-			<!-- Address Book Card -->
-			<div class="rounded-lg bg-bg_subtle shadow-sm overflow-hidden">
-				<div
-					class="px-6 py-4 flex justify-between items-center border-b border-gray-300"
-				>
-					<h2 class="text-lg font-medium">Address Book</h2>
-					<button
-						class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-white text-gray-900 shadow-sm border border-gray-200 hover:bg-gray-100 h-9 px-4 py-2"
-						[routerLink]="['/', 'user', 'address-management']"
-						[queryParams]="{ edit: true }"
-					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="16"
-							height="16"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							class="mr-2"
-						>
-							<path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
-							<path d="m15 5 4 4"></path>
-						</svg>
-						Edit
-					</button>
-				</div>
-				<div class="p-6">
-					<h3 class="text-sm font-medium text-gray-500 mb-2">
-						Default Shipping Address
-					</h3>
-					<address class="not-italic text-base">
-						123 Main St<br />
-						Apt 4B<br />
-						Cityville, State 12345<br />
-						Country
-					</address>
-				</div>
-			</div>
-		</div>
-	} @else {
-		<div>
-			<app-overview-form (cancelEdit)="onCancelProfileEdit()" />
-		</div>
-	}
+  <h1 class="text-base mobile:text-2xl font-medium mb-6">
+    {{ isEditingProfile() ? 'Edit Profile' : 'Account Overview' }}
+  </h1>
+
+  @if (!isEditingProfile()) {
+    <div
+      class="gap-6 grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] mobile:grid-cols-[repeat(auto-fill,minmax(305px,1fr))]"
+    >
+      <!-- Account Details Card -->
+      <div class="rounded-lg bg-bg_subtle shadow-sm overflow-hidden">
+        <div
+          class="px-6 py-4 flex justify-between items-center border-b border-gray-300"
+        >
+          <h2 class="text-lg font-medium">Account Details</h2>
+          <button
+            class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-white text-gray-900 shadow-sm border border-gray-200 hover:bg-gray-100 h-9 px-4 py-2"
+            (click)="isEditingProfile.set(true)"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="mr-2"
+            >
+              <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
+              <path d="m15 5 4 4"></path>
+            </svg>
+            Edit
+          </button>
+        </div>
+        <div class="p-6">
+          @if (user$ | async; as user) {
+            <div class="space-y-4">
+              <div class="flex items-center space-x-1">
+                <p class="text-sm font-medium text-gray-500">Name:</p>
+                <p class="text-base capitalize w-full break-words">
+                  {{ user.name }}
+                </p>
+              </div>
+              <div class="flex items-center space-x-1">
+                <p class="text-sm font-medium text-gray-500">Email:</p>
+                <p class="text-base w-full break-words">{{ user.email }}</p>
+              </div>
+              <div class="flex items-center space-x-1">
+                <p class="text-sm font-medium text-gray-500">Phone:</p>
+                <p class="text-base w-full break-words">
+                  {{ user.phoneNumber }}
+                </p>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Address Book Card -->
+      <div class="rounded-lg bg-bg_subtle shadow-sm overflow-hidden">
+        <div
+          class="px-6 py-4 flex justify-between items-center border-b border-gray-300"
+        >
+          <h2 class="text-lg font-medium">Address Book</h2>
+          <button
+            class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-white text-gray-900 shadow-sm border border-gray-200 hover:bg-gray-100 h-9 px-4 py-2"
+            [routerLink]="['/', 'user', 'address-management']"
+            [queryParams]="{ edit: true }"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="mr-2"
+            >
+              <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
+              <path d="m15 5 4 4"></path>
+            </svg>
+            Edit
+          </button>
+        </div>
+        <div class="p-6">
+          <h3 class="text-sm font-medium text-gray-500 mb-2">
+            Default Shipping Address
+          </h3>
+          <address class="not-italic text-base">
+            123 Main St<br />
+            Apt 4B<br />
+            Cityville, State 12345<br />
+            Country
+          </address>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div>
+      <app-overview-form
+        (cancelEdit)="onCancelProfileEdit()"
+        [user]="user$ | async"
+      />
+    </div>
+  }
 </div>

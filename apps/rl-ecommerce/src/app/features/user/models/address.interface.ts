@@ -1,8 +1,15 @@
 export interface IAddress {
-  name: string;
-  street: string;
-  city: string;
-  state: string;
-  phoneNumbers: string[];
+  id?: string;
+  userId?: string;
+  name?: string;
+  phoneNumber: string;
+  additionalPhoneNumber?: string;
+  deliveryAddress?: string;
+  additionalInformation?: string;
+  country?: string;
+  state?: string;
+  city?: string;
   isDefault: boolean;
+  createdAt?: string;
+  updateAt?: string;
 }

@@ -9,11 +9,19 @@ import { IAddress } from '../models/address.interface';
 import { AddressCardComponent } from './address-card/address-card.component';
 import { AddressFormComponent } from './address-form/address-form.component';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { AsyncPipe } from '@angular/common';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-address',
   standalone: true,
-  imports: [AddressCardComponent, AddressFormComponent, RouterLink],
+  imports: [
+    AddressCardComponent,
+    AddressFormComponent,
+    RouterLink,
+    AsyncPipe,
+    SkeletonModule,
+  ],
   templateUrl: './address.component.html',
   styleUrl: './address.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,15 +30,17 @@ export class AddressComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private addressService = inject(AddressService);
-  addresses: IAddress[] = this.addressService.addresses;
   isAddingAddress: boolean = false;
   addressFormMode: string = 'add';
+  addresses$ = this.addressService.getAddress();
 
   constructor() {
     this.checkRoute();
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.addressService.getAddress();
+  }
 
   checkRoute() {
     this.route.queryParams.subscribe((param) => {

@@ -7,6 +7,7 @@ import {
   input,
   OnInit,
   output,
+  signal,
   ViewChild,
 } from '@angular/core';
 import {
@@ -22,6 +23,8 @@ import { AddressService } from '../services/address.service';
 import { ErrorMessageDirective } from './directives/error-message.directive';
 import { CheckboxModule } from 'primeng/checkbox';
 import { RouterLink } from '@angular/router';
+import { ToastService } from '../../../../shared/services/toast.service';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 declare const google: any;
 
 @Component({
@@ -34,6 +37,7 @@ declare const google: any;
     ErrorMessageDirective,
     CheckboxModule,
     RouterLink,
+    LoaderComponent,
   ],
   templateUrl: './address-form.component.html',
   styleUrl: './address-form.component.scss',
@@ -42,11 +46,13 @@ declare const google: any;
 export class AddressFormComponent implements OnInit, AfterViewInit {
   private addressService = inject(AddressService);
   private fb = inject(FormBuilder);
+  private toast = inject(ToastService);
   closeForm = output<void>();
   formMode = input<string>();
   addressForm!: FormGroup;
   @ViewChild('addressInput', { static: false })
   addressInput!: ElementRef<HTMLInputElement>;
+  isLoading = signal(false);
 
   constructor() {}
 
@@ -58,13 +64,13 @@ export class AddressFormComponent implements OnInit, AfterViewInit {
         '',
         [Validators.required, this.addressService.phoneNumberValidator],
       ],
-      additionalPhoneNumber: ['', Validators.pattern(/^\d{10}$/)],
-      deliveryAddress: ['', [Validators.required, Validators.minLength(5)]],
+      additionalPhoneNumber: ['', this.addressService.phoneNumberValidator],
+      deliveryAddress: ['', [Validators.required]],
       additionalInformation: [''],
       country: ['', Validators.required],
       state: ['', Validators.required],
       city: ['', Validators.required],
-      isDefaultAddress: [false],
+      isDefault: [false],
     });
   }
 
@@ -74,7 +80,7 @@ export class AddressFormComponent implements OnInit, AfterViewInit {
       {
         types: ['geocode'],
         componentRestrictions: { country: [] },
-      }
+      },
     );
 
     autocomplete.addListener('place_changed', () => {
@@ -87,8 +93,37 @@ export class AddressFormComponent implements OnInit, AfterViewInit {
 
   onSubmit() {
     if (this.addressForm.valid) {
-      console.log(this.addressForm.value);
-      // Handle form submission
+      this.isLoading.set(true);
+
+      const formValue = { ...this.addressForm.value };
+      const name = formValue.firstName + ' ' + formValue.lastName;
+      delete formValue['firstName'];
+      delete formValue['lastName'];
+
+      this.addressService.addAddress({ ...formValue, name }).subscribe({
+        next: (res) => {
+          console.log(res);
+          this.isLoading.set(false);
+
+          this.toast.showToast({
+            type: 'success',
+            message: 'Address created successfully!',
+          });
+
+          this.closeForm.emit();
+
+          this.addressForm.reset();
+        },
+        error: (err) => {
+          console.log(err);
+          this.isLoading.set(false);
+
+          this.toast.showToast({
+            type: 'error',
+            message: err.error.message,
+          });
+        },
+      });
     } else {
       this.addressForm.markAllAsTouched();
     }

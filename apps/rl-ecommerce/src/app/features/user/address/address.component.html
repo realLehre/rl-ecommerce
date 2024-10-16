@@ -1,29 +1,48 @@
 <div class="">
   @if (!isAddingAddress) {
-  <div class="flex justify-between items-center mb-6">
-    <h1 class="text-base mobile:text-2xl font-medium">
-      Addresses ({{ addresses.length }})
-    </h1>
-    <button
-      class="bg-primary text-xs mobile:text-sm hover:opacity-80 text-white font-semibold py-2 px-4 rounded"
-      [routerLink]="['/', 'user', 'address-management']"
-      [queryParams]="{ add: true }"
-    >
-      Add New Address
-    </button>
-  </div>
+    <div class="flex justify-between items-center mb-6">
+      @if (addresses$ | async; as addressess) {
+        <h1 class="text-base mobile:text-2xl font-medium">
+          Addresses ({{ addressess.addresses.length }})
+        </h1>
+      } @else {
+        <p-skeleton width="7rem" height="2rem" />
+      }
 
-  <div
-    class="gap-4 grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] mobile:grid-cols-[repeat(auto-fill,minmax(305px,1fr))]"
-  >
-    @for (address of addresses; track address.street) {
-    <app-address-card [address]="address" />
-    }
-  </div>
+      @if (addresses$ | async) {
+        <button
+          class="bg-primary text-xs mobile:text-sm hover:opacity-80 text-white font-semibold py-2 px-4 rounded"
+          [routerLink]="['/', 'user', 'address-management']"
+          [queryParams]="{ add: true }"
+        >
+          Add New Address
+        </button>
+      } @else {
+        <p-skeleton width="7rem" height="2rem" />
+      }
+    </div>
+
+    <div
+      class="gap-4 grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] mobile:grid-cols-[repeat(auto-fill,minmax(305px,1fr))]"
+    >
+      @if (addresses$ | async; as addresses) {
+        @for (address of addresses.addresses; track address.id) {
+          <app-address-card [address]="address" />
+        }
+      } @else {
+        <div>
+          <p-skeleton width="100%" height="10rem" />
+        </div>
+
+        <div>
+          <p-skeleton width="100%" height="10rem" />
+        </div>
+      }
+    </div>
   } @else {
-  <app-address-form
-    (closeForm)="isAddingAddress = false"
-    [formMode]="addressFormMode"
-  />
+    <app-address-form
+      (closeForm)="isAddingAddress = false"
+      [formMode]="addressFormMode"
+    />
   }
 </div>

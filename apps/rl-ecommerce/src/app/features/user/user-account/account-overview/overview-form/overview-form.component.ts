@@ -1,4 +1,11 @@
-import { Component, inject, OnInit, output } from '@angular/core';
+import {
+  Component,
+  inject,
+  input,
+  OnInit,
+  output,
+  signal,
+} from '@angular/core';
 import { ErrorMessageDirective } from '../../../address/address-form/directives/error-message.directive';
 import {
   FormBuilder,
@@ -7,48 +14,75 @@ import {
   Validators,
 } from '@angular/forms';
 import { NgClass } from '@angular/common';
-import { AuthService } from '../../../../auth/services/auth.service';
+import { AuthService, IUser } from '../../../../auth/services/auth.service';
 import { AddressService } from '../../../address/services/address.service';
 import { UserAccountService } from '../../services/user-account.service';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { catchError, switchMap, tap } from 'rxjs';
+import { LoaderComponent } from '../../../../../shared/components/loader/loader.component';
+import { ToastService } from '../../../../../shared/services/toast.service';
 
 @Component({
   selector: 'app-overview-form',
   standalone: true,
-  imports: [ErrorMessageDirective, ReactiveFormsModule, NgClass],
+  imports: [
+    ErrorMessageDirective,
+    ReactiveFormsModule,
+    NgClass,
+    LoaderComponent,
+  ],
   templateUrl: './overview-form.component.html',
   styleUrl: './overview-form.component.scss',
 })
 export class OverviewFormComponent implements OnInit {
   private fb = inject(FormBuilder);
-  private authService = inject(AuthService);
   private addressService = inject(AddressService);
+  private toastService = inject(ToastService);
   private userAccountService = inject(UserAccountService);
+  user = input.required<IUser>();
   profileForm!: FormGroup;
   cancelEdit = output<void>();
+  isLoading = signal(false);
 
   ngOnInit() {
     this.profileForm = this.fb.group({
-      fullName: [null, Validators.required],
-      email: [null, Validators.required],
+      fullName: [this.user()?.name, Validators.required],
+      email: [this.user()?.email, Validators.required],
       phoneNumber: [
-        null,
+        this.user()?.phoneNumber ?? null,
         [Validators.required, this.addressService.phoneNumberValidator],
       ],
     });
-
-    const user = this.authService.user();
-    if (user) {
-      this.profileForm.setValue({
-        fullName: user.fullName,
-        email: user.email,
-        phoneNumber: user.phoneNumber,
-      });
-    }
   }
 
   onSubmit() {
     if (this.profileForm.valid) {
-      this.userAccountService.getUser();
+      const data = {
+        name: this.profileForm.value.fullName,
+        phoneNumber: this.profileForm.value.phoneNumber,
+      };
+
+      this.isLoading.set(true);
+
+      this.userAccountService.updateUser(data).subscribe({
+        next: (res) => {
+          localStorage.setItem('hdjeyu7830nsk083hd', JSON.stringify(res));
+          this.isLoading.set(false);
+          this.toastService.showToast({
+            type: 'success',
+            message: 'Profile updated!',
+          });
+          this.cancelEdit.emit();
+        },
+        error: (err) => {
+          this.isLoading.set(false);
+          this.toastService.showToast({
+            type: 'error',
+            message: err.error.message,
+          });
+          console.log(err);
+        },
+      });
     }
   }
 

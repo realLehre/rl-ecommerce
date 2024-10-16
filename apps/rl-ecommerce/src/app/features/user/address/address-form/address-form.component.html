@@ -36,12 +36,12 @@
               [ngClass]="{ 'border-red-500': isInvalidAndTouched('firstName') }"
             />
 
-            @if (isInvalidAndTouched("firstName")) {
-            <p
-              class="mt-1 text-sm text-red-500 h-5"
-              appErrorMessage
-              [controlName]="'firstName'"
-            ></p>
+            @if (isInvalidAndTouched('firstName')) {
+              <p
+                class="mt-1 text-sm text-red-500 h-5"
+                appErrorMessage
+                [controlName]="'firstName'"
+              ></p>
             }
           </div>
         </div>
@@ -59,12 +59,12 @@
               class="w-full px-3 py-2 border-[2px] rounded-md focus:outline-none bg-bg_subtle"
               [ngClass]="{ 'border-red-500': isInvalidAndTouched('lastName') }"
             />
-            @if (isInvalidAndTouched("lastName")) {
-            <p
-              class="mt-1 text-sm text-red-500 h-5"
-              appErrorMessage
-              [controlName]="'lastName'"
-            ></p>
+            @if (isInvalidAndTouched('lastName')) {
+              <p
+                class="mt-1 text-sm text-red-500 h-5"
+                appErrorMessage
+                [controlName]="'lastName'"
+              ></p>
             }
           </div>
         </div>
@@ -88,12 +88,12 @@
               }"
               appPhoneNumber
             />
-            @if (isInvalidAndTouched("phoneNumber")) {
-            <p
-              class="mt-1 text-sm text-red-500 h-5"
-              appErrorMessage
-              [controlName]="'phoneNumber'"
-            ></p>
+            @if (isInvalidAndTouched('phoneNumber')) {
+              <p
+                class="mt-1 text-sm text-red-500 h-5"
+                appErrorMessage
+                [controlName]="'phoneNumber'"
+              ></p>
             }
           </div>
         </div>
@@ -113,12 +113,12 @@
                 'border-red-500': isInvalidAndTouched('additionalPhoneNumber'),
               }"
             />
-            @if (isInvalidAndTouched("additionalPhoneNumber")) {
-            <p
-              class="mt-1 text-sm text-red-500 h-5"
-              appErrorMessage
-              [controlName]="'additionalPhoneNumber'"
-            ></p>
+            @if (isInvalidAndTouched('additionalPhoneNumber')) {
+              <p
+                class="mt-1 text-sm text-red-500 h-5"
+                appErrorMessage
+                [controlName]="'additionalPhoneNumber'"
+              ></p>
             }
           </div>
         </div>
@@ -140,12 +140,12 @@
             }"
             #addressInput
           />
-          @if (isInvalidAndTouched("deliveryAddress")) {
-          <p
-            class="mt-1 text-sm text-red-500 h-5"
-            appErrorMessage
-            [controlName]="'deliveryAddress'"
-          ></p>
+          @if (isInvalidAndTouched('deliveryAddress')) {
+            <p
+              class="mt-1 text-sm text-red-500 h-5"
+              appErrorMessage
+              [controlName]="'deliveryAddress'"
+            ></p>
           }
         </div>
       </div>
@@ -180,12 +180,12 @@
               class="w-full px-3 py-2 border-[2px] rounded-md focus:outline-none bg-bg_subtle"
               [ngClass]="{ 'border-red-500': isInvalidAndTouched('country') }"
             />
-            @if (isInvalidAndTouched("country")) {
-            <p
-              class="mt-1 text-sm text-red-500 h-5"
-              appErrorMessage
-              [controlName]="'country'"
-            ></p>
+            @if (isInvalidAndTouched('country')) {
+              <p
+                class="mt-1 text-sm text-red-500 h-5"
+                appErrorMessage
+                [controlName]="'country'"
+              ></p>
             }
           </div>
         </div>
@@ -204,12 +204,12 @@
               class="w-full px-3 py-2 border-[2px] rounded-md focus:outline-none bg-bg_subtle"
               [ngClass]="{ 'border-red-500': isInvalidAndTouched('state') }"
             />
-            @if (isInvalidAndTouched("state")) {
-            <p
-              class="mt-1 text-sm text-red-500 h-5"
-              appErrorMessage
-              [controlName]="'state'"
-            ></p>
+            @if (isInvalidAndTouched('state')) {
+              <p
+                class="mt-1 text-sm text-red-500 h-5"
+                appErrorMessage
+                [controlName]="'state'"
+              ></p>
             }
           </div>
         </div>
@@ -225,12 +225,12 @@
               class="w-full px-3 py-2 border-[2px] rounded-md focus:outline-none bg-bg_subtle"
               [ngClass]="{ 'border-red-500': isInvalidAndTouched('city') }"
             />
-            @if (isInvalidAndTouched("city")) {
-            <p
-              class="mt-1 text-sm text-red-500 h-5"
-              appErrorMessage
-              [controlName]="'city'"
-            ></p>
+            @if (isInvalidAndTouched('city')) {
+              <p
+                class="mt-1 text-sm text-red-500 h-5"
+                appErrorMessage
+                [controlName]="'city'"
+              ></p>
             }
           </div>
         </div>
@@ -238,7 +238,7 @@
 
       <div class="mb-6">
         <label class="inline-flex items-center">
-          <p-checkbox [binary]="true" formControlName="isDefaultAddress" />
+          <p-checkbox [binary]="true" formControlName="isDefault" />
           <span class="ml-2 text-sm text-gray-700">Set as Default Address</span>
         </label>
       </div>
@@ -246,9 +246,14 @@
       <div class="flex justify-end">
         <button
           type="submit"
-          class="px-4 py-2 bg-primary text-white rounded-md hover:bg-opacity-80 focus:outline-none"
+          class="flex items-center space-x-2 px-4 py-2 bg-primary text-white rounded-md hover:bg-opacity-80 focus:outline-none"
         >
-          Save Address
+          @if (isLoading()) {
+            <app-loader
+              [customStyle]="{ width: '18px', border: '3px solid #fff' }"
+            />
+          }
+          <span>Save Address</span>
         </button>
       </div>
     </form>

@@ -7,10 +7,13 @@ import {
   User,
 } from '@supabase/supabase-js';
 import { environment } from '../../../../environments/environment';
+import { UserAccountService } from '../../user/user-account/services/user-account.service';
+import { Router } from '@angular/router';
 
 export interface IUser {
   id: string;
   fullName: string;
+  name?: string;
   phoneNumber: string | null;
   email: string;
 }
@@ -19,12 +22,13 @@ export interface IUser {
   providedIn: 'root',
 })
 export class AuthService {
+  private router = inject(Router);
   private supabase!: SupabaseClient;
   user = signal<IUser | null>(null);
   constructor() {
     this.supabase = createClient(
       environment.supabaseUrl,
-      environment.supabaseKey
+      environment.supabaseKey,
     );
     this.onAuthStateChanged();
   }
@@ -60,7 +64,10 @@ export class AuthService {
   }
 
   signOut() {
-    this.supabase.auth.signOut();
+    this.supabase.auth.signOut().then((res) => {
+      this.router.navigate(['/']);
+      localStorage.clear();
+    });
   }
 
   onAuthStateChanged() {
