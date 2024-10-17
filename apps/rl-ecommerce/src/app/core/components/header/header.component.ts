@@ -16,7 +16,7 @@ import { AuthService } from '../../../features/auth/services/auth.service';
 export class HeaderComponent {
   private authService = inject(AuthService);
   user = this.authService.user;
-  userName = this.user()?.fullName.split(' ')[0];
+  userName = this.user()?.fullName.split(' ')[0]!;
   private layoutService = inject(LayoutService);
 
   searchShown: boolean = false;

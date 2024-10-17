@@ -33,4 +33,12 @@ export class ApiAddressController {
   ) {
     return this.addressService.addAddress(userId, createAddressDto);
   }
+
+  @Patch('address/edit/:id')
+  async editAddress(
+    @Param('id') id: string,
+    @Body() addressData: CreateAddressDto,
+  ) {
+    return this.addressService.editAddress(id, addressData);
+  }
 }

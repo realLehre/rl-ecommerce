@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { UserAccountComponent } from './user-account/user-account.component';
+import { hasUnsavedChangesGuard } from '../../shared/guards/has-unsaved-changes.guard';
 
 export const userRoutes: Routes = [
   { path: '', redirectTo: 'account-overview', pathMatch: 'full' },
@@ -18,8 +19,9 @@ export const userRoutes: Routes = [
         path: 'address-management',
         loadComponent: () =>
           import('../user/address/address.component').then(
-            (c) => c.AddressComponent
+            (c) => c.AddressComponent,
           ),
+        canDeactivate: [hasUnsavedChangesGuard],
       },
       {
         path: 'account-settings',

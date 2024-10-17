@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  HostListener,
   inject,
   OnInit,
   signal,
@@ -12,6 +13,8 @@ import { AddressFormComponent } from './address-form/address-form.component';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
 import { SkeletonModule } from 'primeng/skeleton';
+import { CanComponentDeactivate } from '../../../shared/guards/has-unsaved-changes.guard';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-address',
@@ -27,13 +30,14 @@ import { SkeletonModule } from 'primeng/skeleton';
   styleUrl: './address.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AddressComponent {
+export class AddressComponent implements CanComponentDeactivate {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private addressService = inject(AddressService);
   isAddingAddress: boolean = false;
   addressFormMode: string = 'add';
   addresses$ = this.addressService.getAddress();
+  isAddressTouched = false;
 
   constructor() {
     this.checkRoute();
@@ -56,5 +60,22 @@ export class AddressComponent {
 
       this.addressFormMode = Object.keys(param)[0];
     });
+  }
+
+  canDeactivate(): boolean {
+    if (this.isAddressTouched) {
+      return confirm(
+        'You have unsaved changes, are you sure you want to quit?',
+      );
+    } else {
+      return true;
+    }
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: any) {
+    if (!this.canDeactivate()) {
+      $event.returnValue = true;
+    }
   }
 }

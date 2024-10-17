@@ -54,6 +54,7 @@
   } @else {
     <app-address-form
       (closeForm)="onCloseForm()"
+      (addressTouched)="isAddressTouched = $event"
       [formMode]="addressFormMode"
     />
   }

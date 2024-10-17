@@ -29,4 +29,13 @@ export class ApiAddressService {
       },
     });
   }
+
+  async editAddress(id: string, data: CreateAddressDto) {
+    return this.prisma.address.update({
+      where: { id },
+      data: {
+        ...data,
+      },
+    });
+  }
 }

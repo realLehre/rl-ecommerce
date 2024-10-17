@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { IAddress } from '../../models/address.interface';
 import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { environment } from '../../../../../environments/environment';
@@ -14,6 +14,7 @@ export class AddressService {
   baseUrl = environment.apiUrl + 'users';
   authService = inject(AuthService);
   private http = inject(HttpClient);
+  activeAddress = signal<IAddress | null>(null);
   addresses: IAddress[] = [
     {
       name: 'David Omolere Egbuwalo',
@@ -54,6 +55,10 @@ export class AddressService {
       `${this.baseUrl}/${this.authService.user()?.id}/address`,
       data,
     );
+  }
+
+  editAddress(data: CreateAddressDto, id: string) {
+    return this.http.patch(`${this.baseUrl}/address/edit/${id}`, data);
   }
 
   deleteAddress(id: string) {
