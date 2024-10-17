@@ -58,18 +58,18 @@ export class AddressFormComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.addressForm = this.fb.group({
-      firstName: ['', [Validators.required, Validators.minLength(2)]],
-      lastName: ['', [Validators.required, Validators.minLength(2)]],
+      firstName: [null, [Validators.required, Validators.minLength(2)]],
+      lastName: [null, [Validators.required, Validators.minLength(2)]],
       phoneNumber: [
-        '',
+        null,
         [Validators.required, this.addressService.phoneNumberValidator],
       ],
-      additionalPhoneNumber: ['', this.addressService.phoneNumberValidator],
-      deliveryAddress: ['', [Validators.required]],
-      additionalInformation: [''],
-      country: ['', Validators.required],
-      state: ['', Validators.required],
-      city: ['', Validators.required],
+      additionalPhoneNumber: [null, this.addressService.phoneNumberValidator],
+      deliveryAddress: [null, [Validators.required]],
+      additionalInformation: [null],
+      country: [null, Validators.required],
+      state: [null, Validators.required],
+      city: [null, Validators.required],
       isDefault: [false],
     });
   }
@@ -84,9 +84,14 @@ export class AddressFormComponent implements OnInit, AfterViewInit {
     );
 
     autocomplete.addListener('place_changed', () => {
+      this.addressForm.patchValue({
+        deliveryAddress: autocomplete.getPlace()['formatted_address'],
+      });
+
       const place = autocomplete.getPlace().address_components;
 
       const res = this.addressService.getLocationInfo(place);
+      this.addressForm.patchValue({ city: null, state: null, country: null });
       this.patchInputs(res);
     });
   }
@@ -94,7 +99,6 @@ export class AddressFormComponent implements OnInit, AfterViewInit {
   onSubmit() {
     if (this.addressForm.valid) {
       this.isLoading.set(true);
-
       const formValue = { ...this.addressForm.value };
       const name = formValue.firstName + ' ' + formValue.lastName;
       delete formValue['firstName'];
@@ -102,7 +106,6 @@ export class AddressFormComponent implements OnInit, AfterViewInit {
 
       this.addressService.addAddress({ ...formValue, name }).subscribe({
         next: (res) => {
-          console.log(res);
           this.isLoading.set(false);
 
           this.toast.showToast({
@@ -115,7 +118,6 @@ export class AddressFormComponent implements OnInit, AfterViewInit {
           this.addressForm.reset();
         },
         error: (err) => {
-          console.log(err);
           this.isLoading.set(false);
 
           this.toast.showToast({

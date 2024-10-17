@@ -5,13 +5,13 @@ import { environment } from '../../../../../environments/environment';
 import { AuthService } from '../../../auth/services/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { CreateAddressDto } from '../../../../../../../api/src/app/api-address/create-address.dto';
-import { Observable, tap } from 'rxjs';
+import { Observable, retry, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AddressService {
-  baseUrl = environment.apiUrl;
+  baseUrl = environment.apiUrl + 'users';
   authService = inject(AuthService);
   private http = inject(HttpClient);
   addresses: IAddress[] = [
@@ -42,16 +42,22 @@ export class AddressService {
   getAddress(): Observable<{
     addresses: IAddress[];
   }> {
-    return this.http.get<{
-      addresses: IAddress[];
-    }>(`${this.baseUrl}users/${this.authService.user()?.id}/address`);
+    return this.http
+      .get<{
+        addresses: IAddress[];
+      }>(`${this.baseUrl}/${this.authService.user()?.id}/address`)
+      .pipe(retry(3));
   }
 
   addAddress(data: CreateAddressDto) {
     return this.http.post(
-      `${this.baseUrl}users/${this.authService.user()?.id}/address`,
+      `${this.baseUrl}/${this.authService.user()?.id}/address`,
       data,
     );
+  }
+
+  deleteAddress(id: string) {
+    return this.http.delete(`${this.baseUrl}/address/delete/${id}`);
   }
 
   phoneNumberValidator(control: AbstractControl): ValidationErrors | null {

@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   NotFoundException,
   Param,
@@ -20,16 +21,9 @@ export class ApiAddressController {
     return this.addressService.getAddress(id);
   }
 
-  @Get(':id')
-  async getUserById(@Param('id') id: string) {
-    try {
-      const user = await this.addressService.getAddressById(id);
-      console.log('Controller layer result:', user);
-      return user;
-    } catch (error) {
-      console.error('Controller layer error:', error);
-      throw error;
-    }
+  @Delete('address/delete/:id')
+  async deleteAddress(@Param('id') id: string) {
+    return this.addressService.deleteAddress(id);
   }
 
   @Post(':id/address')

@@ -246,7 +246,8 @@
       <div class="flex justify-end">
         <button
           type="submit"
-          class="flex items-center space-x-2 px-4 py-2 bg-primary text-white rounded-md hover:bg-opacity-80 focus:outline-none"
+          class="flex items-center space-x-2 px-4 py-2 bg-primary text-white rounded-md hover:bg-opacity-80 focus:outline-none disabled:bg-type_grey"
+          [disabled]="addressForm.invalid"
         >
           @if (isLoading()) {
             <app-loader

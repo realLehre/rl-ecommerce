@@ -1,55 +1,116 @@
 <div class="bg-bg_subtle rounded-lg shadow-md p-4 flex flex-col h-full">
-  <div class="flex-grow space-y-1 text-sm mobile:text-base">
+  <div class="flex-grow text-sm mobile:text-base">
     <h2 class="font-medium text-gray-800">
       {{ address().name }}
     </h2>
-    <p class="text-type_caption mt-2 break-words">
-      {{ address().city! + address().state! }}
-    </p>
-    <p class="text-type_caption">
-      {{ address().phoneNumber }}
-    </p>
-  </div>
-  <div class="mt-5 flex justify-between items-center">
-    @if (address().isDefault) {
-      <span class="text-primary font-medium">Default Address</span>
-    } @else {
-      <button
-        class="text-type_grey border-type_grey border rounded-full py-1 px-3 hover:text-primary hover:border-primary font-medium"
-      >
-        Set as Default
-      </button>
-    }
-    <div class="flex items-center space-x-2">
-      <button
-        class="text-blue-500 hover:text-blue-600 w-6 h-6"
-        [routerLink]="['/', 'user', 'address-management']"
-        [queryParams]="{ edit: true }"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5 fill-type_grey"
-          viewBox="0 0 20 20"
+    <div class="space-y-1 mt-2 text-sm">
+      <p class="text-type_grey break-words space-x-1">
+        <span class="text-type_title_gray font-medium">Delivery address:</span>
+        <span>{{ address().deliveryAddress }}</span>
+      </p>
+
+      <p class="text-type_grey break-words space-x-1">
+        <span class="text-type_title_gray font-medium">City:</span>
+        <span>{{ address().city }}</span>
+      </p>
+
+      <p class="text-type_grey break-words space-x-1">
+        <span class="text-type_title_gray font-medium">State:</span>
+        <span>{{ address().state }}</span>
+      </p>
+
+      <p class="text-type_grey break-words space-x-1">
+        <span class="text-type_title_gray font-medium">Country:</span>
+        <span>{{ address().country }}</span>
+      </p>
+      <p class="text-type_caption text-sm">
+        <span>{{ address().phoneNumber }}</span>
+        @if (address().additionalPhoneNumber) {
+          <span> / {{ address().additionalPhoneNumber }} </span>
+        }
+      </p>
+    </div>
+    <div class="mt-5 flex justify-between items-center">
+      @if (address().isDefault) {
+        <span class="text-primary font-medium">Default Address</span>
+      } @else {
+        <button
+          class="text-type_grey border-type_grey border rounded-full py-1 px-3 hover:text-primary hover:border-primary font-medium"
         >
-          <path
-            d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"
-          />
-        </svg>
-      </button>
-      <button class="text-red-500 hover:text-red-600 w-6 h-6">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5"
-          viewBox="0 0 20 20"
-          fill="currentColor"
+          Set as Default
+        </button>
+      }
+      <div class="flex items-center space-x-2">
+        <button
+          class="text-blue-500 hover:text-blue-600 w-6 h-6"
+          [routerLink]="['/', 'user', 'address-management']"
+          [queryParams]="{ edit: true }"
         >
-          <path
-            fill-rule="evenodd"
-            d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-            clip-rule="evenodd"
-          />
-        </svg>
-      </button>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 fill-type_grey"
+            viewBox="0 0 20 20"
+          >
+            <path
+              d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"
+            />
+          </svg>
+        </button>
+        <button
+          class="text-red-500 hover:text-red-600 w-6 h-6"
+          (click)="onDeleteDialogAction()"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </button>
+      </div>
     </div>
   </div>
+
+  <p-dialog
+    [visible]="showDeleteDialog()"
+    [style]="{ width: '25rem' }"
+    [breakpoints]="{ '450px': '90vw' }"
+  >
+    <ng-template pTemplate="headless">
+      <div class="p-5 bg-white">
+        <h3 class="text-type_title font-semibold text-lg mobile:text-xl mb-3">
+          Delete Address?
+        </h3>
+
+        <p class="text-type_grey text-sm mobile:text-base mb-10">
+          This action can not be reversed!
+        </p>
+
+        <div class="flex items-center space-x-3 justify-between">
+          <button
+            class="px-4 py-2 bg-transparent h-11 border-[2px] border-primary rounded-md hover:border-type_grey text-primary hover:text-type_grey flex-1"
+            (click)="onDeleteDialogAction('close')"
+          >
+            Cancel</button
+          ><button
+            class="px-4 py-2 flex items-center justify-center space-x-2 bg-primary h-11 text-white rounded-md hover:bg-opacity-80 focus:outline-none disabled:bg-type_grey flex-1"
+            (click)="onDeleteAddress()"
+          >
+            @if (isLoading()) {
+              <app-loader
+                [customStyle]="{ width: '18px', border: '3px solid #fff' }"
+              />
+            }
+            <span>Delete</span>
+          </button>
+        </div>
+      </div>
+    </ng-template>
+  </p-dialog>
 </div>

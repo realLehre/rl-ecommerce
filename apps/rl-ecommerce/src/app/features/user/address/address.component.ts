@@ -3,6 +3,7 @@ import {
   Component,
   inject,
   OnInit,
+  signal,
 } from '@angular/core';
 import { AddressService } from './services/address.service';
 import { IAddress } from '../models/address.interface';
@@ -26,7 +27,7 @@ import { SkeletonModule } from 'primeng/skeleton';
   styleUrl: './address.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AddressComponent implements OnInit {
+export class AddressComponent {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private addressService = inject(AddressService);
@@ -38,12 +39,13 @@ export class AddressComponent implements OnInit {
     this.checkRoute();
   }
 
-  ngOnInit() {
-    this.addressService.getAddress();
-  }
-
   onCloseForm() {
     this.isAddingAddress = false;
+    this.router.navigateByUrl('/user/address-management');
+  }
+
+  onReloadAddress() {
+    this.addresses$ = this.addressService.getAddress();
   }
 
   checkRoute() {

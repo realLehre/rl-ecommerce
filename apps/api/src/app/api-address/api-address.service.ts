@@ -15,18 +15,10 @@ export class ApiAddressService {
     });
   }
 
-  async getAddressById(id: string) {
-    try {
-      const user = await this.prisma.user.findUnique({
-        where: { id },
-      });
-      if (!user) {
-        throw new NotFoundException(`User with ID ${id} not found`);
-      }
-      return user;
-    } catch (error) {
-      throw error;
-    }
+  async deleteAddress(id: string) {
+    return this.prisma.address.delete({
+      where: { id },
+    });
   }
 
   async addAddress(userId: string, data: CreateAddressDto) {

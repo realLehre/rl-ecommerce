@@ -31,6 +31,10 @@ export class AuthService {
       environment.supabaseKey,
     );
     this.onAuthStateChanged();
+    this.user.set(
+      JSON.parse(localStorage.getItem('sb-tentdyesixetvyacewwr-auth-token')!) ??
+        null,
+    );
   }
 
   signUp(data: {
