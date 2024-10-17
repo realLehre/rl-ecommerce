@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './features/auth/auth.guard';
 
 export const routes: Routes = [
   {
@@ -10,14 +11,14 @@ export const routes: Routes = [
     path: '',
     loadComponent: () =>
       import('./core/components/main-content/main-content.component').then(
-        (c) => c.MainContentComponent
+        (c) => c.MainContentComponent,
       ),
     children: [
       {
         path: 'homepage',
         loadComponent: () =>
           import('./features/homepage/homepage.component').then(
-            (c) => c.HomepageComponent
+            (c) => c.HomepageComponent,
           ),
       },
       {
@@ -36,15 +37,17 @@ export const routes: Routes = [
         path: 'checkout',
         loadComponent: () =>
           import('./features/checkout/checkout.component').then(
-            (c) => c.CheckoutComponent
+            (c) => c.CheckoutComponent,
           ),
+        canActivate: [authGuard],
       },
       {
         path: 'orders',
         loadComponent: () =>
           import('./features/user/user-orders/user-orders.component').then(
-            (c) => c.UserOrdersComponent
+            (c) => c.UserOrdersComponent,
           ),
+        canActivate: [authGuard],
       },
       {
         path: 'orders/:id',
@@ -52,11 +55,13 @@ export const routes: Routes = [
           import(
             './features/user/user-orders/user-order-details/user-order-details.component'
           ).then((c) => c.UserOrderDetailsComponent),
+        canActivate: [authGuard],
       },
       {
         path: 'user',
         loadChildren: () =>
           import('./features/user/user.routes').then((c) => c.userRoutes),
+        canActivate: [authGuard],
       },
     ],
   },
@@ -70,7 +75,7 @@ export const routes: Routes = [
     path: '**',
     loadComponent: () =>
       import('./features/page-not-found/page-not-found.component').then(
-        (c) => c.PageNotFoundComponent
+        (c) => c.PageNotFoundComponent,
       ),
   },
 ];

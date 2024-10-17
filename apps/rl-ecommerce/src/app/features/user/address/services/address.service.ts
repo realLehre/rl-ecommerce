@@ -5,7 +5,7 @@ import { environment } from '../../../../../environments/environment';
 import { AuthService } from '../../../auth/services/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { CreateAddressDto } from '../../../../../../../api/src/app/api-address/create-address.dto';
-import { tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -39,12 +39,12 @@ export class AddressService {
   ];
   constructor() {}
 
-  getAddress() {
-    return this.http
-      .get<{
-        addresses: IAddress[];
-      }>(`${this.baseUrl}users/${this.authService.user()?.id}/address`)
-      .pipe(tap((res) => console.log(res)));
+  getAddress(): Observable<{
+    addresses: IAddress[];
+  }> {
+    return this.http.get<{
+      addresses: IAddress[];
+    }>(`${this.baseUrl}users/${this.authService.user()?.id}/address`);
   }
 
   addAddress(data: CreateAddressDto) {

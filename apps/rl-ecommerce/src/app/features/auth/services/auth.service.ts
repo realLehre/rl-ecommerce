@@ -64,10 +64,10 @@ export class AuthService {
   }
 
   signOut() {
-    this.supabase.auth.signOut().then((res) => {
-      this.router.navigate(['/']);
-      localStorage.clear();
-    });
+    this.supabase.auth.signOut();
+    localStorage.clear();
+    this.user.set(null);
+    this.router.navigate(['/']);
   }
 
   onAuthStateChanged() {

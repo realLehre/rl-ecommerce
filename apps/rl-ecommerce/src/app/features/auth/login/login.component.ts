@@ -12,7 +12,7 @@ import {
   Validators,
 } from '@angular/forms';
 
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NgClass } from '@angular/common';
 import { AuthService } from '../services/auth.service';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
@@ -31,6 +31,7 @@ export class LoginComponent implements OnInit {
   private authService = inject(AuthService);
   private toastService = inject(ToastService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   loginForm!: FormGroup;
   showPassword: boolean[] = [];
   isLoading = signal<boolean>(false);
@@ -66,7 +67,8 @@ export class LoginComponent implements OnInit {
           type: 'success',
           message: 'Signed in successfully!',
         });
-        this.router.navigate(['/']);
+        const returnUrl = this.route.snapshot.queryParams['returnUrl'];
+        this.router.navigateByUrl(returnUrl || '/');
       } catch (error) {
       } finally {
         this.isLoading.set(false);

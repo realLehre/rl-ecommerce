@@ -42,6 +42,10 @@ export class AddressComponent implements OnInit {
     this.addressService.getAddress();
   }
 
+  onCloseForm() {
+    this.isAddingAddress = false;
+  }
+
   checkRoute() {
     this.route.queryParams.subscribe((param) => {
       if (param['edit'] || param['add']) {

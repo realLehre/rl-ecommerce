@@ -1,6 +1,7 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   inject,
@@ -24,6 +25,7 @@ import {
 })
 export class UserNavComponent implements AfterViewInit {
   router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
   activeTab: string;
 
   @ViewChildren('tabLink') tabLinks!: QueryList<ElementRef>;
@@ -37,6 +39,7 @@ export class UserNavComponent implements AfterViewInit {
       if (event instanceof NavigationEnd) {
         this.activeTab = event.url; // Update active tab on route change
         this.scrollToActiveTab(); // Scroll the active tab into view on route change
+        this.cdr.detectChanges();
       }
     });
   }
@@ -44,17 +47,20 @@ export class UserNavComponent implements AfterViewInit {
   setActiveTab(route: string, event: MouseEvent) {
     this.activeTab = route;
     this.scrollToActiveTab(); // Scroll to the active tab when clicked
+    this.cdr.detectChanges();
   }
 
   ngAfterViewInit() {
     this.scrollToActiveTab(); // Scroll the active tab into view after the view is initialized
+    this.cdr.detectChanges();
   }
 
   scrollToActiveTab() {
     // Find the currently active link element
     if (this.tabLinks) {
       const activeLink = this.tabLinks.find(
-        (tab) => tab.nativeElement.getAttribute('routerLink') === this.activeTab
+        (tab) =>
+          tab.nativeElement.getAttribute('routerLink') === this.activeTab,
       );
 
       if (activeLink) {
@@ -65,6 +71,8 @@ export class UserNavComponent implements AfterViewInit {
           inline: 'center',
         });
       }
+
+      this.cdr.detectChanges();
     }
   }
 }

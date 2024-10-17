@@ -6,11 +6,11 @@ import { CreateAddressDto } from './create-address.dto';
 export class ApiAddressService {
   constructor(private prisma: PrismaService) {}
 
-  async getAddress(userId: string) {
+  async getAddress(userId: string): Promise<any> {
     return this.prisma.user.findUnique({
       where: { id: userId },
       select: {
-        addresses: true, // Only fetch addresses
+        addresses: true,
       },
     });
   }
