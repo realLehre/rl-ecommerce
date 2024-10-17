@@ -42,9 +42,15 @@
         <span class="text-primary font-medium">Default Address</span>
       } @else {
         <button
-          class="text-type_grey border-type_grey border rounded-full py-1 px-3 hover:text-primary hover:border-primary font-medium"
+          class="flex items-center space-x-2 text-type_grey border-type_grey border rounded-full py-1 px-3 hover:text-primary hover:border-primary font-medium"
+          (click)="onSetAsDefault()"
         >
-          Set as Default
+          @if (isLoading()) {
+            <app-loader
+              [customStyle]="{ width: '18px', border: '3px solid #555555' }"
+            />
+          }
+          <span> Set as Default</span>
         </button>
       }
       <div class="flex items-center space-x-2">

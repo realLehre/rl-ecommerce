@@ -37,8 +37,31 @@ export class AddressCardComponent {
     });
   }
 
+  onSetAsDefault() {
+    this.isLoading.set(true);
+    this.addressService.setAsDefault(this.address().id!).subscribe({
+      next: (res) => {
+        this.isLoading.set(false);
+        this.toast.showToast({
+          type: 'success',
+          message: `${this.address().deliveryAddress} - set as default`,
+        });
+        this.reloadAddress.emit();
+      },
+      error: (err) => {
+        this.isLoading.set(false);
+        console.log(err);
+        this.toast.showToast({
+          type: 'error',
+          message: err.error.message,
+        });
+      },
+    });
+  }
+
   onDeleteAddress() {
     this.isLoading.set(true);
+
     this.addressService.deleteAddress(this.address().id!).subscribe({
       next: (res) => {
         this.toast.showToast({
@@ -61,6 +84,15 @@ export class AddressCardComponent {
   onDeleteDialogAction(action?: string) {
     if (action === 'close') {
       this.showDeleteDialog.set(false);
+
+      return;
+    }
+
+    if (this.address().isDefault) {
+      this.toast.showToast({
+        type: 'error',
+        message: 'Default address can not be deleted!',
+      });
 
       return;
     }

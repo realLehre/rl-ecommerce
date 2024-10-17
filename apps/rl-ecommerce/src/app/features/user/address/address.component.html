@@ -3,7 +3,7 @@
     @if (addresses$ | async; as addresses) {
       <div class="flex justify-between items-center mb-6">
         <h1 class="text-base mobile:text-2xl font-medium">
-          Addresses ({{ addresses.addresses.length }})
+          Addresses ({{ addresses.length }})
         </h1>
 
         <button
@@ -15,11 +15,11 @@
         </button>
       </div>
 
-      @if (addresses.addresses.length !== 0) {
+      @if (addresses.length !== 0) {
         <div
           class="gap-4 grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] mobile:grid-cols-[repeat(auto-fill,minmax(305px,1fr))]"
         >
-          @for (address of addresses.addresses; track address.id) {
+          @for (address of addresses; track address.id) {
             <app-address-card
               [address]="address"
               (reloadAddress)="onReloadAddress()"

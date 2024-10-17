@@ -41,4 +41,12 @@ export class ApiAddressController {
   ) {
     return this.addressService.editAddress(id, addressData);
   }
+
+  @Patch(':userId/address/default/:addressId')
+  async setDefaultAddress(
+    @Param('userId') userId: string,
+    @Param('addressId') addressId: string,
+  ): Promise<void> {
+    return this.addressService.setDefaultAddress(userId, addressId);
+  }
 }

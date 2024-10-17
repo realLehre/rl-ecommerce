@@ -7,10 +7,11 @@ export class ApiAddressService {
   constructor(private prisma: PrismaService) {}
 
   async getAddress(userId: string): Promise<any> {
-    return this.prisma.user.findUnique({
-      where: { id: userId },
-      select: {
-        addresses: true,
+    return this.prisma.address.findMany({
+      where: { userId: userId },
+
+      orderBy: {
+        isDefault: 'desc',
       },
     });
   }
@@ -22,6 +23,23 @@ export class ApiAddressService {
   }
 
   async addAddress(userId: string, data: CreateAddressDto) {
+    if (data.isDefault) {
+      return this.prisma.$transaction([
+        this.prisma.address.updateMany({
+          where: { userId },
+          data: {
+            isDefault: false,
+          },
+        }),
+
+        this.prisma.address.create({
+          data: {
+            ...data,
+            userId,
+          },
+        }),
+      ]);
+    }
     return this.prisma.address.create({
       data: {
         ...data,
@@ -37,5 +55,29 @@ export class ApiAddressService {
         ...data,
       },
     });
+  }
+
+  async setDefaultAddress(userId: string, addressId: string): Promise<any> {
+    return this.prisma.$transaction([
+      // Update all addresses for the user to isDefault = false
+      this.prisma.address.updateMany({
+        where: {
+          userId: userId,
+          isDefault: true,
+        },
+        data: {
+          isDefault: false,
+        },
+      }),
+      // Set the selected address as default
+      this.prisma.address.update({
+        where: {
+          id: addressId,
+        },
+        data: {
+          isDefault: true,
+        },
+      }),
+    ]);
   }
 }

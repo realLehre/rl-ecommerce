@@ -9,4 +9,5 @@ export class CreateAddressDto {
   additionalPhoneNumber?: string;
   deliveryAddress!: string;
   additionalInformation?: string;
+  isDefault!: boolean;
 }

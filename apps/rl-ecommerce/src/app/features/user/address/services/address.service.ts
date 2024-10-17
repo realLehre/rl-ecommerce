@@ -40,13 +40,9 @@ export class AddressService {
   ];
   constructor() {}
 
-  getAddress(): Observable<{
-    addresses: IAddress[];
-  }> {
+  getAddress(): Observable<IAddress[]> {
     return this.http
-      .get<{
-        addresses: IAddress[];
-      }>(`${this.baseUrl}/${this.authService.user()?.id}/address`)
+      .get<IAddress[]>(`${this.baseUrl}/${this.authService.user()?.id}/address`)
       .pipe(retry(3));
   }
 
@@ -63,6 +59,13 @@ export class AddressService {
 
   deleteAddress(id: string) {
     return this.http.delete(`${this.baseUrl}/address/delete/${id}`);
+  }
+
+  setAsDefault(id: string) {
+    return this.http.patch(
+      `${this.baseUrl}/${this.authService.user()?.id}/address/default/${id}`,
+      {},
+    );
   }
 
   phoneNumberValidator(control: AbstractControl): ValidationErrors | null {
