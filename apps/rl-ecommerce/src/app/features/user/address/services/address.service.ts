@@ -43,7 +43,12 @@ export class AddressService {
   getAddress(): Observable<IAddress[]> {
     return this.http
       .get<IAddress[]>(`${this.baseUrl}/${this.authService.user()?.id}/address`)
-      .pipe(retry(3));
+      .pipe(retry(3))
+      .pipe(
+        tap((res) => {
+          localStorage.setItem('adhd83jss027hshuw8', JSON.stringify(res));
+        }),
+      );
   }
 
   addAddress(data: CreateAddressDto) {

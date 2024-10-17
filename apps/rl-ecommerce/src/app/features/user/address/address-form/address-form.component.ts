@@ -68,6 +68,14 @@ export class AddressFormComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor() {}
 
   ngOnInit() {
+    const addresses: IAddress[] = JSON.parse(
+      localStorage.getItem('adhd83jss027hshuw8')!,
+    );
+    let preDefault = false;
+    if (!addresses.length && !this.activeAddress) {
+      preDefault = true;
+    }
+
     this.addressForm = this.fb.group({
       firstName: [null, [Validators.required, Validators.minLength(2)]],
       lastName: [null, [Validators.required, Validators.minLength(2)]],
@@ -81,7 +89,7 @@ export class AddressFormComponent implements OnInit, AfterViewInit, OnDestroy {
       country: [null, Validators.required],
       state: [null, Validators.required],
       city: [null, Validators.required],
-      isDefault: [false],
+      isDefault: [preDefault],
     });
 
     this.activeAddress = this.addressService.activeAddress()!;
