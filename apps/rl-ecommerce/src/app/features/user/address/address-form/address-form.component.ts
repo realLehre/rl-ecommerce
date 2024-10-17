@@ -5,6 +5,7 @@ import {
   ElementRef,
   inject,
   input,
+  OnDestroy,
   OnInit,
   output,
   signal,
@@ -47,7 +48,7 @@ declare const google: any;
   styleUrl: './address-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AddressFormComponent implements OnInit, AfterViewInit {
+export class AddressFormComponent implements OnInit, AfterViewInit, OnDestroy {
   private addressService = inject(AddressService);
   private fb = inject(FormBuilder);
   private toast = inject(ToastService);
@@ -61,7 +62,8 @@ export class AddressFormComponent implements OnInit, AfterViewInit {
   addressInput!: ElementRef<HTMLInputElement>;
   isLoading = signal(false);
   addressTouched = output<boolean>();
-  activeAddress!: IAddress;
+  activeAddress!: IAddress | null;
+  address$ = this.addressService.getAddress();
 
   constructor() {}
 
@@ -215,5 +217,12 @@ export class AddressFormComponent implements OnInit, AfterViewInit {
   isInvalidAndTouched(controlName: string): boolean {
     const control = this.addressForm.get(controlName);
     return control ? control.invalid && control.touched : false;
+  }
+
+  ngOnDestroy() {
+    if (this.activeAddress) {
+      this.addressService.activeAddress.set(null);
+      this.activeAddress = null;
+    }
   }
 }
