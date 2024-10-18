@@ -68,9 +68,7 @@ export class AddressFormComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor() {}
 
   ngOnInit() {
-    const addresses: IAddress[] = JSON.parse(
-      localStorage.getItem('adhd83jss027hshuw8')!,
-    );
+    const addresses: IAddress[] = this.addressService.addressSignal()!;
     let preDefault = false;
     if (!addresses.length && !this.activeAddress) {
       preDefault = true;

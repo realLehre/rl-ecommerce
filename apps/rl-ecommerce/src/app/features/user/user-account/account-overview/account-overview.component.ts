@@ -34,7 +34,7 @@ export class AccountOverviewComponent {
 
   onCancelProfileEdit() {
     this.isEditingProfile.set(false);
-    this.user$ = of(JSON.parse(localStorage.getItem('hdjeyu7830nsk083hd')!));
+    this.user$ = of(this.userAccountService.userSignal());
   }
 
   onEditAddress(address: IAddress) {

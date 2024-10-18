@@ -20,7 +20,8 @@
     "lib": ["ES2022", "dom"],
     "paths": {},
     "baseUrl": ".",
-    "rootDir": "."
+    "rootDir": ".",
+
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

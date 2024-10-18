@@ -20,16 +20,16 @@ model User {
   phoneNumber String?
   createdAt   DateTime        @default(now())
   updateAt    DateTime        @updatedAt
-  addresses   Address[]
+  addresses   Address[]       @relation("UserAddress")
   ratings     ProductRating[]
-  carts       Cart[]
+  carts       Cart[]          @relation("UserCart")
 }
 
 model Cart {
   id           String     @id @default(uuid())
-  user         User       @relation(fields: [userId], references: [id])
+  user         User       @relation("UserCart", fields: [userId], references: [id], onDelete: Cascade)
   userId       String
-  cartItems    CartItem[]
+  cartItems    CartItem[] @relation("CartCartItem")
   subtTotal    Int
   shippingCost Int
   createdAt    DateTime   @default(now())
@@ -40,9 +40,9 @@ model CartItem {
   id           String   @id @default(uuid())
   total        Int
   unit         Int
-  cart         Cart     @relation(fields: [cartId], references: [id])
+  cart         Cart     @relation("CartCartItem", fields: [cartId], references: [id], onDelete: Cascade)
   cartId       String
-  product      Product  @relation(fields: [productId], references: [id])
+  product      Product  @relation("ProductCartItem", fields: [productId], references: [id], onDelete: Cascade)
   productId    String
   shippingCost Int      @default(100)
   updatedAt    DateTime @updatedAt
@@ -54,7 +54,7 @@ model CartItem {
 
 model Address {
   id                    String   @id @default(uuid())
-  user                  User     @relation(fields: [userId], references: [id])
+  user                  User     @relation("UserAddress", fields: [userId], references: [id], onDelete: Cascade)
   userId                String
   name                  String
   phoneNumber           String
@@ -81,8 +81,8 @@ model Product {
   isSoldOut     Boolean         @default(false)
   unit          Int
   category      Category[]
-  ratings       ProductRating[]
-  cartItems     CartItem[]
+  ratings       ProductRating[] @relation("ProductProductRatings")
+  cartItems     CartItem[]      @relation("ProductCartItem")
   createdAt     DateTime        @default(now())
   updateAt      DateTime        @updatedAt
 }
@@ -91,17 +91,18 @@ model Category {
   id            String        @id @default(uuid())
   name          String        @unique
   products      Product[]
-  subCategories SubCategory[]
+  subCategories SubCategory[] @relation("CategorySubCategories")
   createdAt     DateTime      @default(now())
   updateAt      DateTime      @updatedAt
 }
 
 model SubCategory {
-  id        String     @id @default(uuid())
-  name      String     @unique
-  category  Category[]
-  createdAt DateTime   @default(now())
-  updateAt  DateTime   @updatedAt
+  id         String   @id @default(uuid())
+  name       String   @unique
+  category   Category @relation("CategorySubCategories", fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId String
+  createdAt  DateTime @default(now())
+  updateAt   DateTime @updatedAt
 }
 
 model ProductRating {
@@ -109,7 +110,7 @@ model ProductRating {
   rating    Int      @default(0)
   comment   String?
   createdAt DateTime @default(now())
-  product   Product  @relation(fields: [productId], references: [id])
+  product   Product  @relation("ProductProductRatings", fields: [productId], references: [id], onDelete: Cascade)
   productId String
   user      User     @relation(fields: [userId], references: [id])
   userId    String

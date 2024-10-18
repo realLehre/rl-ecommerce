@@ -1,42 +1,49 @@
-<div class="bg-bg_subtle rounded-lg shadow-md p-4 flex flex-col h-full">
-  <div class="flex-grow text-sm mobile:text-base">
-    <h2 class="font-medium text-gray-800">
-      {{ address().name }}
-    </h2>
-    <div class="space-y-1 mt-2 text-sm">
-      <p class="text-type_grey break-words space-x-1">
-        <span class="text-type_title_gray font-medium">Delivery address:</span>
-        <span>{{ address().deliveryAddress }}</span>
-      </p>
-
-      <p class="text-type_grey break-words space-x-1">
-        <span class="text-type_title_gray font-medium">City:</span>
-        <span>{{ address().city }}</span>
-      </p>
-
-      <p class="text-type_grey break-words space-x-1">
-        <span class="text-type_title_gray font-medium">State:</span>
-        <span>{{ address().state }}</span>
-      </p>
-
-      <p class="text-type_grey break-words space-x-1">
-        <span class="text-type_title_gray font-medium">Country:</span>
-        <span>{{ address().country }}</span>
-      </p>
-      <p class="text-type_caption text-sm">
-        <span>{{ address().phoneNumber }}</span>
-        @if (address().additionalPhoneNumber) {
-          <span> / {{ address().additionalPhoneNumber }} </span>
-        }
-      </p>
-
-      @if (address().additionalInformation) {
+<div
+  class="bg-bg_subtle rounded-lg shadow-md p-4 flex flex-col h-full hover:shadow-lg hover:shadow-border_subtle hover:scale-105 transform transition-all duration-300 ease-in-out"
+>
+  <div class="flex-grow flex flex-col justify-between text-sm mobile:text-base">
+    <div>
+      <h2 class="font-medium text-gray-800">
+        {{ address().name }}
+      </h2>
+      <div class="space-y-1 mt-2 text-sm">
         <p class="text-type_grey break-words space-x-1">
-          <span class="text-type_title_gray font-medium">Extra:</span>
-          <span>{{ address().additionalInformation }}</span>
+          <span class="text-type_title_gray font-medium"
+            >Delivery address:</span
+          >
+          <span>{{ address().deliveryAddress }}</span>
         </p>
-      }
+
+        <p class="text-type_grey break-words space-x-1">
+          <span class="text-type_title_gray font-medium">City:</span>
+          <span>{{ address().city }}</span>
+        </p>
+
+        <p class="text-type_grey break-words space-x-1">
+          <span class="text-type_title_gray font-medium">State:</span>
+          <span>{{ address().state }}</span>
+        </p>
+
+        <p class="text-type_grey break-words space-x-1">
+          <span class="text-type_title_gray font-medium">Country:</span>
+          <span>{{ address().country }}</span>
+        </p>
+        <p class="text-type_caption text-sm">
+          <span>{{ address().phoneNumber }}</span>
+          @if (address().additionalPhoneNumber) {
+            <span> / {{ address().additionalPhoneNumber }} </span>
+          }
+        </p>
+
+        @if (address().additionalInformation) {
+          <p class="text-type_grey break-words space-x-1">
+            <span class="text-type_title_gray font-medium">Extra:</span>
+            <span>{{ address().additionalInformation }}</span>
+          </p>
+        }
+      </div>
     </div>
+
     <div class="mt-5 flex justify-between items-center">
       @if (address().isDefault) {
         <span class="text-primary font-medium">Default Address</span>

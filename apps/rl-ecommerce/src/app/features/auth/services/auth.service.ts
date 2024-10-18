@@ -9,6 +9,7 @@ import {
 import { environment } from '../../../../environments/environment';
 import { UserAccountService } from '../../user/user-account/services/user-account.service';
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 
 export interface IUser {
   id: string;
@@ -23,6 +24,7 @@ export interface IUser {
 })
 export class AuthService {
   private router = inject(Router);
+  private cookieService = inject(CookieService);
   private supabase!: SupabaseClient;
   user = signal<IUser | null>(null);
   constructor() {
@@ -31,10 +33,14 @@ export class AuthService {
       environment.supabaseKey,
     );
     this.onAuthStateChanged();
-    this.user.set(
-      JSON.parse(localStorage.getItem('sb-tentdyesixetvyacewwr-auth-token')!) ??
-        null,
-    );
+
+    const user = this.cookieService.get('shshyeo948dnsks7h0');
+    if (user) {
+      const userObj = JSON.parse(user);
+      this.user.set(userObj);
+    } else {
+      this.user.set(null);
+    }
   }
 
   signUp(data: {
@@ -70,6 +76,7 @@ export class AuthService {
   signOut() {
     this.supabase.auth.signOut();
     localStorage.clear();
+    this.cookieService.deleteAll('/');
     this.user.set(null);
     this.router.navigate(['/']);
   }
@@ -84,8 +91,16 @@ export class AuthService {
           fullName: session?.user.user_metadata?.['full_name'],
         };
         this.user.set(data);
+        this.cookieService.set('shshyeo948dnsks7h0', JSON.stringify(data), {
+          path: '/',
+          secure: true,
+          sameSite: 'Strict',
+          expires: session?.expires_in,
+        });
+        localStorage.removeItem('sb-tentdyesixetvyacewwr-auth-token');
       } else if (event === 'SIGNED_OUT') {
-        localStorage.clear();
+        this.cookieService.deleteAll('/');
+
         this.user.set(null);
       }
     });

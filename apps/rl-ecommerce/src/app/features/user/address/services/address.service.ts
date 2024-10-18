@@ -52,7 +52,6 @@ export class AddressService {
           .pipe(
             tap((res) => {
               this.addressSignal.set(res);
-              localStorage.setItem('adhd83jss027hshuw8', JSON.stringify(res));
             }),
           );
   }

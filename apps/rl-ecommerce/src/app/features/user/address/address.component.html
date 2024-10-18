@@ -17,7 +17,7 @@
 
       @if (addresses.length !== 0) {
         <div
-          class="gap-4 grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] mobile:grid-cols-[repeat(auto-fill,minmax(305px,1fr))]"
+          class="gap-6 grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] mobile:grid-cols-[repeat(auto-fill,minmax(305px,1fr))]"
         >
           @for (address of addresses; track address.id) {
             <app-address-card

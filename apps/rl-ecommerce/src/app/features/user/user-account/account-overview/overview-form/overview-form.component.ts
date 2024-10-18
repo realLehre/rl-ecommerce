@@ -39,7 +39,7 @@ export class OverviewFormComponent implements OnInit {
   private addressService = inject(AddressService);
   private toastService = inject(ToastService);
   private userAccountService = inject(UserAccountService);
-  user = input.required<IUser>();
+  user = input.required<IUser | null>();
   profileForm!: FormGroup;
   cancelEdit = output<void>();
   isLoading = signal(false);
