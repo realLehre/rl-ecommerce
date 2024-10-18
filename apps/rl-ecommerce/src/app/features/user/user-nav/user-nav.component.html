@@ -7,7 +7,7 @@
       routerLink="/user/account-overview"
       routerLinkActive="bg-border_subtle"
       [routerLinkActiveOptions]="{ exact: true }"
-      (click)="setActiveTab('/address-management', $event)"
+      (click)="setActiveTab('/user/account-overview', $event)"
       #tabLink
     >
       <img
@@ -43,7 +43,7 @@
       routerLink="/user/address-management"
       routerLinkActive="bg-border_subtle"
       [routerLinkActiveOptions]="{ exact: false }"
-      (click)="setActiveTab('/address-management', $event)"
+      (click)="setActiveTab('/user/address-management', $event)"
       #tabLink
     >
       <svg
@@ -66,7 +66,7 @@
       routerLink="/user/account-settings"
       routerLinkActive="bg-border_subtle"
       [routerLinkActiveOptions]="{ exact: true }"
-      (click)="setActiveTab('/address-management', $event)"
+      (click)="setActiveTab('/user/account-settings', $event)"
       #tabLink
     >
       <img
@@ -82,6 +82,7 @@
 
     <div
       class="flex items-center space-x-4 px-3 py-5 hover:bg-border_subtle cursor-pointer mt-5 border-t-[1px] border-border_subtle max-[730px]:hidden"
+      (click)="onLogOut()"
     >
       <i class="fa fa-sign-out text-2xl"></i>
 

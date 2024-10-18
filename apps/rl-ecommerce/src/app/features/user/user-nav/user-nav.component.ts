@@ -14,6 +14,7 @@ import {
   RouterLink,
   RouterLinkActive,
 } from '@angular/router';
+import { AuthService } from '../../auth/services/auth.service';
 
 @Component({
   selector: 'app-user-nav',
@@ -25,34 +26,35 @@ import {
 })
 export class UserNavComponent implements AfterViewInit {
   router = inject(Router);
+  private authService = inject(AuthService);
   private cdr = inject(ChangeDetectorRef);
   activeTab: string;
 
   @ViewChildren('tabLink') tabLinks!: QueryList<ElementRef>;
 
   constructor() {
-    // Set the active tab based on the current route
-    this.activeTab = this.router.url;
-
-    // Subscribe to route changes
+    this.activeTab = this.cleanUrl(this.router.url);
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        this.activeTab = event.url; // Update active tab on route change
-        this.scrollToActiveTab(); // Scroll the active tab into view on route change
-        this.cdr.detectChanges();
+        this.activeTab = this.cleanUrl(event.url);
+        setTimeout(() => {
+          this.scrollToActiveTab();
+        }, 0);
       }
     });
   }
 
   setActiveTab(route: string, event: MouseEvent) {
-    this.activeTab = route;
-    this.scrollToActiveTab(); // Scroll to the active tab when clicked
-    this.cdr.detectChanges();
+    this.activeTab = this.cleanUrl(route);
+    setTimeout(() => {
+      this.scrollToActiveTab();
+    }, 100);
   }
 
   ngAfterViewInit() {
-    this.scrollToActiveTab(); // Scroll the active tab into view after the view is initialized
-    this.cdr.detectChanges();
+    setTimeout(() => {
+      this.scrollToActiveTab();
+    }, 0);
   }
 
   scrollToActiveTab() {
@@ -60,19 +62,25 @@ export class UserNavComponent implements AfterViewInit {
     if (this.tabLinks) {
       const activeLink = this.tabLinks.find(
         (tab) =>
-          tab.nativeElement.getAttribute('routerLink') === this.activeTab,
+          tab.nativeElement.getAttribute('routerLink') ===
+          this.cleanUrl(this.activeTab),
       );
 
       if (activeLink) {
-        // Scroll the active link into view, smoothly
         activeLink.nativeElement.scrollIntoView({
           behavior: 'smooth',
           block: 'nearest',
           inline: 'center',
         });
       }
-
-      this.cdr.detectChanges();
     }
+  }
+
+  cleanUrl(url: string): string {
+    return url.split('?')[0].split('#')[0];
+  }
+
+  onLogOut() {
+    this.authService.signOut();
   }
 }

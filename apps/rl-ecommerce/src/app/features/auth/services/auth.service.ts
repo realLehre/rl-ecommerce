@@ -85,6 +85,7 @@ export class AuthService {
         };
         this.user.set(data);
       } else if (event === 'SIGNED_OUT') {
+        localStorage.clear();
         this.user.set(null);
       }
     });
