@@ -43,4 +43,8 @@ export class AccountOverviewComponent {
       queryParams: { edit: true },
     });
   }
+
+  test() {
+    this.userAccountService.testEndPoint();
+  }
 }

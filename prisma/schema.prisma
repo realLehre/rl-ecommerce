@@ -80,7 +80,10 @@ model Product {
   previousPrice Int             @default(0)
   isSoldOut     Boolean         @default(false)
   unit          Int
-  category      Category[]
+  categoryId    String
+  category      Category        @relation(fields: [categoryId], references: [id])
+  subCategoryId String?
+  subCategory   SubCategory?    @relation("SubCategoryProducts", fields: [subCategoryId], references: [id])
   ratings       ProductRating[] @relation("ProductProductRatings")
   cartItems     CartItem[]      @relation("ProductCartItem")
   createdAt     DateTime        @default(now())
@@ -97,12 +100,13 @@ model Category {
 }
 
 model SubCategory {
-  id         String   @id @default(uuid())
-  name       String   @unique
-  category   Category @relation("CategorySubCategories", fields: [categoryId], references: [id], onDelete: Cascade)
+  id         String    @id @default(uuid())
+  name       String    @unique
+  category   Category  @relation("CategorySubCategories", fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId String
-  createdAt  DateTime @default(now())
-  updateAt   DateTime @updatedAt
+  products   Product[] @relation("SubCategoryProducts")
+  createdAt  DateTime  @default(now())
+  updateAt   DateTime  @updatedAt
 }
 
 model ProductRating {
