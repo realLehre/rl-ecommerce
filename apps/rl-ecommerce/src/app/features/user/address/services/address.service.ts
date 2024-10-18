@@ -5,7 +5,7 @@ import { environment } from '../../../../../environments/environment';
 import { AuthService } from '../../../auth/services/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { CreateAddressDto } from '../../../../../../../api/src/app/api-address/create-address.dto';
-import { Observable, retry, tap } from 'rxjs';
+import { Observable, of, retry, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +15,7 @@ export class AddressService {
   authService = inject(AuthService);
   private http = inject(HttpClient);
   activeAddress = signal<IAddress | null>(null);
+  addressSignal = signal<IAddress[] | null>(null);
   addresses: IAddress[] = [
     {
       name: 'David Omolere Egbuwalo',
@@ -41,36 +42,46 @@ export class AddressService {
   constructor() {}
 
   getAddress(): Observable<IAddress[]> {
-    return this.http
-      .get<IAddress[]>(`${this.baseUrl}/${this.authService.user()?.id}/address`)
-      .pipe(retry(3))
-      .pipe(
-        tap((res) => {
-          localStorage.setItem('adhd83jss027hshuw8', JSON.stringify(res));
-        }),
-      );
+    return this.addressSignal()
+      ? of(this.addressSignal()!)
+      : this.http
+          .get<IAddress[]>(
+            `${this.baseUrl}/${this.authService.user()?.id}/address`,
+          )
+          .pipe(retry(3))
+          .pipe(
+            tap((res) => {
+              this.addressSignal.set(res);
+              localStorage.setItem('adhd83jss027hshuw8', JSON.stringify(res));
+            }),
+          );
   }
 
   addAddress(data: CreateAddressDto) {
-    return this.http.post(
-      `${this.baseUrl}/${this.authService.user()?.id}/address`,
-      data,
-    );
+    return this.http
+      .post(`${this.baseUrl}/${this.authService.user()?.id}/address`, data)
+      .pipe(tap(() => this.addressSignal.set(null)));
   }
 
   editAddress(data: CreateAddressDto, id: string) {
-    return this.http.patch(`${this.baseUrl}/address/edit/${id}`, data);
+    return this.http
+      .patch(`${this.baseUrl}/address/edit/${id}`, data)
+      .pipe(tap(() => this.addressSignal.set(null)));
   }
 
   deleteAddress(id: string) {
-    return this.http.delete(`${this.baseUrl}/address/delete/${id}`);
+    return this.http
+      .delete(`${this.baseUrl}/address/delete/${id}`)
+      .pipe(tap(() => this.addressSignal.set(null)));
   }
 
   setAsDefault(id: string) {
-    return this.http.patch(
-      `${this.baseUrl}/${this.authService.user()?.id}/address/default/${id}`,
-      {},
-    );
+    return this.http
+      .patch(
+        `${this.baseUrl}/${this.authService.user()?.id}/address/default/${id}`,
+        {},
+      )
+      .pipe(tap(() => this.addressSignal.set(null)));
   }
 
   phoneNumberValidator(control: AbstractControl): ValidationErrors | null {

@@ -61,7 +61,6 @@ export class AddressCardComponent {
 
   onDeleteAddress() {
     this.isLoading.set(true);
-
     this.addressService.deleteAddress(this.address().id!).subscribe({
       next: (res) => {
         this.toast.showToast({
@@ -71,6 +70,10 @@ export class AddressCardComponent {
         this.isLoading.set(false);
         this.reloadAddress.emit();
         this.showDeleteDialog.set(false);
+        window.scrollTo({
+          top: 70,
+          behavior: 'smooth',
+        });
       },
       error: (err) => {
         this.toast.showToast({

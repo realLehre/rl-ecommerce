@@ -7,36 +7,37 @@
     <div
       class="gap-6 grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] mobile:grid-cols-[repeat(auto-fill,minmax(305px,1fr))]"
     >
-      <!-- Account Details Card -->
-      <div class="rounded-lg bg-bg_subtle shadow-sm overflow-hidden">
-        <div
-          class="px-6 py-4 flex justify-between items-center border-b border-gray-300"
-        >
-          <h2 class="text-lg font-medium">Account Details</h2>
-          <button
-            class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-white text-gray-900 shadow-sm border border-gray-200 hover:bg-gray-100 h-9 px-4 py-2"
-            (click)="isEditingProfile.set(true)"
+      @if (user$ | async; as user) {
+        <div class="rounded-lg bg-bg_subtle shadow-sm overflow-hidden">
+          <div
+            class="px-6 py-4 flex justify-between items-center border-b border-gray-300"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="mr-2"
+            <h2 class="text-lg font-medium">Account Details</h2>
+            <button
+              class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-white text-gray-900 shadow-sm border border-gray-200 hover:bg-gray-100 h-9 px-4 py-2"
+              (click)="isEditingProfile.set(true)"
             >
-              <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
-              <path d="m15 5 4 4"></path>
-            </svg>
-            Edit
-          </button>
-        </div>
-        <div class="p-6">
-          @if (user$ | async; as user) {
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="mr-2"
+              >
+                <path
+                  d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"
+                ></path>
+                <path d="m15 5 4 4"></path>
+              </svg>
+              Edit
+            </button>
+          </div>
+          <div class="p-6">
             <div class="space-y-4">
               <div class="flex items-center space-x-1">
                 <p class="text-sm font-medium text-gray-500">Name:</p>
@@ -55,51 +56,97 @@
                 </p>
               </div>
             </div>
-          }
+          </div>
         </div>
-      </div>
+      } @else {
+        <div>
+          <p-skeleton width="100%" height="220px" />
+        </div>
+      }
 
       <!-- Address Book Card -->
-      <div class="rounded-lg bg-bg_subtle shadow-sm overflow-hidden">
-        <div
-          class="px-6 py-4 flex justify-between items-center border-b border-gray-300"
-        >
-          <h2 class="text-lg font-medium">Address Book</h2>
-          <button
-            class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-white text-gray-900 shadow-sm border border-gray-200 hover:bg-gray-100 h-9 px-4 py-2"
-            [routerLink]="['/', 'user', 'address-management']"
-            [queryParams]="{ edit: true }"
+      @if (address$ | async; as address) {
+        <div class="rounded-lg bg-bg_subtle shadow-sm overflow-hidden">
+          <div
+            class="px-6 py-4 flex justify-between items-center border-b border-gray-300"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="mr-2"
+            <h2 class="text-lg font-medium">Address Book</h2>
+            <button
+              class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-white text-gray-900 shadow-sm border border-gray-200 hover:bg-gray-100 h-9 px-4 py-2"
+              (click)="onEditAddress(address[0])"
             >
-              <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
-              <path d="m15 5 4 4"></path>
-            </svg>
-            Edit
-          </button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="mr-2"
+              >
+                <path
+                  d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"
+                ></path>
+                <path d="m15 5 4 4"></path>
+              </svg>
+              Edit
+            </button>
+          </div>
+          <div class="p-6">
+            <h3 class="text-sm font-medium text-gray-500 mb-2">
+              Default Shipping Address
+            </h3>
+            <address class="not-italic text-base">
+              <h2 class="font-medium text-gray-800">
+                {{ address[0].name }}
+              </h2>
+              <div class="space-y-1 mt-2 text-sm">
+                <p class="text-type_grey break-words space-x-1">
+                  <span class="text-type_title_gray font-medium"
+                    >Delivery address:</span
+                  >
+                  <span>{{ address[0].deliveryAddress }}</span>
+                </p>
+
+                <p class="text-type_grey break-words space-x-1">
+                  <span class="text-type_title_gray font-medium">City:</span>
+                  <span>{{ address[0].city }}</span>
+                </p>
+
+                <p class="text-type_grey break-words space-x-1">
+                  <span class="text-type_title_gray font-medium">State:</span>
+                  <span>{{ address[0].state }}</span>
+                </p>
+
+                <p class="text-type_grey break-words space-x-1">
+                  <span class="text-type_title_gray font-medium">Country:</span>
+                  <span>{{ address[0].country }}</span>
+                </p>
+                <p class="text-type_caption text-sm">
+                  <span>{{ address[0].phoneNumber }}</span>
+                  @if (address[0].additionalPhoneNumber) {
+                    <span> / {{ address[0].additionalPhoneNumber }} </span>
+                  }
+                </p>
+
+                @if (address[0].additionalInformation) {
+                  <p class="text-type_grey break-words space-x-1">
+                    <span class="text-type_title_gray font-medium">Extra:</span>
+                    <span>{{ address[0].additionalInformation }}</span>
+                  </p>
+                }
+              </div>
+            </address>
+          </div>
         </div>
-        <div class="p-6">
-          <h3 class="text-sm font-medium text-gray-500 mb-2">
-            Default Shipping Address
-          </h3>
-          <address class="not-italic text-base">
-            123 Main St<br />
-            Apt 4B<br />
-            Cityville, State 12345<br />
-            Country
-          </address>
+      } @else {
+        <div>
+          <p-skeleton width="100%" height="220px" />
         </div>
-      </div>
+      }
     </div>
   } @else {
     <div>

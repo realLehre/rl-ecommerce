@@ -46,6 +46,7 @@ export class AddressComponent implements CanComponentDeactivate {
 
   onCloseForm() {
     this.isAddingAddress = false;
+    this.addresses$ = this.addressService.getAddress();
     this.router.navigateByUrl('/user/address-management');
   }
 
