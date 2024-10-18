@@ -241,7 +241,7 @@
             <p-checkbox
               [binary]="true"
               formControlName="isDefault"
-              [readonly]="(address$ | async)?.length == 0"
+              [readonly]="(address$ | async)?.length == 0 && !activeAddress"
             />
             <span class="ml-2 text-sm text-gray-700"
               >Set as Default Address</span

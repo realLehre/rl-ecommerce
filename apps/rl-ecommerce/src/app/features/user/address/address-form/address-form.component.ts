@@ -157,8 +157,8 @@ export class AddressFormComponent implements OnInit, AfterViewInit, OnDestroy {
             });
 
             this.closeForm.emit();
-
             this.addressForm.reset();
+            this.addressTouched.emit(false);
           },
           error: (err) => {
             this.isLoading.set(false);
@@ -182,7 +182,7 @@ export class AddressFormComponent implements OnInit, AfterViewInit, OnDestroy {
               });
 
               this.closeForm.emit();
-
+              this.addressTouched.emit(false);
               this.addressForm.reset();
             },
             error: (err) => {
