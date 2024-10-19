@@ -202,6 +202,7 @@ export class AddressFormComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.addressForm.pristine) {
       if (confirm('You have unsaved changes, are you sure you want to quit?')) {
         this.closeForm.emit();
+        this.addressTouched.emit(false);
       }
     } else {
       this.closeForm.emit();
