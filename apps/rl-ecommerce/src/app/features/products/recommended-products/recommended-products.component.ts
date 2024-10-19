@@ -13,11 +13,12 @@ import { ProductsService } from '../services/products.service';
 import { ProductCardComponent } from '../../products-showcase/product-card/product-card.component';
 import { Observable } from 'rxjs';
 import { IProduct } from '../model/product.interface';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-recommended-products',
   standalone: true,
-  imports: [CommonModule, ProductCardComponent],
+  imports: [CommonModule, ProductCardComponent, SkeletonModule],
   templateUrl: './recommended-products.component.html',
   styleUrl: './recommended-products.component.scss',
 })
@@ -41,6 +42,7 @@ export class RecommendedProductsComponent implements OnInit {
 
   ngAfterViewInit() {
     this.checkArrowVisibility();
+    this.showRightArrow = true;
   }
 
   @HostListener('window:resize')
@@ -53,10 +55,6 @@ export class RecommendedProductsComponent implements OnInit {
     this.showLeftArrow = container.scrollLeft > 0;
     this.showRightArrow =
       container.scrollLeft < container.scrollWidth - container.clientWidth;
-    // console.log(
-    //   `scroll width: ${container.scrollWidth}, \`scroll scrollLeft: ${container.scrollLeft}, \`client width: ${container.clientWidth}`,
-    // );
-    // console.log(container.scrollWidth - container.clientWidth);
   }
 
   scroll(direction: 'left' | 'right') {

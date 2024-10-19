@@ -17,4 +17,17 @@ export class ApiCategoryService {
       },
     });
   }
+
+  async getCategories() {
+    return this.prisma.category.findMany({
+      include: {
+        subCategories: true,
+        _count: {
+          select: {
+            products: true,
+          },
+        },
+      },
+    });
+  }
 }

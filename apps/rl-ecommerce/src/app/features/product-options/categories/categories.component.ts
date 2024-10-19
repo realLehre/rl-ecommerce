@@ -1,17 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { ProductOptionsService } from '../services/product-options.service';
+import { Observable } from 'rxjs';
+import { ICategory } from '../models/product-options.interface';
+import { AsyncPipe } from '@angular/common';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-categories',
   standalone: true,
-  imports: [],
+  imports: [AsyncPipe, SkeletonModule],
   templateUrl: './categories.component.html',
   styleUrl: './categories.component.scss',
 })
-export class CategoriesComponent {
-  categories: { title: string; total: number }[] = [
-    { title: 'Figures & Playlists', total: 4 },
-    { title: 'Dolls', total: 6 },
-    { title: 'Building Sets & Blocks', total: 2 },
-    { title: 'Remote-Control Toys', total: 5 },
-  ];
+export class CategoriesComponent implements OnInit {
+  private optionsService = inject(ProductOptionsService);
+  categories$: Observable<ICategory[]> = this.optionsService.getCategories();
+
+  ngOnInit() {}
 }
