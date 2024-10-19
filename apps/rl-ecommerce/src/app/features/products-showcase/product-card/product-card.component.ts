@@ -1,11 +1,14 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   inject,
   input,
 } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { Router } from '@angular/router';
+import { IProduct } from '../../products/model/product.interface';
+import { ProductsService } from '../../products/services/products.service';
 
 @Component({
   selector: 'app-product-card',
@@ -17,15 +20,13 @@ import { Router } from '@angular/router';
 })
 export class ProductCardComponent {
   router = inject(Router);
-  product = input.required<{
-    image: string;
-    name: string;
-    price: number;
-    rating: number;
-    id: string;
-  }>();
+  private productService = inject(ProductsService);
+  product = input.required<IProduct>();
 
-  onViewDetails(id: string) {
-    this.router.navigate(['/product/' + id]);
+  onViewDetails(product: IProduct) {
+    this.productService.activeProduct.set(product);
+    this.router.navigate(['/product/' + product.name], {
+      queryParams: { id: product.id },
+    });
   }
 }

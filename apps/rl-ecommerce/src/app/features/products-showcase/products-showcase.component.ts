@@ -7,13 +7,13 @@ import {
 import { ProductCardComponent } from './product-card/product-card.component';
 import { MobileFiltersComponent } from '../product-options/mobile-filters/mobile-filters.component';
 import { LayoutService } from '../../shared/services/layout.service';
-import { NgClass } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { ProductsService } from '../products/services/products.service';
 
 @Component({
   selector: 'app-products-showcase',
   standalone: true,
-  imports: [ProductCardComponent, MobileFiltersComponent, NgClass],
+  imports: [ProductCardComponent, MobileFiltersComponent, NgClass, AsyncPipe],
   templateUrl: './products-showcase.component.html',
   styleUrl: './products-showcase.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,13 +22,7 @@ export class ProductsShowcaseComponent implements OnInit {
   private layoutService = inject(LayoutService);
   private productService = inject(ProductsService);
   isMobileFilterOpened = this.layoutService.mobileFilterOpened;
-  products: {
-    image: string;
-    name: string;
-    price: number;
-    rating: number;
-    id: string;
-  }[] = this.productService.products;
+  products$ = this.productService.getProducts();
   ngOnInit() {}
 
   onOpenMobileFilter() {

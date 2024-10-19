@@ -5,10 +5,14 @@ import {
   AfterViewInit,
   HostListener,
   inject,
+  input,
+  OnInit,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductsService } from '../services/products.service';
 import { ProductCardComponent } from '../../products-showcase/product-card/product-card.component';
+import { Observable } from 'rxjs';
+import { IProduct } from '../model/product.interface';
 
 @Component({
   selector: 'app-recommended-products',
@@ -17,12 +21,20 @@ import { ProductCardComponent } from '../../products-showcase/product-card/produ
   templateUrl: './recommended-products.component.html',
   styleUrl: './recommended-products.component.scss',
 })
-export class RecommendedProductsComponent {
+export class RecommendedProductsComponent implements OnInit {
   private productService = inject(ProductsService);
-
   @ViewChild('carouselContainer') carouselContainer!: ElementRef;
+  query = input<{ productId: string; categoryId: string }>();
+  products$!: Observable<IProduct[]>;
 
-  products = this.productService.products;
+  ngOnInit() {
+    if (this.query()) {
+      this.products$ = this.productService.getSimilarProducts(
+        this.query()?.categoryId!,
+        this.query()?.productId!,
+      );
+    }
+  }
 
   showLeftArrow = false;
   showRightArrow = true;

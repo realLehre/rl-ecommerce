@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, input, OnInit } from '@angular/core';
 import { GalleriaModule } from 'primeng/galleria';
 
 @Component({
@@ -9,15 +9,7 @@ import { GalleriaModule } from 'primeng/galleria';
   styleUrl: './product-details-images.component.scss',
 })
 export class ProductDetailsImagesComponent implements OnInit {
-  images = [
-    'assets/images/toy-5.jpeg',
-    'assets/images/toy-1.jpeg',
-    'assets/images/toy-2.jpeg',
-    'assets/images/toy-3.jpeg',
-    'assets/images/toy-4.jpeg',
-    'assets/images/toy-10.png',
-    'assets/images/toy-9.jpeg',
-  ];
+  images = input<string[]>([]);
   responsiveOptions: any[] | undefined;
   ngOnInit() {
     this.responsiveOptions = [

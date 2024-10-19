@@ -5,73 +5,143 @@
   <h3 class="block mobile:hidden font-medium text-lg text-type_title mt-4">
     Product Details
   </h3>
-  <div class="flex items-start flex-col min-[700px]:flex-row gap-10 mt-8">
-    <div
-      class="min-[850px]:w-[500px] min-[450px]:w-[400px] w-full max-[450px]:h-[300px] self-center"
-    >
-      <app-product-details-images />
+
+  @if (product$ | async; as product) {
+    <div class="flex items-start flex-col min-[700px]:flex-row gap-10 mt-8">
+      <div
+        class="min-[850px]:w-[500px] min-[450px]:w-[400px] w-full max-[450px]:h-[300px] max-[700px]:self-center"
+      >
+        <app-product-details-images [images]="product.imageUrls" />
+      </div>
+
+      <div class="w-full">
+        <div class="space-y-2 min-[700px]:space-y-4">
+          <h1 class="text-2xl mobile:text-[40px] text-type_caption leading-10">
+            {{ product.name || activeProduct()?.name }}
+          </h1>
+
+          <p class="text-[20px] mobile:text-3xl text-type_title font-semibold">
+            {{ product.price | currency: '₦' : 'symbol' : '1.0-0' }}
+          </p>
+
+          <div
+            class="text-xs mobile:text-sm font-semibold"
+            [ngClass]="
+              product.unit < 5 ? 'text-red-600' : 'text-type_title_gray'
+            "
+          >
+            <span>{{ product.unit }}</span> <span> item</span>
+            @if (product.unit > 1) {
+              <span>s</span>
+            }
+            left
+          </div>
+
+          <p class="text-sm mobile:text-base text-type_grey">
+            {{ product.description }}
+          </p>
+        </div>
+
+        <div class="w-full h-[1px] my-6 bg-border_subtle"></div>
+
+        <div class="">
+          <h3 class="text-xs text-type_title font-semibold">CATEGORY</h3>
+          <p class="text-type_caption">{{ product.category.name }}</p>
+        </div>
+
+        <div class="space-y-2 mt-5">
+          <h3 class="text-xs text-type_title font-semibold">QUANTITY</h3>
+          <div>
+            <app-product-quantity
+              [quantity]="quantity"
+              (quantityChanged)="onAdjustQuantity($event)"
+            />
+          </div>
+        </div>
+
+        <div
+          class="flex items-center justify-between mt-8 flex-wrap gap-x-3 gap-y-2 text-sm mobile:text-base"
+        >
+          <button
+            class="min-w-[190px] rounded-full text-white font-medium bg-primary py-2 flex-1 h-12 hidden mobile:block"
+            routerLink="/checkout"
+          >
+            Proceed to Checkout
+          </button>
+          <button
+            class="min-w-[120px] rounded-full text-white font-medium bg-primary py-2 flex-1 h-12 block mobile:hidden"
+            routerLink="/checkout"
+          >
+            Buy Now
+          </button>
+          <button
+            class="min-w-[120px] mobile:min-w-[190px] rounded-full font-medium border-primary border-[2px] text-type_title_gray py-2 flex-1 h-12"
+            routerLink="/cart"
+          >
+            Add to Cart
+          </button>
+        </div>
+      </div>
     </div>
 
-    <div class="w-full">
-      <div class="space-y-2 min-[700px]:space-y-4">
-        <h1 class="text-2xl mobile:text-[40px] text-type_caption">
-          Palm Slippers
-        </h1>
+    <div class="mt-[80px]">
+      <app-recommended-products
+        [query]="{ productId: product.id, categoryId: product.categoryId }"
+      />
+    </div>
+  } @else {
+    <div class="flex items-start flex-col min-[700px]:flex-row gap-10 mt-8">
+      <div
+        class="min-[850px]:w-[500px] min-[450px]:w-[400px] w-full max-[450px]:h-[300px] max-[700px]:self-center"
+      >
+        <div class="mb-6">
+          <p-skeleton width="100%" height="400px" />
+        </div>
 
-        <p class="text-[20px] mobile:text-3xl text-type_title font-semibold">
-          #4,000
-        </p>
-
-        <p class="text-sm mobile:text-lg text-type_grey">
-          Experience ultimate comfort and style with our eco-friendly palm
-          slippers, featuring a tropical leaf design, cushioned footbed, and
-          non-slip sole, perfect for both indoor and outdoor use.
-        </p>
-      </div>
-
-      <div class="w-full h-[1px] my-6 bg-border_subtle"></div>
-
-      <div class="space-y-1">
-        <h3 class="text-xs text-type_title font-semibold">CATEGORY</h3>
-        <p class="text-type_caption">Toy Builders</p>
-      </div>
-
-      <div class="space-y-2 mt-5">
-        <h3 class="text-xs text-type_title font-semibold">QUANTITY</h3>
         <div>
-          <app-product-quantity
-            [quantity]="quantity"
-            (quantityChanged)="onAdjustQuantity($event)"
-          />
+          <p-skeleton width="100%" height="50px" />
         </div>
       </div>
 
-      <div
-        class="flex items-center justify-between mt-8 flex-wrap gap-x-3 gap-y-2 text-sm mobile:text-base"
-      >
-        <button
-          class="min-w-[190px] rounded-full text-white font-medium bg-primary py-2 flex-1 h-12 hidden mobile:block"
-          routerLink="/checkout"
+      <div class="w-full">
+        <div class="space-y-2 min-[700px]:space-y-4">
+          <div>
+            <p-skeleton width="100%" height="2rem" />
+          </div>
+          <div>
+            <p-skeleton width="10rem" height="2rem" />
+          </div>
+          <div>
+            <p-skeleton width="100%" height="150px" />
+          </div>
+        </div>
+
+        <div class="w-full h-[1px] my-6 bg-border_subtle"></div>
+
+        <div class="space-y-1">
+          <div>
+            <p-skeleton width="10rem" height="2rem" />
+          </div>
+          <div>
+            <p-skeleton width="20rem" height="2rem" />
+          </div>
+        </div>
+
+        <div class="mt-5">
+          <p-skeleton width="20rem" height="4rem" />
+        </div>
+
+        <div
+          class="flex items-center justify-between mt-8 flex-wrap gap-x-3 gap-y-2 text-sm mobile:text-base"
         >
-          Proceed to Checkout
-        </button>
-        <button
-          class="min-w-[120px] rounded-full text-white font-medium bg-primary py-2 flex-1 h-12 block mobile:hidden"
-          routerLink="/checkout"
-        >
-          Buy Now
-        </button>
-        <button
-          class="min-w-[120px] mobile:min-w-[190px] rounded-full font-medium border-primary border-[2px] text-type_title_gray py-2 flex-1 h-12"
-          routerLink="/cart"
-        >
-          Add to Cart
-        </button>
+          <div class="flex-1">
+            <p-skeleton width="100%" height="3rem" borderRadius="50px" />
+          </div>
+          <div class="flex-1">
+            <p-skeleton width="100%" height="3rem" borderRadius="50px" />
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div class="mt-[80px]">
-    <app-recommended-products />
-  </div>
+  }
 </div>

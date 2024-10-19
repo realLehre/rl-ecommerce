@@ -1,9 +1,18 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
+import { IProduct } from '../model/product.interface';
+import { of, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductsService {
+  private http = inject(HttpClient);
+  private baseUrl = environment.apiUrl + 'product/';
+  productSignal = signal<IProduct[] | null>(null);
+  activeProduct = signal<IProduct | null>(null);
+
   products = [
     {
       image: 'assets/images/toy-1.jpeg',
@@ -136,4 +145,22 @@ export class ProductsService {
   ];
 
   constructor() {}
+
+  getProducts() {
+    return this.productSignal()
+      ? of(this.productSignal())
+      : this.http
+          .get<IProduct[]>(`${this.baseUrl}all`)
+          .pipe(tap((res) => this.productSignal.set(res)));
+  }
+
+  getProductById(id: string) {
+    return this.http.get<IProduct>(`${this.baseUrl}${id}`);
+  }
+
+  getSimilarProducts(categoryId: string, productId: string) {
+    return this.http.get<IProduct[]>(
+      `${this.baseUrl}${productId}/similar/${categoryId}`,
+    );
+  }
 }

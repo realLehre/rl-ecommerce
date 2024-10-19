@@ -1,46 +1,48 @@
 <div class="hidden min-[850px]:block">
   <p-galleria
-    [value]="images"
+    [value]="images()"
     [responsiveOptions]="responsiveOptions"
     [containerStyle]="{
       'max-width': '500px',
     }"
     [numVisible]="5"
+    [showItemNavigators]="true"
   >
     <ng-template pTemplate="item" let-item>
       <div class="w-[500px] h-[500px]">
-        <img [src]="item" class="w-full h-full cover" />
+        <img [src]="item" class="w-full h-full object-cover" />
       </div>
     </ng-template>
     <ng-template pTemplate="thumbnail" let-item>
-      <img [src]="item" class="w-20 h-20 min-w-20 min-h-20 cover" />
+      <img [src]="item" class="w-20 h-20 min-w-20 min-h-20 object-cover" />
     </ng-template>
   </p-galleria>
 </div>
 
 <div class="hidden min-[550px]:block min-[850px]:hidden">
   <p-galleria
-    [value]="images"
+    [value]="images()"
     [responsiveOptions]="responsiveOptions"
     [containerStyle]="{
       'max-width': '350px',
     }"
     [numVisible]="5"
+    [showItemNavigators]="true"
   >
     <ng-template pTemplate="item" let-item>
       <div class="w-[350px] h-[350px]">
-        <img [src]="item" class="w-full h-full cover" />
+        <img [src]="item" class="w-full h-full object-cover" />
       </div>
     </ng-template>
     <ng-template pTemplate="thumbnail" let-item>
-      <img [src]="item" class="w-20 h-20 min-w-20 min-h-20 cover" />
+      <img [src]="item" class="w-20 h-20 min-w-20 min-h-20 object-cover" />
     </ng-template>
   </p-galleria>
 </div>
 
 <div class="block min-[550px]:hidden">
   <p-galleria
-    [value]="images"
+    [value]="images()"
     [responsiveOptions]="responsiveOptions"
     [containerStyle]="{
       'max-width': '500px',

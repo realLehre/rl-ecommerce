@@ -27,8 +27,8 @@
   <div
     class="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] mobile:grid-cols-[repeat(auto-fill,minmax(210px,1fr))] gap-x-6 gap-y-10"
   >
-    @for (product of products; track product.id) {
-    <app-product-card [product]="product" />
+    @for (product of products$ | async; track product.id) {
+      <app-product-card [product]="product" />
     }
   </div>
 </div>

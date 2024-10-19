@@ -53,8 +53,8 @@
     #carouselContainer
     class="overflow-x-auto space-x-4 scrollbar-hide scroll-smooth grid grid-flow-col auto-cols-[minmax(220px,1fr)] gap-x-3 mt-6 snap-proximity snap-x hide-scrollbar w-full"
   >
-    @for (product of products; track product.id) {
-    <app-product-card [product]="product" class="snap-center" />
+    @for (product of products$ | async; track product.id) {
+      <app-product-card [product]="product" class="snap-center" />
     }
   </div>
 </div>
