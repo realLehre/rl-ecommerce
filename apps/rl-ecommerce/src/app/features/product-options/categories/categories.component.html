@@ -9,19 +9,25 @@
       @for (cat of categories; track cat) {
         <li
           class="text-type_grey cursor-pointer flex items-center leading-tight group break-words"
+          (click)="onSetCategory(cat)"
         >
           <span
             class="text-primary text-[25px] -translate-y-[2px] mr-2 opacity-0 transition-all duration-300 tablet:group-hover:inline-block tablet:group-hover:opacity-100 tablet:group-hover:translate-x-0"
+            [ngClass]="{
+              'inline-block opacity-100 translate-x-0':
+                cat.id === activeCategory()?.id,
+            }"
             >•</span
           >
           <div
             class="transform -translate-x-[22px] tablet:group-hover:translate-x-1 group-hover:text-primary transition-all duration-300"
+            [ngClass]="{
+              'translate-x-1 text-primary ': cat.id === activeCategory()?.id,
+            }"
           >
             <span class="category-title break-words leading-[1]"
               >{{ cat.name }}
-              <span class="font-semibold text-type_title_gray">
-                ({{ cat._count.products }})</span
-              >
+              <span class="font-semibold"> ({{ cat._count.products }})</span>
             </span>
           </div>
         </li>

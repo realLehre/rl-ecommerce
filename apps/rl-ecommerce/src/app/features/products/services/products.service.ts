@@ -1,8 +1,16 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { IProduct } from '../model/product.interface';
 import { of, tap } from 'rxjs';
+
+interface IProductFilter {
+  categoryId?: string;
+  subCategoryId?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  sortBy?: string;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -146,11 +154,35 @@ export class ProductsService {
 
   constructor() {}
 
-  getProducts() {
+  getProducts(filters?: IProductFilter) {
+    let params = new HttpParams();
+
+    if (filters?.categoryId) {
+      params = params.set('categoryId', filters.categoryId);
+    }
+    if (filters?.subCategoryId) {
+      params = params.set('subCategoryId', filters.subCategoryId);
+    }
+    if (filters?.minPrice) {
+      params = params.set('minPrice', filters.minPrice.toString());
+    }
+    if (filters?.maxPrice) {
+      params = params.set('maxPrice', filters.maxPrice.toString());
+    }
+    if (filters?.sortBy) {
+      params = params.set('sortBy', filters.sortBy);
+    }
+
+    if (this.productSignal()) {
+      console.log('there is signal');
+    } else {
+      console.log('no signal');
+    }
+
     return this.productSignal()
       ? of(this.productSignal())
       : this.http
-          .get<IProduct[]>(`${this.baseUrl}all`)
+          .get<IProduct[]>(`${this.baseUrl}all`, { params })
           .pipe(tap((res) => this.productSignal.set(res)));
   }
 

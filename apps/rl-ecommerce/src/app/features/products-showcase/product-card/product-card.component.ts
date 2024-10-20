@@ -27,8 +27,15 @@ export class ProductCardComponent {
 
   onViewDetails(product: IProduct) {
     this.productService.activeProduct.set(product);
-    this.router.navigate(['/product/' + product.name], {
+    this.router.navigate(['/product/' + this.createSlug(product.name)], {
       queryParams: { id: product.id },
     });
+  }
+
+  createSlug(name: string): string {
+    return name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-') // Replace spaces and special characters with hyphen
+      .replace(/^-+|-+$/g, ''); // Trim leading or trailing hyphens
   }
 }

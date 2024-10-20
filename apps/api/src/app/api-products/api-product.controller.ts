@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 
 import { ApiProductService } from './api-product.service';
 
@@ -7,8 +7,20 @@ export class ApiProductController {
   constructor(private productService: ApiProductService) {}
 
   @Get('all')
-  async getProducts() {
-    return this.productService.getProducts();
+  async getProducts(
+    @Query('categoryId') categoryId?: string,
+    @Query('subCategoryId') subCategoryId?: string,
+    @Query('minPrice') minPrice?: string,
+    @Query('maxPrice') maxPrice?: string,
+    @Query('sortBy') sortBy?: string,
+  ) {
+    return this.productService.getProducts({
+      categoryId,
+      subCategoryId,
+      minPrice: minPrice ? parseFloat(minPrice) : undefined,
+      maxPrice: maxPrice ? parseFloat(maxPrice) : undefined,
+      sortBy,
+    });
   }
 
   @Get(':id')

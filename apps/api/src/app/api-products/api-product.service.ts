@@ -5,12 +5,34 @@ import { PrismaService } from '../prisma.service';
 export class ApiProductService {
   constructor(private prisma: PrismaService) {}
 
-  async getProducts() {
+  async getProducts(filters: {
+    categoryId?: string;
+    subCategoryId?: string;
+    minPrice?: number;
+    maxPrice?: number;
+    sortBy?: string;
+  }) {
     return this.prisma.product.findMany({
       include: {
         category: true,
         subCategory: true,
         ratings: true,
+      },
+      where: {
+        categoryId: filters.categoryId || undefined,
+        subCategoryId: filters.subCategoryId || undefined,
+        price: {
+          gte: filters.minPrice || undefined,
+          lte: filters.maxPrice || undefined,
+        },
+      },
+      orderBy: {
+        createdAt:
+          filters.sortBy === 'new'
+            ? 'desc'
+            : filters.sortBy === 'old'
+              ? 'asc'
+              : undefined,
       },
     });
   }
