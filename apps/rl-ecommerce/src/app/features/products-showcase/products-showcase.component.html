@@ -21,7 +21,13 @@
           </svg>
         </div>
         <p class="text-xs ml-auto tablet:text-base justify-self-end">
-          Showing 17–32 of 45 results
+          Showing {{ config()?.currentPage! | itemsShowing }} –
+          {{
+            (config()?.currentPage! | itemsShowing) +
+              productArray.totalItemsInPage -
+              1
+          }}
+          of {{ config()?.totalItems }} results
         </p>
       </header>
     }

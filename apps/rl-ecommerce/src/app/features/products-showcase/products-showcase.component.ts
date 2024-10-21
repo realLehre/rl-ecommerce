@@ -20,6 +20,7 @@ import { ProductOptionsService } from '../product-options/services/product-optio
 import { ISavedProductOptionQueries } from '../product-options/models/product-options.interface';
 import { IProductResponse } from '../products/model/product.interface';
 import { NgxPaginationModule, PaginationInstance } from 'ngx-pagination';
+import { ItemsShowingPipe } from '../../shared/pipes/items-showing.pipe';
 
 @Component({
   selector: 'app-products-showcase',
@@ -32,6 +33,7 @@ import { NgxPaginationModule, PaginationInstance } from 'ngx-pagination';
     CurrencyPipe,
     SkeletonModule,
     NgxPaginationModule,
+    ItemsShowingPipe,
   ],
   templateUrl: './products-showcase.component.html',
   styleUrl: './products-showcase.component.scss',
