@@ -39,6 +39,8 @@ export class ProductNavComponent implements OnInit, AfterViewInit {
 
   onViewSubCategory(cat?: ISubCategory) {
     this.productService.productSignal.set(null);
+    this.optionsService.currentPage.set(1);
+
     if (!cat) {
       this.currentSubCategory.set(null);
       const queryData = { category: this.currentCategory() };
@@ -61,6 +63,7 @@ export class ProductNavComponent implements OnInit, AfterViewInit {
           relativeTo: this.route,
           queryParams: {
             subCategory: this.optionsService.createSlug(cat.name),
+            page: null,
           },
           queryParamsHandling: 'merge',
           fragment: 't',

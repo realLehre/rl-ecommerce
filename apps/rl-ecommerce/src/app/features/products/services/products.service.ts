@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { IProduct, IProductResponse } from '../model/product.interface';
 import { of, tap } from 'rxjs';
+import { PaginationInstance } from 'ngx-pagination';
 
 interface IProductFilter {
   categoryId?: string;
@@ -10,6 +11,7 @@ interface IProductFilter {
   minPrice?: number;
   maxPrice?: number;
   sortBy?: string;
+  page?: number;
 }
 
 @Injectable({
@@ -20,6 +22,8 @@ export class ProductsService {
   private baseUrl = environment.apiUrl + 'product/';
   productSignal = signal<IProductResponse | null>(null);
   activeProduct = signal<IProduct | null>(null);
+  paginationConfig = signal<PaginationInstance | null>(null);
+  pageSize = signal(10);
 
   products = [
     {
@@ -172,12 +176,32 @@ export class ProductsService {
     if (filters?.sortBy) {
       params = params.set('sortBy', filters.sortBy);
     }
+    if (filters?.page) {
+      params = params.set('page', filters.page);
+    }
 
     return this.productSignal()
       ? of(this.productSignal())
-      : this.http
-          .get<IProductResponse>(`${this.baseUrl}all`, { params })
-          .pipe(tap((res) => this.productSignal.set(res)));
+      : this.http.get<IProductResponse>(`${this.baseUrl}all`, { params }).pipe(
+          tap((res) => {
+            const {
+              currentPage,
+              products,
+              totalItems,
+              totalItemsInPage,
+              totalPages,
+            } = res;
+
+            this.paginationConfig.set({
+              currentPage,
+              itemsPerPage: this.pageSize(),
+              totalItems,
+              id: 'productPagination',
+            });
+
+            this.productSignal.set(res);
+          }),
+        );
   }
 
   getProductById(id: string) {

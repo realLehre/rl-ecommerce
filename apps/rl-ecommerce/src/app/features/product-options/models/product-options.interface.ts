@@ -17,4 +17,5 @@ export interface ISubCategory {
 export interface ISavedProductOptionQueries {
   category?: ICategory;
   subCategory?: ISubCategory;
+  page?: number;
 }

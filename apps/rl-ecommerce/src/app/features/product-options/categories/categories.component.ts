@@ -1,7 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ProductOptionsService } from '../services/product-options.service';
 import { Observable } from 'rxjs';
-import { ICategory } from '../models/product-options.interface';
+import {
+  ICategory,
+  ISavedProductOptionQueries,
+} from '../models/product-options.interface';
 import { AsyncPipe, NgClass } from '@angular/common';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -26,14 +29,22 @@ export class CategoriesComponent implements OnInit {
 
   onSetCategory(cat?: ICategory) {
     this.productService.productSignal.set(null);
+    this.optionsService.currentPage.set(1);
     if (cat) {
       this.optionsService.currentCategory.set(cat);
       this.optionsService.currentSubCategory.set(null);
+
+      // const savedQuery: ISavedProductOptionQueries = JSON.parse(
+      //   sessionStorage.getItem('hshs82haa02sshs92s')!,
+      // );
+
       const queryData = { category: cat };
       sessionStorage.setItem('hshs82haa02sshs92s', JSON.stringify(queryData));
       this.router.navigate([], {
         relativeTo: this.route,
-        queryParams: { category: this.createSlug(cat.name) },
+        queryParams: {
+          category: this.createSlug(cat.name),
+        },
         queryParamsHandling: 'replace',
         fragment: 't',
       });
@@ -44,7 +55,7 @@ export class CategoriesComponent implements OnInit {
       sessionStorage.removeItem('hshs82haa02sshs92s');
       this.router.navigate([], {
         relativeTo: this.route,
-        queryParams: { category: null, subCategory: null },
+        queryParams: { category: null, subCategory: null, page: null },
         queryParamsHandling: 'replace',
         fragment: 't',
       });
