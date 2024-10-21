@@ -173,12 +173,6 @@ export class ProductsService {
       params = params.set('sortBy', filters.sortBy);
     }
 
-    if (this.productSignal()) {
-      console.log('there is signal');
-    } else {
-      console.log('no signal');
-    }
-
     return this.productSignal()
       ? of(this.productSignal())
       : this.http

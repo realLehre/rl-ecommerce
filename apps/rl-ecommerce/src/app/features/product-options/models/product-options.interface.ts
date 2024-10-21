@@ -13,3 +13,8 @@ export interface ISubCategory {
   createdAt: string;
   updateAt: string;
 }
+
+export interface ISavedProductOptionQueries {
+  category?: ICategory;
+  subCategory?: ISubCategory;
+}
