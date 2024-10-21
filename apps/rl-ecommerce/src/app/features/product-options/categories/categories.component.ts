@@ -16,6 +16,7 @@ import { ProductsService } from '../../products/services/products.service';
 })
 export class CategoriesComponent implements OnInit {
   private optionsService = inject(ProductOptionsService);
+  private productService = inject(ProductsService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   categories$ = this.optionsService.getCategories();
@@ -23,15 +24,31 @@ export class CategoriesComponent implements OnInit {
 
   ngOnInit() {}
 
-  onSetCategory(cat: ICategory) {
-    this.optionsService.currentCategory.set(cat);
-    const queryData = { category: cat };
-    sessionStorage.setItem('hshs82haa02sshs92s', JSON.stringify(queryData));
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { category: this.createSlug(cat.name) },
-      queryParamsHandling: 'replace',
-    });
+  onSetCategory(cat?: ICategory) {
+    this.productService.productSignal.set(null);
+    if (cat) {
+      this.optionsService.currentCategory.set(cat);
+      this.optionsService.currentSubCategory.set(null);
+      const queryData = { category: cat };
+      sessionStorage.setItem('hshs82haa02sshs92s', JSON.stringify(queryData));
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { category: this.createSlug(cat.name) },
+        queryParamsHandling: 'replace',
+        fragment: 't',
+      });
+    } else {
+      this.optionsService.currentCategory.set(null);
+      this.optionsService.currentSubCategory.set(null);
+
+      sessionStorage.removeItem('hshs82haa02sshs92s');
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { category: null, subCategory: null },
+        queryParamsHandling: 'replace',
+        fragment: 't',
+      });
+    }
   }
 
   createSlug(name: string): string {

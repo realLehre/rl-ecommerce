@@ -48,14 +48,13 @@ export class ProductsShowcaseComponent implements OnInit {
 
     const newQuery = {
       categoryId: savedQuery?.category?.id,
-      subCategoryId: savedQuery.subCategory?.id,
+      subCategoryId: savedQuery?.subCategory?.id,
     };
 
     this.products$ = this.productService.getProducts(newQuery);
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe(() => {
-        this.productService.productSignal.set(null);
         const category = this.optionsService.currentCategory();
         const subCategory = this.optionsService.currentSubCategory();
         this.products$ = this.productService.getProducts({

@@ -4,21 +4,58 @@
   >
     CATEGORIES
   </h1>
-  <ul class="mt-1 space-y-1">
+  <ul class="mt-1 space-y-2">
     @if (categories$ | async; as categories) {
+      <li
+        class="text-type_grey cursor-pointer flex items-center leading-tight group break-words"
+        (click)="onSetCategory()"
+      >
+        <span
+          class="text-primary text-[25px] -translate-y-[1px] mr-2 opacity-0 transition-all duration-300 tablet:group-hover:inline-block tablet:group-hover:opacity-100 tablet:group-hover:translate-x-0"
+          [ngClass]="{
+            'inline-block opacity-100 translate-x-0': !activeCategory(),
+          }"
+        >
+          <svg
+            width="8"
+            height="9"
+            viewBox="0 0 8 9"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="4" cy="4.5" r="4" fill="#800020" /></svg
+        ></span>
+        <div
+          class="transform -translate-x-[22px] tablet:group-hover:translate-x-1 group-hover:text-primary transition-all duration-300"
+          [ngClass]="{
+            'translate-x-1 text-primary ': !activeCategory(),
+          }"
+        >
+          <span class="category-title break-words leading-[1]">All </span>
+        </div>
+      </li>
       @for (cat of categories; track cat) {
         <li
           class="text-type_grey cursor-pointer flex items-center leading-tight group break-words"
           (click)="onSetCategory(cat)"
         >
           <span
-            class="text-primary text-[25px] -translate-y-[2px] mr-2 opacity-0 transition-all duration-300 tablet:group-hover:inline-block tablet:group-hover:opacity-100 tablet:group-hover:translate-x-0"
+            class="text-primary text-[25px] -translate-y-[1px] mr-2 opacity-0 transition-all duration-300 tablet:group-hover:inline-block tablet:group-hover:opacity-100 tablet:group-hover:translate-x-0"
             [ngClass]="{
               'inline-block opacity-100 translate-x-0':
                 cat.id === activeCategory()?.id,
             }"
-            >•</span
           >
+            <svg
+              width="8"
+              height="9"
+              viewBox="0 0 8 9"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle cx="4" cy="4.5" r="4" fill="#800020" />
+            </svg>
+          </span>
           <div
             class="transform -translate-x-[22px] tablet:group-hover:translate-x-1 group-hover:text-primary transition-all duration-300"
             [ngClass]="{

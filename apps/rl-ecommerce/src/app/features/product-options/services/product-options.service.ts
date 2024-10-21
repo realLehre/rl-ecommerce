@@ -22,10 +22,10 @@ export class ProductOptionsService {
       sessionStorage.getItem('hshs82haa02sshs92s')!,
     );
 
-    if (savedQuery.category) {
+    if (savedQuery?.category) {
       this.currentCategory.set(savedQuery.category);
     }
-    if (savedQuery.subCategory) {
+    if (savedQuery?.subCategory) {
       this.currentSubCategory.set(savedQuery.subCategory);
     }
   }

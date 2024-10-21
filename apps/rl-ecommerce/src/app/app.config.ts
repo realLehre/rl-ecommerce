@@ -13,9 +13,10 @@ import { provideHttpClient } from '@angular/common/http';
 import { DialogService } from 'primeng/dynamicdialog';
 import { CookieService } from 'ngx-cookie-service';
 const scrollConfig: InMemoryScrollingOptions = {
-  scrollPositionRestoration: 'top',
   anchorScrolling: 'enabled',
+  scrollPositionRestoration: 'enabled',
 };
+
 const inMemoryScrollingFeature: InMemoryScrollingFeature =
   withInMemoryScrolling(scrollConfig);
 export const appConfig: ApplicationConfig = {

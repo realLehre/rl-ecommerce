@@ -27,7 +27,11 @@
             track cat.id;
             let i = $index
           ) {
-            <div class="space-x-5 text-type_grey scroll-snap-start">
+            <div
+              class="space-x-5 text-type_grey scroll-snap-start"
+              [id]="cat.id"
+              #subCategoryNav
+            >
               <span
                 class="text-type_grey whitespace-nowrap cursor-pointer h-5 uppercase"
                 (click)="onViewSubCategory(cat)"
