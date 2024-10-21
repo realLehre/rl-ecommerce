@@ -30,3 +30,11 @@ export interface ISubCategory {
   createdAt: string;
   updateAt: string;
 }
+
+export interface IProductResponse {
+  products: IProduct[];
+  totalItems: number;
+  totalItemsInPage: number;
+  currentPage: number;
+  totalPages: number;
+}

@@ -17,6 +17,7 @@ import { filter, Observable, of } from 'rxjs';
 import * as events from 'events';
 import { ProductOptionsService } from '../product-options/services/product-options.service';
 import { ISavedProductOptionQueries } from '../product-options/models/product-options.interface';
+import { IProductResponse } from '../products/model/product.interface';
 
 @Component({
   selector: 'app-products-showcase',
@@ -40,7 +41,7 @@ export class ProductsShowcaseComponent implements OnInit {
   private optionsService = inject(ProductOptionsService);
   private cdr = inject(ChangeDetectorRef);
   isMobileFilterOpened = this.layoutService.mobileFilterOpened;
-  products$!: Observable<any>;
+  products$!: Observable<IProductResponse | null>;
   ngOnInit() {
     const savedQuery: ISavedProductOptionQueries = JSON.parse(
       sessionStorage.getItem('hshs82haa02sshs92s')!,

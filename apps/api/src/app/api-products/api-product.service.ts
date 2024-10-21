@@ -11,8 +11,13 @@ export class ApiProductService {
     minPrice?: number;
     maxPrice?: number;
     sortBy?: string;
+    page?: number;
+    pageSize?: number;
   }) {
-    return this.prisma.product.findMany({
+    const page = filters.page ?? 1;
+    const pageSize = filters.pageSize ?? 10;
+    const skip = (page - 1) * pageSize;
+    const products = await this.prisma.product.findMany({
       include: {
         category: true,
         subCategory: true,
@@ -34,7 +39,30 @@ export class ApiProductService {
               ? 'asc'
               : undefined,
       },
+      skip,
+      take: pageSize,
     });
+
+    const totalItems = await this.prisma.product.count({
+      where: {
+        categoryId: filters.categoryId || undefined,
+        subCategoryId: filters.subCategoryId || undefined,
+        price: {
+          gte: filters.minPrice || undefined,
+          lte: filters.maxPrice || undefined,
+        },
+      },
+    });
+
+    const totalPages = Math.ceil(totalItems / pageSize);
+
+    return {
+      products,
+      totalItems,
+      totalItemsInPage: products.length,
+      currentPage: page,
+      totalPages,
+    };
   }
 
   async getProductById(id: string) {

@@ -1,7 +1,7 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
-import { IProduct } from '../model/product.interface';
+import { IProduct, IProductResponse } from '../model/product.interface';
 import { of, tap } from 'rxjs';
 
 interface IProductFilter {
@@ -18,7 +18,7 @@ interface IProductFilter {
 export class ProductsService {
   private http = inject(HttpClient);
   private baseUrl = environment.apiUrl + 'product/';
-  productSignal = signal<IProduct[] | null>(null);
+  productSignal = signal<IProductResponse | null>(null);
   activeProduct = signal<IProduct | null>(null);
 
   products = [
@@ -176,7 +176,7 @@ export class ProductsService {
     return this.productSignal()
       ? of(this.productSignal())
       : this.http
-          .get<IProduct[]>(`${this.baseUrl}all`, { params })
+          .get<IProductResponse>(`${this.baseUrl}all`, { params })
           .pipe(tap((res) => this.productSignal.set(res)));
   }
 
