@@ -37,9 +37,20 @@
             left
           </div>
 
-          <p class="text-sm mobile:text-base text-type_grey">
-            {{ product.description }}
-          </p>
+          <div class="text-sm mobile:text-base text-type_grey">
+            <p [ngClass]="{ 'line-clamp-[8]': isCollapsed() }">
+              {{ product.description }}
+            </p>
+          </div>
+          @if (product.description.length > limit) {
+            <a
+              href="javascript:void(0)"
+              (click)="toggleCollapse()"
+              class="text-sm font-medium text-primary"
+            >
+              {{ isCollapsed() ? 'Read More' : 'Show Less' }}
+            </a>
+          }
         </div>
 
         <div class="w-full h-[1px] my-6 bg-border_subtle"></div>

@@ -1,5 +1,5 @@
 <div
-  class="flex flex-col space-y-1 mobile:space-y-3"
+  class="flex flex-col space-y-1 mobile:space-y-3 group"
   (click)="onViewDetails(product())"
 >
   <div class="relative w-full h-[180px] mobile:h-[230px]">
@@ -24,9 +24,15 @@
       <!--        <div>OUT</div>-->
       <!--      </div>-->
       <img
+        [src]="product().imageUrls[1]"
+        [alt]="product().name"
+        class="hidden group-hover:inline w-full h-full object-cover"
+        alt=""
+      />
+      <img
         [src]="product().image"
         [alt]="product().name"
-        class="w-full h-full object-cover"
+        class="inline group-hover:hidden w-full h-full object-cover"
       />
     </div>
   </div>

@@ -2,9 +2,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  input,
   OnInit,
-  output,
+  signal,
 } from '@angular/core';
 import { BreadcrumbComponent } from '../../../shared/components/breadcrumb/breadcrumb.component';
 import { ProductDetailsImagesComponent } from './product-details-images/product-details-images.component';
@@ -51,6 +50,8 @@ export class ProductDetailsComponent implements OnInit {
   quantity: number = 1;
   isLoading: boolean = false;
   activeProduct = this.productService.activeProduct;
+  isCollapsed = signal(true);
+  limit = 200;
 
   ngOnInit() {
     const productId = this.route.snapshot.queryParams['id'];
@@ -62,6 +63,10 @@ export class ProductDetailsComponent implements OnInit {
         const productId = this.route.snapshot.queryParams['id'];
         this.product$ = this.productService.getProductById(productId);
       });
+  }
+
+  toggleCollapse() {
+    this.isCollapsed.set(!this.isCollapsed());
   }
 
   onAdjustQuantity(qty: number) {

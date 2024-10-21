@@ -184,18 +184,10 @@ export class ProductsService {
       ? of(this.productSignal())
       : this.http.get<IProductResponse>(`${this.baseUrl}all`, { params }).pipe(
           tap((res) => {
-            const {
-              currentPage,
-              products,
-              totalItems,
-              totalItemsInPage,
-              totalPages,
-            } = res;
-
             this.paginationConfig.set({
-              currentPage,
+              currentPage: res.currentPage,
               itemsPerPage: this.pageSize(),
-              totalItems,
+              totalItems: res.totalItems,
               id: 'productPagination',
             });
 
