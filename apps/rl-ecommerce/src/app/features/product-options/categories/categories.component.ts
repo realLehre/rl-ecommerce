@@ -30,10 +30,11 @@ export class CategoriesComponent implements OnInit {
   onSetCategory(cat?: ICategory) {
     this.productService.productSignal.set(null);
     this.optionsService.currentPage.set(1);
+    this.optionsService.currentPriceFilter.set(null);
+    this.optionsService.currentSort.set('old');
     if (cat) {
       this.optionsService.currentCategory.set(cat);
       this.optionsService.currentSubCategory.set(null);
-
       // const savedQuery: ISavedProductOptionQueries = JSON.parse(
       //   sessionStorage.getItem('hshs82haa02sshs92s')!,
       // );

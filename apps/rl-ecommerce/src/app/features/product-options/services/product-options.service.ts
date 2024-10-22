@@ -18,6 +18,8 @@ export class ProductOptionsService {
   currentCategory = signal<ICategory | null>(null);
   currentSubCategory = signal<ISubCategory | null>(null);
   currentPage = signal<number>(1);
+  currentPriceFilter = signal<{ min: any; max: any } | null>(null);
+  currentSort = signal<string | null>('old');
   url = environment.apiUrl + 'category';
   constructor() {
     const savedQuery: ISavedProductOptionQueries = JSON.parse(
@@ -32,6 +34,15 @@ export class ProductOptionsService {
     }
     if (savedQuery?.page) {
       this.currentPage.set(savedQuery.page);
+    }
+    if (savedQuery?.price) {
+      this.currentPriceFilter.set({
+        min: savedQuery?.price.min,
+        max: savedQuery?.price.max,
+      });
+    }
+    if (savedQuery?.sort) {
+      this.currentSort.set(savedQuery?.sort);
     }
   }
 

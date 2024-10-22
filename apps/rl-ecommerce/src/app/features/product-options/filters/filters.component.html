@@ -1,42 +1,53 @@
 <div class="w-full">
   <h1 class="font-playfair title text-lg">FILTER BY</h1>
-  <div class="mt-1 space-y-1">
-    <div
-      class="flex items-center justify-between cursor-pointer"
-      (click)="onToggleFilter(0)"
-    >
-      <h4 class="text-type_title_gray font-semibold">Age</h4>
-      <i
-        class="fa fa-caret-up transition-all duration-300"
-        [ngClass]="{
-          'rotate-180': isShowing[0],
-        }"
-      ></i>
-    </div>
-    <ul
-      class="transition-all duration-300 ease-in-out h-0 overflow-hidden"
-      [ngClass]="{ '!h-10': isShowing[0] }"
-    >
-      <li class="text-type_grey text-sm">Old to new</li>
-      <li class="text-type_grey text-sm">New to old</li>
-    </ul>
-  </div>
+  <!--  <div class="mt-1 space-y-1">-->
+  <!--    <div-->
+  <!--      class="flex items-center justify-between cursor-pointer"-->
+  <!--      (click)="onToggleFilter(0)"-->
+  <!--    >-->
+  <!--      <h4 class="text-type_title_gray font-semibold">Age</h4>-->
+  <!--      <i-->
+  <!--        class="fa fa-caret-up transition-all duration-300"-->
+  <!--        [ngClass]="{-->
+  <!--          'rotate-180': isShowing[0],-->
+  <!--        }"-->
+  <!--      ></i>-->
+  <!--    </div>-->
+  <!--    <ul-->
+  <!--      class="transition-all duration-300 ease-in-out h-0 overflow-hidden"-->
+  <!--      [ngClass]="{ '!h-10': isShowing[0] }"-->
+  <!--    >-->
+  <!--      <li class="text-type_grey text-sm">Old to new</li>-->
+  <!--      <li class="text-type_grey text-sm">New to old</li>-->
+  <!--    </ul>-->
+  <!--  </div>-->
 
-  <div class="space-y-1 my-5">
-    <h4 class="text-type_title_gray font-semibold">Price</h4>
+  <div class="space-y-1 my-5 mt-2">
+    <div class="flex items-center justify-between">
+      <h4 class="text-type_title_gray font-semibold">Price (₦)</h4>
+      <button
+        class="py-2 text-primary font-semibold text-sm"
+        type="button"
+        (click)="onApplyPriceFilter()"
+      >
+        Apply
+      </button>
+    </div>
     <div class="price-slider">
       <div class="text-type_grey text-sm mb-2">
-        <span>{{ rangeValues[0] }}</span>
+        <span>₦{{ rangeValues[0] | number }}</span>
         <span> - </span>
-        <span>{{ rangeValues[1] }}</span>
+        <span>₦{{ rangeValues[1] | number }}</span>
       </div>
-      <div class="w-full">
-        <p-slider
-          [(ngModel)]="rangeValues"
-          [range]="true"
-          styleClass="w-4rem"
-        />
-      </div>
+      <div class="card flex justify-content-center"></div>
+      <p-slider
+        [(ngModel)]="rangeValues"
+        [min]="1000"
+        [max]="1000000"
+        [step]="500"
+        [range]="true"
+        styleClass="w-10rem"
+      />
     </div>
   </div>
 
@@ -49,16 +60,77 @@
       <i
         class="fa fa-caret-up transition-all duration-300"
         [ngClass]="{
-          'rotate-180': isShowing[1],
+          'rotate-180': isShowing()[1],
         }"
       ></i>
     </div>
     <ul
       class="transition-all duration-300 ease-in-out h-0 overflow-hidden"
-      [ngClass]="{ '!h-10': isShowing[1] }"
+      [ngClass]="{ '!h-10': isShowing()[1] }"
     >
-      <li class="text-type_grey text-sm">Old to new</li>
-      <li class="text-type_grey text-sm">New to old</li>
+      <li
+        class="text-type_grey cursor-pointer flex items-center leading-tight group break-words"
+        (click)="onSetOrder('old')"
+      >
+        <span
+          class="text-primary text-[25px] -translate-y-[1px] mr-2 opacity-0 transition-all duration-300 tablet:group-hover:inline-block tablet:group-hover:opacity-100 tablet:group-hover:translate-x-0"
+          [ngClass]="{
+            'inline-block opacity-100 translate-x-0': currentSort() === 'old',
+          }"
+        >
+          <svg
+            width="8"
+            height="9"
+            viewBox="0 0 8 9"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="4" cy="4.5" r="4" fill="#800020" />
+          </svg>
+        </span>
+        <div
+          class="transform -translate-x-[16px] tablet:group-hover:translate-x-1 group-hover:text-primary transition-all duration-300"
+          [ngClass]="{
+            '!translate-x-1 text-primary ': currentSort() == 'old',
+          }"
+        >
+          <span class="category-title break-words leading-[1]"
+            >Old to New
+          </span>
+        </div>
+      </li>
+
+      <li
+        class="text-type_grey cursor-pointer flex items-center leading-tight group break-words"
+        (click)="onSetOrder('new')"
+      >
+        <span
+          class="text-primary text-[25px] -translate-y-[1px] mr-2 opacity-0 transition-all duration-300 tablet:group-hover:inline-block tablet:group-hover:opacity-100 tablet:group-hover:translate-x-0"
+          [ngClass]="{
+            'inline-block opacity-100 translate-x-0': currentSort() == 'new',
+          }"
+        >
+          <svg
+            width="8"
+            height="9"
+            viewBox="0 0 8 9"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="4" cy="4.5" r="4" fill="#800020" />
+          </svg>
+        </span>
+        <div
+          class="transform -translate-x-[16px] tablet:group-hover:translate-x-1 group-hover:text-primary transition-all duration-300"
+          [ngClass]="{
+            '!translate-x-1 text-primary ': currentSort() == 'new',
+          }"
+        >
+          <span class="category-title break-words leading-[1]"
+            >New to Old
+          </span>
+        </div>
+      </li>
     </ul>
   </div>
 </div>

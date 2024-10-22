@@ -58,6 +58,9 @@ export class ProductsShowcaseComponent implements OnInit {
       categoryId: savedQuery?.category?.id,
       subCategoryId: savedQuery?.subCategory?.id,
       page: savedQuery?.page,
+      minPrice: savedQuery?.price?.min,
+      maxPrice: savedQuery?.price?.max,
+      sortBy: savedQuery?.sort,
     };
 
     this.products$ = this.productService.getProducts(newQuery);
@@ -66,11 +69,16 @@ export class ProductsShowcaseComponent implements OnInit {
       .subscribe(() => {
         const category = this.optionsService.currentCategory();
         const subCategory = this.optionsService.currentSubCategory();
+        const priceFilter = this.optionsService.currentPriceFilter();
         const page = this.optionsService.currentPage();
+        const sort = this.optionsService.currentSort();
         this.products$ = this.productService.getProducts({
           categoryId: category?.id,
           subCategoryId: subCategory?.id,
           page,
+          minPrice: priceFilter?.min,
+          maxPrice: priceFilter?.max,
+          sortBy: sort!,
         });
         this.cdr.detectChanges();
       });
