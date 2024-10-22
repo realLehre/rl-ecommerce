@@ -34,7 +34,7 @@ export class FiltersComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private optionsService = inject(ProductOptionsService);
   private productService = inject(ProductsService);
-  isShowing = signal<boolean[]>([false]);
+  isShowing = signal<boolean[]>([true, true]);
   // rangeValues = new FormControl([20, 30]);
   rangeValues = [2000, 10000];
   value: number = 50;
@@ -81,6 +81,9 @@ export class FiltersComponent implements OnInit {
   }
 
   onSetOrder(sort: string) {
+    if (this.currentSort() === sort) {
+      return;
+    }
     this.productService.productSignal.set(null);
     this.optionsService.currentSort.set(sort);
 

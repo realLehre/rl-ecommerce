@@ -9,7 +9,7 @@
             page.name.toLowerCase() == 'product details') &&
           page.name.toLowerCase() !== 'home',
       }"
-      [routerLink]="[page.route]"
+      (click)="onNavigateBack(page)"
     >
       <span>{{ page.name }}</span>
       @if (i != newPages.length - 1) {

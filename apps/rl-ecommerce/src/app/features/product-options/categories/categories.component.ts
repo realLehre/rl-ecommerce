@@ -28,6 +28,10 @@ export class CategoriesComponent implements OnInit {
   ngOnInit() {}
 
   onSetCategory(cat?: ICategory) {
+    if (this.activeCategory()?.id == cat?.id) {
+      return;
+    }
+
     this.productService.productSignal.set(null);
     this.optionsService.currentPage.set(1);
     this.optionsService.currentPriceFilter.set(null);
@@ -50,6 +54,9 @@ export class CategoriesComponent implements OnInit {
         fragment: 't',
       });
     } else {
+      if (this.optionsService.currentCategory() == null) {
+        return;
+      }
       this.optionsService.currentCategory.set(null);
       this.optionsService.currentSubCategory.set(null);
 
