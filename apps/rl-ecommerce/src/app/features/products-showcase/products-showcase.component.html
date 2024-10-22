@@ -53,7 +53,7 @@
     </div>
 
     @if (productArray.products.length) {
-      <div class="flex justify-center items-center w-full mt-12">
+      <div class="hidden mobile:flex justify-center items-center w-full mt-12">
         <pagination-template
           #p="paginationApi"
           [id]="config()?.id!"
@@ -110,6 +110,57 @@
           </div>
         </pagination-template>
       </div>
+
+      <div
+        class="flex mobile:hidden items-center justify-between space-x-3 max-w-[230px] mx-auto mt-10"
+      >
+        <button
+          class="h-8 w-8 flex items-center border-0 outline-0 justify-center cursor-pointer disabled:opacity-30"
+          [disabled]="config()?.currentPage! === 1"
+          (click)="pageChange(config()?.currentPage! - 1)"
+          [attr.aria-label]="'Previous page'"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 448 512"
+            class="w-6"
+          >
+            <path
+              d="M7.4 273.4C2.7 268.8 0 262.6 0 256s2.7-12.8 7.4-17.4l176-168c9.6-9.2 24.8-8.8 33.9 .8s8.8 24.8-.8 33.9L83.9 232 424 232c13.3 0 24 10.7 24 24s-10.7 24-24 24L83.9 280 216.6 406.6c9.6 9.2 9.9 24.3 .8 33.9s-24.3 9.9-33.9 .8l-176-168z"
+            />
+          </svg>
+        </button>
+
+        <div
+          class="p-2 bg-primary bg-opacity-60 h-12 rounded flex items-center justify-center space-x-2 text-white font-medium"
+        >
+          <span
+            class="h-8 flex items-center justify-center px-5 bg-primary rounded"
+            >{{ config()?.currentPage! }}</span
+          >
+          <div class="space-x-1">
+            <span>of</span>
+            <span>{{ productArray.totalPages }}</span>
+          </div>
+        </div>
+
+        <button
+          class="h-8 w-8 flex items-center border-0 outline-0 justify-center cursor-pointer disabled:opacity-30"
+          [disabled]="config()?.currentPage! === productArray.totalPages"
+          (click)="pageChange(config()?.currentPage! + 1)"
+          [attr.aria-label]="'Next page'"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 448 512"
+            class="w-6 rotate-180"
+          >
+            <path
+              d="M7.4 273.4C2.7 268.8 0 262.6 0 256s2.7-12.8 7.4-17.4l176-168c9.6-9.2 24.8-8.8 33.9 .8s8.8 24.8-.8 33.9L83.9 232 424 232c13.3 0 24 10.7 24 24s-10.7 24-24 24L83.9 280 216.6 406.6c9.6 9.2 9.9 24.3 .8 33.9s-24.3 9.9-33.9 .8l-176-168z"
+            />
+          </svg>
+        </button>
+      </div>
     }
   } @else {
     <header class="flex items-center mb-7">
@@ -126,7 +177,7 @@
     <div
       class="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] mobile:grid-cols-[repeat(auto-fill,minmax(210px,1fr))] gap-x-6 gap-y-10"
     >
-      @for (t of [1, 2, 3, 4, 5, 6]; track t) {
+      @for (t of [1, 2, 3, 4]; track t) {
         <div class="flex flex-col space-y-1 mobile:space-y-3">
           <div class="relative w-full h-[180px] mobile:h-[230px]">
             <div

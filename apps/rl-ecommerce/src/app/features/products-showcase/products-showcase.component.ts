@@ -72,7 +72,6 @@ export class ProductsShowcaseComponent implements OnInit {
           subCategoryId: subCategory?.id,
           page,
         });
-        console.log(1);
         this.cdr.detectChanges();
       });
   }
@@ -103,7 +102,7 @@ export class ProductsShowcaseComponent implements OnInit {
     });
     setTimeout(() => {
       window.scrollTo({
-        top: 500,
+        top: 470,
         behavior: 'smooth',
       });
     }, 100);
