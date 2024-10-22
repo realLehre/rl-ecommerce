@@ -90,7 +90,6 @@ export class ProductsShowcaseComponent implements OnInit {
     this.productService.paginationConfig.set(
       newPaginationConfig as PaginationInstance,
     );
-    console.log(newPaginationConfig);
     this.optionsService.currentPage.set(event);
     const savedQuery: ISavedProductOptionQueries = JSON.parse(
       sessionStorage.getItem('hshs82haa02sshs92s')!,
@@ -117,6 +116,8 @@ export class ProductsShowcaseComponent implements OnInit {
   }
 
   onOpenMobileFilter() {
-    this.layoutService.mobileFilterOpened.set(true);
+    this.layoutService.mobileFilterOpened.set(
+      !this.layoutService.mobileFilterOpened(),
+    );
   }
 }

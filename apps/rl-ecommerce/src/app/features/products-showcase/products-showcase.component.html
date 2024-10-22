@@ -32,8 +32,8 @@
       </header>
     }
     <app-mobile-filters
-      class="absolute tablet:hidden h-full w-[200px] -left-4 top-0 z-[110] -translate-x-[600px] transition-all ease-in-out"
-      [ngClass]="{ '-translate-x-[15px]': isMobileFilterOpened() }"
+      class="fixed tablet:hidden h-full w-full left-0 bottom-0 h-1/2 translate-y-[100%] z-[110] transition-all ease-in-out"
+      [ngClass]="{ '!translate-y-0': isMobileFilterOpened() }"
     />
     <div
       class="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] mobile:grid-cols-[repeat(auto-fill,minmax(210px,1fr))] gap-x-6 gap-y-10"
