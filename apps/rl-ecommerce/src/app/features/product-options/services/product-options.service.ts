@@ -19,7 +19,7 @@ export class ProductOptionsService {
   currentSubCategory = signal<ISubCategory | null>(null);
   currentPage = signal<number>(1);
   currentPriceFilter = signal<{ min: any; max: any } | null>(null);
-  currentSort = signal<string | null>('old');
+  currentSort = signal<string | null>(null);
   url = environment.apiUrl + 'category';
   constructor() {
     const savedQuery: ISavedProductOptionQueries = JSON.parse(
@@ -59,5 +59,18 @@ export class ProductOptionsService {
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-') // Replace spaces and special characters with hyphen
       .replace(/^-+|-+$/g, ''); // Trim leading or trailing hyphens
+  }
+
+  checkNumberOfFiltersApplied(): number {
+    const priceFilter = this.currentPriceFilter();
+    const sortFilter = this.currentSort();
+
+    if (priceFilter && sortFilter) {
+      return 2;
+    }
+    if (priceFilter || sortFilter) {
+      return 1;
+    }
+    return 0;
   }
 }

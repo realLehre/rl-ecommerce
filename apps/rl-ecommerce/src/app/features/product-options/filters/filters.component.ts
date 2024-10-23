@@ -13,6 +13,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProductOptionsService } from '../services/product-options.service';
 import { ProductsService } from '../../products/services/products.service';
 import { ISavedProductOptionQueries } from '../models/product-options.interface';
+import { LayoutService } from '../../../shared/services/layout.service';
+import { NumberOfFiltersPipe } from '../../../shared/pipes/number-of-filters.pipe';
 
 @Component({
   selector: 'app-filters',
@@ -24,28 +26,24 @@ import { ISavedProductOptionQueries } from '../models/product-options.interface'
     CheckboxModule,
     FormsModule,
     DecimalPipe,
+    NumberOfFiltersPipe,
   ],
   templateUrl: './filters.component.html',
   styleUrl: './filters.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FiltersComponent implements OnInit {
+export class FiltersComponent {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private optionsService = inject(ProductOptionsService);
+  private layoutService = inject(LayoutService);
   private productService = inject(ProductsService);
   isShowing = signal<boolean[]>([true, true]);
   // rangeValues = new FormControl([20, 30]);
   rangeValues = [2000, 10000];
   value: number = 50;
   currentSort = this.optionsService.currentSort;
-
-  ngOnInit() {
-    // console.log(this.isShowing);
-    // this.rangeValues.valueChanges.subscribe((val) => {
-    //   console.log(val);
-    // });
-  }
+  currentPriceFilter = this.optionsService.currentPriceFilter;
 
   onApplyPriceFilter() {
     console.log(this.rangeValues);
@@ -55,6 +53,7 @@ export class FiltersComponent implements OnInit {
       min: this.rangeValues[0],
       max: this.rangeValues[1],
     });
+    this.layoutService.mobileFilterOpened.set(false);
 
     const savedQuery: ISavedProductOptionQueries = JSON.parse(
       sessionStorage.getItem('hshs82haa02sshs92s')!,
@@ -81,7 +80,11 @@ export class FiltersComponent implements OnInit {
   }
 
   onSetOrder(sort: string) {
-    if (this.currentSort() === sort) {
+    this.layoutService.mobileFilterOpened.set(false);
+    if (
+      this.currentSort() === sort ||
+      (!this.currentSort() && sort === 'old')
+    ) {
       return;
     }
     this.productService.productSignal.set(null);
@@ -104,6 +107,37 @@ export class FiltersComponent implements OnInit {
       queryParamsHandling: 'merge',
       fragment: 't',
     });
+  }
+
+  onClearFilter() {
+    this.productService.productSignal.set(null);
+    this.optionsService.currentSort.set(null);
+    this.optionsService.currentPriceFilter.set(null);
+    this.layoutService.mobileFilterOpened.set(false);
+
+    const savedQuery: ISavedProductOptionQueries = JSON.parse(
+      sessionStorage.getItem('hshs82haa02sshs92s')!,
+    );
+
+    delete savedQuery.price;
+    delete savedQuery.sort;
+
+    sessionStorage.setItem('hshs82haa02sshs92s', JSON.stringify(savedQuery));
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        minPrice: null,
+        maxPrice: null,
+        sort: null,
+      },
+      queryParamsHandling: 'merge',
+      fragment: 't',
+    });
+  }
+
+  checkNumberOfFiltersApplied(): number {
+    return this.optionsService.checkNumberOfFiltersApplied();
   }
 
   onToggleFilter(index: number) {

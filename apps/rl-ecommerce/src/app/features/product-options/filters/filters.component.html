@@ -35,9 +35,9 @@
     </div>
     <div class="price-slider">
       <div class="text-type_grey text-sm mb-2">
-        <span>₦{{ rangeValues[0] | number }}</span>
+        <span>₦{{ currentPriceFilter()?.min ?? rangeValues[0] | number }}</span>
         <span> - </span>
-        <span>₦{{ rangeValues[1] | number }}</span>
+        <span>₦{{ currentPriceFilter()?.max ?? rangeValues[1] | number }}</span>
       </div>
       <div class="card flex justify-content-center"></div>
       <p-slider
@@ -75,7 +75,8 @@
         <span
           class="text-primary text-[25px] -translate-y-[1px] mr-2 opacity-0 transition-all duration-300 tablet:group-hover:inline-block tablet:group-hover:opacity-100 tablet:group-hover:translate-x-0"
           [ngClass]="{
-            'inline-block opacity-100 translate-x-0': currentSort() === 'old',
+            'inline-block opacity-100 translate-x-0':
+              currentSort() === 'old' || !currentSort(),
           }"
         >
           <svg
@@ -91,7 +92,8 @@
         <div
           class="transform -translate-x-[16px] tablet:group-hover:translate-x-1 group-hover:text-primary transition-all duration-300"
           [ngClass]="{
-            '!translate-x-1 text-primary ': currentSort() == 'old',
+            '!translate-x-1 text-primary ':
+              currentSort() == 'old' || !currentSort(),
           }"
         >
           <span class="category-title break-words leading-[1]"
@@ -133,4 +135,19 @@
       </li>
     </ul>
   </div>
+  @if (currentPriceFilter() || currentSort()) {
+    <div class="flex items-center justify-between mt-2">
+      <p class="text-type_title_gray font-semibold">
+        {{ 0 | numberOfFilters }} applied
+      </p>
+
+      <button
+        class="py-2 text-primary font-semibold text-sm"
+        type="button"
+        (click)="onClearFilter()"
+      >
+        Clear
+      </button>
+    </div>
+  }
 </div>

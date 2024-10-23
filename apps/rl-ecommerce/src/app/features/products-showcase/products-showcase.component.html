@@ -2,7 +2,7 @@
   @if (products$ | async; as productArray) {
     @if (productArray.products.length) {
       <header class="flex items-center mb-7">
-        <div
+        <button
           class="flex tablet:hidden items-center space-x-1 cursor-pointer text-type_grey relative"
           (click)="onOpenMobileFilter()"
         >
@@ -19,7 +19,14 @@
               fill="#555555"
             />
           </svg>
-        </div>
+
+          @if (currentPriceFilter() || currentSort()) {
+            <span
+              class="absolute -top-2 -right-2 h-4 w-4 flex items-center justify-center bg-primary text-white p-2 text-[10px] font-medium rounded-full"
+              >{{ 0 | numberOfFilters }}</span
+            >
+          }
+        </button>
         <p class="text-xs ml-auto tablet:text-base justify-self-end">
           Showing {{ config()?.currentPage! | itemsShowing }} –
           {{
@@ -32,7 +39,7 @@
       </header>
     }
     <app-mobile-filters
-      class="fixed tablet:hidden h-full w-full left-0 bottom-0 h-1/2 translate-y-[100%] z-[110] transition-all ease-in-out"
+      class="fixed tablet:hidden w-full left-0 bottom-0 h-1/2 translate-y-[100%] z-[110] transition-all ease-in-out"
       [ngClass]="{ '!translate-y-0': isMobileFilterOpened() }"
     />
     <div

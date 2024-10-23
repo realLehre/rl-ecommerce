@@ -21,6 +21,7 @@ import { ISavedProductOptionQueries } from '../product-options/models/product-op
 import { IProductResponse } from '../products/model/product.interface';
 import { NgxPaginationModule, PaginationInstance } from 'ngx-pagination';
 import { ItemsShowingPipe } from '../../shared/pipes/items-showing.pipe';
+import { NumberOfFiltersPipe } from '../../shared/pipes/number-of-filters.pipe';
 
 @Component({
   selector: 'app-products-showcase',
@@ -34,6 +35,7 @@ import { ItemsShowingPipe } from '../../shared/pipes/items-showing.pipe';
     SkeletonModule,
     NgxPaginationModule,
     ItemsShowingPipe,
+    NumberOfFiltersPipe,
   ],
   templateUrl: './products-showcase.component.html',
   styleUrl: './products-showcase.component.scss',
@@ -49,6 +51,8 @@ export class ProductsShowcaseComponent implements OnInit {
   isMobileFilterOpened = this.layoutService.mobileFilterOpened;
   products$!: Observable<IProductResponse | null>;
   config = this.productService.paginationConfig;
+  currentPriceFilter = this.optionsService.currentPriceFilter;
+  currentSort = this.optionsService.currentSort;
   ngOnInit() {
     const savedQuery: ISavedProductOptionQueries = JSON.parse(
       sessionStorage.getItem('hshs82haa02sshs92s')!,
@@ -113,6 +117,10 @@ export class ProductsShowcaseComponent implements OnInit {
         behavior: 'smooth',
       });
     }, 100);
+  }
+
+  checkNumberOfFiltersApplied(): number {
+    return this.optionsService.checkNumberOfFiltersApplied();
   }
 
   onOpenMobileFilter() {
