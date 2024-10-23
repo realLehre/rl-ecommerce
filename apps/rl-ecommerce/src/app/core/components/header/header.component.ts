@@ -24,6 +24,7 @@ import {
 import { ProductsService } from '../../../features/products/services/products.service';
 import { IProduct } from '../../../features/products/model/product.interface';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
+import { ProductOptionsService } from '../../../features/product-options/services/product-options.service';
 
 @Component({
   selector: 'app-header',
@@ -43,6 +44,7 @@ import { LoaderComponent } from '../../../shared/components/loader/loader.compon
 export class HeaderComponent implements AfterViewInit {
   private authService = inject(AuthService);
   private productService = inject(ProductsService);
+  private optionsService = inject(ProductOptionsService);
   user = this.authService.user;
   userName = this.user()?.fullName.split(' ')[0]!;
   private layoutService = inject(LayoutService);
@@ -110,5 +112,16 @@ export class HeaderComponent implements AfterViewInit {
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-') // Replace spaces and special characters with hyphen
       .replace(/^-+|-+$/g, ''); // Trim leading or trailing hyphens
+  }
+
+  onRouteHome() {
+    this.router.navigate(['/']);
+    this.productService.productSignal.set(null);
+    this.optionsService.currentPage.set(1);
+    this.optionsService.currentPriceFilter.set(null);
+    this.optionsService.currentSort.set(null);
+    this.optionsService.currentCategory.set(null);
+    this.optionsService.currentSubCategory.set(null);
+    sessionStorage.removeItem('hshs82haa02sshs92s');
   }
 }
