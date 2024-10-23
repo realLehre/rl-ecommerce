@@ -5,7 +5,11 @@ import { Pipe, PipeTransform } from '@angular/core';
   standalone: true,
 })
 export class ItemsShowingPipe implements PipeTransform {
-  transform(page: number): number {
-    return (page + 1) * 10 - 19;
+  transform(page: number, total?: number): number {
+    if (total) {
+      return Math.min(page * 12, total);
+    } else {
+      return (page - 1) * 12 + 1;
+    }
   }
 }

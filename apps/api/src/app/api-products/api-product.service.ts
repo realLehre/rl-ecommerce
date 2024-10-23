@@ -15,7 +15,7 @@ export class ApiProductService {
     pageSize?: number;
   }) {
     const page = filters.page ?? 1;
-    const pageSize = filters.pageSize ?? 10;
+    const pageSize = filters.pageSize ?? 12;
     const skip = (page - 1) * pageSize;
     const products = await this.prisma.product.findMany({
       include: {

@@ -2,10 +2,10 @@
   class="flex items-center justify-center bg-bg_main shadow-sm shadow-grey-300 h-[75px]"
 >
   <div
-    class="flex items-center justify-between tablet:w-[85%] max-w-[1200px] w-[90%] py-4"
+    class="flex items-center justify-between min-[760px]:w-[85%] max-w-[1200px] w-[90%] py-4"
   >
     <div class="flex items-center space-x-5">
-      <button class="tablet:hidden block border-0 outline-0">
+      <button class="min-[760px]:hidden block border-0 outline-0">
         <img
           src="assets/images/icons/bars.svg"
           alt=""
@@ -17,13 +17,13 @@
         <img
           src="assets/images/icons/logo.png"
           alt=""
-          class="w-[100px] tablet:w-[120px]"
+          class="w-[100px] min-[760px]:w-[120px]"
         />
       </div>
     </div>
 
     <div
-      class="tablet:w-1/2 tablet:h-[43px] h-full py-2 px-3 tablet:bg-transparent bg-bg_main tablet:relative absolute w-full top-0 left-0 -translate-y-[100%] tablet:translate-y-0 transition ease-in-out flex items-center justify-center"
+      class="min-[760px]:w-1/2 min-[760px]:h-[43px] h-full py-2 px-3 min-[760px]:bg-transparent bg-bg_main min-[760px]:relative absolute w-full top-0 left-0 -translate-y-[100%] min-[760px]:translate-y-0 transition ease-in-out flex items-center justify-center"
       [ngClass]="{ 'translate-y-0': searchShown() }"
     >
       <div class="relative w-full h-10 flex items-center justify-between">
@@ -108,7 +108,7 @@
       <img
         src="assets/images/icons/search.svg"
         alt=""
-        class="tablet:hidden block cursor-pointer"
+        class="min-[760px]:hidden block cursor-pointer"
         (click)="onToggleSearch()"
       />
       <div
