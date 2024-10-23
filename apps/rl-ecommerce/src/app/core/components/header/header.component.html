@@ -24,9 +24,9 @@
 
     <div
       class="tablet:w-1/2 tablet:h-[43px] h-full py-2 px-3 tablet:bg-transparent bg-bg_main tablet:relative absolute w-full top-0 left-0 -translate-y-[100%] tablet:translate-y-0 transition ease-in-out flex items-center justify-center"
-      [ngClass]="{ 'translate-y-0': searchShown }"
+      [ngClass]="{ 'translate-y-0': searchShown() }"
     >
-      <div class="relative w-full h-10 flex items-center space-x-10">
+      <div class="relative w-full h-10 flex items-center justify-between">
         <div class="w-full h-full">
           <img
             src="assets/images/icons/search.svg"
@@ -34,16 +34,73 @@
             class="absolute left-3 top-1/2 -translate-y-1/2"
           />
           <input
-            class="w-full focus:outline-0 rounded-full bg-bg_subtle border border-border_subtle h-full pl-12 text-type_caption font-medium placeholder:text-type_caption"
+            class="w-full focus:outline-0 rounded-full bg-bg_subtle border border-border_subtle h-full px-12 text-type_caption font-medium placeholder:text-type_caption"
+            #input
             placeholder="Search"
           />
+
+          @if (!isSearching()) {
+            @if (
+              searchInput.nativeElement.value ||
+              searchShown() ||
+              searchInput.nativeElement.value !== ''
+            ) {
+              <img
+                src="assets/images/icons/close.svg"
+                alt=""
+                class="w-4 min-w-4 h-4 min-h-4 absolute right-3 top-1/2 -translate-y-1/2"
+                (click)="onToggleSearch()"
+              />
+            }
+          } @else {
+            <div class="absolute right-3 top-1/2 -translate-y-1/2">
+              <app-loader
+                [customStyle]="{ width: '16px', border: '3px solid #555555' }"
+              />
+            </div>
+          }
+          <div
+            class="bg-bg_subtle h-auto w-full absolute top-[40px] shadow-md shadow-stone-500 rounded-md rounded-t-0 overflow-hidden"
+          >
+            @if (products()) {
+              @for (toy of products(); track toy.name; let i = $index) {
+                <div
+                  class="flex items-center justify-between space-x-3 text-type_title py-[10px] px-3 cursor-pointer hover:bg-border_subtle"
+                  [ngClass]="{
+                    'border-b border-border_subtle':
+                      i < products()?.length! - 1,
+                  }"
+                  (click)="onViewDetails(toy)"
+                >
+                  <div class="flex items-center space-x-2 w-[70%]">
+                    <div class="w-8 h-8 min-w-8 min-h-8 rounded-md">
+                      <img
+                        [src]="toy.image"
+                        alt=""
+                        class="w-full h-full object-cover"
+                      />
+                    </div>
+                    <p class="text-xs truncate">{{ toy.name }}</p>
+                  </div>
+
+                  <p class="text-xs font-semibold">
+                    {{ toy.price | currency: '₦' : 'symbol' : '1.0-0' }}
+                  </p>
+                </div>
+              } @empty {
+                <p class="text-type_title_gray font-semibold p-3">
+                  No products matched your search!
+                </p>
+              }
+            }
+          </div>
         </div>
-        <img
-          src="assets/images/icons/close.svg"
-          alt=""
-          class="w-4 min-w-4 h-4 min-h-4 tablet:hidden block"
-          (click)="onToggleSearch()"
-        />
+        <!--        <img-->
+        <!--          src="assets/images/icons/close.svg"-->
+        <!--          alt=""-->
+        <!--          class="w-4 min-w-4 h-4 min-h-4 tablet:hidden block"-->
+        <!--          (click)="onToggleSearch()"-->
+        <!--        />-->
       </div>
     </div>
 
@@ -94,14 +151,14 @@
           </svg>
         </div>
         @if (user()) {
-        <div class="items-center space-x-1 hidden mobile:flex">
-          <p
-            class="text-sm text-type_title_gray group-hover:text-primary font-semibold capitalize"
-          >
-            Hi, {{ userName }}
-          </p>
-          <i class="fa fa-angle-down group-hover:text-primary"></i>
-        </div>
+          <div class="items-center space-x-1 hidden mobile:flex">
+            <p
+              class="text-sm text-type_title_gray group-hover:text-primary font-semibold capitalize"
+            >
+              Hi, {{ userName }}
+            </p>
+            <i class="fa fa-angle-down group-hover:text-primary"></i>
+          </div>
         }
       </div>
     </div>
@@ -112,56 +169,56 @@
   <ng-template pTemplate="start">
     <div class="py-3">
       @if (!user()) {
-      <div
-        class="w-full items-center flex justify-center pt-3 border-b-[1px] border-border_subtle"
-      >
-        <button
-          class="w-[85%] rounded-md text-white font-medium bg-primary py-2 block hover:bg-opacity-80"
-          routerLink="/auth"
-        >
-          Sign In
-        </button>
-      </div>
-      } @else {
-      <div class="w-full">
         <div
-          class="flex items-center space-x-4 px-3 py-2 hover:bg-border_subtle cursor-pointer"
-          routerLink="/user"
+          class="w-full items-center flex justify-center pt-3 border-b-[1px] border-border_subtle"
         >
-          <img src="assets/images/icons/user.svg" alt="" class="w-5" />
-          <p class="text-type_caption">My Account</p>
-        </div>
-        <div
-          class="flex items-center space-x-4 px-3 py-2 hover:bg-border_subtle cursor-pointer"
-          routerLink="/orders"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 448 512"
-            class="w-5"
+          <button
+            class="w-[85%] rounded-md text-white font-medium bg-primary py-2 block hover:bg-opacity-80"
+            routerLink="/auth"
           >
-            <path
-              d="M50.7 58.5L0 160l208 0 0-128L93.7 32C75.5 32 58.9 42.3 50.7 58.5zM240 160l208 0L397.3 58.5C389.1 42.3 372.5 32 354.3 32L240 32l0 128zm208 32L0 192 0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-224z"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="50"
-            />
-          </svg>
-
-          <p class="text-type_caption">Orders</p>
+            Sign In
+          </button>
         </div>
-      </div>
+      } @else {
+        <div class="w-full">
+          <div
+            class="flex items-center space-x-4 px-3 py-2 hover:bg-border_subtle cursor-pointer"
+            routerLink="/user"
+          >
+            <img src="assets/images/icons/user.svg" alt="" class="w-5" />
+            <p class="text-type_caption">My Account</p>
+          </div>
+          <div
+            class="flex items-center space-x-4 px-3 py-2 hover:bg-border_subtle cursor-pointer"
+            routerLink="/orders"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 448 512"
+              class="w-5"
+            >
+              <path
+                d="M50.7 58.5L0 160l208 0 0-128L93.7 32C75.5 32 58.9 42.3 50.7 58.5zM240 160l208 0L397.3 58.5C389.1 42.3 372.5 32 354.3 32L240 32l0 128zm208 32L0 192 0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-224z"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="50"
+              />
+            </svg>
 
-      <div
-        class="w-full border-t-[1px] border-border_subtle mt-3 pt-3 text-center"
-      >
-        <button
-          class="bg-transparent border-0 text-primary font-semibold"
-          (click)="onSignOut()"
+            <p class="text-type_caption">Orders</p>
+          </div>
+        </div>
+
+        <div
+          class="w-full border-t-[1px] border-border_subtle mt-3 pt-3 text-center"
         >
-          LOGOUT
-        </button>
-      </div>
+          <button
+            class="bg-transparent border-0 text-primary font-semibold"
+            (click)="onSignOut()"
+          >
+            LOGOUT
+          </button>
+        </div>
       }
     </div>
   </ng-template>

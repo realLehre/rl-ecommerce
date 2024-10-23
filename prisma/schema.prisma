@@ -88,6 +88,8 @@ model Product {
   cartItems     CartItem[]      @relation("ProductCartItem")
   createdAt     DateTime        @default(now())
   updateAt      DateTime        @updatedAt
+
+  @@index([name])
 }
 
 model Category {

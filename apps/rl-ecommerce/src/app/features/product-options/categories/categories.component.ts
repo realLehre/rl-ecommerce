@@ -9,6 +9,7 @@ import { AsyncPipe, NgClass } from '@angular/common';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductsService } from '../../products/services/products.service';
+import { LayoutService } from '../../../shared/services/layout.service';
 
 @Component({
   selector: 'app-categories',
@@ -22,12 +23,14 @@ export class CategoriesComponent implements OnInit {
   private productService = inject(ProductsService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private layoutService = inject(LayoutService);
   categories$ = this.optionsService.getCategories();
   activeCategory = this.optionsService.currentCategory;
 
   ngOnInit() {}
 
   onSetCategory(cat?: ICategory) {
+    this.layoutService.menuOpened.set(false);
     if (this.activeCategory()?.id == cat?.id) {
       return;
     }

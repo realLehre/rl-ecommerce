@@ -1,5 +1,6 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   inject,
   OnInit,
@@ -52,6 +53,7 @@ export class ProductDetailsComponent implements OnInit {
   activeProduct = this.productService.activeProduct;
   isCollapsed = signal(true);
   limit = 200;
+  cdr = inject(ChangeDetectorRef);
 
   ngOnInit() {
     const productId = this.route.snapshot.queryParams['id'];
@@ -62,6 +64,7 @@ export class ProductDetailsComponent implements OnInit {
       .subscribe(() => {
         const productId = this.route.snapshot.queryParams['id'];
         this.product$ = this.productService.getProductById(productId);
+        this.cdr.detectChanges();
       });
   }
 

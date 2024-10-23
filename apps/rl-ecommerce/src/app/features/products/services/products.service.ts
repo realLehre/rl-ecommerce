@@ -24,6 +24,8 @@ export class ProductsService {
   activeProduct = signal<IProduct | null>(null);
   paginationConfig = signal<PaginationInstance | null>(null);
   pageSize = signal(10);
+  searchedProductsSignal = signal<IProduct[] | null>(null);
+  isSearchingProducts = signal(false);
 
   products = [
     {
@@ -204,5 +206,20 @@ export class ProductsService {
     return this.http.get<IProduct[]>(
       `${this.baseUrl}${productId}/similar/${categoryId}`,
     );
+  }
+
+  getSearchedProducts(input: string) {
+    this.isSearchingProducts.set(true);
+    return this.searchedProductsSignal()
+      ? of(this.searchedProductsSignal())
+      : this.http
+          .get<IProduct[]>(`${this.baseUrl}?search=${input}`)
+          .pipe(
+            tap((res) => {
+              this.searchedProductsSignal.set(res);
+              this.isSearchingProducts.set(false);
+            }),
+          )
+          .subscribe();
   }
 }

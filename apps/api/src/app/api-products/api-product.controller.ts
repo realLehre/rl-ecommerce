@@ -44,4 +44,9 @@ export class ApiProductController {
   async addProduct(@Body() data: any) {
     await this.productService.addProduct(data);
   }
+
+  @Get()
+  async searchProducts(@Query('search') search: string) {
+    return this.productService.searchProducts(search);
+  }
 }

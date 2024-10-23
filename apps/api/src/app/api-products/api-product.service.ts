@@ -92,4 +92,16 @@ export class ApiProductService {
       data: data,
     });
   }
+
+  async searchProducts(input: string) {
+    return this.prisma.product.findMany({
+      where: {
+        name: {
+          contains: input,
+          mode: 'insensitive',
+        },
+      },
+      take: 5,
+    });
+  }
 }
