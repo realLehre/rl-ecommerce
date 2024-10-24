@@ -86,10 +86,15 @@
             Buy Now
           </button>
           <button
-            class="min-w-[120px] mobile:min-w-[190px] rounded-full font-medium border-primary border-[2px] text-type_title_gray py-2 flex-1 h-12"
-            routerLink="/cart"
+            class="min-w-[120px] flex items-center justify-center space-x-3 mobile:min-w-[190px] rounded-full font-medium border-primary border-[2px] text-type_title_gray py-2 flex-1 h-12"
+            (click)="onAddToCart()"
           >
-            Add to Cart
+            @if (isAddingToCart()) {
+              <app-loader
+                [customStyle]="{ width: '24px', border: '3px solid #000' }"
+              />
+            }
+            <span> Add to Cart </span>
           </button>
         </div>
       </div>

@@ -22,6 +22,8 @@ import { filter, Observable } from 'rxjs';
 import { IProduct } from '../model/product.interface';
 import { AsyncPipe, CurrencyPipe, NgClass } from '@angular/common';
 import { SkeletonModule } from 'primeng/skeleton';
+import { CartService } from '../../../shared/services/cart.service';
+import { UserAccountService } from '../../user/user-account/services/user-account.service';
 
 @Component({
   selector: 'app-product-details',
@@ -46,6 +48,8 @@ export class ProductDetailsComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private productService = inject(ProductsService);
+  private cartService = inject(CartService);
+  private userService = inject(UserAccountService);
   product$!: Observable<IProduct>;
   similarProducts!: Observable<IProduct[]>;
   quantity: number = 1;
@@ -54,17 +58,40 @@ export class ProductDetailsComponent implements OnInit {
   isCollapsed = signal(true);
   limit = 200;
   cdr = inject(ChangeDetectorRef);
+  isAddingToCart = signal(false);
+  productId!: string;
 
   ngOnInit() {
-    const productId = this.route.snapshot.queryParams['id'];
-    this.product$ = this.productService.getProductById(productId);
+    this.productId = this.route.snapshot.queryParams['id'];
+    this.product$ = this.productService.getProductById(this.productId);
 
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe(() => {
-        const productId = this.route.snapshot.queryParams['id'];
-        this.product$ = this.productService.getProductById(productId);
+        this.productId = this.route.snapshot.queryParams['id'];
+        this.product$ = this.productService.getProductById(this.productId);
         this.cdr.detectChanges();
+      });
+  }
+
+  onAddToCart() {
+    const user = this.userService.user;
+    this.isAddingToCart.set(true);
+
+    this.cartService
+      .addToCart({
+        userId: user()?.id!,
+        productId: this.productId,
+        unit: this.quantity,
+      })
+      .subscribe({
+        next: (res) => {
+          this.isAddingToCart.set(false);
+          this.cartService.getCart().subscribe();
+        },
+        error: (err) => {
+          this.isAddingToCart.set(false);
+        },
       });
   }
 

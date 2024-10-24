@@ -22,15 +22,15 @@ model User {
   updateAt    DateTime        @updatedAt
   addresses   Address[]       @relation("UserAddress")
   ratings     ProductRating[]
-  carts       Cart[]          @relation("UserCart")
+  cart        Cart?           @relation("UserCart")
 }
 
 model Cart {
   id           String     @id @default(uuid())
   user         User       @relation("UserCart", fields: [userId], references: [id], onDelete: Cascade)
-  userId       String
+  userId       String     @unique
   cartItems    CartItem[] @relation("CartCartItem")
-  subtTotal    Int
+  subTotal     Int
   shippingCost Int
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
