@@ -3,6 +3,7 @@ import {
   Component,
   inject,
   OnInit,
+  signal,
 } from '@angular/core';
 import { BreadcrumbComponent } from '../../shared/components/breadcrumb/breadcrumb.component';
 import { RouterLink } from '@angular/router';
@@ -12,6 +13,8 @@ import { ProductsService } from '../products/services/products.service';
 import { AsyncPipe, CurrencyPipe } from '@angular/common';
 import { ProductQuantityComponent } from '../../shared/components/product-quantity/product-quantity.component';
 import { CartService } from '../../shared/services/cart.service';
+import { ICartItems } from '../../shared/models/cart.interface';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-cart',
@@ -34,16 +37,50 @@ export class CartComponent implements OnInit {
   private cartService = inject(CartService);
   cart$ = this.cartService.getCart();
   quantity: number = 1;
-  cartItems: any[] = [];
-  isLoading: boolean = false;
-  ngOnInit() {
-    this.cartItems = this.productService.products.slice(0, 4);
-    setTimeout(() => {
-      this.isLoading = false;
-    }, 4000);
-  }
+  isUpdating = signal<boolean[]>([false]);
+  ngOnInit() {}
 
-  onAdjustQuantity(qty: number) {
+  onAdjustQuantity(qty: number, item: ICartItems, idx: number) {
+    let loadings = [...this.isUpdating()];
+    loadings[idx] = true;
+    this.isUpdating.set(loadings);
     this.quantity = qty;
+
+    this.cartService
+      .updateCartItem({
+        itemId: item.id,
+        unit: this.quantity,
+        productPrice: item.product.price,
+      })
+      .subscribe({
+        next: (res) => {
+          loadings[idx] = false;
+          this.isUpdating.set([...loadings]);
+
+          const currentCart = this.cartService.cartSignal();
+          if (currentCart) {
+            const updatedItems = currentCart.cartItems.map((cartItem) => {
+              if (cartItem.id === item.id) {
+                return {
+                  ...cartItem,
+                  unit: qty,
+                  total: qty * cartItem.product.price,
+                };
+              }
+              return cartItem;
+            });
+
+            this.cart$ = of({ ...currentCart, cartItems: updatedItems });
+            this.cartService.cartSignal.set({
+              ...currentCart,
+              cartItems: updatedItems,
+            });
+          }
+        },
+        error: (err) => {
+          loadings[idx] = false;
+          this.isUpdating.set([...loadings]);
+        },
+      });
   }
 }

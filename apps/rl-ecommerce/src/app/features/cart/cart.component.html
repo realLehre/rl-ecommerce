@@ -68,7 +68,8 @@
                   <td>
                     <app-product-quantity
                       [quantity]="item.unit"
-                      (quantityChanged)="onAdjustQuantity($event)"
+                      [isLoading]="isUpdating()[i]"
+                      (quantityChanged)="onAdjustQuantity($event, item, i)"
                     />
                   </td>
                   <td class="font-semibold text-type_title_gray text-base">
@@ -126,7 +127,8 @@
                 </button>
                 <app-product-quantity
                   [quantity]="item.unit"
-                  (quantityChanged)="onAdjustQuantity($event)"
+                  [isLoading]="isUpdating()[i]"
+                  (quantityChanged)="onAdjustQuantity($event, item, i)"
                 />
               </div>
             </div>

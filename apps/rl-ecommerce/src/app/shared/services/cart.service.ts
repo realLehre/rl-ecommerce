@@ -27,4 +27,11 @@ export class CartService {
   addToCart(data: { userId: string; unit: number; productId: string }) {
     return this.http.post(`${this.apiUrl}/add`, data);
   }
+
+  updateCartItem(data: { itemId: string; unit: number; productPrice: number }) {
+    return this.http.patch(`${this.apiUrl}/${data.itemId}/update`, {
+      unit: data.unit,
+      productPrice: data.productPrice,
+    });
+  }
 }

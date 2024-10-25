@@ -5,10 +5,6 @@ import { PrismaService } from '../prisma.service';
 export class ApiCartService {
   constructor(private prisma: PrismaService) {}
 
-  async addToCart(userId: string, productId: string) {
-    // await this.prisma.cartItem.create({});
-  }
-
   async getOrCreateCart(userId: string) {
     let cart = await this.prisma.cart.findUnique({
       where: { userId },
@@ -56,10 +52,22 @@ export class ApiCartService {
           cartId: cart.id,
           productId,
           unit,
-          total: product!.price * unit + 100,
+          total: product!.price * unit,
           shippingCost: 100, // Default shipping cost
         },
       });
+    });
+  }
+
+  async updateCartItem(itemId: string, unit: number, productPrice: number) {
+    return this.prisma.cartItem.update({
+      where: {
+        id: itemId,
+      },
+      data: {
+        unit,
+        total: productPrice * unit,
+      },
     });
   }
 }

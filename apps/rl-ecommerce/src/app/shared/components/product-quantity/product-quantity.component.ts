@@ -4,6 +4,7 @@ import {
   input,
   OnInit,
   output,
+  signal,
 } from '@angular/core';
 import { LoaderComponent } from '../loader/loader.component';
 
@@ -19,7 +20,7 @@ export class ProductQuantityComponent implements OnInit {
   quantity = input.required<number>();
   quantityMain!: number;
   quantityChanged = output<number>();
-  isLoading: boolean = false;
+  isLoading = input<boolean>(false);
 
   ngOnInit() {
     this.quantityMain = this.quantity();
@@ -37,12 +38,5 @@ export class ProductQuantityComponent implements OnInit {
       this.quantityMain--;
     }
     this.quantityChanged.emit(this.quantityMain);
-  }
-
-  setLoader() {
-    this.isLoading = true;
-    setTimeout(() => {
-      this.isLoading = false;
-    }, 1000);
   }
 }

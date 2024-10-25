@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiCartService } from './api-cart.service';
 
 @Controller('cart')
@@ -18,6 +18,18 @@ export class ApiCartController {
       data.unit,
       data.productId,
       data.userId,
+    );
+  }
+
+  @Patch(':id/update')
+  async updateCartItem(
+    @Param('id') itemId: string,
+    @Body() data: { unit: number; productPrice: number },
+  ) {
+    return this.cartService.updateCartItem(
+      itemId,
+      data.unit,
+      data.productPrice,
     );
   }
 }

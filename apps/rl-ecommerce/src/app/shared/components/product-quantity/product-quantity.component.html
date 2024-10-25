@@ -10,7 +10,11 @@
   <div
     class="border-x-[1px] border-border_subtle text-base text-type_title_grey w-12 h-full flex items-center justify-center"
   >
-    <span>{{ quantity() }}</span>
+    @if (isLoading()) {
+      <app-loader [customStyle]="{ width: '18px', border: '3px solid #000' }" />
+    } @else {
+      <span>{{ quantity() }}</span>
+    }
   </div>
   <div
     class="p-2 cursor-pointer w-12 text-center mobile:w-auto"
