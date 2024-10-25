@@ -1,46 +1,76 @@
 <div class="pt-5">
-  <div class="pb-3 border-b-[2px] border-border_subtle">
-    <div
-      class="flex items-center justify-between space-x-3 text-sm mobile:text-[20px] text-type_title_gray mb-3"
-    >
-      <p>Product</p>
-      <p>Total</p>
-    </div>
+  @if (cart()) {
+    <div>
+      <div class="pb-3 border-b-[2px] border-border_subtle">
+        <div
+          class="flex items-center justify-between space-x-3 text-sm mobile:text-[20px] text-type_title_gray mb-3"
+        >
+          <p>Product</p>
+          <p>Total</p>
+        </div>
 
-    <div
-      class="flex items-center justify-between space-x-3 text-sm mobile:text-[20px] text-type_title_gray"
-    >
-      <div class="flex items-center space-x-2">
-        <img src="assets/images/toy-1.jpeg" alt="" class="w-12 h-12" />
-        <div class="text-sm mobile:text-base text-type_grey">
-          <p>Palm Slippers</p>
-          <p class="text-type_title font-semibold">x2</p>
+        <div class="space-y-2">
+          @for (item of cart().cartItems; track item.id) {
+            <div
+              class="flex items-center justify-between space-x-3 text-sm mobile:text-[20px] text-type_title_gray"
+            >
+              <div class="flex items-center space-x-2 w-[70%]">
+                <img
+                  [src]="item?.product?.image"
+                  [alt]="item?.product?.name"
+                  class="w-12 h-12 min-w-12 min-h-12"
+                />
+                <div class="text-sm text-type_grey break-words">
+                  <p>{{ item?.product?.name }}</p>
+                  <p class="text-type_title font-semibold">x{{ item.unit }}</p>
+                </div>
+              </div>
+              <p
+                class="text-sm mobile:text-base text-type_grey w-[30%] text-right whitespace-nowrap"
+              >
+                {{ item.total | currency: '₦' : 'symbol' : '1.0-0' }}
+              </p>
+            </div>
+          }
         </div>
       </div>
-      <p class="text-sm mobile:text-base text-type_grey">#4000</p>
+
+      <div
+        class="flex items-center justify-between space-x-4 text-sm mobile:text-base text-type_title_gray py-3 border-b-[2px] border-border_subtle"
+      >
+        <p>Subtotal</p>
+        <p class="text-type_title_gray font-semibold">
+          {{ cart().cartItems | subtotal | currency: '₦' : 'symbol' : '1.0-0' }}
+        </p>
+      </div>
+
+      <div
+        class="flex items-center justify-between space-x-4 text-sm mobile:text-base text-type_title_gray py-3 border-b-[2px] border-border_subtle"
+      >
+        <p>Delivery Fee</p>
+        <p class="text-type_title_gray font-semibold">
+          {{
+            cart().cartItems
+              | totalDelivery
+              | currency: '₦' : 'symbol' : '1.0-0'
+          }}
+        </p>
+      </div>
+
+      <div
+        class="flex items-center justify-between space-x-4 text-sm mobile:text-base text-type_title_gray py-3 border-b-[2px] border-border_subtle"
+      >
+        <p>Total</p>
+        <p class="text-type_title_gray font-semibold text-lg mobile:text-2xl">
+          {{
+            cart().cartItems | grandTotal | currency: '₦' : 'symbol' : '1.0-0'
+          }}
+        </p>
+      </div>
     </div>
-  </div>
-
-  <div
-    class="flex items-center justify-between space-x-4 text-sm mobile:text-base text-type_title_gray py-3 border-b-[2px] border-border_subtle"
-  >
-    <p>Subtotal</p>
-    <p class="text-type_title_gray font-semibold">#4000</p>
-  </div>
-
-  <div
-    class="flex items-center justify-between space-x-4 text-sm mobile:text-base text-type_title_gray py-3 border-b-[2px] border-border_subtle"
-  >
-    <p>Delivery Fee</p>
-    <p class="text-type_title_gray font-semibold">#4000</p>
-  </div>
-
-  <div
-    class="flex items-center justify-between space-x-4 text-sm mobile:text-base text-type_title_gray py-3 border-b-[2px] border-border_subtle"
-  >
-    <p>Total</p>
-    <p class="text-type_title_gray font-semibold text-lg mobile:text-2xl">
-      #4000
-    </p>
-  </div>
+  } @else {
+    <div>
+      <p-skeleton width="100%" height="450px" />
+    </div>
+  }
 </div>

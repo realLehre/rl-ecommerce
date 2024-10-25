@@ -4,6 +4,7 @@ import {
   inject,
   OnInit,
   signal,
+  WritableSignal,
 } from '@angular/core';
 import { BreadcrumbComponent } from '../../shared/components/breadcrumb/breadcrumb.component';
 import { Router, RouterLink } from '@angular/router';
@@ -51,7 +52,7 @@ export class CartComponent implements OnInit {
   private router = inject(Router);
   // cart$ = this.cartService.getCart();
   cart$!: Observable<ICart>;
-  cart = this.cartService.cartSignal;
+  cart = this.cartService.cartSignal as WritableSignal<ICart>;
   quantity: number = 1;
   isUpdating = signal<boolean[]>([false]);
   showDeleteDialog = signal(false);

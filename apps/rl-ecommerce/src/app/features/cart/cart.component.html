@@ -7,7 +7,7 @@
   </h3>
 
   @if (cart()) {
-    @if ((cart()?.cartItems)!.length) {
+    @if (cart().cartItems.length) {
       <div class="mt-4 flex flex-col w-full">
         <div class="w-full mx-auto hidden min-[750px]:block">
           <table class="w-full table-auto border-collapse">
@@ -21,7 +21,7 @@
               </tr>
             </thead>
             <tbody>
-              @for (item of cart()?.cartItems; track item.id; let i = $index) {
+              @for (item of cart().cartItems; track item.id; let i = $index) {
                 <tr class="border-b border-border_subtle">
                   <td class="py-3">
                     <button
@@ -89,7 +89,7 @@
         </div>
 
         <div class="block min-[750px]:hidden w-full space-y-5">
-          @for (item of cart()?.cartItems!; track item.id; let i = $index) {
+          @for (item of cart().cartItems; track item.id; let i = $index) {
             <div class="w-full border-b border-border_subtle pb-5">
               <div class="flex items-center space-x-3">
                 <img
@@ -146,9 +146,7 @@
             <h5 class="text-lg text-type_title_gray">Subtotal Price</h5>
             <h1 class="text-2xl mobile:text-3xl font-semibold">
               {{
-                cart()?.cartItems!
-                  | subtotal
-                  | currency: '₦' : 'symbol' : '1.0-0'
+                cart().cartItems | subtotal | currency: '₦' : 'symbol' : '1.0-0'
               }}
             </h1>
           </div>
