@@ -6,179 +6,188 @@
     My Cart
   </h3>
 
-  @if (cartItems.length > 0) { @if (!isLoading) {
-  <div class="mt-4 flex flex-col w-full">
-    <div class="w-full mx-auto hidden min-[750px]:block">
-      <table class="w-full table-auto border-collapse">
-        <thead>
-          <tr class="border-b text-left text-type_grey">
-            <th class="pb-4"></th>
-            <th class="pb-4">PRODUCT</th>
-            <th class="pb-4">UNIT PRICE</th>
-            <th class="pb-4">QUANTITY</th>
-            <th class="pb-4">PRICE</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (item of cartItems; track item.id; let i = $index) {
-          <tr class="border-b border-border_subtle">
-            <td class="py-4">
-              <button
-                class="bg-[#FFEBEE] h-10 w-10 rounded-full flex items-center justify-center"
-              >
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M7 4V2H17V4H22V6H20V21C20 21.2652 19.8946 21.5196 19.7071 21.7071C19.5196 21.8946 19.2652 22 19 22H5C4.73478 22 4.48043 21.8946 4.29289 21.7071C4.10536 21.5196 4 21.2652 4 21V6H2V4H7ZM6 6V20H18V6H6ZM9 9H11V17H9V9ZM13 9H15V17H13V9Z"
-                    fill="#E57373"
-                  />
-                </svg>
-              </button>
-            </td>
-            <td class="py-5">
-              <div class="flex items-center gap-5">
-                <img
-                  src="assets/images/toy-1.jpeg"
-                  alt="Palm Slippers"
-                  class="w-24 h-24 object-cover rounded"
-                />
-                <div>
-                  <h3
-                    class="text-type_grey text-lg w-full break-words max-w-[150px] capitalize"
-                  >
-                    {{ item.name }}
-                  </h3>
-                  <!--                      <p class="text-sm">-->
-                  <!--                        SIZE: <span class="font-bold">43</span>-->
-                  <!--                      </p>-->
-                </div>
-              </div>
-            </td>
-            <td class="font-semibold text-type_title_gray text-lg">
-              {{ item.price | currency : '₦' : 'symbol' : '1.0-0' }}
-            </td>
-            <td>
-              <app-product-quantity
-                [quantity]="item.itemsLeft"
-                (quantityChanged)="onAdjustQuantity($event)"
-              />
-            </td>
-            <td class="font-semibold text-type_title_gray text-lg">
-              {{ item.price | currency : '₦' : 'symbol' : '1.0-0' }}
-            </td>
-          </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-
-    <div class="block min-[750px]:hidden w-full space-y-5">
-      @for (item of cartItems; track item.id; let i = $index) {
-      <div class="w-full border-b border-border_subtle pb-5">
-        <div class="flex items-center space-x-3">
-          <img
-            src="assets/images/toy-1.jpeg"
-            alt="Palm Slippers"
-            class="w-24 h-24 object-cover rounded"
-          />
-
-          <div class="space-y-2">
-            <h3
-              class="text-type_grey text-lg w-full break-words max-w-[150px] capitalize"
-            >
-              {{ item.name }}
-            </h3>
-            <p class="font-semibold text-type_title_gray">
-              {{ item.price | currency : '₦' : 'symbol' : '1.0-0' }}
-            </p>
-          </div>
+  @if (cart$ | async; as cart) {
+    @if (cart.cartItems.length) {
+      <div class="mt-4 flex flex-col w-full">
+        <div class="w-full mx-auto hidden min-[750px]:block">
+          <table class="w-full table-auto border-collapse">
+            <thead>
+              <tr class="border-b text-left text-type_grey text-sm">
+                <th class="pb-2"></th>
+                <th class="pb-2">PRODUCT</th>
+                <th class="pb-2">UNIT PRICE</th>
+                <th class="pb-2">QUANTITY</th>
+                <th class="pb-2">PRICE</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (item of cart.cartItems; track item.id; let i = $index) {
+                <tr class="border-b border-border_subtle">
+                  <td class="py-3">
+                    <button
+                      class="bg-[#FFEBEE] h-10 w-10 rounded-full flex items-center justify-center"
+                    >
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M7 4V2H17V4H22V6H20V21C20 21.2652 19.8946 21.5196 19.7071 21.7071C19.5196 21.8946 19.2652 22 19 22H5C4.73478 22 4.48043 21.8946 4.29289 21.7071C4.10536 21.5196 4 21.2652 4 21V6H2V4H7ZM6 6V20H18V6H6ZM9 9H11V17H9V9ZM13 9H15V17H13V9Z"
+                          fill="#E57373"
+                        />
+                      </svg>
+                    </button>
+                  </td>
+                  <td class="py-3">
+                    <div class="flex items-center gap-5">
+                      <img
+                        [src]="item.product.image"
+                        [alt]="item.product.name"
+                        class="w-[80px] h-[80px] object-cover rounded"
+                      />
+                      <div>
+                        <h3
+                          class="text-type_grey text-base w-full break-words max-w-[150px] leading-tight capitalize"
+                        >
+                          {{ item.product.name }}
+                        </h3>
+                        <!--                      <p class="text-sm">-->
+                        <!--                        SIZE: <span class="font-bold">43</span>-->
+                        <!--                      </p>-->
+                      </div>
+                    </div>
+                  </td>
+                  <td class="font-semibold text-type_title_gray text-base">
+                    {{
+                      item.product.price | currency: '₦' : 'symbol' : '1.0-0'
+                    }}
+                  </td>
+                  <td>
+                    <app-product-quantity
+                      [quantity]="item.unit"
+                      (quantityChanged)="onAdjustQuantity($event)"
+                    />
+                  </td>
+                  <td class="font-semibold text-type_title_gray text-base">
+                    {{
+                      item.product.price * item.unit
+                        | currency: '₦' : 'symbol' : '1.0-0'
+                    }}
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
         </div>
 
-        <div class="flex items-center justify-between mt-3">
-          <button
-            class="bg-[#FFEBEE] h-10 w-10 rounded-full flex items-center justify-center"
-          >
+        <div class="block min-[750px]:hidden w-full space-y-5">
+          @for (item of cart.cartItems; track item.id; let i = $index) {
+            <div class="w-full border-b border-border_subtle pb-5">
+              <div class="flex items-center space-x-3">
+                <img
+                  [src]="item.product.image"
+                  [alt]="item.product.name"
+                  class="w-[60px] h-[60px] object-cover rounded"
+                />
+
+                <div class="space-y-2">
+                  <h3
+                    class="text-type_grey text-sm leading-tight w-full break-words max-w-[150px] capitalize"
+                  >
+                    {{ item.product.name }}
+                  </h3>
+                  <p class="font-semibold text-type_title_gray">
+                    {{
+                      item.product.price | currency: '₦' : 'symbol' : '1.0-0'
+                    }}
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between mt-3">
+                <button
+                  class="bg-[#FFEBEE] h-10 w-10 rounded-full flex items-center justify-center"
+                >
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M7 4V2H17V4H22V6H20V21C20 21.2652 19.8946 21.5196 19.7071 21.7071C19.5196 21.8946 19.2652 22 19 22H5C4.73478 22 4.48043 21.8946 4.29289 21.7071C4.10536 21.5196 4 21.2652 4 21V6H2V4H7ZM6 6V20H18V6H6ZM9 9H11V17H9V9ZM13 9H15V17H13V9Z"
+                      fill="#E57373"
+                    />
+                  </svg>
+                </button>
+                <app-product-quantity
+                  [quantity]="item.unit"
+                  (quantityChanged)="onAdjustQuantity($event)"
+                />
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="w-full mobile:w-[450px] self-end mt-7 text-type_title_gray">
+          <div class="flex items-center justify-between">
+            <h5 class="text-lg text-type_title_gray">Subtotal Price</h5>
+            <h1 class="text-2xl mobile:text-3xl font-semibold">
+              {{ '2309202' | currency: '₦' : 'symbol' : '1.0-0' }}
+            </h1>
+          </div>
+
+          <div class="flex items-center space-x-2 my-4 mb-5">
             <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
+              width="20"
+              height="21"
+              viewBox="0 0 20 21"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M7 4V2H17V4H22V6H20V21C20 21.2652 19.8946 21.5196 19.7071 21.7071C19.5196 21.8946 19.2652 22 19 22H5C4.73478 22 4.48043 21.8946 4.29289 21.7071C4.10536 21.5196 4 21.2652 4 21V6H2V4H7ZM6 6V20H18V6H6ZM9 9H11V17H9V9ZM13 9H15V17H13V9Z"
-                fill="#E57373"
+                d="M10.0001 18.8337C5.39758 18.8337 1.66675 15.1028 1.66675 10.5003C1.66675 5.89783 5.39758 2.16699 10.0001 2.16699C14.6026 2.16699 18.3334 5.89783 18.3334 10.5003C18.3334 15.1028 14.6026 18.8337 10.0001 18.8337ZM9.16675 9.66699V14.667H10.8334V9.66699H9.16675ZM9.16675 6.33366V8.00033H10.8334V6.33366H9.16675Z"
+                fill="#555555"
               />
             </svg>
-          </button>
-          <app-product-quantity
-            [quantity]="item.itemsLeft"
-            (quantityChanged)="onAdjustQuantity($event)"
-          />
+            <p class="text-base mobile:text-lg">
+              Delivery fee will be added when checking out
+            </p>
+          </div>
+
+          <div>
+            <button
+              class="w-full rounded-full text-white font-medium bg-primary py-2 h-12 block"
+              routerLink="/checkout"
+            >
+              Checkout
+            </button>
+          </div>
         </div>
       </div>
-      }
-    </div>
-
-    <div class="w-full mobile:w-[450px] self-end mt-7 text-type_title_gray">
-      <div class="flex items-center justify-between">
-        <h5 class="text-lg text-type_title_gray">Subtotal Price</h5>
-        <h1 class="text-2xl mobile:text-3xl font-semibold">
-          {{ '2309202' | currency : '₦' : 'symbol' : '1.0-0' }}
-        </h1>
-      </div>
-
-      <div class="flex items-center space-x-2 my-4 mb-5">
-        <svg
-          width="20"
-          height="21"
-          viewBox="0 0 20 21"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M10.0001 18.8337C5.39758 18.8337 1.66675 15.1028 1.66675 10.5003C1.66675 5.89783 5.39758 2.16699 10.0001 2.16699C14.6026 2.16699 18.3334 5.89783 18.3334 10.5003C18.3334 15.1028 14.6026 18.8337 10.0001 18.8337ZM9.16675 9.66699V14.667H10.8334V9.66699H9.16675ZM9.16675 6.33366V8.00033H10.8334V6.33366H9.16675Z"
-            fill="#555555"
-          />
-        </svg>
-        <p class="text-base mobile:text-lg">
-          Delivery fee will be added when checking out
-        </p>
-      </div>
-
-      <div>
-        <button
-          class="w-full rounded-full text-white font-medium bg-primary py-2 h-12 block"
-          routerLink="/checkout"
-        >
-          Checkout
-        </button>
-      </div>
-    </div>
-  </div>
+    } @else {
+      <app-empty-cart />
+    }
   } @else {
-  <div class="flex items-center flex-col w-full mt-8">
-    <div class="h-auto w-full space-y-3">
-      <div>
-        <p-skeleton width="100%" height="80px" />
+    <div class="flex items-center flex-col w-full mt-8">
+      <div class="h-auto w-full space-y-3">
+        <div>
+          <p-skeleton width="100%" height="80px" />
+        </div>
+        <div class="my-2">
+          <p-skeleton width="100%" height="80px" />
+        </div>
+        <div>
+          <p-skeleton width="100%" height="80px" />
+        </div>
       </div>
-      <div class="my-2">
-        <p-skeleton width="100%" height="80px" />
-      </div>
-      <div>
-        <p-skeleton width="100%" height="80px" />
+      <div class="self-end mt-4 w-full mobile:w-[300px]">
+        <p-skeleton width="100%" height="150px" />
       </div>
     </div>
-    <div class="self-end mt-4 w-full mobile:w-[300px]">
-      <p-skeleton width="100%" height="150px" />
-    </div>
-  </div>
-  } } @else {
-  <app-empty-cart />
   }
 </div>

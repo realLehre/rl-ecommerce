@@ -9,8 +9,9 @@ import { RouterLink } from '@angular/router';
 import { EmptyCartComponent } from './empty-cart/empty-cart.component';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ProductsService } from '../products/services/products.service';
-import { CurrencyPipe } from '@angular/common';
+import { AsyncPipe, CurrencyPipe } from '@angular/common';
 import { ProductQuantityComponent } from '../../shared/components/product-quantity/product-quantity.component';
+import { CartService } from '../../shared/services/cart.service';
 
 @Component({
   selector: 'app-cart',
@@ -22,6 +23,7 @@ import { ProductQuantityComponent } from '../../shared/components/product-quanti
     SkeletonModule,
     CurrencyPipe,
     ProductQuantityComponent,
+    AsyncPipe,
   ],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.scss',
@@ -29,6 +31,8 @@ import { ProductQuantityComponent } from '../../shared/components/product-quanti
 })
 export class CartComponent implements OnInit {
   productService = inject(ProductsService);
+  private cartService = inject(CartService);
+  cart$ = this.cartService.getCart();
   quantity: number = 1;
   cartItems: any[] = [];
   isLoading: boolean = false;
