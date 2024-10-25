@@ -139,7 +139,9 @@
           <div class="flex items-center justify-between">
             <h5 class="text-lg text-type_title_gray">Subtotal Price</h5>
             <h1 class="text-2xl mobile:text-3xl font-semibold">
-              {{ '2309202' | currency: '₦' : 'symbol' : '1.0-0' }}
+              {{
+                cart.cartItems | subtotal | currency: '₦' : 'symbol' : '1.0-0'
+              }}
             </h1>
           </div>
 

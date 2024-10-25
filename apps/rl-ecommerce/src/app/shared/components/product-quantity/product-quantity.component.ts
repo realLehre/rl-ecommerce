@@ -27,12 +27,10 @@ export class ProductQuantityComponent implements OnInit {
   }
 
   onAdjustQuantity(action: string) {
-    // this.setLoader();
-
     if (action.toLowerCase() == 'increase') {
       this.quantityMain++;
     } else {
-      if (this.quantity() == 0) {
+      if (this.quantity() == 1) {
         return;
       }
       this.quantityMain--;

@@ -15,6 +15,7 @@ import { ProductQuantityComponent } from '../../shared/components/product-quanti
 import { CartService } from '../../shared/services/cart.service';
 import { ICartItems } from '../../shared/models/cart.interface';
 import { of } from 'rxjs';
+import { SubtotalPipe } from '../../shared/pipes/subtotal.pipe';
 
 @Component({
   selector: 'app-cart',
@@ -27,6 +28,7 @@ import { of } from 'rxjs';
     CurrencyPipe,
     ProductQuantityComponent,
     AsyncPipe,
+    SubtotalPipe,
   ],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.scss',
