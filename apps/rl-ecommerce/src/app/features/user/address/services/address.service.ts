@@ -16,29 +16,7 @@ export class AddressService {
   private http = inject(HttpClient);
   activeAddress = signal<IAddress | null>(null);
   addressSignal = signal<IAddress[] | null>(null);
-  addresses: IAddress[] = [
-    {
-      name: 'David Omolere Egbuwalo',
-      city: 'Ile Ife',
-      state: 'Osun',
-      phoneNumber: '+234 9131778206',
-      isDefault: true,
-    },
-    {
-      name: 'Jane Doe',
-      city: 'Lagos',
-      state: 'Lagos',
-      phoneNumber: '+234 9131778206',
-      isDefault: false,
-    },
-    {
-      name: 'John Smith',
-      city: 'Abuja',
-      state: 'FCT',
-      phoneNumber: '+234 9131778206',
-      isDefault: false,
-    },
-  ];
+
   constructor() {}
 
   getAddress(): Observable<IAddress[]> {
