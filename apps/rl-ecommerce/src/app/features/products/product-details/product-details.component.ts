@@ -24,6 +24,7 @@ import { AsyncPipe, CurrencyPipe, NgClass } from '@angular/common';
 import { SkeletonModule } from 'primeng/skeleton';
 import { CartService } from '../../../shared/services/cart.service';
 import { UserAccountService } from '../../user/user-account/services/user-account.service';
+import { ToastService } from '../../../shared/services/toast.service';
 
 @Component({
   selector: 'app-product-details',
@@ -50,6 +51,7 @@ export class ProductDetailsComponent implements OnInit {
   private productService = inject(ProductsService);
   private cartService = inject(CartService);
   private userService = inject(UserAccountService);
+  private toast = inject(ToastService);
   product$!: Observable<IProduct>;
   similarProducts!: Observable<IProduct[]>;
   quantity: number = 1;
@@ -74,23 +76,34 @@ export class ProductDetailsComponent implements OnInit {
       });
   }
 
-  onAddToCart() {
-    const user = this.userService.user;
+  onAddToCart(product: IProduct) {
     this.isAddingToCart.set(true);
 
     this.cartService
       .addToCart({
-        userId: user()?.id!,
-        productId: this.productId,
+        product: product,
         unit: this.quantity,
-      })
+      })!
       .subscribe({
         next: (res) => {
           this.isAddingToCart.set(false);
-          this.cartService.getCart().subscribe();
+          const cartTotal = this.cartService.cartTotal;
+          if (cartTotal()) {
+            this.cartService.cartTotal.set(cartTotal()! + 1);
+          }
+          this.cartService.cartSignal.set(null);
+          this.cartService.getCart()!.subscribe();
+          this.toast.showToast({
+            type: 'success',
+            message: `${product.name} added to cart!`,
+          });
         },
         error: (err) => {
           this.isAddingToCart.set(false);
+          this.toast.showToast({
+            type: 'error',
+            message: err.error.message,
+          });
         },
       });
   }

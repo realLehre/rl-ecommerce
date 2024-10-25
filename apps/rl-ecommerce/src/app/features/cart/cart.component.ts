@@ -6,16 +6,24 @@ import {
   signal,
 } from '@angular/core';
 import { BreadcrumbComponent } from '../../shared/components/breadcrumb/breadcrumb.component';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { EmptyCartComponent } from './empty-cart/empty-cart.component';
 import { SkeletonModule } from 'primeng/skeleton';
-import { ProductsService } from '../products/services/products.service';
 import { AsyncPipe, CurrencyPipe } from '@angular/common';
 import { ProductQuantityComponent } from '../../shared/components/product-quantity/product-quantity.component';
 import { CartService } from '../../shared/services/cart.service';
-import { ICartItems } from '../../shared/models/cart.interface';
-import { of } from 'rxjs';
+import {
+  ICart,
+  ICartItemProduct,
+  ICartItems,
+} from '../../shared/models/cart.interface';
+import { Observable, of } from 'rxjs';
 import { SubtotalPipe } from '../../shared/pipes/subtotal.pipe';
+import { DialogModule } from 'primeng/dialog';
+import { LoaderComponent } from '../../shared/components/loader/loader.component';
+import { PrimeTemplate } from 'primeng/api';
+import { ProductsService } from '../products/services/products.service';
+import { IProduct } from '../products/model/product.interface';
 
 @Component({
   selector: 'app-cart',
@@ -29,17 +37,26 @@ import { SubtotalPipe } from '../../shared/pipes/subtotal.pipe';
     ProductQuantityComponent,
     AsyncPipe,
     SubtotalPipe,
+    DialogModule,
+    LoaderComponent,
+    PrimeTemplate,
   ],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartComponent implements OnInit {
-  productService = inject(ProductsService);
   private cartService = inject(CartService);
-  cart$ = this.cartService.getCart();
+  private productService = inject(ProductsService);
+  private router = inject(Router);
+  // cart$ = this.cartService.getCart();
+  cart$!: Observable<ICart>;
+  cart = this.cartService.cartSignal;
   quantity: number = 1;
   isUpdating = signal<boolean[]>([false]);
+  showDeleteDialog = signal(false);
+  activeCartItem!: ICartItems;
+  isLoading = signal(false);
   ngOnInit() {}
 
   onAdjustQuantity(qty: number, item: ICartItems, idx: number) {
@@ -58,7 +75,6 @@ export class CartComponent implements OnInit {
         next: (res) => {
           loadings[idx] = false;
           this.isUpdating.set([...loadings]);
-
           const currentCart = this.cartService.cartSignal();
           if (currentCart) {
             const updatedItems = currentCart.cartItems.map((cartItem) => {
@@ -73,6 +89,7 @@ export class CartComponent implements OnInit {
             });
 
             this.cart$ = of({ ...currentCart, cartItems: updatedItems });
+            this.cart.set({ ...currentCart, cartItems: updatedItems });
             this.cartService.cartSignal.set({
               ...currentCart,
               cartItems: updatedItems,
@@ -84,5 +101,47 @@ export class CartComponent implements OnInit {
           this.isUpdating.set([...loadings]);
         },
       });
+  }
+
+  onDeleteDialogAction(action: string, item?: ICartItems) {
+    if (item) this.activeCartItem = item;
+    action === 'open'
+      ? this.showDeleteDialog.set(true)
+      : this.showDeleteDialog.set(false);
+  }
+
+  onDeleteCartItem() {
+    this.isLoading.set(true);
+    this.cartService.deleteCartItem(this.activeCartItem?.id).subscribe({
+      next: (res) => {
+        this.isLoading.set(false);
+        this.showDeleteDialog.set(false);
+        const cart = this.cartService.cartSignal();
+        if (cart) {
+          const cartItems = cart?.cartItems.filter(
+            (item) => item.id !== this.activeCartItem?.id,
+          );
+
+          this.cart$ = of({ ...cart, cartItems });
+          this.cart.set({ ...cart, cartItems });
+          this.cartService.cartSignal.set({ ...cart, cartItems });
+
+          this.cartService.cartTotal.set(cartItems.length);
+        }
+      },
+      error: (err) => {
+        this.isLoading.set(false);
+      },
+    });
+  }
+
+  onViewProduct(product: ICartItemProduct) {
+    this.productService.activeProduct.set(product as IProduct);
+    this.router.navigate(
+      ['/product/' + this.productService.createSlug(product.name)],
+      {
+        queryParams: { id: product.id },
+      },
+    );
   }
 }

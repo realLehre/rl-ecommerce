@@ -10,6 +10,7 @@ import { environment } from '../../../../environments/environment';
 import { UserAccountService } from '../../user/user-account/services/user-account.service';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
+import { CartService } from '../../../shared/services/cart.service';
 
 export interface IUser {
   id: string;

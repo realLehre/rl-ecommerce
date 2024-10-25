@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { ApiCartService } from './api-cart.service';
 
 @Controller('cart')
@@ -12,11 +20,18 @@ export class ApiCartController {
 
   @Post('add')
   async addItemToCart(
-    @Body() data: { userId: string; unit: number; productId: string },
+    @Body()
+    data: {
+      userId: string;
+      unit: number;
+      productId: string;
+      productPrice: number;
+    },
   ) {
     return this.cartService.addItemToCart(
       data.unit,
       data.productId,
+      data.productPrice,
       data.userId,
     );
   }
@@ -31,5 +46,15 @@ export class ApiCartController {
       data.unit,
       data.productPrice,
     );
+  }
+
+  @Delete(':id/delete')
+  async deleteCartItem(@Param('id') id: string) {
+    return this.cartService.deleteCartItem(id);
+  }
+
+  @Post(':id/merge')
+  async mergeCart(@Param('id') id: string, @Body() data: any) {
+    return this.cartService.mergeCart(data, id);
   }
 }

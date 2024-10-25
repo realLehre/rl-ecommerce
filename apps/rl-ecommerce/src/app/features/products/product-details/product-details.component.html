@@ -87,7 +87,7 @@
           </button>
           <button
             class="min-w-[120px] flex items-center justify-center space-x-3 mobile:min-w-[190px] rounded-full font-medium border-primary border-[2px] text-type_title_gray py-2 flex-1 h-12"
-            (click)="onAddToCart()"
+            (click)="onAddToCart(product)"
           >
             @if (isAddingToCart()) {
               <app-loader

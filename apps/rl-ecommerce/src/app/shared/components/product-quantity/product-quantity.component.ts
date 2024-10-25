@@ -27,6 +27,9 @@ export class ProductQuantityComponent implements OnInit {
   }
 
   onAdjustQuantity(action: string) {
+    if (this.isLoading()) {
+      return;
+    }
     if (action.toLowerCase() == 'increase') {
       this.quantityMain++;
     } else {

@@ -6,8 +6,8 @@
     My Cart
   </h3>
 
-  @if (cart$ | async; as cart) {
-    @if (cart.cartItems.length) {
+  @if (cart()) {
+    @if ((cart()?.cartItems)!.length) {
       <div class="mt-4 flex flex-col w-full">
         <div class="w-full mx-auto hidden min-[750px]:block">
           <table class="w-full table-auto border-collapse">
@@ -21,11 +21,12 @@
               </tr>
             </thead>
             <tbody>
-              @for (item of cart.cartItems; track item.id; let i = $index) {
+              @for (item of cart()?.cartItems; track item.id; let i = $index) {
                 <tr class="border-b border-border_subtle">
                   <td class="py-3">
                     <button
                       class="bg-[#FFEBEE] h-10 w-10 rounded-full flex items-center justify-center"
+                      (click)="onDeleteDialogAction('open', item)"
                     >
                       <svg
                         width="24"
@@ -42,7 +43,10 @@
                     </button>
                   </td>
                   <td class="py-3">
-                    <div class="flex items-center gap-5">
+                    <div
+                      class="flex items-center gap-5"
+                      (click)="onViewProduct(item.product)"
+                    >
                       <img
                         [src]="item.product.image"
                         [alt]="item.product.name"
@@ -85,13 +89,14 @@
         </div>
 
         <div class="block min-[750px]:hidden w-full space-y-5">
-          @for (item of cart.cartItems; track item.id; let i = $index) {
+          @for (item of cart()?.cartItems!; track item.id; let i = $index) {
             <div class="w-full border-b border-border_subtle pb-5">
               <div class="flex items-center space-x-3">
                 <img
                   [src]="item.product.image"
                   [alt]="item.product.name"
                   class="w-[60px] h-[60px] object-cover rounded"
+                  (click)="onViewProduct(item.product)"
                 />
 
                 <div class="space-y-2">
@@ -111,6 +116,7 @@
               <div class="flex items-center justify-between mt-3">
                 <button
                   class="bg-[#FFEBEE] h-10 w-10 rounded-full flex items-center justify-center"
+                  (click)="onDeleteDialogAction('open', item)"
                 >
                   <svg
                     width="24"
@@ -140,7 +146,9 @@
             <h5 class="text-lg text-type_title_gray">Subtotal Price</h5>
             <h1 class="text-2xl mobile:text-3xl font-semibold">
               {{
-                cart.cartItems | subtotal | currency: '₦' : 'symbol' : '1.0-0'
+                cart()?.cartItems!
+                  | subtotal
+                  | currency: '₦' : 'symbol' : '1.0-0'
               }}
             </h1>
           </div>
@@ -195,3 +203,40 @@
     </div>
   }
 </div>
+
+<p-dialog
+  [visible]="showDeleteDialog()"
+  [style]="{ width: '25rem' }"
+  [breakpoints]="{ '450px': '90vw' }"
+>
+  <ng-template pTemplate="headless">
+    <div class="p-5 bg-white">
+      <h3 class="text-type_title font-semibold text-lg mobile:text-xl mb-3">
+        Delete Item?
+      </h3>
+
+      <p class="text-type_grey text-sm mobile:text-base mb-10">
+        This action can not be reversed!
+      </p>
+
+      <div class="flex items-center space-x-3 justify-between">
+        <button
+          class="px-4 py-2 bg-transparent h-11 border-[2px] border-primary rounded-md hover:border-type_grey text-primary hover:text-type_grey flex-1"
+          (click)="onDeleteDialogAction('close')"
+        >
+          Cancel</button
+        ><button
+          class="px-4 py-2 flex items-center justify-center space-x-2 bg-primary h-11 text-white rounded-md hover:bg-opacity-80 focus:outline-none disabled:bg-type_grey flex-1"
+          (click)="onDeleteCartItem()"
+        >
+          @if (isLoading()) {
+            <app-loader
+              [customStyle]="{ width: '18px', border: '3px solid #fff' }"
+            />
+          }
+          <span>Delete</span>
+        </button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>

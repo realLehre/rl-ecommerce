@@ -34,26 +34,43 @@ export class ApiCartService {
       });
     }
 
+    const subTotal = cart.cartItems.reduce((sum, item) => sum + item.total, 0);
+    const shippingCost = cart.cartItems.reduce(
+      (sum, item) => sum + item.shippingCost,
+      0,
+    );
+
+    // Update the cart with the calculated subtotal
+    cart = await this.prisma.cart.update({
+      where: { id: cart.id },
+      data: { subTotal, shippingCost },
+      include: {
+        cartItems: {
+          include: {
+            product: true,
+          },
+        },
+      },
+    });
+
     return cart;
   }
 
-  async addItemToCart(unit: number, productId: string, userId: string) {
+  async addItemToCart(
+    unit: number,
+    productId: string,
+    productPrice: number,
+    userId: string,
+  ) {
+    const cart = await this.getOrCreateCart(userId);
     return this.prisma.$transaction(async (prisma) => {
-      const product = await prisma.product.findUnique({
-        where: {
-          id: productId,
-        },
-      });
-
-      const cart = await this.getOrCreateCart(userId);
-
       await prisma.cartItem.create({
         data: {
           cartId: cart.id,
           productId,
           unit,
-          total: product!.price * unit,
-          shippingCost: 100, // Default shipping cost
+          total: productPrice * unit,
+          shippingCost: 100,
         },
       });
     });
@@ -69,5 +86,57 @@ export class ApiCartService {
         total: productPrice * unit,
       },
     });
+  }
+
+  async mergeCart(data: any, userId: string) {
+    const cart = await this.getOrCreateCart(userId);
+    return this.prisma.$transaction(async (prisma) => {
+      for (const guestItem of data?.cartItems!) {
+        const existingItem = cart.cartItems.find(
+          (item) => item.product.id == guestItem.product.id,
+        );
+
+        if (!existingItem) {
+          await prisma.cartItem.create({
+            data: {
+              cartId: cart.id,
+              productId: guestItem.product.id,
+              unit: guestItem.unit,
+              total: guestItem.product.price * guestItem.unit,
+              shippingCost: 100,
+            },
+          });
+        }
+      }
+
+      const subTotal = cart.cartItems.reduce(
+        (sum, item) => sum + item.total,
+        0,
+      );
+      const shippingCost = cart.cartItems.reduce(
+        (sum, item) => sum + item.shippingCost,
+        0,
+      );
+      return prisma.cart.update({
+        where: {
+          id: cart.id,
+        },
+        data: {
+          subTotal,
+          shippingCost,
+        },
+        include: {
+          cartItems: {
+            include: {
+              product: true,
+            },
+          },
+        },
+      });
+    });
+  }
+
+  async deleteCartItem(id: string) {
+    return this.prisma.cartItem.delete({ where: { id } });
   }
 }

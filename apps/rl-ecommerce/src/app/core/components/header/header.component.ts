@@ -4,6 +4,7 @@ import {
   Component,
   ElementRef,
   inject,
+  OnInit,
   signal,
   ViewChild,
 } from '@angular/core';
@@ -20,11 +21,14 @@ import {
   map,
   Observable,
   of,
+  switchMap,
 } from 'rxjs';
 import { ProductsService } from '../../../features/products/services/products.service';
 import { IProduct } from '../../../features/products/model/product.interface';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 import { ProductOptionsService } from '../../../features/product-options/services/product-options.service';
+import { NumberOfFiltersPipe } from '../../../shared/pipes/number-of-filters.pipe';
+import { CartService } from '../../../shared/services/cart.service';
 
 @Component({
   selector: 'app-header',
@@ -36,15 +40,17 @@ import { ProductOptionsService } from '../../../features/product-options/service
     CurrencyPipe,
     AsyncPipe,
     LoaderComponent,
+    NumberOfFiltersPipe,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HeaderComponent implements AfterViewInit {
+export class HeaderComponent implements AfterViewInit, OnInit {
   private authService = inject(AuthService);
   private productService = inject(ProductsService);
   private optionsService = inject(ProductOptionsService);
+  private cartService = inject(CartService);
   user = this.authService.user;
   userName = this.user()?.fullName.split(' ')[0]!;
   private layoutService = inject(LayoutService);
@@ -52,12 +58,18 @@ export class HeaderComponent implements AfterViewInit {
   @ViewChild('input', { static: true }) searchInput!: ElementRef;
   searchShown = signal(false);
   isSearching = this.productService.isSearchingProducts;
+  cartItems = this.cartService.cartTotal;
 
   searchedProducts$: Observable<IProduct[] | null> = of(
     this.productService.searchedProductsSignal(),
   );
 
   products = this.productService.searchedProductsSignal;
+
+  ngOnInit() {
+    this.cartService.cartSignal.set(null);
+    this.cartService.getCart().subscribe();
+  }
 
   ngAfterViewInit() {
     this.getSearch();
@@ -91,6 +103,8 @@ export class HeaderComponent implements AfterViewInit {
 
   onSignOut() {
     this.authService.signOut();
+    this.cartService.cartSignal.set(null);
+    this.cartService.cartTotal.set(null);
   }
   onToggleSearch() {
     if (this.searchInput.nativeElement.value) {

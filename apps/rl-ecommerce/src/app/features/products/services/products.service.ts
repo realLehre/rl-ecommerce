@@ -222,4 +222,11 @@ export class ProductsService {
           )
           .subscribe();
   }
+
+  createSlug(name: string): string {
+    return name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-') // Replace spaces and special characters with hyphen
+      .replace(/^-+|-+$/g, ''); // Trim leading or trailing hyphens
+  }
 }

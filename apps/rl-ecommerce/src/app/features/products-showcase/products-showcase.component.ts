@@ -1,11 +1,9 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   inject,
   OnInit,
-  signal,
 } from '@angular/core';
 import { ProductCardComponent } from './product-card/product-card.component';
 import { MobileFiltersComponent } from '../product-options/mobile-filters/mobile-filters.component';
