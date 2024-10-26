@@ -1,10 +1,18 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  input,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule, PaginationInstance } from 'ngx-pagination';
-import { IOrder, UserOrdersService } from '../services/user-orders.service';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { OrderStatusDirective } from '../../../../shared/directives/order-status.directive';
+import { IOrder } from '../../../../shared/models/order.interface';
+import { SubtotalPipe } from '../../../../shared/pipes/subtotal.pipe';
+import { SkeletonModule } from 'primeng/skeleton';
+import { OrderService } from '../../../../shared/services/order.service';
 
 @Component({
   selector: 'app-user-orders-table',
@@ -15,14 +23,17 @@ import { OrderStatusDirective } from '../../../../shared/directives/order-status
     NgxPaginationModule,
     RouterLink,
     OrderStatusDirective,
+    SubtotalPipe,
+    SkeletonModule,
   ],
   templateUrl: './user-orders-table.component.html',
   styleUrl: './user-orders-table.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserOrdersTableComponent {
-  private orderService = inject(UserOrdersService);
-  orders: IOrder[] = this.orderService.orders;
+  private orderService = inject(OrderService);
+  private router = inject(Router);
+  orders = input<IOrder[] | any[]>([]);
 
   sortUsed: boolean = false;
   sortColumn: keyof IOrder | '' = '';
@@ -37,6 +48,12 @@ export class UserOrdersTableComponent {
 
   ngOnInit() {}
 
+  onViewOrder(order: IOrder) {
+    this.orderService.activeOrder.set(order);
+
+    this.router.navigate(['/', 'orders', order.id]);
+  }
+
   onChangeItemsToShow(total: number) {
     this.config.itemsPerPage = total;
   }
@@ -50,7 +67,7 @@ export class UserOrdersTableComponent {
     }
     this.sortUsed = true;
 
-    this.orders.sort((a, b) => {
+    this.orders()?.sort((a, b) => {
       const valueA = a[column];
       const valueB = b[column];
 

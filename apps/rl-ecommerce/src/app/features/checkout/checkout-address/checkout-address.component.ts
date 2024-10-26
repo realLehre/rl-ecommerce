@@ -33,7 +33,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
 export class CheckoutAddressComponent implements OnInit {
   private addressService = inject(AddressService);
   addresses!: IAddress[];
-  test = toSignal(this.addressService.getAddress(), { initialValue: [] });
   selectedAddress!: IAddress;
   isLoading = signal(true);
   selectedAddressEmit = output<IAddress>();

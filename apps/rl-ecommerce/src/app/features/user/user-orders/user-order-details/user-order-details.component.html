@@ -4,7 +4,7 @@
   <app-breadcrumb
     [pages]="[
       { name: 'orders', route: '/orders' },
-      { name: 'order details', route: '/orders/' + id }
+      { name: 'order details', route: '/orders/' + id },
     ]"
   />
   <h3 class="block mobile:hidden font-medium text-lg text-type_title mt-4">
@@ -28,27 +28,33 @@
         <div class="flex-1 min-w-[50px] text-gray-600">
           <h5 class="text-xs font-medium">ORDER ID</h5>
           <p class="text-base sm:text-lg font-semibold break-all">
-            3456ssssssssssssssssssssssssssssssssssssss
+            {{ order()?.id }}
           </p>
         </div>
 
         <div class="h-10 w-[1px] border border-border_subtle"></div>
         <div class="flex-1 min-w-[120px] text-gray-600">
           <h5 class="text-xs font-medium">DATE</h5>
-          <p class="text-base sm:text-lg font-semibold">June 27, 2024</p>
+          <p class="text-base sm:text-lg font-semibold">
+            {{ order()?.createdAt! | date }}
+          </p>
         </div>
 
         <div class="h-10 w-[1px] border border-border_subtle"></div>
         <div class="flex-1 min-w-[100px] text-gray-600">
           <h5 class="text-xs font-medium">TOTAL</h5>
-          <p class="text-base sm:text-lg font-semibold">6,000</p>
+          <p class="text-base sm:text-lg font-semibold">
+            {{ order()?.totalAmount! | currency: '₦' : 'symbol' : '1.0-0' }}
+          </p>
         </div>
 
         <div class="h-10 w-[1px] border border-border_subtle"></div>
 
         <div class="flex-1 min-w-[150px] text-gray-600">
           <h5 class="text-xs font-medium">PAYMENT METHOD</h5>
-          <p class="text-base sm:text-lg font-semibold">Paystack</p>
+          <p class="text-base sm:text-lg font-semibold capitalize">
+            {{ order()?.paymentMethod }}
+          </p>
         </div>
       </div>
 
@@ -56,7 +62,10 @@
         <h3 class="text-type_title_grey font-semibold mb-1">
           Your Order Details
         </h3>
-        <app-generic-order-summary [paymentMethod]="'Paystack'" />
+        <app-generic-order-summary
+          [paymentMethod]="order()?.paymentMethod"
+          [cartItems]="order()?.cartOrder?.cartItems!"
+        />
       </div>
     </div>
   </div>

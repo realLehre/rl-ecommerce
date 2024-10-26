@@ -67,7 +67,6 @@ export class HeaderComponent implements AfterViewInit, OnInit {
   products = this.productService.searchedProductsSignal;
 
   ngOnInit() {
-    this.cartService.cartSignal.set(null);
     this.cartService.getCart().subscribe();
   }
 

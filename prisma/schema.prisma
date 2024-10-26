@@ -23,15 +23,14 @@ model User {
   addresses   Address[]       @relation("UserAddress")
   ratings     ProductRating[]
   cart        Cart?           @relation("UserCart")
-  order       Order[]
+  orders      Order[]         @relation("UserOrders")
 }
 
 model Order {
   id             String          @id @default(uuid())
-  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId         String          @unique
-  cart           Cart            @relation(fields: [cartId], references: [id])
-  cartId         String          @unique
+  user           User            @relation("UserOrders", fields: [userId], references: [id], onDelete: Cascade)
+  userId         String
+  cartOrder      Json
   shippingInfo   Address         @relation(fields: [shippingInfoId], references: [id])
   shippingInfoId String
   orderAmount    Int
@@ -67,7 +66,6 @@ model Cart {
   userId       String     @unique
   cartItems    CartItem[] @relation("CartCartItem")
   subTotal     Int
-  order        Order?
   shippingCost Int
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt

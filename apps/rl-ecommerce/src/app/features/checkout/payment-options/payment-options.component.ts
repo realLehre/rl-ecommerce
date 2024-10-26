@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PaymentOptionsComponent {
-  paymentOption: string = 'pay on delivery';
+  paymentOption!: string;
   paymentOptionSelected = output<string>();
 
   onSelectPaymentMethod() {

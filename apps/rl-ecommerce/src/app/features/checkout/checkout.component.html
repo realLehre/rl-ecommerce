@@ -29,11 +29,16 @@
         />
 
         <button
-          class="w-full rounded-full text-white font-medium bg-primary hover:bg-opacity-75 py-2 h-12 block disabled:bg-opacity-25 mt-10"
+          class="w-full flex items-center justify-center space-x-3 rounded-full text-white font-medium bg-primary hover:bg-opacity-75 py-2 h-12 disabled:bg-opacity-25 mt-10"
           [disabled]="!selectPaymentMethod || !selectedAddress"
           (click)="onPay()"
         >
-          Place order
+          @if (isLoading()) {
+            <app-loader
+              [customStyle]="{ width: '24px', border: '3px solid #fff' }"
+            />
+          }
+          <span>Place order</span>
         </button>
       </div>
     </div>

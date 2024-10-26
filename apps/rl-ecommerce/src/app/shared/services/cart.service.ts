@@ -20,10 +20,18 @@ export class CartService {
     cartItems: [],
   };
   STORAGE_KEY = 'hd30jlsncjefysakhs';
+  CART_KEY = 'sjshdy382nsj02shk02s';
   constructor() {
     const guestCart = JSON.parse(localStorage.getItem(this.STORAGE_KEY)!);
 
     if (guestCart) this.guestCart = guestCart;
+
+    const cart = JSON.parse(localStorage.getItem(this.CART_KEY)!);
+
+    if (cart) {
+      this.cartSignal.set(cart);
+      this.cartTotal.set(cart.cartItems.length);
+    }
   }
 
   getCart() {
@@ -35,6 +43,7 @@ export class CartService {
               this.cartSignal.set(res);
               this.cartTotal.set(res.cartItems.length);
               this.mergeCart()?.subscribe();
+              localStorage.setItem(this.CART_KEY, JSON.stringify(res));
             }),
           );
     } else {

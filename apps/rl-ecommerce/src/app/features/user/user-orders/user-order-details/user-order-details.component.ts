@@ -3,6 +3,8 @@ import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/br
 import { ActivatedRoute } from '@angular/router';
 import { OrderTrackerComponent } from './order-tracker/order-tracker.component';
 import { GenericOrderSummaryComponent } from '../../../../shared/components/generic-order-summary/generic-order-summary.component';
+import { OrderService } from '../../../../shared/services/order.service';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-user-order-details',
@@ -11,6 +13,8 @@ import { GenericOrderSummaryComponent } from '../../../../shared/components/gene
     BreadcrumbComponent,
     OrderTrackerComponent,
     GenericOrderSummaryComponent,
+    DatePipe,
+    CurrencyPipe,
   ],
   templateUrl: './user-order-details.component.html',
   styleUrl: './user-order-details.component.scss',
@@ -18,8 +22,19 @@ import { GenericOrderSummaryComponent } from '../../../../shared/components/gene
 })
 export class UserOrderDetailsComponent {
   private route = inject(ActivatedRoute);
+  private orderService = inject(OrderService);
+  order = this.orderService.activeOrder;
   id: string = '';
   constructor() {
-    this.route.params.subscribe((param) => (this.id = param['id']));
+    this.route.params.subscribe((param) => {
+      this.id = param['id'];
+      if (!this.order()) {
+        this.orderService.getOrderById(this.id).subscribe({
+          next: (res) => {
+            this.order.set(res);
+          },
+        });
+      }
+    });
   }
 }

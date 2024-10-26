@@ -92,7 +92,7 @@ export class ProductDetailsComponent implements OnInit {
             this.cartService.cartTotal.set(cartTotal()! + 1);
           }
           this.cartService.cartSignal.set(null);
-          this.cartService.getCart()!.subscribe();
+          this.cartService.getCart().subscribe();
           this.toast.showToast({
             type: 'success',
             message: `${product.name} added to cart!`,

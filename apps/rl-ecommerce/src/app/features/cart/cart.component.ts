@@ -51,7 +51,7 @@ export class CartComponent implements OnInit {
   private productService = inject(ProductsService);
   private router = inject(Router);
   // cart$ = this.cartService.getCart();
-  cart$!: Observable<ICart>;
+  // cart$!: Observable<ICart>;
   cart = this.cartService.cartSignal as WritableSignal<ICart>;
   quantity: number = 1;
   isUpdating = signal<boolean[]>([false]);
@@ -89,12 +89,15 @@ export class CartComponent implements OnInit {
               return cartItem;
             });
 
-            this.cart$ = of({ ...currentCart, cartItems: updatedItems });
-            this.cart.set({ ...currentCart, cartItems: updatedItems });
-            this.cartService.cartSignal.set({
-              ...currentCart,
-              cartItems: updatedItems,
-            });
+            const newCart = { ...currentCart, cartItems: updatedItems };
+
+            // this.cart$ = of(newCart);
+            this.cart.set(newCart);
+            this.cartService.cartSignal.set(newCart);
+            localStorage.setItem(
+              this.cartService.CART_KEY,
+              JSON.stringify(newCart),
+            );
           }
         },
         error: (err) => {
@@ -123,11 +126,16 @@ export class CartComponent implements OnInit {
             (item) => item.id !== this.activeCartItem?.id,
           );
 
-          this.cart$ = of({ ...cart, cartItems });
-          this.cart.set({ ...cart, cartItems });
-          this.cartService.cartSignal.set({ ...cart, cartItems });
+          const newCart = { ...cart, cartItems };
 
+          // this.cart$ = of(newCart);
+          this.cart.set(newCart);
+          this.cartService.cartSignal.set(newCart);
           this.cartService.cartTotal.set(cartItems.length);
+          localStorage.setItem(
+            this.cartService.CART_KEY,
+            JSON.stringify(newCart),
+          );
         }
       },
       error: (err) => {

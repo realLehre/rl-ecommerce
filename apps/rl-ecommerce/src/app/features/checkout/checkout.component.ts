@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
+  signal,
   WritableSignal,
 } from '@angular/core';
 import { BreadcrumbComponent } from '../../shared/components/breadcrumb/breadcrumb.component';
@@ -11,7 +12,10 @@ import { PaymentOptionsComponent } from './payment-options/payment-options.compo
 import { IAddress } from '../user/models/address.interface';
 import { CartService } from '../../shared/services/cart.service';
 import { ICart } from '../../shared/models/cart.interface';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { OrderService } from '../../shared/services/order.service';
+import { ToastService } from '../../shared/services/toast.service';
+import { LoaderComponent } from '../../shared/components/loader/loader.component';
 
 @Component({
   selector: 'app-checkout',
@@ -22,6 +26,7 @@ import { RouterLink } from '@angular/router';
     OrderSummaryComponent,
     PaymentOptionsComponent,
     RouterLink,
+    LoaderComponent,
   ],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss',
@@ -29,9 +34,13 @@ import { RouterLink } from '@angular/router';
 })
 export class CheckoutComponent {
   private cartService = inject(CartService);
+  private orderService = inject(OrderService);
+  private toast = inject(ToastService);
+  private router = inject(Router);
   cart = this.cartService.cartSignal as WritableSignal<ICart>;
   selectedAddress!: IAddress;
   selectPaymentMethod!: string;
+  isLoading = signal(false);
   onSelectedAddress(address: IAddress) {
     this.selectedAddress = address;
   }
@@ -41,6 +50,33 @@ export class CheckoutComponent {
   }
 
   onPay() {
-    console.log(this.cart, this.selectedAddress, this.selectPaymentMethod);
+    this.isLoading.set(true);
+    this.orderService
+      .placeOrder({
+        address: this.selectedAddress,
+        cart: this.cart(),
+        paymentMethod: this.selectPaymentMethod,
+      })
+      .subscribe({
+        next: (res) => {
+          this.cartService.cartSignal.set(null);
+          this.cartService.cartTotal.set(null);
+          this.cartService.getCart().subscribe();
+          localStorage.removeItem(this.cartService.CART_KEY);
+          this.toast.showToast({
+            type: 'success',
+            message: 'Order placed successfully!',
+          });
+          this.isLoading.set(false);
+          this.router.navigate(['/', 'orders']);
+        },
+        error: (err) => {
+          this.toast.showToast({
+            type: 'error',
+            message: err.error.message,
+          });
+          this.isLoading.set(false);
+        },
+      });
   }
 }

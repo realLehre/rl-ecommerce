@@ -13,6 +13,8 @@ import { ApiProductService } from './api-products/api-product.service';
 import { ApiProductController } from './api-products/api-product.controller';
 import { ApiCartService } from './api-cart/api-cart.service';
 import { ApiCartController } from './api-cart/api-cart.controller';
+import { ApiOrderService } from './api-order/api-order.service';
+import { ApiOrderController } from './api-order/api-order.controller';
 
 @Module({
   imports: [],
@@ -23,6 +25,7 @@ import { ApiCartController } from './api-cart/api-cart.controller';
     ApiCategoryController,
     ApiProductController,
     ApiCartController,
+    ApiOrderController,
   ],
   providers: [
     AppService,
@@ -32,6 +35,7 @@ import { ApiCartController } from './api-cart/api-cart.controller';
     ApiCategoryService,
     ApiProductService,
     ApiCartService,
+    ApiOrderService,
   ],
 })
 export class AppModule {}
