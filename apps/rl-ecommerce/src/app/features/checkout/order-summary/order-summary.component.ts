@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
+  input,
   WritableSignal,
 } from '@angular/core';
 import { CartService } from '../../../shared/services/cart.service';
@@ -29,6 +30,5 @@ import { SkeletonModule } from 'primeng/skeleton';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OrderSummaryComponent {
-  private cartService = inject(CartService);
-  cart = this.cartService.cartSignal as WritableSignal<ICart>;
+  cart = input<ICart>({} as ICart);
 }

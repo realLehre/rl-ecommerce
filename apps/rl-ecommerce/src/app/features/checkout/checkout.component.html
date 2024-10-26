@@ -16,14 +16,25 @@
   >
     <div class="space-y-4 grow w-full min-[750px]:w-[60%]">
       <h3 class="font-semibold text-type_title">Billing Address</h3>
-      <app-checkout-address />
+      <app-checkout-address (selectedAddressEmit)="onSelectedAddress($event)" />
     </div>
 
     <div class="space-y-4 grow w-full min-[750px]:w-[40%]">
       <h3 class="font-semibold text-type_title">Your order</h3>
-      <app-order-summary />
+      <app-order-summary [cart]="cart()" />
       <div class="mt-3">
-        <app-payment-options />
+        <h3 class="font-semibold text-type_title mb-2">Payment</h3>
+        <app-payment-options
+          (paymentOptionSelected)="onSelectPaymentMethod($event)"
+        />
+
+        <button
+          class="w-full rounded-full text-white font-medium bg-primary hover:bg-opacity-75 py-2 h-12 block disabled:bg-opacity-25 mt-10"
+          [disabled]="!selectPaymentMethod || !selectedAddress"
+          (click)="onPay()"
+        >
+          Place order
+        </button>
       </div>
     </div>
   </div>

@@ -23,6 +23,42 @@ model User {
   addresses   Address[]       @relation("UserAddress")
   ratings     ProductRating[]
   cart        Cart?           @relation("UserCart")
+  order       Order[]
+}
+
+model Order {
+  id             String          @id @default(uuid())
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String          @unique
+  cart           Cart            @relation(fields: [cartId], references: [id])
+  cartId         String          @unique
+  shippingInfo   Address         @relation(fields: [shippingInfoId], references: [id])
+  shippingInfoId String
+  orderAmount    Int
+  shippingCost   Int
+  totalAmount    Int
+  paymentMethod  String
+  orderStatus    OrderStatus     @default(PENDING)
+  deliveryStatus DeliveryStatus  @default(PENDING)
+  deliveryEvents DeliveryEvent[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@index([userId])
+  @@index([deliveryStatus])
+}
+
+model DeliveryEvent {
+  id        String       @id @default(uuid())
+  order     Order        @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId   String
+  dateTime  DateTime     @default(now())
+  remark    String
+  status    EventStatus?
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  @@index([orderId])
 }
 
 model Cart {
@@ -31,6 +67,7 @@ model Cart {
   userId       String     @unique
   cartItems    CartItem[] @relation("CartCartItem")
   subTotal     Int
+  order        Order?
   shippingCost Int
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
@@ -61,6 +98,7 @@ model Address {
   additionalPhoneNumber String?
   deliveryAddress       String
   additionalInformation String?
+  order                 Order[]
   country               String
   state                 String
   city                  String
@@ -122,42 +160,24 @@ model ProductRating {
   userId    String
 }
 
-// **** TO CALCULATE CartItem.Total ********
-// CREATE OR REPLACE FUNCTION calculate_cartitem_total() RETURNS TRIGGER AS $$
-// BEGIN
-//   -- Calculate the total for the cart item (price * unit)
-//   NEW.total := (SELECT price FROM Product WHERE id = NEW.productId) * NEW.unit;
-//   RETURN NEW;
-// END;
-// $$ LANGUAGE plpgsql;
-//
-// CREATE TRIGGER update_cartitem_total
-// BEFORE INSERT OR UPDATE ON "CartItem"
-// FOR EACH ROW
-// EXECUTE FUNCTION calculate_cartitem_total();
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  FAILED
+}
 
-// ***** TO CALCULATE Cart.Total ******
-// CREATE OR REPLACE FUNCTION update_cart_totals() RETURNS TRIGGER AS $$
-// BEGIN
-//   -- Calculate the subtotal for the cart (sum of CartItem totals)
-//   UPDATE "Cart"
-//   SET subtotal = (
-//       SELECT COALESCE(SUM(total), 0)
-//       FROM "CartItem"
-//       WHERE "CartItem".cartId = NEW.cartId
-//     ),
-//     total = (
-//       SELECT COALESCE(SUM(total + shippingCost), 0)
-//       FROM "CartItem"
-//       WHERE "CartItem".cartId = NEW.cartId
-//     )
-//   WHERE id = NEW.cartId;
-//
-//   RETURN NEW;
-// END;
-// $$ LANGUAGE plpgsql;
-//
-// CREATE TRIGGER calculate_cart_totals
-// AFTER INSERT OR UPDATE OR DELETE ON "CartItem"
-// FOR EACH ROW
-// EXECUTE FUNCTION update_cart_totals();
+enum DeliveryStatus {
+  PENDING
+  CONFIRMED
+  PACKED
+  OUT_FOR_DELIVERY
+  DELIVERED
+  FAILED
+}
+
+enum EventStatus {
+  PAID
+  CONFIRMED
+  PACKED
+  DELIVERED
+}

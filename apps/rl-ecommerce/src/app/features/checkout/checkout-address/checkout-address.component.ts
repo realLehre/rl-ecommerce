@@ -3,6 +3,7 @@ import {
   Component,
   inject,
   OnInit,
+  output,
   signal,
 } from '@angular/core';
 import { AddressService } from '../../user/address/services/address.service';
@@ -35,12 +36,14 @@ export class CheckoutAddressComponent implements OnInit {
   test = toSignal(this.addressService.getAddress(), { initialValue: [] });
   selectedAddress!: IAddress;
   isLoading = signal(true);
+  selectedAddressEmit = output<IAddress>();
 
   ngOnInit() {
     this.addressService.getAddress().subscribe((res) => {
       this.isLoading.set(false);
       this.addresses = res;
       this.selectedAddress = res.find((address) => address.isDefault)!;
+      this.selectedAddressEmit.emit(this.selectedAddress);
     });
   }
 
@@ -49,6 +52,6 @@ export class CheckoutAddressComponent implements OnInit {
   }
 
   onSelectAddress() {
-    console.log(this.selectedAddress);
+    this.selectedAddressEmit.emit(this.selectedAddress);
   }
 }
