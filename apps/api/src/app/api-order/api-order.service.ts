@@ -30,6 +30,11 @@ export class ApiOrderService {
   async getOrderById(orderId: string) {
     return this.prisma.order.findUnique({
       where: { id: orderId },
+      include: {
+        deliveryEvents: true,
+        user: true,
+        shippingInfo: true,
+      },
     });
   }
 

@@ -22,7 +22,7 @@ export class OrderService {
 
   getOrder() {
     return this.orderSignal()
-      ? of(this.orderSignal)
+      ? of(this.orderSignal())
       : this.http.get<IOrder[]>(`${this.apiUrl}/${this.user()?.id}`).pipe(
           tap((res) => {
             this.orderSignal.set(res);

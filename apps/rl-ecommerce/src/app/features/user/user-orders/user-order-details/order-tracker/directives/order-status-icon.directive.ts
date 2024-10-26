@@ -6,6 +6,7 @@ import {
   OnInit,
   Renderer2,
 } from '@angular/core';
+import { IDeliveryEvents } from '../../../../../../shared/models/order.interface';
 
 interface IOrderStatus {
   label: string;
@@ -19,32 +20,34 @@ interface IOrderStatus {
 export class OrderStatusIconDirective implements OnInit {
   private renderer = inject(Renderer2);
   private el = inject(ElementRef);
-  timeLine = input.required<IOrderStatus[]>();
-  status = input.required<IOrderStatus>();
+  timeLine = input.required<IDeliveryEvents[]>();
+  status = input.required<IDeliveryEvents>();
   completeImageSrc: string = 'assets/images/icons/green-tick.svg';
   firstWaitingImageSrc: string = 'assets/images/icons/order-loading.svg';
   blankImageSrc: string = 'assets/images/icons/order-blank.svg';
 
   ngOnInit() {
-    this.changeSrc(this.status().isComplete);
+    this.changeSrc(this.status().status);
   }
 
-  changeSrc(status: boolean) {
+  changeSrc(event: string) {
     const lastCompletedIndex = this.timeLine().reduceRight(
       (acc, status, index) => {
-        return acc !== -1 ? acc : status.isComplete ? index : -1;
+        return acc !== -1 ? acc : status.status ? index : -1;
       },
-      -1
+      -1,
     );
+
     const indexOfStatus = this.timeLine().findIndex(
-      (status) => status.label == this.status().label
+      (status) => status.remark == this.status().remark,
     );
-    if (status) {
+
+    if (event) {
       this.setImageSrc(this.completeImageSrc);
     } else {
       this.setImageSrc(this.blankImageSrc);
     }
-    if (!status && indexOfStatus - lastCompletedIndex == 1) {
+    if (!event && indexOfStatus - lastCompletedIndex == 1) {
       this.setImageSrc(this.firstWaitingImageSrc);
     }
   }

@@ -5,6 +5,7 @@ import { OrderTrackerComponent } from './order-tracker/order-tracker.component';
 import { GenericOrderSummaryComponent } from '../../../../shared/components/generic-order-summary/generic-order-summary.component';
 import { OrderService } from '../../../../shared/services/order.service';
 import { CurrencyPipe, DatePipe } from '@angular/common';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-user-order-details',
@@ -15,6 +16,7 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
     GenericOrderSummaryComponent,
     DatePipe,
     CurrencyPipe,
+    SkeletonModule,
   ],
   templateUrl: './user-order-details.component.html',
   styleUrl: './user-order-details.component.scss',

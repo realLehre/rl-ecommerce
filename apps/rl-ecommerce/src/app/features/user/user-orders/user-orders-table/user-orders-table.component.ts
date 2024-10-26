@@ -3,6 +3,8 @@ import {
   Component,
   inject,
   input,
+  OnInit,
+  signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -13,6 +15,7 @@ import { IOrder } from '../../../../shared/models/order.interface';
 import { SubtotalPipe } from '../../../../shared/pipes/subtotal.pipe';
 import { SkeletonModule } from 'primeng/skeleton';
 import { OrderService } from '../../../../shared/services/order.service';
+import { ToastService } from '../../../../shared/services/toast.service';
 
 @Component({
   selector: 'app-user-orders-table',
@@ -30,10 +33,12 @@ import { OrderService } from '../../../../shared/services/order.service';
   styleUrl: './user-orders-table.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserOrdersTableComponent {
+export class UserOrdersTableComponent implements OnInit {
   private orderService = inject(OrderService);
   private router = inject(Router);
-  orders = input<IOrder[] | any[]>([]);
+  private toast = inject(ToastService);
+  orders: IOrder[] = [];
+  isLoading = signal(true);
 
   sortUsed: boolean = false;
   sortColumn: keyof IOrder | '' = '';
@@ -46,7 +51,21 @@ export class UserOrdersTableComponent {
     currentPage: 1,
   };
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.orderService.getOrder().subscribe({
+      next: (res) => {
+        this.orders = res!;
+        this.isLoading.set(false);
+      },
+      error: (err) => {
+        this.isLoading.set(false);
+        this.toast.showToast({
+          type: 'error',
+          message: err.error.message,
+        });
+      },
+    });
+  }
 
   onViewOrder(order: IOrder) {
     this.orderService.activeOrder.set(order);
@@ -67,7 +86,7 @@ export class UserOrdersTableComponent {
     }
     this.sortUsed = true;
 
-    this.orders()?.sort((a, b) => {
+    this.orders?.sort((a, b) => {
       const valueA = a[column];
       const valueB = b[column];
 

@@ -1,6 +1,6 @@
 <div>
-  @if (orders()) {
-    @if (orders().length) {
+  @if (!isLoading()) {
+    @if (orders.length) {
       <div class="border-[1px] border-border_subtle rounded-lg mt-5 py-5">
         <div class="flex items-center flex-wrap gap-x-6 gap-y-2 mb-5 px-4">
           <div class="max-w-[300px] min-w-[170px] grow h-8 relative">
@@ -124,7 +124,7 @@
               </tr>
             </thead>
             <tbody>
-              @for (order of orders()! | paginate: config; track order.id) {
+              @for (order of orders | paginate: config; track order.id) {
                 <tr
                   class="border-b border-border_subtle text-type_title_gray text-sm font-medium"
                 >
