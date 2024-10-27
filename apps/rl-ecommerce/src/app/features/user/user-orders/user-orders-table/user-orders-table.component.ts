@@ -11,7 +11,10 @@ import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule, PaginationInstance } from 'ngx-pagination';
 import { Router, RouterLink } from '@angular/router';
 import { OrderStatusDirective } from '../../../../shared/directives/order-status.directive';
-import { IOrder } from '../../../../shared/models/order.interface';
+import {
+  IOrder,
+  IOrderResponse,
+} from '../../../../shared/models/order.interface';
 import { SubtotalPipe } from '../../../../shared/pipes/subtotal.pipe';
 import { SkeletonModule } from 'primeng/skeleton';
 import { OrderService } from '../../../../shared/services/order.service';
@@ -37,7 +40,7 @@ export class UserOrdersTableComponent implements OnInit {
   private orderService = inject(OrderService);
   private router = inject(Router);
   private toast = inject(ToastService);
-  orders: IOrder[] = [];
+  orders!: IOrderResponse;
   isLoading = signal(true);
 
   sortUsed: boolean = false;
@@ -86,7 +89,7 @@ export class UserOrdersTableComponent implements OnInit {
     }
     this.sortUsed = true;
 
-    this.orders?.sort((a, b) => {
+    this.orders?.orders?.sort((a, b) => {
       const valueA = a[column];
       const valueB = b[column];
 

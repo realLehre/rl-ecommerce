@@ -16,15 +16,55 @@ export interface IOrderBody {
 export class ApiOrderService {
   constructor(private prisma: PrismaService) {}
 
-  async getOrder(userId: string) {
-    return this.prisma.order.findMany({
-      where: { userId: userId },
+  async getOrder(
+    userId: string,
+    filters: {
+      orderId?: string;
+      minPrice?: number;
+      maxPrice?: number;
+      page?: number;
+      pageSize?: number;
+    },
+  ) {
+    const page = filters.page ?? 1;
+    const pageSize = filters.pageSize ?? 10;
+    const skip = (page - 1) * pageSize;
+    const orders = await this.prisma.order.findMany({
+      where: {
+        userId: userId,
+        totalAmount: {
+          gte: filters.minPrice || undefined,
+          lte: filters.maxPrice || undefined,
+        },
+      },
       include: {
         user: true,
         deliveryEvents: true,
         shippingInfo: true,
       },
+      skip,
+      take: pageSize,
     });
+
+    const totalItems = await this.prisma.order.count({
+      where: {
+        userId: userId,
+        totalAmount: {
+          gte: filters.minPrice || undefined,
+          lte: filters.maxPrice || undefined,
+        },
+      },
+    });
+
+    const totalPages = Math.ceil(totalItems / pageSize);
+
+    return {
+      orders,
+      totalItems,
+      totalItemsInPage: orders.length,
+      currentPage: page,
+      totalPages,
+    };
   }
 
   async getOrderById(orderId: string) {

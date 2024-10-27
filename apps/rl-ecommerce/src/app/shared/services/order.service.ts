@@ -4,7 +4,7 @@ import { IAddress } from '../../features/user/models/address.interface';
 import { ICart, ICartItems } from '../models/cart.interface';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { IOrder } from '../models/order.interface';
+import { IOrder, IOrderResponse } from '../models/order.interface';
 import { of, tap } from 'rxjs';
 
 @Injectable({
@@ -15,7 +15,7 @@ export class OrderService {
   private http = inject(HttpClient);
   private apiUrl = environment.apiUrl + 'order';
   user = this.userService.user;
-  orderSignal = signal<IOrder[] | null>(null);
+  orderSignal = signal<IOrderResponse | null>(null);
   activeOrder = signal<IOrder | null>(null);
 
   constructor() {}
@@ -23,7 +23,7 @@ export class OrderService {
   getOrder() {
     return this.orderSignal()
       ? of(this.orderSignal())
-      : this.http.get<IOrder[]>(`${this.apiUrl}/${this.user()?.id}`).pipe(
+      : this.http.get<IOrderResponse>(`${this.apiUrl}/${this.user()?.id}`).pipe(
           tap((res) => {
             this.orderSignal.set(res);
           }),

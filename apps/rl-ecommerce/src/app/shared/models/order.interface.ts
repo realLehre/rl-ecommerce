@@ -12,6 +12,14 @@ export interface IOrderBody {
   deliveryStatus: string;
 }
 
+export interface IOrderResponse {
+  currentPage: number;
+  totalItems: number;
+  orders: IOrder[];
+  totalItemsInPage: number;
+  totalPages: number;
+}
+
 export interface ICartOrder {
   id: string;
   userId: string;

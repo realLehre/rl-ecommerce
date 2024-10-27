@@ -15,5 +15,5 @@ import { Observable } from 'rxjs';
 })
 export class UserOrdersComponent {
   private orderService = inject(OrderService);
-  orders: Observable<any> = this.orderService.getOrder();
+  // orders: Observable<any> = this.orderService.getOrder();
 }
