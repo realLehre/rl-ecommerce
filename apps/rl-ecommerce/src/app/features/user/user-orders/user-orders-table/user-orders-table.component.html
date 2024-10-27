@@ -28,39 +28,14 @@
             <thead class="bg-bg_subtle border border-border_subtle">
               <tr>
                 <th
-                  class="px-4 py-3 text-left text-xs text-type_gray font-medium"
+                  class="hidden mobile:block px-2 mobile:px-4 py-3 text-left text-[10px] mobile:text-xs text-type_gray font-medium"
                 >
                   ORDER ID
                 </th>
-                <th
-                  (click)="sortTable('user')"
-                  class="px-4 py-3 text-xs text-type_gray font-medium text-left cursor-pointer"
-                >
-                  <div class="flex items-center space-x-1">
-                    <span>CUSTOMER NAME</span>
-                    <span class="flex flex-col">
-                      <i
-                        class="fa fa-caret-up text-xs"
-                        [ngClass]="
-                          sortDirection === 'asc' && sortUsed
-                            ? 'opacity-100'
-                            : 'opacity-30'
-                        "
-                      ></i>
-                      <i
-                        class="fa fa-caret-down text-xs -mt-[10px]"
-                        [ngClass]="
-                          sortDirection === 'desc'
-                            ? 'opacity-100'
-                            : 'opacity-30'
-                        "
-                      ></i>
-                    </span>
-                  </div>
-                </th>
+
                 <th
                   (click)="sortTable('totalAmount')"
-                  class="px-4 py-3 text-left cursor-pointer text-xs text-type_gray font-medium"
+                  class="px-2 mobile:px-4 py-3 text-left cursor-pointer text-[10px] mobile:text-xs text-type_gray font-medium"
                 >
                   <div class="flex items-center space-x-1">
                     <span>TOTAL PRICE</span>
@@ -86,7 +61,7 @@
                 </th>
                 <th
                   (click)="sortTable('createdAt')"
-                  class="px-4 py-3 text-left cursor-pointer text-xs text-type_gray font-medium"
+                  class="px-2 mobile:px-4 py-3 text-left cursor-pointer text-[10px] mobile:text-xs text-type_gray font-medium"
                 >
                   <div class="flex items-center space-x-1">
                     <span>ORDER DATE</span>
@@ -112,12 +87,12 @@
                   </div>
                 </th>
                 <th
-                  class="px-4 py-3 text-left text-xs text-type_gray font-medium"
+                  class="px-2 mobile:px-4 py-3 text-left text-[10px] mobile:text-xs text-type_gray font-medium"
                 >
                   STATUS
                 </th>
                 <th
-                  class="px-4 py-3 text-left text-xs text-type_gray font-medium"
+                  class="px-2 mobile:px-4 py-3 text-left text-[10px] mobile:text-xs text-type_gray font-medium"
                 >
                   ACTION
                 </th>
@@ -126,15 +101,21 @@
             <tbody>
               @for (order of orders | paginate: config; track order.id) {
                 <tr
-                  class="border-b border-border_subtle text-type_title_gray text-sm font-medium"
+                  class="border-b border-border_subtle text-type_title_gray text-xs mobile:text-sm font-medium"
                 >
-                  <td class="px-4 py-5 font-semibold">{{ order.id }}</td>
-                  <td class="px-4 py-5">{{ order.user.name }}</td>
-                  <td class="px-4 py-5">
+                  <td
+                    class="hidden mobile:block px-2 mobile:px-4 py-5 font-semibold"
+                  >
+                    {{ order.id }}
+                  </td>
+
+                  <td class="px-2 mobile:px-4 py-5">
                     {{ order.totalAmount | currency: '₦' : 'symbol' : '1.0-0' }}
                   </td>
-                  <td class="px-4 py-5">{{ order.createdAt | date }}</td>
-                  <td class="px-4 py-5">
+                  <td class="px-2 mobile:px-4 py-5">
+                    {{ order.createdAt | date }}
+                  </td>
+                  <td class="px-2 mobile:px-4 py-5">
                     <span
                       appOrderStatus
                       [orderStatus]="order.orderStatus"
@@ -143,12 +124,13 @@
                       {{ order.orderStatus }}
                     </span>
                   </td>
-                  <td class="px-4 py-2">
+                  <td class="px-2 mobile:px-4 py-2">
                     <button
-                      class="border-[1px] border-type_caption rounded-full hover:bg-bg_subtle text-type_caption font-medium py-1 px-3 whitespace-nowrap"
+                      class="border-[1px] border-type_caption rounded-full hover:bg-bg_subtle text-type_caption font-medium py-1 px-2 mobile:px-3 whitespace-nowrap text-[10px] mobile:text-sm"
                       (click)="onViewOrder(order)"
                     >
-                      View Details
+                      <span class="block mobile:hidden font-medium">View</span>
+                      <span class="hidden mobile:block">View Details</span>
                     </button>
                   </td>
                 </tr>
@@ -178,7 +160,7 @@
           </div>
 
           <div
-            class="flex justify-center items-center w-full min-[760px]:justify-self-center min-[760px]:w-auto"
+            class="hidden mobile:flex justify-center items-center w-full min-[760px]:justify-self-center min-[760px]:w-auto"
           >
             <pagination-template
               #p="paginationApi"
@@ -236,6 +218,57 @@
               </div>
             </pagination-template>
           </div>
+
+          <!--          <div-->
+          <!--            class="flex mobile:hidden items-center justify-between space-x-3 max-w-[230px] mx-auto mt-10"-->
+          <!--          >-->
+          <!--            <button-->
+          <!--              class="h-8 w-8 flex items-center border-0 outline-0 justify-center cursor-pointer disabled:opacity-30"-->
+          <!--              [disabled]="config()?.currentPage! === 1"-->
+          <!--              (click)="pageChange(config()?.currentPage! - 1)"-->
+          <!--              [attr.aria-label]="'Previous page'"-->
+          <!--            >-->
+          <!--              <svg-->
+          <!--                xmlns="http://www.w3.org/2000/svg"-->
+          <!--                viewBox="0 0 448 512"-->
+          <!--                class="w-6"-->
+          <!--              >-->
+          <!--                <path-->
+          <!--                  d="M7.4 273.4C2.7 268.8 0 262.6 0 256s2.7-12.8 7.4-17.4l176-168c9.6-9.2 24.8-8.8 33.9 .8s8.8 24.8-.8 33.9L83.9 232 424 232c13.3 0 24 10.7 24 24s-10.7 24-24 24L83.9 280 216.6 406.6c9.6 9.2 9.9 24.3 .8 33.9s-24.3 9.9-33.9 .8l-176-168z"-->
+          <!--                />-->
+          <!--              </svg>-->
+          <!--            </button>-->
+
+          <!--            <div-->
+          <!--              class="p-2 bg-primary bg-opacity-60 h-12 rounded flex items-center justify-center space-x-2 text-white font-medium"-->
+          <!--            >-->
+          <!--              <span-->
+          <!--                class="h-8 flex items-center justify-center px-5 bg-primary rounded"-->
+          <!--                >{{ config()?.currentPage! }}</span-->
+          <!--              >-->
+          <!--              <div class="space-x-1">-->
+          <!--                <span>of</span>-->
+          <!--                <span>{{ productArray.totalPages }}</span>-->
+          <!--              </div>-->
+          <!--            </div>-->
+
+          <!--            <button-->
+          <!--              class="h-8 w-8 flex items-center border-0 outline-0 justify-center cursor-pointer disabled:opacity-30"-->
+          <!--              [disabled]="config()?.currentPage! === productArray.totalPages"-->
+          <!--              (click)="pageChange(config()?.currentPage! + 1)"-->
+          <!--              [attr.aria-label]="'Next page'"-->
+          <!--            >-->
+          <!--              <svg-->
+          <!--                xmlns="http://www.w3.org/2000/svg"-->
+          <!--                viewBox="0 0 448 512"-->
+          <!--                class="w-6 rotate-180"-->
+          <!--              >-->
+          <!--                <path-->
+          <!--                  d="M7.4 273.4C2.7 268.8 0 262.6 0 256s2.7-12.8 7.4-17.4l176-168c9.6-9.2 24.8-8.8 33.9 .8s8.8 24.8-.8 33.9L83.9 232 424 232c13.3 0 24 10.7 24 24s-10.7 24-24 24L83.9 280 216.6 406.6c9.6 9.2 9.9 24.3 .8 33.9s-24.3 9.9-33.9 .8l-176-168z"-->
+          <!--                />-->
+          <!--              </svg>-->
+          <!--            </button>-->
+          <!--          </div>-->
         </div>
       </div>
     } @else {

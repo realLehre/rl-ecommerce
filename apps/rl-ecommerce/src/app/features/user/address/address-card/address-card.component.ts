@@ -28,6 +28,7 @@ export class AddressCardComponent {
   address = input.required<IAddress>();
   showDeleteDialog = signal(false);
   isLoading = signal(false);
+  isDeleting = signal(false);
   reloadAddress = output<void>();
 
   onEditAddress() {
@@ -60,14 +61,14 @@ export class AddressCardComponent {
   }
 
   onDeleteAddress() {
-    this.isLoading.set(true);
+    this.isDeleting.set(true);
     this.addressService.deleteAddress(this.address().id!).subscribe({
       next: (res) => {
         this.toast.showToast({
           type: 'success',
           message: 'Address deleted!',
         });
-        this.isLoading.set(false);
+        this.isDeleting.set(false);
         this.reloadAddress.emit();
         this.showDeleteDialog.set(false);
         window.scrollTo({
@@ -80,7 +81,7 @@ export class AddressCardComponent {
           type: 'error',
           message: err.error.message,
         });
-        this.isLoading.set(false);
+        this.isDeleting.set(false);
       },
     });
   }

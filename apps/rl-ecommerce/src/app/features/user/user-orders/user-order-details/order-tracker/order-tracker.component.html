@@ -9,7 +9,7 @@
           alt=""
           class="w-6 tablet:w-8"
         />
-        @if (i < timeLine.length - 1) {
+        @if (i < trackingEvents()?.length! - 1) {
           <div
             class="bg-border_subtle h-[2px] min-w-[40px] w-[40px] min-[700px]:w-[120px] grow shrink"
           ></div>

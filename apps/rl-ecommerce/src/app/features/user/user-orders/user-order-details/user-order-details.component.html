@@ -28,7 +28,7 @@
         <div class="flex items-start flex-wrap justify-between gap-3">
           <div class="flex-1 min-w-[50px] text-gray-600">
             <h5 class="text-xs font-medium">ORDER ID</h5>
-            <p class="text-base sm:text-lg font-semibold break-all">
+            <p class="text-sm font-semibold break-all">
               {{ order()?.id }}
             </p>
           </div>
@@ -36,7 +36,7 @@
           <div class="h-10 w-[1px] border border-border_subtle"></div>
           <div class="flex-1 min-w-[120px] text-gray-600">
             <h5 class="text-xs font-medium">DATE</h5>
-            <p class="text-base sm:text-lg font-semibold">
+            <p class="text-sm font-semibold">
               {{ order()?.createdAt! | date }}
             </p>
           </div>
@@ -44,7 +44,7 @@
           <div class="h-10 w-[1px] border border-border_subtle"></div>
           <div class="flex-1 min-w-[100px] text-gray-600">
             <h5 class="text-xs font-medium">TOTAL</h5>
-            <p class="text-base sm:text-lg font-semibold">
+            <p class="text-sm font-semibold">
               {{ order()?.totalAmount! | currency: '₦' : 'symbol' : '1.0-0' }}
             </p>
           </div>
@@ -53,7 +53,7 @@
 
           <div class="flex-1 min-w-[150px] text-gray-600">
             <h5 class="text-xs font-medium">PAYMENT METHOD</h5>
-            <p class="text-base sm:text-lg font-semibold capitalize">
+            <p class="text-sm font-semibold capitalize">
               {{ order()?.paymentMethod }}
             </p>
           </div>

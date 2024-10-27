@@ -121,7 +121,7 @@
           class="px-4 py-2 flex items-center justify-center space-x-2 bg-primary h-11 text-white rounded-md hover:bg-opacity-80 focus:outline-none disabled:bg-type_grey flex-1"
           (click)="onDeleteAddress()"
         >
-          @if (isLoading()) {
+          @if (isDeleting()) {
             <app-loader
               [customStyle]="{ width: '18px', border: '3px solid #fff' }"
             />
