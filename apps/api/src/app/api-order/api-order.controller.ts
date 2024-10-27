@@ -8,11 +8,12 @@ export class ApiOrderController {
   @Get(':id')
   async getOrder(
     @Param('id') userId: string,
-    @Query('categoryId') orderId?: string,
+    @Query('orderId') orderId?: string,
     @Query('minPrice') minPrice?: string,
     @Query('maxPrice') maxPrice?: string,
     @Query('page') page?: string,
     @Query('pageSize') pageSize?: string,
+    @Query('deliveryStatus') deliveryStatus?: string,
   ) {
     return this.orderService.getOrder(userId, {
       orderId,
@@ -20,6 +21,7 @@ export class ApiOrderController {
       maxPrice: maxPrice ? parseFloat(maxPrice) : undefined,
       page: page ? parseInt(page) : undefined,
       pageSize: pageSize ? parseInt(pageSize) : undefined,
+      deliveryStatus,
     });
   }
 

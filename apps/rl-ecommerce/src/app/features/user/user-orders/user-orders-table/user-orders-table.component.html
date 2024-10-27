@@ -1,8 +1,72 @@
 <div>
+  <div
+    class="flex items-center justify-between flex-wrap gap-x-6 gap-y-2 mb-5 px-4"
+  >
+    <div class="max-w-[300px] min-w-[170px] grow h-8 relative">
+      <img
+        src="assets/images/icons/search.svg"
+        alt=""
+        class="absolute left-3 top-1/2 -translate-y-1/2 w-5"
+      />
+      <input
+        class="w-full focus:outline-0 rounded-full bg-bg_subtle border border-border_subtle h-full pl-10 text-type_caption font-medium placeholder:text-type_caption"
+        placeholder="Search"
+        [formControl]="searchInput"
+        id="toTop"
+      />
+    </div>
+
+    <p-menu #menu [popup]="true" styleClass="user-order-menu">
+      <ng-template pTemplate="start">
+        <div class="py-3 px-3">
+          <div class="flex items-center justify-between space-x-3">
+            <h3 class="text-base text-type_title">Filters</h3>
+            <button class="bg-transparent text-primary text-sm py-2">
+              Clear
+            </button>
+          </div>
+
+          <div>
+            <p class="text-sm text-type_title mb-1">Status</p>
+            <div class="card flex justify-content-center">
+              <p-dropdown
+                [options]="deliveryStatus"
+                [(ngModel)]="selectedStatus"
+                (ngModelChange)="onChangeOrderStatus($event)"
+                optionLabel="name"
+                placeholder="Select status"
+              />
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </p-menu>
+    <div
+      class="h-8 border-border_subtle border-[2px] px-2 bg-transparent rounded-full text-type_caption flex items-center space-x-2 cursor-pointer"
+      #menuContainer
+      (click)="menu.toggle($event)"
+    >
+      <i class="fa fa-filter"></i>
+      <span>Filter</span>
+    </div>
+
+    <!--          <select-->
+    <!--            class="h-8 border-border_subtle border-[2px] px-2 bg-transparent rounded-full text-type_caption focus:outline-none"-->
+    <!--            [(ngModel)]="selectedStatus"-->
+    <!--            (ngModelChange)="onChangeOrderStatus($event)"-->
+    <!--          >-->
+    <!--            <option selected value="ALL">All status</option>-->
+    <!--            <option value="CONFIRMED">Confirmed</option>-->
+    <!--            <option value="PACKED">Packed</option>-->
+    <!--            <option value="DELIVERED">Delivered</option>-->
+    <!--          </select>-->
+  </div>
   @if (!isLoading()) {
     @if (orders.orders.length) {
       <div class="border-[1px] border-border_subtle rounded-lg mt-5 py-5">
-        <div class="flex items-center flex-wrap gap-x-6 gap-y-2 mb-5 px-4">
+        <div
+          class="flex items-center justify-between flex-wrap gap-x-6 gap-y-2 mb-5 px-4"
+        >
           <div class="max-w-[300px] min-w-[170px] grow h-8 relative">
             <img
               src="assets/images/icons/search.svg"
@@ -12,15 +76,27 @@
             <input
               class="w-full focus:outline-0 rounded-full bg-bg_subtle border border-border_subtle h-full pl-10 text-type_caption font-medium placeholder:text-type_caption"
               placeholder="Search"
+              [formControl]="searchInput"
               id="toTop"
             />
           </div>
 
-          <select
-            class="h-8 border-border_subtle border-[2px] px-2 bg-transparent rounded-full text-type_caption"
+          <div
+            class="h-8 border-border_subtle border-[2px] px-2 bg-transparent rounded-full text-type_caption flex items-center space-x-2"
           >
-            <option>All status</option>
-          </select>
+            <i class="fa fa-filter"></i>
+            <span>Filter</span>
+          </div>
+          <!--          <select-->
+          <!--            class="h-8 border-border_subtle border-[2px] px-2 bg-transparent rounded-full text-type_caption focus:outline-none"-->
+          <!--            [(ngModel)]="selectedStatus"-->
+          <!--            (ngModelChange)="onChangeOrderStatus($event)"-->
+          <!--          >-->
+          <!--            <option selected value="ALL">All status</option>-->
+          <!--            <option value="CONFIRMED">Confirmed</option>-->
+          <!--            <option value="PACKED">Packed</option>-->
+          <!--            <option value="DELIVERED">Delivered</option>-->
+          <!--          </select>-->
         </div>
 
         <div class="overflow-x-auto">
@@ -99,7 +175,10 @@
               </tr>
             </thead>
             <tbody>
-              @for (order of orders.orders | paginate: config; track order.id) {
+              @for (
+                order of orders.orders | paginate: config()!;
+                track order.id
+              ) {
                 <tr
                   class="border-b border-border_subtle text-type_title_gray text-xs mobile:text-sm font-medium"
                 >
@@ -118,10 +197,10 @@
                   <td class="px-2 mobile:px-4 py-5">
                     <span
                       appOrderStatus
-                      [orderStatus]="order.orderStatus"
+                      [orderStatus]="order.deliveryStatus"
                       class="px-2 py-1 rounded-full text-[10px] font-semibold whitespace-nowrap"
                     >
-                      {{ order.orderStatus }}
+                      {{ order.deliveryStatus }}
                     </span>
                   </td>
                   <td class="px-2 mobile:px-4 py-2">
@@ -164,7 +243,7 @@
           >
             <pagination-template
               #p="paginationApi"
-              [id]="config.id!"
+              [id]="config()?.id!"
               (pageChange)="pageChange($event)"
               class="h-fit min-h-auto"
             >
@@ -219,79 +298,97 @@
             </pagination-template>
           </div>
 
-          <!--          <div-->
-          <!--            class="flex mobile:hidden items-center justify-between space-x-3 max-w-[230px] mx-auto mt-10"-->
-          <!--          >-->
-          <!--            <button-->
-          <!--              class="h-8 w-8 flex items-center border-0 outline-0 justify-center cursor-pointer disabled:opacity-30"-->
-          <!--              [disabled]="config()?.currentPage! === 1"-->
-          <!--              (click)="pageChange(config()?.currentPage! - 1)"-->
-          <!--              [attr.aria-label]="'Previous page'"-->
-          <!--            >-->
-          <!--              <svg-->
-          <!--                xmlns="http://www.w3.org/2000/svg"-->
-          <!--                viewBox="0 0 448 512"-->
-          <!--                class="w-6"-->
-          <!--              >-->
-          <!--                <path-->
-          <!--                  d="M7.4 273.4C2.7 268.8 0 262.6 0 256s2.7-12.8 7.4-17.4l176-168c9.6-9.2 24.8-8.8 33.9 .8s8.8 24.8-.8 33.9L83.9 232 424 232c13.3 0 24 10.7 24 24s-10.7 24-24 24L83.9 280 216.6 406.6c9.6 9.2 9.9 24.3 .8 33.9s-24.3 9.9-33.9 .8l-176-168z"-->
-          <!--                />-->
-          <!--              </svg>-->
-          <!--            </button>-->
+          <div
+            class="flex mobile:hidden items-center justify-between space-x-3 max-w-[230px] mx-auto mt-10"
+          >
+            <button
+              class="h-8 w-8 flex items-center border-0 outline-0 justify-center cursor-pointer disabled:opacity-30"
+              [disabled]="config()?.currentPage! === 1"
+              (click)="pageChange(config()?.currentPage! - 1)"
+              [attr.aria-label]="'Previous page'"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 448 512"
+                class="w-6"
+              >
+                <path
+                  d="M7.4 273.4C2.7 268.8 0 262.6 0 256s2.7-12.8 7.4-17.4l176-168c9.6-9.2 24.8-8.8 33.9 .8s8.8 24.8-.8 33.9L83.9 232 424 232c13.3 0 24 10.7 24 24s-10.7 24-24 24L83.9 280 216.6 406.6c9.6 9.2 9.9 24.3 .8 33.9s-24.3 9.9-33.9 .8l-176-168z"
+                />
+              </svg>
+            </button>
 
-          <!--            <div-->
-          <!--              class="p-2 bg-primary bg-opacity-60 h-12 rounded flex items-center justify-center space-x-2 text-white font-medium"-->
-          <!--            >-->
-          <!--              <span-->
-          <!--                class="h-8 flex items-center justify-center px-5 bg-primary rounded"-->
-          <!--                >{{ config()?.currentPage! }}</span-->
-          <!--              >-->
-          <!--              <div class="space-x-1">-->
-          <!--                <span>of</span>-->
-          <!--                <span>{{ productArray.totalPages }}</span>-->
-          <!--              </div>-->
-          <!--            </div>-->
+            <div
+              class="p-2 bg-primary bg-opacity-60 h-12 rounded flex items-center justify-center space-x-2 text-white font-medium"
+            >
+              <span
+                class="h-8 flex items-center justify-center px-5 bg-primary rounded"
+                >{{ config()?.currentPage! }}</span
+              >
+              <div class="space-x-1">
+                <span>of</span>
+                <span>{{ orders.totalPages }}</span>
+              </div>
+            </div>
 
-          <!--            <button-->
-          <!--              class="h-8 w-8 flex items-center border-0 outline-0 justify-center cursor-pointer disabled:opacity-30"-->
-          <!--              [disabled]="config()?.currentPage! === productArray.totalPages"-->
-          <!--              (click)="pageChange(config()?.currentPage! + 1)"-->
-          <!--              [attr.aria-label]="'Next page'"-->
-          <!--            >-->
-          <!--              <svg-->
-          <!--                xmlns="http://www.w3.org/2000/svg"-->
-          <!--                viewBox="0 0 448 512"-->
-          <!--                class="w-6 rotate-180"-->
-          <!--              >-->
-          <!--                <path-->
-          <!--                  d="M7.4 273.4C2.7 268.8 0 262.6 0 256s2.7-12.8 7.4-17.4l176-168c9.6-9.2 24.8-8.8 33.9 .8s8.8 24.8-.8 33.9L83.9 232 424 232c13.3 0 24 10.7 24 24s-10.7 24-24 24L83.9 280 216.6 406.6c9.6 9.2 9.9 24.3 .8 33.9s-24.3 9.9-33.9 .8l-176-168z"-->
-          <!--                />-->
-          <!--              </svg>-->
-          <!--            </button>-->
-          <!--          </div>-->
+            <button
+              class="h-8 w-8 flex items-center border-0 outline-0 justify-center cursor-pointer disabled:opacity-30"
+              [disabled]="config()?.currentPage! === orders.totalPages"
+              (click)="pageChange(config()?.currentPage! + 1)"
+              [attr.aria-label]="'Next page'"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 448 512"
+                class="w-6 rotate-180"
+              >
+                <path
+                  d="M7.4 273.4C2.7 268.8 0 262.6 0 256s2.7-12.8 7.4-17.4l176-168c9.6-9.2 24.8-8.8 33.9 .8s8.8 24.8-.8 33.9L83.9 232 424 232c13.3 0 24 10.7 24 24s-10.7 24-24 24L83.9 280 216.6 406.6c9.6 9.2 9.9 24.3 .8 33.9s-24.3 9.9-33.9 .8l-176-168z"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
     } @else {
-      <div
-        class="flex flex-col items-center text-center w-full mobile:w-1/2 mx-auto space-y-1 mt-8 pb-[200px]"
-      >
-        <div>
-          <h2 class="text-type_title text-2xl mobile:text-3xl font-semibold">
-            Your order list empty!
-          </h2>
-
-          <p class="text-sm mobile:text-lg text-type_caption mt-1 mb-10">
-            Looks like you haven’t paced any orders yet.
-          </p>
-
-          <button
-            class="w-full rounded-full text-white font-medium bg-primary py-2 h-12 block"
-            routerLink="/"
-          >
-            Continue Shopping
-          </button>
+      @if (orderQueried()) {
+        <div
+          class="flex flex-col items-center text-center w-full mobile:w-1/2 mx-auto space-y-1 mt-8 pb-[200px]"
+        >
+          <div>
+            <p class="text-sm mobile:text-lg text-type_caption mt-1 mb-10">
+              No orders matched your search!
+            </p>
+            <button
+              class="w-full rounded-full text-white font-medium bg-primary py-2 h-12 block"
+              (click)="onReturn()"
+            >
+              Return
+            </button>
+          </div>
         </div>
-      </div>
+      } @else {
+        <div
+          class="flex flex-col items-center text-center w-full mobile:w-1/2 mx-auto space-y-1 mt-8 pb-[200px]"
+        >
+          <div>
+            <h2 class="text-type_title text-2xl mobile:text-3xl font-semibold">
+              Your order list empty!
+            </h2>
+
+            <p class="text-sm mobile:text-lg text-type_caption mt-1 mb-10">
+              Looks like you haven’t paced any orders yet.
+            </p>
+
+            <button
+              class="w-full rounded-full text-white font-medium bg-primary py-2 h-12 block"
+              routerLink="/"
+            >
+              Continue Shopping
+            </button>
+          </div>
+        </div>
+      }
     }
   } @else {
     <div class="w-full space-y-2 mt-5">

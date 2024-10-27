@@ -71,11 +71,15 @@ body {
   }
 }
 
-.p-menu {
+.header-menu {
   position: absolute;
   top: 55px !important;
   right: 0;
   z-index: 1010000000;
+  background-color: theme('colors.bg_subtle');
+}
+
+.user-order-menu {
   background-color: theme('colors.bg_subtle');
 }
 

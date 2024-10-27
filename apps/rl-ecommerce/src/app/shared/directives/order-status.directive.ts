@@ -20,24 +20,24 @@ export class OrderStatusDirective implements OnInit {
   ngOnInit() {
     this.renderer.addClass(
       this.el.nativeElement,
-      this.getStatusClass(this.orderStatus())
+      this.getStatusClass(this.orderStatus()),
     );
 
     this.renderer.addClass(
       this.el.nativeElement,
-      this.getTextColor(this.orderStatus())
+      this.getTextColor(this.orderStatus()),
     );
   }
 
   getStatusClass(status: string): string {
     switch (status.toLowerCase()) {
-      case 'payment pending':
+      case 'pending':
         return 'bg-pink-200';
       case 'payment confirmed':
         return 'bg-blue-200';
-      case 'packing order':
+      case 'packing':
         return 'bg-purple-200';
-      case 'order delivered':
+      case 'delivered':
         return 'bg-green-200';
       default:
         return 'bg-gray-200';

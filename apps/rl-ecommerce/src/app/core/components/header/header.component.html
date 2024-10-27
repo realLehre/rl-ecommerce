@@ -171,7 +171,12 @@
   </div>
 </div>
 
-<p-menu #menu [popup]="true" [appendTo]="menuContainer">
+<p-menu
+  #menu
+  [popup]="true"
+  [appendTo]="menuContainer"
+  styleClass="header-menu"
+>
   <ng-template pTemplate="start">
     <div class="py-3">
       @if (!user()) {

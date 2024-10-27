@@ -45,6 +45,8 @@ model Order {
 
   @@index([userId])
   @@index([deliveryStatus])
+  @@index([orderStatus])
+  @@index([createdAt])
 }
 
 model DeliveryEvent {
@@ -162,6 +164,8 @@ enum OrderStatus {
   PENDING
   CONFIRMED
   FAILED
+  DELIVERED
+  PACKED
 }
 
 enum DeliveryStatus {

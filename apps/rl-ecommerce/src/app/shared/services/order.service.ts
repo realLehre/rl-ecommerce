@@ -2,10 +2,11 @@ import { inject, Injectable, signal } from '@angular/core';
 import { UserAccountService } from '../../features/user/user-account/services/user-account.service';
 import { IAddress } from '../../features/user/models/address.interface';
 import { ICart, ICartItems } from '../models/cart.interface';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { IOrder, IOrderResponse } from '../models/order.interface';
 import { of, tap } from 'rxjs';
+import { PaginationInstance } from 'ngx-pagination';
 
 @Injectable({
   providedIn: 'root',
@@ -17,17 +18,60 @@ export class OrderService {
   user = this.userService.user;
   orderSignal = signal<IOrderResponse | null>(null);
   activeOrder = signal<IOrder | null>(null);
+  paginationConfig = signal<PaginationInstance | null>(null);
+  orderQueried = signal(false);
 
   constructor() {}
 
-  getOrder() {
+  getOrder(filters: {
+    minPrice?: number;
+    maxPrice?: number;
+    deliveryStatus?: string;
+    itemsToShow: number;
+    page?: number;
+    orderId?: string;
+  }) {
+    this.orderQueried.set(false);
+    let params = new HttpParams();
+    if (filters?.minPrice) {
+      params = params.set('minPrice', filters.minPrice.toString());
+      this.orderQueried.set(true);
+    }
+    if (filters?.maxPrice) {
+      params = params.set('maxPrice', filters.maxPrice.toString());
+      this.orderQueried.set(true);
+    }
+    if (filters?.deliveryStatus) {
+      params = params.set('deliveryStatus', filters.deliveryStatus);
+      this.orderQueried.set(true);
+    }
+    if (filters?.page) {
+      params = params.set('page', filters.page);
+      this.orderQueried.set(true);
+    }
+    if (filters?.itemsToShow) {
+      params = params.set('pageSize', filters.itemsToShow);
+      this.orderQueried.set(true);
+    }
+    if (filters?.orderId) {
+      params = params.set('orderId', filters.orderId);
+      this.orderQueried.set(true);
+    }
     return this.orderSignal()
       ? of(this.orderSignal())
-      : this.http.get<IOrderResponse>(`${this.apiUrl}/${this.user()?.id}`).pipe(
-          tap((res) => {
-            this.orderSignal.set(res);
-          }),
-        );
+      : this.http
+          .get<IOrderResponse>(`${this.apiUrl}/${this.user()?.id}`, { params })
+          .pipe(
+            tap((res) => {
+              this.orderSignal.set(res);
+              this.paginationConfig.set({
+                currentPage: res.currentPage,
+                itemsPerPage: filters.itemsToShow,
+                totalItems: res.totalItems,
+                id: 'userOrderPagination',
+              });
+            }),
+          );
   }
 
   getOrderById(id: string) {

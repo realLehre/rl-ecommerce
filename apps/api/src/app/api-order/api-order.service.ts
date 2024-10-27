@@ -24,6 +24,7 @@ export class ApiOrderService {
       maxPrice?: number;
       page?: number;
       pageSize?: number;
+      deliveryStatus?: any;
     },
   ) {
     const page = filters.page ?? 1;
@@ -35,6 +36,11 @@ export class ApiOrderService {
         totalAmount: {
           gte: filters.minPrice || undefined,
           lte: filters.maxPrice || undefined,
+        },
+        deliveryStatus: filters.deliveryStatus || undefined,
+        id: {
+          contains: filters.orderId,
+          mode: 'insensitive',
         },
       },
       include: {
@@ -100,7 +106,7 @@ export class ApiOrderService {
               },
               {
                 remark: 'Order confirmed',
-                status: null,
+                status: 'CONFIRMED',
               },
               {
                 remark: 'Order assigned for delivery',
