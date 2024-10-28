@@ -1,71 +1,101 @@
 <div>
-  <div
-    class="flex items-center justify-between flex-wrap gap-x-6 gap-y-2 mb-5 px-4"
-  >
-    <div class="max-w-[300px] min-w-[170px] grow h-8 relative">
-      <img
-        src="assets/images/icons/search.svg"
-        alt=""
-        class="absolute left-3 top-1/2 -translate-y-1/2 w-5"
-      />
-      <input
-        class="w-full focus:outline-0 rounded-full bg-bg_subtle border border-border_subtle h-full pl-10 text-type_caption font-medium placeholder:text-type_caption"
-        placeholder="Search"
-        [formControl]="searchInput"
-        id="toTop"
-      />
-    </div>
-
-    <p-menu #menu [popup]="true" styleClass="user-order-menu">
-      <ng-template pTemplate="start">
-        <div class="py-3 px-3">
-          <div class="flex items-center justify-between space-x-3">
-            <h3 class="text-base text-type_title">Filters</h3>
-            <button class="bg-transparent text-primary text-sm py-2">
+  <p-menu #menu [popup]="true" styleClass="user-order-menu">
+    <ng-template pTemplate="start">
+      <div class="py-3 px-3 w-[250px]">
+        <div class="flex items-center justify-between space-x-3">
+          <h3 class="text-base text-type_title">Filters</h3>
+          @if (filterNumber) {
+            <button
+              class="bg-transparent text-primary font-medium text-sm py-2"
+              (click)="onClearFilter()"
+            >
               Clear
             </button>
-          </div>
+          }
+        </div>
 
+        <div class="mt-2">
           <div>
             <p class="text-sm text-type_title mb-1">Status</p>
-            <div class="card flex justify-content-center">
+            <div class="w-full">
               <p-dropdown
                 [options]="deliveryStatus"
                 [(ngModel)]="selectedStatus"
                 (ngModelChange)="onChangeOrderStatus($event)"
                 optionLabel="name"
                 placeholder="Select status"
+                styleClass="deliveryStatusDropdown"
               />
             </div>
           </div>
-        </div>
-      </ng-template>
-    </p-menu>
-    <div
-      class="h-8 border-border_subtle border-[2px] px-2 bg-transparent rounded-full text-type_caption flex items-center space-x-2 cursor-pointer"
-      #menuContainer
-      (click)="menu.toggle($event)"
-    >
-      <i class="fa fa-filter"></i>
-      <span>Filter</span>
-    </div>
 
-    <!--          <select-->
-    <!--            class="h-8 border-border_subtle border-[2px] px-2 bg-transparent rounded-full text-type_caption focus:outline-none"-->
-    <!--            [(ngModel)]="selectedStatus"-->
-    <!--            (ngModelChange)="onChangeOrderStatus($event)"-->
-    <!--          >-->
-    <!--            <option selected value="ALL">All status</option>-->
-    <!--            <option value="CONFIRMED">Confirmed</option>-->
-    <!--            <option value="PACKED">Packed</option>-->
-    <!--            <option value="DELIVERED">Delivered</option>-->
-    <!--          </select>-->
-  </div>
+          <div class="price-slider mt-4 mb-5">
+            <p class="text-sm text-type_title mb-1">Price</p>
+            <div class="text-type_grey text-sm mb-2">
+              <span>₦{{ rangeValues[0] | number }}</span>
+              <span> - </span>
+              <span>₦{{ rangeValues[1] | number }}</span>
+            </div>
+            <div class="card flex justify-content-center"></div>
+            <p-slider
+              [(ngModel)]="rangeValues"
+              [min]="1000"
+              [max]="1000000"
+              [step]="500"
+              [range]="true"
+              styleClass="w-10rem"
+            />
+          </div>
+
+          <div class="">
+            <p class="text-sm text-type_title mb-1">Date range</p>
+            <div class="relative">
+              <p-calendar
+                [(ngModel)]="rangeDates"
+                (ngModelChange)="onDateChanged()"
+                selectionMode="range"
+                dateFormat="dd/mm/yy"
+                [readonlyInput]="true"
+                styleClass="orderDate"
+                class="w-full"
+                [showIcon]="true"
+              >
+                <ng-template
+                  pTemplate="inputicon"
+                  let-clickCallBack="clickCallBack"
+                >
+                  <span (click)="clickCallBack($event)">
+                    <i class="fa fa-calendar"></i>
+                  </span>
+                </ng-template>
+              </p-calendar>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between mt-8">
+          <button
+            class="rounded-md font-medium border-primary border-[2px] text-primary py-2 h-8 w-[80px] flex items-center justify-center px-4"
+            (click)="menu.toggle($event)"
+          >
+            Cancel
+          </button>
+          <button
+            class="rounded-md text-white font-medium bg-primary py-2 px-4 h-8 w-[80px] flex items-center justify-center"
+            (click)="onApplyFilter()"
+          >
+            Apply
+          </button>
+        </div>
+      </div>
+    </ng-template>
+  </p-menu>
+
   @if (!isLoading()) {
     @if (orders.orders.length) {
       <div class="border-[1px] border-border_subtle rounded-lg mt-5 py-5">
         <div
-          class="flex items-center justify-between flex-wrap gap-x-6 gap-y-2 mb-5 px-4"
+          class="flex items-center justify-between gap-x-6 gap-y-2 mb-5 px-4"
         >
           <div class="max-w-[300px] min-w-[170px] grow h-8 relative">
             <img
@@ -81,22 +111,19 @@
             />
           </div>
 
-          <div
-            class="h-8 border-border_subtle border-[2px] px-2 bg-transparent rounded-full text-type_caption flex items-center space-x-2"
+          <button
+            class="h-8 border-border_subtle border-[2px] px-2 bg-transparent rounded-full text-type_caption flex items-center space-x-2 relative"
+            (click)="menu.toggle($event)"
           >
+            @if (filterNumber) {
+              <span
+                class="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center bg-primary text-white p-2 text-xs font-medium rounded-full"
+                >{{ filterNumber }}</span
+              >
+            }
             <i class="fa fa-filter"></i>
             <span>Filter</span>
-          </div>
-          <!--          <select-->
-          <!--            class="h-8 border-border_subtle border-[2px] px-2 bg-transparent rounded-full text-type_caption focus:outline-none"-->
-          <!--            [(ngModel)]="selectedStatus"-->
-          <!--            (ngModelChange)="onChangeOrderStatus($event)"-->
-          <!--          >-->
-          <!--            <option selected value="ALL">All status</option>-->
-          <!--            <option value="CONFIRMED">Confirmed</option>-->
-          <!--            <option value="PACKED">Packed</option>-->
-          <!--            <option value="DELIVERED">Delivered</option>-->
-          <!--          </select>-->
+          </button>
         </div>
 
         <div class="overflow-x-auto">
@@ -175,10 +202,7 @@
               </tr>
             </thead>
             <tbody>
-              @for (
-                order of orders.orders | paginate: config()!;
-                track order.id
-              ) {
+              @for (order of orders.orders | paginate: config; track order.id) {
                 <tr
                   class="border-b border-border_subtle text-type_title_gray text-xs mobile:text-sm font-medium"
                 >
@@ -243,7 +267,7 @@
           >
             <pagination-template
               #p="paginationApi"
-              [id]="config()?.id!"
+              [id]="config.id!"
               (pageChange)="pageChange($event)"
               class="h-fit min-h-auto"
             >
@@ -303,8 +327,8 @@
           >
             <button
               class="h-8 w-8 flex items-center border-0 outline-0 justify-center cursor-pointer disabled:opacity-30"
-              [disabled]="config()?.currentPage! === 1"
-              (click)="pageChange(config()?.currentPage! - 1)"
+              [disabled]="config.currentPage === 1"
+              (click)="pageChange(config.currentPage - 1)"
               [attr.aria-label]="'Previous page'"
             >
               <svg
@@ -323,7 +347,7 @@
             >
               <span
                 class="h-8 flex items-center justify-center px-5 bg-primary rounded"
-                >{{ config()?.currentPage! }}</span
+                >{{ config.currentPage }}</span
               >
               <div class="space-x-1">
                 <span>of</span>
@@ -333,8 +357,8 @@
 
             <button
               class="h-8 w-8 flex items-center border-0 outline-0 justify-center cursor-pointer disabled:opacity-30"
-              [disabled]="config()?.currentPage! === orders.totalPages"
-              (click)="pageChange(config()?.currentPage! + 1)"
+              [disabled]="config.currentPage === orders.totalPages"
+              (click)="pageChange(config.currentPage + 1)"
               [attr.aria-label]="'Next page'"
             >
               <svg

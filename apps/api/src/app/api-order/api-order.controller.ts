@@ -11,6 +11,8 @@ export class ApiOrderController {
     @Query('orderId') orderId?: string,
     @Query('minPrice') minPrice?: string,
     @Query('maxPrice') maxPrice?: string,
+    @Query('minDate') minDate?: any,
+    @Query('maxDate') maxDate?: any,
     @Query('page') page?: string,
     @Query('pageSize') pageSize?: string,
     @Query('deliveryStatus') deliveryStatus?: string,
@@ -22,6 +24,8 @@ export class ApiOrderController {
       page: page ? parseInt(page) : undefined,
       pageSize: pageSize ? parseInt(pageSize) : undefined,
       deliveryStatus,
+      minDate,
+      maxDate,
     });
   }
 

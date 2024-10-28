@@ -22,6 +22,8 @@ export class ApiOrderService {
       orderId?: string;
       minPrice?: number;
       maxPrice?: number;
+      minDate?: any;
+      maxDate?: any;
       page?: number;
       pageSize?: number;
       deliveryStatus?: any;
@@ -36,6 +38,10 @@ export class ApiOrderService {
         totalAmount: {
           gte: filters.minPrice || undefined,
           lte: filters.maxPrice || undefined,
+        },
+        createdAt: {
+          gte: filters.minDate || undefined,
+          lte: filters.maxDate || undefined,
         },
         deliveryStatus: filters.deliveryStatus || undefined,
         id: {

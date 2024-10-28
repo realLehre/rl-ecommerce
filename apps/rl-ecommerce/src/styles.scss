@@ -81,6 +81,7 @@ body {
 
 .user-order-menu {
   background-color: theme('colors.bg_subtle');
+  width: 250px;
 }
 
 .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-focus {
@@ -94,6 +95,22 @@ body {
 
 .p-radiobutton .p-radiobutton-box.p-highlight {
   background-color: theme('colors.primary');
+}
+
+.deliveryStatusDropdown {
+  width: 100% !important;
+  padding: 2px;
+
+  & .p-dropdown-item {
+    padding: 4px 8px !important;
+  }
+}
+
+.orderDate {
+  & input {
+    width: 100% !important;
+    padding: 2px;
+  }
 }
 
 ::-webkit-scrollbar {

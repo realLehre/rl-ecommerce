@@ -18,7 +18,7 @@ export class OrderService {
   user = this.userService.user;
   orderSignal = signal<IOrderResponse | null>(null);
   activeOrder = signal<IOrder | null>(null);
-  paginationConfig = signal<PaginationInstance | null>(null);
+
   orderQueried = signal(false);
 
   constructor() {}
@@ -30,6 +30,8 @@ export class OrderService {
     itemsToShow: number;
     page?: number;
     orderId?: string;
+    minDate?: any;
+    maxDate?: any;
   }) {
     this.orderQueried.set(false);
     let params = new HttpParams();
@@ -57,6 +59,14 @@ export class OrderService {
       params = params.set('orderId', filters.orderId);
       this.orderQueried.set(true);
     }
+    if (filters?.minDate) {
+      params = params.set('minDate', filters.minDate);
+      this.orderQueried.set(true);
+    }
+    if (filters?.maxDate) {
+      params = params.set('maxDate', filters.maxDate);
+      this.orderQueried.set(true);
+    }
     return this.orderSignal()
       ? of(this.orderSignal())
       : this.http
@@ -64,12 +74,6 @@ export class OrderService {
           .pipe(
             tap((res) => {
               this.orderSignal.set(res);
-              this.paginationConfig.set({
-                currentPage: res.currentPage,
-                itemsPerPage: filters.itemsToShow,
-                totalItems: res.totalItems,
-                id: 'userOrderPagination',
-              });
             }),
           );
   }
@@ -105,5 +109,13 @@ export class OrderService {
     return cart.cartItems.reduce((acc: number, item: ICartItems) => {
       return (acc += item.shippingCost);
     }, 0);
+  }
+
+  formatDate(date: Date) {
+    return new Date(date).toISOString();
+  }
+
+  formatDateToLocale(date: Date) {
+    return new Date(date);
   }
 }
