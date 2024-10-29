@@ -88,9 +88,9 @@ export class ProductDetailsComponent implements OnInit {
         next: (res) => {
           this.isAddingToCart.set(false);
           const cartTotal = this.cartService.cartTotal;
-          if (cartTotal()) {
-            this.cartService.cartTotal.set(cartTotal()! + 1);
-          }
+
+          this.cartService.cartTotal.set(cartTotal()! + 1);
+
           this.cartService.cartSignal.set(null);
           this.cartService.getCart().subscribe();
           this.toast.showToast({

@@ -7,6 +7,7 @@ interface PaystackPopOptions {
   callback?: (response: any) => void;
   onClose?: () => void;
   metadata?: any;
+  channels: any;
 }
 
 declare class PaystackPop {

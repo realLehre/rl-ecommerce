@@ -65,16 +65,19 @@ export class CheckoutComponent {
           next: (res) => {
             this.isInitiatingPayment.set(false);
 
-            const total =
-              this.orderService.getTotalItemAmount(this.cart()) +
-              this.orderService.getShippingCost(this.cart());
-
+            const total = Math.round(
+              (this.orderService.getTotalItemAmount(this.cart()) +
+                this.orderService.getShippingCost(this.cart())) *
+                100,
+            );
             const handler = new PaystackPop();
 
             handler.newTransaction({
               key: 'pk_test_b95a88357b0b5b7c4e20ccceb1ac928bb2f9a5bf',
-              email: 'beed@beed.com',
-              amount: total * 100,
+              email: 'hhh@dudd.com',
+              amount: Math.min(total, 10000000),
+              currency: 'NGN',
+              channels: ['card'],
               callback: (response) => {
                 this.onPlaceOrder();
               },
@@ -103,16 +106,17 @@ export class CheckoutComponent {
       })
       .subscribe({
         next: (res) => {
+          this.router.navigate(['/', 'orders']);
           this.cartService.cartSignal.set(null);
           this.cartService.cartTotal.set(null);
           this.cartService.getCart().subscribe();
+          this.orderService.orderSignal.set(null);
           localStorage.removeItem(this.cartService.CART_KEY);
           this.toast.showToast({
             type: 'success',
             message: 'Order placed successfully!',
           });
           this.isLoading.set(false);
-          this.router.navigate(['/', 'orders']);
         },
         error: (err) => {
           this.toast.showToast({
