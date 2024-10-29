@@ -100,6 +100,7 @@ export class UserOrdersTableComponent implements OnInit {
   ];
   selectedStatus!: { name: string; code: string };
   rangeValues = [2000, 10000];
+  rangeValueChanged = signal(false);
   rangeDates: any[] = [];
   FILTER_STORAGE_KEY = 'sjs29shdndj20snshgff7';
   @ViewChild('menu') menu!: Menu;
@@ -186,6 +187,14 @@ export class UserOrdersTableComponent implements OnInit {
     this.filter = { ...this.filter, page: 1, deliveryStatus: status.code };
   }
 
+  onRangeValueChanged(value: any[]) {
+    this.filter = {
+      ...this.filter,
+      minPrice: value[0],
+      maxPrice: value[1],
+    };
+  }
+
   pageChange(event: any) {
     this.filter = { ...this.filter, page: event };
     this.reFetchOrder();
@@ -196,7 +205,6 @@ export class UserOrdersTableComponent implements OnInit {
   }
 
   onDateChanged() {
-    console.log(this.rangeDates);
     if (this.rangeDates[0] && this.rangeDates[1]) {
       let dates = [...this.rangeDates];
       dates = dates.map((date) => this.orderService.formatDate(date));
@@ -210,11 +218,6 @@ export class UserOrdersTableComponent implements OnInit {
   }
 
   onApplyFilter() {
-    this.filter = {
-      ...this.filter,
-      minPrice: this.rangeValues[0],
-      maxPrice: this.rangeValues[1],
-    };
     this.filterNumber = this.findFilterNumber();
     this.reFetchOrder();
     this.menu.hide();

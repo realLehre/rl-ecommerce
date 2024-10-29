@@ -5,6 +5,7 @@ import {
   signal,
   WritableSignal,
 } from '@angular/core';
+
 import { BreadcrumbComponent } from '../../shared/components/breadcrumb/breadcrumb.component';
 import { CheckoutAddressComponent } from './checkout-address/checkout-address.component';
 import { OrderSummaryComponent } from './order-summary/order-summary.component';
@@ -16,6 +17,7 @@ import { Router, RouterLink } from '@angular/router';
 import { OrderService } from '../../shared/services/order.service';
 import { ToastService } from '../../shared/services/toast.service';
 import { LoaderComponent } from '../../shared/components/loader/loader.component';
+import { PaymentService } from '../../shared/services/payment.service';
 
 @Component({
   selector: 'app-checkout',
@@ -35,12 +37,14 @@ import { LoaderComponent } from '../../shared/components/loader/loader.component
 export class CheckoutComponent {
   private cartService = inject(CartService);
   private orderService = inject(OrderService);
+  private paymentService = inject(PaymentService);
   private toast = inject(ToastService);
   private router = inject(Router);
   cart = this.cartService.cartSignal as WritableSignal<ICart>;
   selectedAddress!: IAddress;
   selectPaymentMethod!: string;
   isLoading = signal(false);
+  isInitiatingPayment = signal(false);
   onSelectedAddress(address: IAddress) {
     this.selectedAddress = address;
   }
@@ -49,7 +53,47 @@ export class CheckoutComponent {
     this.selectPaymentMethod = method;
   }
 
-  onPay() {
+  onInitiateOrder() {
+    if (this.selectPaymentMethod == 'pay on delivery') {
+      this.onPlaceOrder();
+    } else {
+      this.isInitiatingPayment.set(true);
+
+      this.paymentService
+        .initiatePayment({ amount: 100000, email: 'beed@beed.com' })
+        .subscribe({
+          next: (res) => {
+            this.isInitiatingPayment.set(false);
+
+            const total =
+              this.orderService.getTotalItemAmount(this.cart()) +
+              this.orderService.getShippingCost(this.cart());
+
+            const handler = new PaystackPop();
+
+            handler.newTransaction({
+              key: 'pk_test_b95a88357b0b5b7c4e20ccceb1ac928bb2f9a5bf',
+              email: 'beed@beed.com',
+              amount: total * 100,
+              callback: (response) => {
+                this.onPlaceOrder();
+              },
+              onClose: () => {},
+            });
+          },
+          error: (err) => {
+            this.isInitiatingPayment.set(false);
+
+            this.toast.showToast({
+              type: 'error',
+              message: err.error.message,
+            });
+          },
+        });
+    }
+  }
+
+  onPlaceOrder() {
     this.isLoading.set(true);
     this.orderService
       .placeOrder({

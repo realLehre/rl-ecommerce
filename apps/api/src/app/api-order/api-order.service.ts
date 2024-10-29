@@ -49,6 +49,9 @@ export class ApiOrderService {
           mode: 'insensitive',
         },
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
       include: {
         user: true,
         deliveryEvents: true,

@@ -39,9 +39,10 @@
             <div class="card flex justify-content-center"></div>
             <p-slider
               [(ngModel)]="rangeValues"
+              (ngModelChange)="onRangeValueChanged($event)"
               [min]="1000"
-              [max]="1000000"
-              [step]="500"
+              [max]="10000000"
+              [step]="5000"
               [range]="true"
               styleClass="w-10rem"
             />

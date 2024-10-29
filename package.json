@@ -21,6 +21,7 @@
     "@nestjs/common": "^10.0.2",
     "@nestjs/core": "^10.0.2",
     "@nestjs/platform-express": "^10.0.2",
+    "@paystack/inline-js": "^2.22.1",
     "@prisma/client": "^5.21.0",
     "@supabase/supabase-js": "^2.45.4",
     "axios": "^1.6.0",

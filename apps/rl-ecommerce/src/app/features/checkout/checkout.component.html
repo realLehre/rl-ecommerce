@@ -31,9 +31,9 @@
         <button
           class="w-full flex items-center justify-center space-x-3 rounded-full text-white font-medium bg-primary hover:bg-opacity-75 py-2 h-12 disabled:bg-opacity-25 mt-10"
           [disabled]="!selectPaymentMethod || !selectedAddress"
-          (click)="onPay()"
+          (click)="onInitiateOrder()"
         >
-          @if (isLoading()) {
+          @if (isLoading() || isInitiatingPayment()) {
             <app-loader
               [customStyle]="{ width: '24px', border: '3px solid #fff' }"
             />
