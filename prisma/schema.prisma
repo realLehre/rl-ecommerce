@@ -34,6 +34,7 @@ model Order {
   shippingInfo   Address         @relation(fields: [shippingInfoId], references: [id])
   shippingInfoId String
   orderAmount    Int
+  orderItems     OrderItem[]
   shippingCost   Int
   totalAmount    Int
   paymentMethod  String
@@ -47,6 +48,18 @@ model Order {
   @@index([deliveryStatus])
   @@index([orderStatus])
   @@index([createdAt])
+}
+
+model OrderItem {
+  id        String         @id @default(uuid())
+  order     Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId   String
+  product   Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
+  unit      Int
+  total     Int
+  rating    ProductRating?
+  createdAt DateTime       @default(now())
 }
 
 model DeliveryEvent {
@@ -121,6 +134,7 @@ model Product {
   categoryId    String
   category      Category        @relation(fields: [categoryId], references: [id])
   subCategoryId String?
+  orderItems    OrderItem[]
   subCategory   SubCategory?    @relation("SubCategoryProducts", fields: [subCategoryId], references: [id])
   ratings       ProductRating[] @relation("ProductProductRatings")
   cartItems     CartItem[]      @relation("ProductCartItem")
@@ -150,14 +164,21 @@ model SubCategory {
 }
 
 model ProductRating {
-  id        String   @id @default(uuid())
-  rating    Int      @default(0)
-  comment   String?
-  createdAt DateTime @default(now())
-  product   Product  @relation("ProductProductRatings", fields: [productId], references: [id], onDelete: Cascade)
-  productId String
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
+  id          String    @id @default(uuid())
+  rating      Int       @default(0)
+  title       String
+  comment     String?
+  createdAt   DateTime  @default(now())
+  product     Product   @relation("ProductProductRatings", fields: [productId], references: [id], onDelete: Cascade)
+  productId   String
+  orderItem   OrderItem @relation(fields: [orderItemId], references: [id])
+  orderItemId String    @unique
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String
+
+  @@index([productId])
+  @@index([orderItemId])
+  @@index([userId])
 }
 
 enum OrderStatus {

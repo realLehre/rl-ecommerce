@@ -14,10 +14,22 @@
   @if (order()) {
     <div class="w-full min-[700px]:w-[70%] max-w-[800px] mt-8">
       <div class="text-center">
-        <h3 class="text-lg text-[#2E7D32] mb-1 font-semibold">Verified</h3>
-        <p class="text-sm text-type_grey">
-          Your order has been verified, we are confirming your payment
-        </p>
+        @switch (order()?.deliveryStatus) {
+          @case ('PACKED') {
+            <h3 class="text-lg text-[#2E7D32] mb-1 font-semibold">Packed</h3>
+            <p class="text-sm text-type_grey">
+              Your order has been packed, to be delivered soon.
+            </p>
+          }
+          @case ('DELIVERED') {
+            <h3 class="text-lg text-[#2E7D32] mb-1 font-semibold">Delivered</h3>
+            <p class="text-sm text-type_grey">Your order has been delivered.</p>
+          }
+          @default {
+            <h3 class="text-lg text-[#2E7D32] mb-1 font-semibold">Verified</h3>
+            <p class="text-sm text-type_grey">Your order has been verified.</p>
+          }
+        }
       </div>
 
       <div class="my-8">

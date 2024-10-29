@@ -1,6 +1,44 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 
+interface ICart {
+  id: string;
+  userId: string;
+  subTotal: number;
+  shippingCost: number;
+  createdAt: string;
+  updatedAt: string;
+  cartItems: ICartItems[];
+}
+interface ICartItemProduct {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  imageUrls: string[];
+  videoUrls: any[];
+  price: number;
+  previousPrice: number;
+  isSoldOut: boolean;
+  unit: number;
+  categoryId: string;
+  subCategoryId: string;
+  createdAt: string;
+  updateAt: string;
+}
+interface ICartItems {
+  id: string;
+  total: number;
+  unit: number;
+  cartId: string;
+  productId: string;
+  shippingCost: number;
+  updatedAt: string;
+  createdAt: string;
+  product: ICartItemProduct;
+  rating?: any;
+}
+
 export interface IOrderBody {
   userId: string;
   cart: any;
@@ -56,6 +94,11 @@ export class ApiOrderService {
         user: true,
         deliveryEvents: true,
         shippingInfo: true,
+        orderItems: {
+          include: {
+            rating: true,
+          },
+        },
       },
       skip,
       take: pageSize,
@@ -89,6 +132,11 @@ export class ApiOrderService {
         deliveryEvents: true,
         user: true,
         shippingInfo: true,
+        orderItems: {
+          include: {
+            rating: true,
+          },
+        },
       },
     });
   }
@@ -99,7 +147,7 @@ export class ApiOrderService {
       return tx.order.create({
         data: {
           userId: data.userId,
-          cartOrder: data.cart,
+          cartOrder: data.cart as any,
           shippingInfoId: data.shippingInfoId,
           orderAmount: data.orderAmount,
           shippingCost: data.shippingCost,
@@ -107,6 +155,13 @@ export class ApiOrderService {
           paymentMethod: data.paymentMethod,
           orderStatus: 'CONFIRMED',
           deliveryStatus: 'PENDING',
+          orderItems: {
+            create: data.cart.cartItems.map((cartItem: any) => ({
+              productId: cartItem.productId,
+              total: cartItem.total,
+              unit: cartItem.unit,
+            })),
+          },
           deliveryEvents: {
             create: [
               {

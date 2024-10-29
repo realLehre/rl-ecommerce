@@ -18,13 +18,15 @@ export class OrderStatusDirective implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    this.renderer.addClass(
+    this.renderer.setStyle(
       this.el.nativeElement,
+      'background-color',
       this.getStatusClass(this.orderStatus()),
     );
 
-    this.renderer.addClass(
+    this.renderer.setStyle(
       this.el.nativeElement,
+      'color',
       this.getTextColor(this.orderStatus()),
     );
   }
@@ -32,13 +34,11 @@ export class OrderStatusDirective implements OnInit {
   getStatusClass(status: string): string {
     switch (status.toLowerCase()) {
       case 'pending':
-        return 'bg-pink-200';
-      case 'payment confirmed':
-        return 'bg-blue-200';
-      case 'packing':
-        return 'bg-purple-200';
+        return '#FDEBF4';
+      case 'packed':
+        return '#E1E2FC';
       case 'delivered':
-        return 'bg-green-200';
+        return '#DBF9E9';
       default:
         return 'bg-gray-200';
     }
@@ -46,16 +46,14 @@ export class OrderStatusDirective implements OnInit {
 
   getTextColor(status: string): string {
     switch (status.toLowerCase()) {
-      case 'payment pending':
-        return 'text-pink-800';
-      case 'payment confirmed':
-        return 'text-blue-800';
-      case 'packing order':
-        return 'text-purple-800';
-      case 'order delivered':
-        return 'text-green-800';
+      case 'pending':
+        return '#8B0E4D';
+      case 'packed':
+        return '#0E138B';
+      case 'delivered':
+        return '#0A8B46';
       default:
-        return 'text-gray-800';
+        return 'bg-gray-200';
     }
   }
 }

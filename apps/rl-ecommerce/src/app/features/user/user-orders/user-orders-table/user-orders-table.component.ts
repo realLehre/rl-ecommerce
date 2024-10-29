@@ -67,7 +67,6 @@ export class UserOrdersTableComponent implements OnInit {
   private toast = inject(ToastService);
   orders!: IOrderResponse;
   isLoading = signal(true);
-
   orderQueried = this.orderService.orderQueried;
   sortUsed: boolean = false;
   sortColumn: keyof IOrder | '' = '';
@@ -155,7 +154,7 @@ export class UserOrdersTableComponent implements OnInit {
           res?.totalItemsInPage!,
           this.totalItemsToShow,
         );
-        this.config.totalItems = res?.totalItemsInPage!;
+        this.config.totalItems = res?.totalItems;
         this.config.currentPage = res?.currentPage!;
         this.isLoading.set(false);
       },
