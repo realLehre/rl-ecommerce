@@ -3,19 +3,14 @@ import {
   Component,
   HostListener,
   inject,
-  OnInit,
-  signal,
 } from '@angular/core';
 import { AddressService } from './services/address.service';
-import { IAddress } from '../models/address.interface';
 import { AddressCardComponent } from './address-card/address-card.component';
 import { AddressFormComponent } from './address-form/address-form.component';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
 import { SkeletonModule } from 'primeng/skeleton';
 import { CanComponentDeactivate } from '../../../shared/guards/has-unsaved-changes.guard';
-import { DialogService } from 'primeng/dynamicdialog';
-import { log } from '@angular-devkit/build-angular/src/builders/ssr-dev-server';
 
 @Component({
   selector: 'app-address',
