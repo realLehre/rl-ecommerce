@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { v4 as uuidv4 } from 'uuid';
+
 import { PrismaService } from '../prisma.service';
 
 interface ICart {
@@ -92,7 +94,6 @@ export class ApiOrderService {
       },
       include: {
         user: true,
-        deliveryEvents: true,
         shippingInfo: true,
         orderItems: {
           include: {
@@ -129,7 +130,6 @@ export class ApiOrderService {
     return this.prisma.order.findUnique({
       where: { id: orderId },
       include: {
-        deliveryEvents: true,
         user: true,
         shippingInfo: true,
         orderItems: {
@@ -162,29 +162,36 @@ export class ApiOrderService {
               unit: cartItem.unit,
             })),
           },
-          deliveryEvents: {
-            create: [
-              {
-                remark: 'Customer paid',
-                status: 'PAID',
-              },
-              {
-                remark: 'Order confirmed',
-                status: 'CONFIRMED',
-              },
-              {
-                remark: 'Order assigned for delivery',
-                status: null,
-              },
-              {
-                remark: 'Order delivered',
-                status: null,
-              },
-            ],
-          },
-        },
-        include: {
-          deliveryEvents: true,
+          deliveryEvents: [
+            {
+              id: uuidv4(),
+              remark: 'Customer paid',
+              status: 'PAID',
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+            },
+            {
+              id: uuidv4(),
+              remark: 'Order confirmed',
+              status: 'CONFIRMED',
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+            },
+            {
+              id: uuidv4(),
+              remark: 'Order assigned for delivery',
+              status: null,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+            },
+            {
+              id: uuidv4(),
+              remark: 'Order delivered',
+              status: null,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+            },
+          ],
         },
       });
     });

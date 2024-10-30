@@ -42,6 +42,7 @@ export class UserOrderDetailsComponent {
 
   loadOrderDetails(event: any) {
     this.order.set(null);
+    this.orderService.orderSignal.set(null);
     this.orderService.getOrderById(this.id).subscribe({
       next: (res) => {
         this.order.set(res);

@@ -15,7 +15,7 @@ export interface IProduct {
   updateAt: string;
   category: ICategory;
   subCategory: ISubCategory;
-  ratings: any[];
+  ratings: IProductRating[];
 }
 export interface ICategory {
   id: string;
@@ -37,4 +37,23 @@ export interface IProductResponse {
   totalItemsInPage: number;
   currentPage: number;
   totalPages: number;
+}
+
+export interface IProductRating {
+  id: string;
+  rating: number;
+  title: string;
+  comment: string;
+  createdAt: string;
+  productId: string;
+  orderItemId: string;
+  userId: string;
+  user: {
+    id: string;
+    email: string;
+    name: string;
+    phoneNumber: string;
+    createdAt: string;
+    updateAt: string;
+  };
 }

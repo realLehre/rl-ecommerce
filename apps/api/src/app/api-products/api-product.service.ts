@@ -21,7 +21,11 @@ export class ApiProductService {
       include: {
         category: true,
         subCategory: true,
-        ratings: true,
+        ratings: {
+          include: {
+            user: true,
+          },
+        },
       },
       where: {
         categoryId: filters.categoryId || undefined,
@@ -71,7 +75,11 @@ export class ApiProductService {
       include: {
         category: true,
         subCategory: true,
-        ratings: true,
+        ratings: {
+          include: {
+            user: true,
+          },
+        },
       },
     });
   }

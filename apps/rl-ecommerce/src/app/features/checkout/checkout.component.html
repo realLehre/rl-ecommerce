@@ -29,8 +29,12 @@
         />
 
         <button
-          class="w-full flex items-center justify-center space-x-3 rounded-full text-white font-medium bg-primary hover:bg-opacity-75 py-2 h-12 disabled:bg-opacity-25 mt-10"
-          [disabled]="!selectPaymentMethod || !selectedAddress"
+          class="w-full flex items-center justify-center space-x-3 rounded-full text-white font-medium bg-primary hover:bg-opacity-75 py-2 h-12 disabled:bg-opacity-25 disabled:cursor-not-allowed mt-10"
+          [disabled]="
+            !selectPaymentMethod ||
+            !selectedAddress ||
+            !cart().cartItems!.length
+          "
           (click)="onInitiateOrder()"
         >
           @if (isLoading() || isInitiatingPayment()) {

@@ -49,11 +49,9 @@ export class OrderService {
     }
     if (filters?.page) {
       params = params.set('page', filters.page);
-      this.orderQueried.set(true);
     }
     if (filters?.itemsToShow) {
       params = params.set('pageSize', filters.itemsToShow);
-      this.orderQueried.set(true);
     }
     if (filters?.orderId) {
       params = params.set('orderId', filters.orderId);

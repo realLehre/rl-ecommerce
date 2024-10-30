@@ -43,13 +43,22 @@
     >
       {{ product().name }}
     </h3>
+
     <div class="flex items-center space-x-1 mb-1 mobile:mb-3">
-      <div class="space-x-[2px]">
-        @for (item of [1, 2, 3, 4, 5]; track item) {
-          <span class="text-[#CE8600]">★</span>
-        }
-      </div>
-      <span class="text-type_title_gray">({{ '20' }})</span>
+      @for (item of stars(); track item; let i = $index) {
+        <div class="relative w-[20px] h-[20px]">
+          <!-- Gray Star Icon -->
+          <i class="fa fa-star w-full h-full text-gray-300 text-[20px]"></i>
+
+          <!-- Yellow Overlay for Star Fill -->
+          <i
+            class="fa fa-star h-full text-[20px] text-yellow-400 absolute top-0 left-0 overflow-hidden"
+            [ngStyle]="{ width: getStarWidth(i) }"
+          ></i>
+        </div>
+      }
+
+      <span class="text-type_title_gray">({{ product().ratings.length }})</span>
     </div>
     <div
       class="flex items-start mobile:items-center flex-col mobile:flex-row justify-between gap-x-2 gap-y-4"

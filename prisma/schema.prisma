@@ -27,26 +27,24 @@ model User {
 }
 
 model Order {
-  id             String          @id @default(uuid())
-  user           User            @relation("UserOrders", fields: [userId], references: [id], onDelete: Cascade)
+  id             String         @id @default(uuid())
+  user           User           @relation("UserOrders", fields: [userId], references: [id], onDelete: Cascade)
   userId         String
   cartOrder      Json
-  shippingInfo   Address         @relation(fields: [shippingInfoId], references: [id])
+  shippingInfo   Address        @relation(fields: [shippingInfoId], references: [id])
   shippingInfoId String
   orderAmount    Int
   orderItems     OrderItem[]
   shippingCost   Int
   totalAmount    Int
   paymentMethod  String
-  orderStatus    OrderStatus     @default(PENDING)
-  deliveryStatus DeliveryStatus  @default(PENDING)
-  deliveryEvents DeliveryEvent[]
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
+  orderStatus    OrderStatus    @default(PENDING)
+  deliveryStatus DeliveryStatus @default(PENDING)
+  deliveryEvents Json
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
 
-  @@index([userId])
   @@index([deliveryStatus])
-  @@index([orderStatus])
   @@index([createdAt])
 }
 
@@ -64,15 +62,11 @@ model OrderItem {
 
 model DeliveryEvent {
   id        String       @id @default(uuid())
-  order     Order        @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  orderId   String
   dateTime  DateTime     @default(now())
   remark    String
   status    EventStatus?
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
-
-  @@index([orderId])
 }
 
 model Cart {
@@ -97,9 +91,6 @@ model CartItem {
   shippingCost Int      @default(100)
   updatedAt    DateTime @updatedAt
   createdAt    DateTime @default(now())
-
-  @@index([cartId])
-  @@index([productId])
 }
 
 model Address {
@@ -177,7 +168,6 @@ model ProductRating {
   userId      String
 
   @@index([productId])
-  @@index([orderItemId])
   @@index([userId])
 }
 
