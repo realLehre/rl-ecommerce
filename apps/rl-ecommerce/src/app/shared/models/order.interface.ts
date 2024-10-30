@@ -52,8 +52,19 @@ export interface IOrder {
   deliveryStatus: string;
   createdAt: string;
   updatedAt: string;
+  orderItems: IOrderItem[];
   user: User;
   deliveryEvents: IDeliveryEvents[];
+}
+
+export interface IOrderItem {
+  id: string;
+  orderId: string;
+  productId: string;
+  unit: number;
+  total: number;
+  createdAt: string;
+  rating?: any;
 }
 
 export interface User {

@@ -1,4 +1,11 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  input,
+  OnInit,
+  output,
+  signal,
+} from '@angular/core';
 import { ICartItems } from '../../models/cart.interface';
 import { CurrencyPipe, NgClass } from '@angular/common';
 import {
@@ -20,6 +27,9 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { IOrder, IOrderItem } from '../../models/order.interface';
+import { ReviewService } from '../../services/review.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-generic-order-summary',
@@ -42,15 +52,21 @@ import {
 export class GenericOrderSummaryComponent implements OnInit {
   router = inject(Router);
   private productService = inject(ProductsService);
+  private reviewService = inject(ReviewService);
+  private toast = inject(ToastService);
   paymentMethod = input<string>();
-  cartItems = input<ICartItems[]>([]);
-  showReviewDialog = signal(true);
+  order = input<IOrder>();
+  deliveryStatus = input<string>();
+  showReviewDialog = signal(false);
   isSubmitting = signal(false);
   selectedProduct!: ICartItems;
+  selectedOrderItem!: IOrderItem;
   stars = signal<{ star: number; active: boolean }[]>(
     Array.from({ length: 5 }, (_, i) => ({ star: i + 1, active: false })),
   );
+  selectedRating = 0;
   reviewForm!: FormGroup;
+  reviewGiven = output<void>();
 
   ngOnInit() {
     this.reviewForm = new FormGroup<any>({
@@ -76,13 +92,15 @@ export class GenericOrderSummaryComponent implements OnInit {
     );
   }
 
-  onReviewProduct(item: ICartItems) {
+  onReviewProduct(item: ICartItems, orderItem: IOrderItem) {
     this.selectedProduct = item;
+    this.selectedOrderItem = orderItem;
     this.showReviewDialog.set(true);
   }
 
   onSetStar(index: number) {
     const idx = index + 1;
+    this.selectedRating = index + 1;
     let newStars = Array.from({ length: 5 }, (_, i) => ({
       star: i + 1,
       active: false,
@@ -98,7 +116,40 @@ export class GenericOrderSummaryComponent implements OnInit {
     this.stars.set([...newStars]);
   }
 
-  onSubmitReview() {}
+  onSubmitReview() {
+    if (this.reviewForm.invalid && this.selectedRating == 0) {
+      this.reviewForm.markAllAsTouched();
+      return;
+    }
+    this.isSubmitting.set(true);
+    const reviewData = {
+      rating: this.selectedRating,
+      title: this.reviewForm.value.title,
+      comment: this.reviewForm.value.comment,
+      productId: this.selectedProduct.productId,
+      orderItemId: this.selectedOrderItem.id,
+      userId: this.order()?.userId,
+    };
+
+    this.reviewService.createReview(reviewData).subscribe({
+      next: (res) => {
+        this.reviewGiven.emit();
+        this.toast.showToast({
+          type: 'success',
+          message: 'Review submitted successfully!',
+        });
+        this.isSubmitting.set(false);
+        this.showReviewDialog.set(false);
+      },
+      error: (err) => {
+        this.isSubmitting.set(false);
+        this.toast.showToast({
+          type: 'error',
+          message: err.error.message,
+        });
+      },
+    });
+  }
 
   onCloseDialog() {
     this.showReviewDialog.set(false);

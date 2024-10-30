@@ -77,7 +77,9 @@
           </h3>
           <app-generic-order-summary
             [paymentMethod]="order()?.paymentMethod"
-            [cartItems]="order()?.cartOrder?.cartItems!"
+            [order]="order()!"
+            [deliveryStatus]="order()?.deliveryStatus"
+            (reviewGiven)="loadOrderDetails($event)"
           />
         </div>
       </div>

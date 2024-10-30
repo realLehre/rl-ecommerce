@@ -1,4 +1,4 @@
-@if (cartItems()) {
+@if (order()) {
   <div class="">
     <div class="pb-3 border-b-[2px] border-border_subtle">
       <div
@@ -9,7 +9,11 @@
       </div>
 
       <div class="space-y-3">
-        @for (item of cartItems(); track item.id; let i = $index) {
+        @for (
+          item of order()?.cartOrder?.cartItems;
+          track item.id;
+          let i = $index
+        ) {
           <div>
             <div
               class="flex items-center justify-between space-x-3 text-sm mobile:text-[20px] text-type_title_gray"
@@ -32,13 +36,17 @@
                 {{ item.total | currency: '₦' : 'symbol' : '1.0-0' }}
               </p>
             </div>
-
-            <button
-              class="py-2 text-primary italic underline text-sm"
-              (click)="onReviewProduct(item)"
-            >
-              Review product
-            </button>
+            @if (
+              deliveryStatus()?.toLowerCase() === 'delivered' &&
+              !order()?.orderItems?.[i]?.rating
+            ) {
+              <button
+                class="py-2 text-primary italic underline text-sm"
+                (click)="onReviewProduct(item, order()?.orderItems?.[i]!)"
+              >
+                Review product
+              </button>
+            }
           </div>
         }
       </div>
@@ -49,7 +57,11 @@
     >
       <p>Subtotal</p>
       <p class="text-type_title_gray font-semibold">
-        {{ cartItems()! | subtotal | currency: '₦' : 'symbol' : '1.0-0' }}
+        {{
+          order()?.cartOrder?.cartItems!
+            | subtotal
+            | currency: '₦' : 'symbol' : '1.0-0'
+        }}
       </p>
     </div>
 
@@ -58,7 +70,11 @@
     >
       <p>Delivery Fee</p>
       <p class="text-type_title_gray font-semibold">
-        {{ cartItems() | totalDelivery | currency: '₦' : 'symbol' : '1.0-0' }}
+        {{
+          order()?.cartOrder?.cartItems!
+            | totalDelivery
+            | currency: '₦' : 'symbol' : '1.0-0'
+        }}
       </p>
     </div>
 
@@ -78,7 +94,11 @@
     >
       <p>Total</p>
       <p class="text-type_title_gray font-semibold text-lg mobile:text-2xl">
-        {{ cartItems()! | grandTotal | currency: '₦' : 'symbol' : '1.0-0' }}
+        {{
+          order()?.cartOrder?.cartItems!
+            | grandTotal
+            | currency: '₦' : 'symbol' : '1.0-0'
+        }}
       </p>
     </div>
   </div>
@@ -113,7 +133,7 @@
         </div>
       </div>
 
-      <form class="mt-4" [formGroup]="reviewForm">
+      <form class="mt-4" [formGroup]="reviewForm" (ngSubmit)="onSubmitReview()">
         <div>
           <label
             for="title"
@@ -153,8 +173,10 @@
           >
             Cancel</button
           ><button
-            class="px-4 py-2 flex items-center justify-center space-x-2 bg-primary h-[38px] text-white rounded-md hover:bg-opacity-80 focus:outline-none disabled:bg-type_grey flex-1"
-            (click)="onSubmitReview()"
+            class="px-4 py-2 flex items-center justify-center space-x-2 bg-primary h-[38px] text-white rounded-md hover:bg-opacity-80 focus:outline-none disabled:bg-type_grey flex-1 disabled:cursor-not-allowed"
+            [disabled]="
+              isSubmitting() || reviewForm.invalid || selectedRating == 0
+            "
             type="submit"
           >
             @if (isSubmitting()) {
