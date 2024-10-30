@@ -92,6 +92,13 @@ export class ApiProductService {
           not: productId,
         },
       },
+      include: {
+        ratings: {
+          include: {
+            user: true,
+          },
+        },
+      },
     });
   }
 

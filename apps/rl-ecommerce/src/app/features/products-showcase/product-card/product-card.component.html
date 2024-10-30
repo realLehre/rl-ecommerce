@@ -45,7 +45,7 @@
     </h3>
 
     <div class="flex items-center space-x-1 mb-1 mobile:mb-3">
-      @for (item of stars(); track item; let i = $index) {
+      @for (item of stars(); track item.star; let i = $index) {
         <div class="relative w-[20px] h-[20px]">
           <!-- Gray Star Icon -->
           <i class="fa fa-star w-full h-full text-gray-300 text-[20px]"></i>
@@ -58,7 +58,9 @@
         </div>
       }
 
-      <span class="text-type_title_gray">({{ product().ratings.length }})</span>
+      <span class="text-type_title_gray"
+        >({{ product().ratings.length! }})</span
+      >
     </div>
     <div
       class="flex items-start mobile:items-center flex-col mobile:flex-row justify-between gap-x-2 gap-y-4"

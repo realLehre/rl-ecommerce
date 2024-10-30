@@ -1,1 +1,26 @@
-<p>page-not-found works!</p>
+<div class="flex items-center flex-col justify-between h-full w-full">
+  <div class="w-full">
+    <app-header />
+  </div>
+
+  <div class="my-[60px]">
+    <!--    <img src="apps/rl-ecommerce/src/assets/images/404.png" />-->
+    <img src="assets/images/404-2.png" />
+
+    <div
+      class="flex flex-col items-center justify-center text-center max-w-[400px] w-[90%] mx-auto mt-[40px]"
+    >
+      <p class="mb-4 text-lg mobile:text-2xl">
+        The page you are looking for does not exist
+      </p>
+      <button
+        class="px-10 py-2 space-x-2 bg-primary text-white rounded-md hover:bg-opacity-80 focus:outline-none"
+        routerLink="/"
+      >
+        Home
+      </button>
+    </div>
+  </div>
+
+  <app-footer />
+</div>

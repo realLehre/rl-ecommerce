@@ -37,7 +37,9 @@ export class ProductCardComponent {
   user = this.userService.user;
   product = input.required<IProduct>();
   isAddingToCart = signal(false);
-  stars = signal(Array(5));
+  stars = signal(
+    Array.from({ length: 5 }, (_, i) => ({ star: i + 1, active: false })),
+  );
   halfPercentage!: number;
 
   onViewDetails(product: IProduct) {
