@@ -1,65 +1,126 @@
 <div>
   <h1 class="text-type_title text-xl mobile:text-3xl">Reviews</h1>
-  <div class="flex items-start space-x-4 mt-5">
-    <div class="flex flex-col space-y-7">
-      <div>
-        <h3 class="text-type_title_gray text-xl mobile:2xl">Total Reviews</h3>
-        <p
-          class="text-type_title text-[35px] mobile:text-[50px] leading-[1] font-semibold"
-        >
-          {{ reviews().length }}
-        </p>
-      </div>
-
-      <div>
-        <h3 class="text-type_title_gray text-xl mobile:2xl">Average Rating</h3>
-        <div class="flex items-center flex-col space-y-3">
+  @if (reviews().length) {
+    <div>
+      <div
+        class="flex flex-col tablet:flex-row items-start gap-x-10 gap-y-7 mt-5"
+      >
+        <div class="flex flex-col w-full tablet:w-[25%] gap-y-7 gap-x-4">
           <div
-            class="text-type_title text-[35px] mobile:text-[50px] leading-[1] font-semibold flex items-center"
+            class="flex flex-row w-full justify-between flex-1 tablet:flex-col gap-y-7 gap-x-4"
           >
-            <span>{{ averageRating() }}</span>
-            <span class="font-normal">/5</span>
-          </div>
-          <div class="flex items-center space-x-1">
-            @for (item of stars(); track item.star; let i = $index) {
-              <div class="relative w-[25px] h-[25px]">
-                <!-- Gray Star Icon -->
-                <i
-                  class="fa fa-star w-full h-full text-gray-300 text-[25px]"
-                ></i>
+            <div>
+              <h3 class="text-type_title_gray text-lg mobile:2xl">
+                Total Reviews
+              </h3>
+              <p
+                class="text-type_title text-[35px] mobile:text-[50px] leading-[1] font-semibold"
+              >
+                {{ reviews().length }}
+              </p>
+            </div>
 
-                <!-- Yellow Overlay for Star Fill -->
-                <i
-                  class="fa fa-star h-full text-[25px] text-yellow-400 absolute top-0 left-0 overflow-hidden"
-                  [ngStyle]="{ width: getStarWidth(i) }"
-                ></i>
+            <div>
+              <h3 class="text-type_title_gray text-lg mobile:2xl">
+                Average Rating
+              </h3>
+              <div class="flex flex-col space-y-3">
+                <div
+                  class="text-type_title text-[35px] mobile:text-[50px] leading-[1] font-semibold flex items-center"
+                >
+                  <span>{{ averageRating() }}</span>
+                  <span class="font-normal">/5</span>
+                </div>
+                <div class="flex items-center space-x-1">
+                  @for (item of stars(); track item.star; let i = $index) {
+                    <div class="relative w-[25px] h-[25px]">
+                      <i
+                        class="fa fa-star w-full h-full text-gray-300 text-[25px]"
+                      ></i>
+
+                      <i
+                        class="fa fa-star h-full text-[25px] text-yellow-400 absolute top-0 left-0 overflow-hidden"
+                        [ngStyle]="{ width: getStarWidth(i) }"
+                      ></i>
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-1 max-w-[300px]">
+            @for (count of ratingCounts(); track count.star; let i = $index) {
+              <div class="flex items-center space-x-3">
+                <div class="flex items-center space-x-1">
+                  <span>{{ count.star }}</span>
+                  <i class="fa fa-star text-yellow-400 text-lg"></i>
+                </div>
+
+                <div class="w-[80%] flex items-center space-x-3">
+                  <div
+                    class="top-0 left-0 h-2 bg-yellow-400 rounded-lg"
+                    [ngStyle]="{
+                      width: count.totalRating
+                        ? (count.totalRating / reviews().length) * 100 + '%'
+                        : '3%',
+                    }"
+                  ></div>
+                  <p class="text-type_grey">{{ count.totalRating }}</p>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="flex-1">
+          <h3 class="text-type_title_gray text-lg mobile:2xl">Comments</h3>
+
+          <div class="">
+            @for (review of reviews(); track review.id; let i = $index) {
+              <div
+                class="flex items-start space-x-4 pt-5"
+                [ngClass]="{
+                  'pb-5 border-b-[2px] border-border_subtle':
+                    i + 1 < reviews().length,
+                }"
+              >
+                <h3 class="capitalize font-medium">{{ review.user.name }}</h3>
+
+                <div>
+                  <div class="flex items-center space-x-3">
+                    <div>
+                      @for (star of stars(); track star.star; let i = $index) {
+                        <i
+                          class="fa fa-star text-xl cursor-pointer text-gray-300"
+                          [ngClass]="{
+                            '!text-yellow-400': i + 1 <= review.rating,
+                          }"
+                        ></i>
+                      }
+                    </div>
+                    <p class="text-sm">{{ review.createdAt | date }}</p>
+                  </div>
+
+                  <div class="mt-2">
+                    <h3 class="font-semibold leading-[1]">
+                      {{ review.title }}
+                    </h3>
+
+                    @if (review.comment) {
+                      <p class="text-type_grey mt-2 leading-tight">
+                        {{ review.comment }}
+                      </p>
+                    }
+                  </div>
+                </div>
               </div>
             }
           </div>
         </div>
       </div>
-
-      <div class="space-y-1">
-        @for (count of ratingCounts(); track count.star; let i = $index) {
-          <div class="flex items-center space-x-3">
-            <div class="flex items-center space-x-1">
-              <span>{{ count.star }}</span>
-              <i class="fa fa-star text-yellow-400 text-lg"></i>
-            </div>
-
-            <div
-              class="top-0 left-0 h-2 bg-yellow-400 rounded-lg"
-              [ngStyle]="{
-                width: count.totalRating
-                  ? (count.totalRating / reviews().length) * 100 + '%'
-                  : '3%',
-              }"
-            ></div>
-
-            <p class="text-type_grey">{{ count.totalRating }}</p>
-          </div>
-        }
-      </div>
     </div>
-  </div>
+  } @else {
+    <p class="text-type_caption mt-3">This product has no reviews yet</p>
+  }
 </div>

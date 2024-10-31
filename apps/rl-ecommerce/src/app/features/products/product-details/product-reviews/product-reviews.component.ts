@@ -47,7 +47,6 @@ export class ProductReviewsComponent implements OnInit {
         entry.totalRating += 1;
       }
     });
-    console.log(this.ratingCounts());
   }
 
   getStarWidth(starIndex: number): string {
