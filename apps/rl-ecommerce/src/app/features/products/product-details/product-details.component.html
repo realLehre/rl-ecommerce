@@ -1,115 +1,131 @@
 <div
   class="w-[90%] tablet:w-[85%] max-w-[1200px] mx-auto mt-9 mobile:mt-[80px]"
 >
-  <app-breadcrumb [pages]="[{ name: 'product details', route: '/product' }]" />
-  <h3 class="block mobile:hidden font-medium text-lg text-type_title mt-4">
-    Product Details
-  </h3>
+  @if (!isShowingFullReview()) {
+    <app-breadcrumb
+      [pages]="[{ name: 'product details', route: '/product' }]"
+    />
+    <h3 class="block mobile:hidden font-medium text-lg text-type_title mt-4">
+      Product Details
+    </h3>
+  }
 
   @if (product$ | async; as product) {
-    <div class="flex items-start flex-col min-[700px]:flex-row gap-10 mt-8">
-      <div
-        class="min-[850px]:w-[500px] min-[450px]:w-[400px] w-full max-[450px]:h-[300px] max-[700px]:self-center"
-      >
-        <app-product-details-images [images]="product.imageUrls" />
-      </div>
+    @if (!isShowingFullReview()) {
+      <div class="flex items-start flex-col min-[700px]:flex-row gap-10 mt-8">
+        <div
+          class="min-[850px]:w-[500px] min-[450px]:w-[400px] w-full max-[450px]:h-[300px] max-[700px]:self-center"
+        >
+          <app-product-details-images [images]="product.imageUrls" />
+        </div>
 
-      <div class="w-full">
-        <div class="space-y-2 min-[700px]:space-y-4">
-          <h1 class="text-2xl mobile:text-[40px] text-type_caption leading-10">
-            {{ product.name || activeProduct()?.name }}
-          </h1>
+        <div class="w-full">
+          <div class="space-y-2 min-[700px]:space-y-4">
+            <h1
+              class="text-2xl mobile:text-[40px] text-type_caption leading-10"
+            >
+              {{ product.name || activeProduct()?.name }}
+            </h1>
 
-          <p class="text-[20px] mobile:text-3xl text-type_title font-semibold">
-            {{ product.price | currency: '₦' : 'symbol' : '1.0-0' }}
-          </p>
+            <p
+              class="text-[20px] mobile:text-3xl text-type_title font-semibold"
+            >
+              {{ product.price | currency: '₦' : 'symbol' : '1.0-0' }}
+            </p>
+
+            <div
+              class="text-xs mobile:text-sm font-semibold"
+              [ngClass]="
+                product.unit < 5 ? 'text-red-600' : 'text-type_title_gray'
+              "
+            >
+              <span>{{ product.unit }}</span> <span> item</span>
+              @if (product.unit > 1) {
+                <span>s</span>
+              }
+              left
+            </div>
+
+            <div class="text-sm mobile:text-base text-type_grey">
+              <p [ngClass]="{ 'line-clamp-[8]': isCollapsed() }">
+                {{ product.description }}
+              </p>
+            </div>
+            @if (product.description.length > limit) {
+              <a
+                href="javascript:void(0)"
+                (click)="toggleCollapse()"
+                class="text-sm font-medium text-primary"
+              >
+                {{ isCollapsed() ? 'Read More' : 'Show Less' }}
+              </a>
+            }
+          </div>
+
+          <div class="w-full h-[1px] my-6 bg-border_subtle"></div>
+
+          <div class="">
+            <h3 class="text-xs text-type_title font-semibold">CATEGORY</h3>
+            <p class="text-type_caption">{{ product.category.name }}</p>
+          </div>
+
+          <div class="space-y-2 mt-5">
+            <h3 class="text-xs text-type_title font-semibold">QUANTITY</h3>
+            <div>
+              <app-product-quantity
+                [quantity]="quantity"
+                (quantityChanged)="onAdjustQuantity($event)"
+              />
+            </div>
+          </div>
 
           <div
-            class="text-xs mobile:text-sm font-semibold"
-            [ngClass]="
-              product.unit < 5 ? 'text-red-600' : 'text-type_title_gray'
-            "
+            class="flex items-center justify-between mt-8 flex-wrap gap-x-3 gap-y-2 text-sm mobile:text-base"
           >
-            <span>{{ product.unit }}</span> <span> item</span>
-            @if (product.unit > 1) {
-              <span>s</span>
-            }
-            left
-          </div>
-
-          <div class="text-sm mobile:text-base text-type_grey">
-            <p [ngClass]="{ 'line-clamp-[8]': isCollapsed() }">
-              {{ product.description }}
-            </p>
-          </div>
-          @if (product.description.length > limit) {
-            <a
-              href="javascript:void(0)"
-              (click)="toggleCollapse()"
-              class="text-sm font-medium text-primary"
+            <button
+              class="min-w-[190px] rounded-full text-white font-medium bg-primary py-2 flex-1 h-12 hidden mobile:block"
+              routerLink="/checkout"
             >
-              {{ isCollapsed() ? 'Read More' : 'Show Less' }}
-            </a>
-          }
-        </div>
-
-        <div class="w-full h-[1px] my-6 bg-border_subtle"></div>
-
-        <div class="">
-          <h3 class="text-xs text-type_title font-semibold">CATEGORY</h3>
-          <p class="text-type_caption">{{ product.category.name }}</p>
-        </div>
-
-        <div class="space-y-2 mt-5">
-          <h3 class="text-xs text-type_title font-semibold">QUANTITY</h3>
-          <div>
-            <app-product-quantity
-              [quantity]="quantity"
-              (quantityChanged)="onAdjustQuantity($event)"
-            />
+              Proceed to Checkout
+            </button>
+            <button
+              class="min-w-[120px] rounded-full text-white font-medium bg-primary py-2 flex-1 h-12 block mobile:hidden"
+              routerLink="/checkout"
+            >
+              Buy Now
+            </button>
+            <button
+              class="min-w-[120px] flex items-center justify-center space-x-3 mobile:min-w-[190px] rounded-full font-medium border-primary border-[2px] text-type_title_gray py-2 flex-1 h-12"
+              [disabled]="isAddingToCart()"
+              (click)="onAddToCart(product)"
+            >
+              @if (isAddingToCart()) {
+                <app-loader
+                  [customStyle]="{ width: '24px', border: '3px solid #000' }"
+                />
+              }
+              <span> Add to Cart </span>
+            </button>
           </div>
-        </div>
-
-        <div
-          class="flex items-center justify-between mt-8 flex-wrap gap-x-3 gap-y-2 text-sm mobile:text-base"
-        >
-          <button
-            class="min-w-[190px] rounded-full text-white font-medium bg-primary py-2 flex-1 h-12 hidden mobile:block"
-            routerLink="/checkout"
-          >
-            Proceed to Checkout
-          </button>
-          <button
-            class="min-w-[120px] rounded-full text-white font-medium bg-primary py-2 flex-1 h-12 block mobile:hidden"
-            routerLink="/checkout"
-          >
-            Buy Now
-          </button>
-          <button
-            class="min-w-[120px] flex items-center justify-center space-x-3 mobile:min-w-[190px] rounded-full font-medium border-primary border-[2px] text-type_title_gray py-2 flex-1 h-12"
-            [disabled]="isAddingToCart()"
-            (click)="onAddToCart(product)"
-          >
-            @if (isAddingToCart()) {
-              <app-loader
-                [customStyle]="{ width: '24px', border: '3px solid #000' }"
-              />
-            }
-            <span> Add to Cart </span>
-          </button>
         </div>
       </div>
-    </div>
 
-    <div class="mt-[50px]">
-      <app-product-reviews [reviews]="product.ratings" />
-    </div>
+      <div class="mt-[50px]">
+        <app-product-reviews
+          [showingFullReview]="isShowingFullReview()"
+          [reviews]="product.ratings"
+          (seeFullReview)="onSeeFullReview($event)"
+        />
+      </div>
 
-    <div class="mt-[80px]">
-      <!--      <app-recommended-products-->
-      <!--        [query]="{ productId: product.id, categoryId: product.categoryId }"-->
-      <!--      />-->
-    </div>
+      <div class="mt-[80px]">
+        <!--      <app-recommended-products-->
+        <!--        [query]="{ productId: product.id, categoryId: product.categoryId }"-->
+        <!--      />-->
+      </div>
+    } @else {
+      <app-large-reviews [reviews]="product.ratings" />
+    }
   } @else {
     <div class="flex items-start flex-col min-[700px]:flex-row gap-10 mt-8">
       <div

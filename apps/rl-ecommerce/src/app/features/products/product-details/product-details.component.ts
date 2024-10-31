@@ -26,6 +26,7 @@ import { CartService } from '../../../shared/services/cart.service';
 import { UserAccountService } from '../../user/user-account/services/user-account.service';
 import { ToastService } from '../../../shared/services/toast.service';
 import { ProductReviewsComponent } from './product-reviews/product-reviews.component';
+import { LargeReviewsComponent } from './large-reviews/large-reviews.component';
 
 @Component({
   selector: 'app-product-details',
@@ -42,6 +43,7 @@ import { ProductReviewsComponent } from './product-reviews/product-reviews.compo
     CurrencyPipe,
     NgClass,
     ProductReviewsComponent,
+    LargeReviewsComponent,
   ],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.scss',
@@ -64,6 +66,7 @@ export class ProductDetailsComponent implements OnInit {
   cdr = inject(ChangeDetectorRef);
   isAddingToCart = signal(false);
   productId!: string;
+  isShowingFullReview = signal(false);
 
   ngOnInit() {
     this.productId = this.route.snapshot.queryParams['id'];
@@ -112,6 +115,10 @@ export class ProductDetailsComponent implements OnInit {
           });
         },
       });
+  }
+
+  onSeeFullReview(event: boolean) {
+    this.isShowingFullReview.set(event);
   }
 
   toggleCollapse() {

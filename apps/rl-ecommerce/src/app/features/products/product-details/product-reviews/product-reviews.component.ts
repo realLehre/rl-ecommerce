@@ -4,6 +4,7 @@ import {
   computed,
   input,
   OnInit,
+  output,
   signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -19,6 +20,7 @@ import { IProductRating } from '../../model/product.interface';
 })
 export class ProductReviewsComponent implements OnInit {
   reviews = input<IProductRating[]>([]);
+  showShortReview = input<boolean>(true);
   stars = signal(
     Array.from({ length: 5 }, (_, i) => ({ star: i + 1, active: false })),
   );
@@ -28,6 +30,10 @@ export class ProductReviewsComponent implements OnInit {
       totalRating: 0,
     })).reverse(),
   );
+  reviewComments = computed(() => {
+    const reviews = [...this.reviews()];
+    return this.showShortReview() ? reviews.splice(0, 2) : this.reviews();
+  });
 
   averageRating = computed(() => {
     const totalRating = this.reviews().reduce(
@@ -37,6 +43,9 @@ export class ProductReviewsComponent implements OnInit {
     const rating = totalRating / this.reviews().length;
     return parseFloat(rating.toFixed(2)) || 0;
   });
+
+  seeFullReview = output<boolean>();
+  showingFullReview = input<boolean>(false);
 
   ngOnInit() {
     this.reviews().map((review) => {
@@ -60,5 +69,9 @@ export class ProductReviewsComponent implements OnInit {
     } else {
       return '0%';
     }
+  }
+
+  onSeeFullReviews() {
+    this.seeFullReview.emit(true);
   }
 }
