@@ -18,13 +18,14 @@ import {
   RouterLink,
 } from '@angular/router';
 import { ProductsService } from '../services/products.service';
-import { filter, Observable } from 'rxjs';
+import { filter, Observable, of } from 'rxjs';
 import { IProduct } from '../model/product.interface';
 import { AsyncPipe, CurrencyPipe, NgClass } from '@angular/common';
 import { SkeletonModule } from 'primeng/skeleton';
 import { CartService } from '../../../shared/services/cart.service';
 import { UserAccountService } from '../../user/user-account/services/user-account.service';
 import { ToastService } from '../../../shared/services/toast.service';
+import { ProductReviewsComponent } from './product-reviews/product-reviews.component';
 
 @Component({
   selector: 'app-product-details',
@@ -40,6 +41,7 @@ import { ToastService } from '../../../shared/services/toast.service';
     SkeletonModule,
     CurrencyPipe,
     NgClass,
+    ProductReviewsComponent,
   ],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.scss',
@@ -52,11 +54,11 @@ export class ProductDetailsComponent implements OnInit {
   private cartService = inject(CartService);
   private userService = inject(UserAccountService);
   private toast = inject(ToastService);
+  activeProduct = this.productService.activeProduct;
   product$!: Observable<IProduct>;
   similarProducts!: Observable<IProduct[]>;
   quantity: number = 1;
   isLoading: boolean = false;
-  activeProduct = this.productService.activeProduct;
   isCollapsed = signal(true);
   limit = 200;
   cdr = inject(ChangeDetectorRef);
@@ -67,13 +69,17 @@ export class ProductDetailsComponent implements OnInit {
     this.productId = this.route.snapshot.queryParams['id'];
     this.product$ = this.productService.getProductById(this.productId);
 
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe(() => {
-        this.productId = this.route.snapshot.queryParams['id'];
-        this.product$ = this.productService.getProductById(this.productId);
-        this.cdr.detectChanges();
-      });
+    if (this.activeProduct()) {
+      this.product$ = of(this.activeProduct() as IProduct);
+    } else {
+      this.router.events
+        .pipe(filter((event) => event instanceof NavigationEnd))
+        .subscribe(() => {
+          this.productId = this.route.snapshot.queryParams['id'];
+          this.product$ = this.productService.getProductById(this.productId);
+        });
+    }
+    this.cdr.detectChanges();
   }
 
   onAddToCart(product: IProduct) {

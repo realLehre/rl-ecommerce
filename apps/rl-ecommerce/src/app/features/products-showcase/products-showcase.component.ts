@@ -80,7 +80,6 @@ export class ProductsShowcaseComponent implements OnInit {
       Object.entries(routeQuery).filter(([_, value]) => value !== undefined),
     );
 
-    // Step 3: Add the dynamic query parameters to the router navigation
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {

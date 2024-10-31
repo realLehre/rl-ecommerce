@@ -39,14 +39,17 @@
       [ngClass]="{ '!translate-y-0': isMobileFilterOpened() }"
     />
 
-    <!--	  grid-cols-[repeat(auto-fill,minmax(150px,1fr))] mobile:grid-cols-[repeat(auto-fill,minmax(210px,1fr))]-->
-    <div class="grid grid-cols-2 min-[1050px]:grid-cols-3 gap-x-6 gap-y-10">
-      @for (
-        product of productArray.products | paginate: config()!;
-        track product.id
-      ) {
-        <app-product-card [product]="product" />
-      } @empty {
+    <div>
+      <div class="grid grid-cols-2 min-[1050px]:grid-cols-3 gap-x-6 gap-y-10">
+        @for (
+          product of productArray.products | paginate: config()!;
+          track product.id
+        ) {
+          <app-product-card [product]="product" />
+        }
+      </div>
+
+      @if (!productArray.products.length) {
         <div class="text-center w-full">
           <h3 class="text-base mobile:text-lg font-medium">
             No products are available
@@ -178,7 +181,7 @@
       </div>
     </header>
     <div class="grid grid-cols-2 min-[1050px]:grid-cols-3 gap-x-6 gap-y-10">
-      @for (t of [1, 2, 3, 4]; track t) {
+      @for (t of [1, 2, 3, 4, 5, 6]; track t) {
         <div class="flex flex-col space-y-1 mobile:space-y-3">
           <div class="relative w-full h-[180px] mobile:h-[230px]">
             <div

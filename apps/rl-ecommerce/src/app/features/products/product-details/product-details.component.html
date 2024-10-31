@@ -101,10 +101,14 @@
       </div>
     </div>
 
+    <div class="mt-[50px]">
+      <app-product-reviews [reviews]="product.ratings" />
+    </div>
+
     <div class="mt-[80px]">
-      <app-recommended-products
-        [query]="{ productId: product.id, categoryId: product.categoryId }"
-      />
+      <!--      <app-recommended-products-->
+      <!--        [query]="{ productId: product.id, categoryId: product.categoryId }"-->
+      <!--      />-->
     </div>
   } @else {
     <div class="flex items-start flex-col min-[700px]:flex-row gap-10 mt-8">

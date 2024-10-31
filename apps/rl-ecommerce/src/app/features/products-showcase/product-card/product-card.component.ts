@@ -40,7 +40,6 @@ export class ProductCardComponent {
   stars = signal(
     Array.from({ length: 5 }, (_, i) => ({ star: i + 1, active: false })),
   );
-  halfPercentage!: number;
 
   onViewDetails(product: IProduct) {
     this.productService.activeProduct.set(product);

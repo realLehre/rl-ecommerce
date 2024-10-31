@@ -68,7 +68,18 @@ export class ProductsService {
   }
 
   getProductById(id: string) {
-    return this.http.get<IProduct>(`${this.baseUrl}${id}`);
+    const saved = JSON.parse(localStorage.getItem('productDetails')!);
+    if (saved) {
+      return of(saved);
+    } else {
+      return this.http
+        .get<IProduct>(`${this.baseUrl}${id}`)
+        .pipe(
+          tap((res) =>
+            localStorage.setItem('productDetails', JSON.stringify(res)),
+          ),
+        );
+    }
   }
 
   getSimilarProducts(categoryId: string, productId: string) {
