@@ -92,7 +92,8 @@ export class ProductsService {
           .subscribe();
   }
 
-  createSlug(name: string): string {
+  createSlug(name: string): any {
+    if (!name) return;
     return name
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-') // Replace spaces and special characters with hyphen

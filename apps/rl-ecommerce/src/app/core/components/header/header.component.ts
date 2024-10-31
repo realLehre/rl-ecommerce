@@ -96,9 +96,12 @@ export class HeaderComponent implements AfterViewInit, OnInit {
     this.productService.searchedProductsSignal.set(null);
     this.searchShown.set(false);
     this.searchInput.nativeElement.value = '';
-    this.router.navigate(['/product/' + this.createSlug(product.name)], {
-      queryParams: { id: product.id },
-    });
+    this.router.navigate(
+      ['/product/' + this.productService.createSlug(product.name)],
+      {
+        queryParams: { id: product.id },
+      },
+    );
   }
 
   onSignOut() {
@@ -119,13 +122,6 @@ export class HeaderComponent implements AfterViewInit, OnInit {
 
   onOpenMenu() {
     this.layoutService.menuOpened.set(true);
-  }
-
-  createSlug(name: string): string {
-    return name
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-') // Replace spaces and special characters with hyphen
-      .replace(/^-+|-+$/g, ''); // Trim leading or trailing hyphens
   }
 
   onRouteHome() {

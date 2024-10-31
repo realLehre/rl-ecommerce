@@ -65,6 +65,31 @@ export class ProductsShowcaseComponent implements OnInit {
       sortBy: savedQuery?.sort,
     };
 
+    const routeQuery = {
+      category: this.productService.createSlug(savedQuery?.category?.name!),
+      subCategory: this.productService.createSlug(
+        savedQuery?.subCategory?.name!,
+      ),
+      page: savedQuery?.page,
+      minPrice: savedQuery?.price?.min,
+      maxPrice: savedQuery?.price?.max,
+      sortBy: savedQuery?.sort,
+    };
+
+    const filteredQuery = Object.fromEntries(
+      Object.entries(routeQuery).filter(([_, value]) => value !== undefined),
+    );
+
+    // Step 3: Add the dynamic query parameters to the router navigation
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        ...filteredQuery,
+      },
+      queryParamsHandling: 'merge',
+      fragment: 't',
+    });
+
     this.products$ = this.productService.getProducts(newQuery);
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))

@@ -5,13 +5,13 @@ import {
   input,
   OnInit,
 } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Location, NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-breadcrumb',
   standalone: true,
-  imports: [NgClass],
+  imports: [NgClass, RouterLink],
   templateUrl: './breadcrumb.component.html',
   styleUrl: './breadcrumb.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -21,7 +21,6 @@ export class BreadcrumbComponent implements OnInit {
   private location = inject(Location);
   pages = input.required<{ name: string; route: string }[]>();
   newPages: { name: string; route: string }[] = [];
-  lastFragment: string = '';
 
   ngOnInit() {
     const pages = this.pages();
@@ -40,16 +39,7 @@ export class BreadcrumbComponent implements OnInit {
     );
   }
 
-  onNavigateBack(page?: any) {
-    if (page) {
-      if (
-        this.getLastFragment(page.route) ||
-        page.name.toLowerCase() == 'account' ||
-        page.name.toLowerCase() == 'product details'
-      ) {
-        return;
-      }
-    }
+  onNavigateBack() {
     this.location.back();
   }
 }

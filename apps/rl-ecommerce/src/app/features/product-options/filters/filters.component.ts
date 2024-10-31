@@ -46,7 +46,6 @@ export class FiltersComponent {
   currentPriceFilter = this.optionsService.currentPriceFilter;
 
   onApplyPriceFilter() {
-    console.log(this.rangeValues);
     this.productService.productSignal.set(null);
     this.optionsService.currentPage.set(1);
     this.optionsService.currentPriceFilter.set({
