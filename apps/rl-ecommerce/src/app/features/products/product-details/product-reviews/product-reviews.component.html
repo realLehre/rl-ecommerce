@@ -2,8 +2,19 @@
   <div class="flex items-center justify-between">
     <div class="flex items-center">
       @if (showingFullReview()) {
-        <button class="mr-2 text-2xl py-2">
-          <i class="fa fa-arrow-left"></i>
+        <button
+          class="h-8 w-8 flex items-center border-0 outline-0 justify-center cursor-pointer mr-2"
+          (click)="onCloseFullReview()"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 448 512"
+            class="w-6"
+          >
+            <path
+              d="M7.4 273.4C2.7 268.8 0 262.6 0 256s2.7-12.8 7.4-17.4l176-168c9.6-9.2 24.8-8.8 33.9 .8s8.8 24.8-.8 33.9L83.9 232 424 232c13.3 0 24 10.7 24 24s-10.7 24-24 24L83.9 280 216.6 406.6c9.6 9.2 9.9 24.3 .8 33.9s-24.3 9.9-33.9 .8l-176-168z"
+            />
+          </svg>
         </button>
       }
       <h1 class="text-type_title text-xl mobile:text-3xl">Reviews</h1>
@@ -112,7 +123,7 @@
                     <div>
                       @for (star of stars(); track star.star; let i = $index) {
                         <i
-                          class="fa fa-star text-xl cursor-pointer text-gray-300"
+                          class="fa fa-star text-xl text-gray-300"
                           [ngClass]="{
                             '!text-yellow-400': i + 1 <= review.rating,
                           }"

@@ -27,6 +27,7 @@ import { UserAccountService } from '../../user/user-account/services/user-accoun
 import { ToastService } from '../../../shared/services/toast.service';
 import { ProductReviewsComponent } from './product-reviews/product-reviews.component';
 import { LargeReviewsComponent } from './large-reviews/large-reviews.component';
+import { ReviewService } from '../../../shared/services/review.service';
 
 @Component({
   selector: 'app-product-details',
@@ -55,6 +56,7 @@ export class ProductDetailsComponent implements OnInit {
   private productService = inject(ProductsService);
   private cartService = inject(CartService);
   private userService = inject(UserAccountService);
+  private reviewService = inject(ReviewService);
   private toast = inject(ToastService);
   activeProduct = this.productService.activeProduct;
   product$!: Observable<IProduct>;
@@ -66,7 +68,7 @@ export class ProductDetailsComponent implements OnInit {
   cdr = inject(ChangeDetectorRef);
   isAddingToCart = signal(false);
   productId!: string;
-  isShowingFullReview = signal(false);
+  isShowingFullReview = this.reviewService.seeingFullReview;
 
   ngOnInit() {
     this.productId = this.route.snapshot.queryParams['id'];
@@ -115,10 +117,6 @@ export class ProductDetailsComponent implements OnInit {
           });
         },
       });
-  }
-
-  onSeeFullReview(event: boolean) {
-    this.isShowingFullReview.set(event);
   }
 
   toggleCollapse() {

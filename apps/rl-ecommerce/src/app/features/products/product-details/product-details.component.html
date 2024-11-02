@@ -111,11 +111,7 @@
       </div>
 
       <div class="mt-[50px]">
-        <app-product-reviews
-          [showingFullReview]="isShowingFullReview()"
-          [reviews]="product.ratings"
-          (seeFullReview)="onSeeFullReview($event)"
-        />
+        <app-product-reviews [reviews]="product.ratings" />
       </div>
 
       <div class="mt-[80px]">

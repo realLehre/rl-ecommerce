@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  inject,
   input,
   OnInit,
   output,
@@ -9,6 +10,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IProductRating } from '../../model/product.interface';
+import { ReviewService } from '../../../../shared/services/review.service';
 
 @Component({
   selector: 'app-product-reviews',
@@ -19,6 +21,7 @@ import { IProductRating } from '../../model/product.interface';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductReviewsComponent implements OnInit {
+  private reviewService = inject(ReviewService);
   reviews = input<IProductRating[]>([]);
   showShortReview = input<boolean>(true);
   stars = signal(
@@ -44,8 +47,7 @@ export class ProductReviewsComponent implements OnInit {
     return parseFloat(rating.toFixed(2)) || 0;
   });
 
-  seeFullReview = output<boolean>();
-  showingFullReview = input<boolean>(false);
+  showingFullReview = this.reviewService.seeingFullReview;
 
   ngOnInit() {
     this.reviews().map((review) => {
@@ -72,6 +74,11 @@ export class ProductReviewsComponent implements OnInit {
   }
 
   onSeeFullReviews() {
-    this.seeFullReview.emit(true);
+    this.reviewService.seeingFullReview.set(true);
+    window.scrollTo(0, 0);
+  }
+
+  onCloseFullReview() {
+    this.reviewService.seeingFullReview.set(false);
   }
 }
