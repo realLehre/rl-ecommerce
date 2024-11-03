@@ -20,7 +20,7 @@ import {
 import { ProductsService } from '../services/products.service';
 import { filter, Observable, of } from 'rxjs';
 import { IProduct } from '../model/product.interface';
-import { AsyncPipe, CurrencyPipe, NgClass } from '@angular/common';
+import { AsyncPipe, CurrencyPipe, NgClass, NgStyle } from '@angular/common';
 import { SkeletonModule } from 'primeng/skeleton';
 import { CartService } from '../../../shared/services/cart.service';
 import { UserAccountService } from '../../user/user-account/services/user-account.service';
@@ -45,6 +45,7 @@ import { ReviewService } from '../../../shared/services/review.service';
     NgClass,
     ProductReviewsComponent,
     LargeReviewsComponent,
+    NgStyle,
   ],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.scss',
@@ -69,6 +70,9 @@ export class ProductDetailsComponent implements OnInit {
   isAddingToCart = signal(false);
   productId!: string;
   isShowingFullReview = this.reviewService.seeingFullReview;
+  stars = signal(
+    Array.from({ length: 5 }, (_, i) => ({ star: i + 1, active: false })),
+  );
 
   ngOnInit() {
     this.productId = this.route.snapshot.queryParams['id'];
@@ -132,5 +136,26 @@ export class ProductDetailsComponent implements OnInit {
 
   onAdjustQuantity(qty: number) {
     this.quantity = qty;
+  }
+
+  averageRating(): number {
+    const totalRating = this.activeProduct()!.ratings.reduce(
+      (acc: number, rating: any) => acc + rating.rating,
+      0,
+    );
+    return totalRating / this.activeProduct()!.ratings.length || 0;
+  }
+
+  getStarWidth(starIndex: number): string {
+    const fullStars = Math.floor(this.averageRating());
+    const partialFill = (this.averageRating() % 1) * 100;
+
+    if (starIndex < fullStars) {
+      return '100%';
+    } else if (starIndex === fullStars) {
+      return `${partialFill}%`;
+    } else {
+      return '0%';
+    }
   }
 }

@@ -38,7 +38,7 @@ export class ProductReviewsComponent implements OnInit {
   );
   reviewComments = computed(() => {
     const reviews = [...this.reviews()];
-    return this.showShortReview() ? reviews.splice(0, 2) : this.reviews();
+    return this.showShortReview() ? reviews.splice(0, 5) : this.reviews();
   });
 
   averageRating = computed(() => {

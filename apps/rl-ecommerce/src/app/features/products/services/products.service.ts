@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { IProduct, IProductResponse } from '../model/product.interface';
@@ -82,11 +82,7 @@ export class ProductsService {
     // }
     return this.http
       .get<IProduct>(`${this.baseUrl}${id}`)
-      .pipe(
-        tap((res) =>
-          localStorage.setItem('productDetails', JSON.stringify(res)),
-        ),
-      );
+      .pipe(tap((res) => this.activeProduct.set(res)));
   }
 
   getSimilarProducts(categoryId: string, productId: string) {
