@@ -78,6 +78,7 @@ export class AuthService {
   signOut() {
     this.supabase.auth.signOut();
     localStorage.clear();
+    sessionStorage.clear();
     this.cookieService.deleteAll('/');
     this.user.set(null);
     this.router.navigate(['/']);

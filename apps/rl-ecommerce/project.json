@@ -21,7 +21,12 @@
         "inlineStyleLanguage": "scss",
         "assets": [
           "apps/rl-ecommerce/src/favicon.ico",
-          "apps/rl-ecommerce/src/assets"
+          "apps/rl-ecommerce/src/assets",
+          {
+            "glob": "_redirects",
+            "input": "src",
+            "output": "/"
+          }
         ],
         "styles": [
           "apps/rl-ecommerce/src/styles.scss",

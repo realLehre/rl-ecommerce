@@ -95,7 +95,6 @@ export class ProductCardComponent {
           this.cartService.cartTotal.set(cartTotal()! + 1);
 
           const cart = { ...this.cartService.cartSignal() } || {};
-
           this.cartService.cartSignal.set(null);
           this.cartService.getCart().subscribe();
           const newCartItem = { ...res, product: this.product() as IProduct };
@@ -103,7 +102,6 @@ export class ProductCardComponent {
             ...this.cartService.cartSignal()!,
             cartItems: [...cart?.cartItems!, newCartItem as any],
           });
-          console.log(this.cartService.cartSignal());
           this.toast.showToast({
             type: 'success',
             message: `${this.product().name} added to cart!`,

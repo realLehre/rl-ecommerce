@@ -113,6 +113,15 @@ export class ApiOrderService {
           gte: filters.minPrice || undefined,
           lte: filters.maxPrice || undefined,
         },
+        createdAt: {
+          gte: filters.minDate || undefined,
+          lte: filters.maxDate || undefined,
+        },
+        deliveryStatus: filters.deliveryStatus || undefined,
+        id: {
+          contains: filters.orderId,
+          mode: 'insensitive',
+        },
       },
     });
 
