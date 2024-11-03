@@ -1,6 +1,6 @@
 [build]
   command = "npx nx build rl-ecommerce --configuration=production"
-  publish = "dist/apps/your-app/browser"
+  publish = "dist/apps/rl-ecommerce/browser"
   base = "/"
 
   [[redirects]]
