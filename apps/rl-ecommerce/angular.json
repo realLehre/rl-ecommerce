@@ -1,12 +1,9 @@
 {
   "name": "rl-ecommerce",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projects": {
+    "rl-ecommerce": {
   "projectType": "application",
-  "generators": {
-    "@schematics/angular:component": {
-      "style": "scss"
-    }
-  },
   "sourceRoot": "apps/rl-ecommerce/src",
   "prefix": "app",
   "architect": {
@@ -98,4 +95,4 @@
       }
     }
   }
-}
+}}}
