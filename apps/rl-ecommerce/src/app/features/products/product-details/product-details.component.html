@@ -98,7 +98,7 @@
             <h3 class="text-xs text-type_title font-semibold">QUANTITY</h3>
             <div>
               <app-product-quantity
-                [quantity]="productInCart()?.unit || 1"
+                [quantity]="productInCart()?.unit || quantity"
                 [isLoading]="isUpdatingCart()"
                 (quantityChanged)="onAdjustQuantity($event, product)"
               />

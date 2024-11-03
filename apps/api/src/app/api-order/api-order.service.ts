@@ -227,10 +227,10 @@ export class ApiOrderService {
   }
 
   determineDeliveryStatus(events: any) {
-    this.eventUsed = events;
     const lastEvent = [...events]
       .reverse()
       .find((event) => event.status !== null);
+    this.eventUsed = [...events];
 
     switch (lastEvent?.status) {
       case 'CONFIRMED':

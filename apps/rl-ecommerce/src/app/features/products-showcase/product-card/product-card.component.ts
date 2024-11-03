@@ -93,14 +93,17 @@ export class ProductCardComponent {
           const cartTotal = this.cartService.cartTotal;
 
           this.cartService.cartTotal.set(cartTotal()! + 1);
-          const cart = { ...this.cartService.cartSignal() };
+
+          const cart = { ...this.cartService.cartSignal() } || {};
 
           this.cartService.cartSignal.set(null);
           this.cartService.getCart().subscribe();
+          const newCartItem = { ...res, product: this.product() as IProduct };
           this.cartService.cartSignal.set({
             ...this.cartService.cartSignal()!,
-            cartItems: [...cart?.cartItems!, res as ICartItems],
+            cartItems: [...cart?.cartItems!, newCartItem as any],
           });
+          console.log(this.cartService.cartSignal());
           this.toast.showToast({
             type: 'success',
             message: `${this.product().name} added to cart!`,
@@ -124,7 +127,7 @@ export class ProductCardComponent {
       .updateCartItem({
         itemId: this.productInCart()?.id!,
         unit: this.quantity,
-        productPrice: this.productInCart()?.product.price!,
+        productPrice: this.product()?.price!,
       })
       .subscribe({
         next: (res) => {

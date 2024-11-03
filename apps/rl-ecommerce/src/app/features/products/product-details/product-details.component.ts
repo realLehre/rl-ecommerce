@@ -144,46 +144,47 @@ export class ProductDetailsComponent implements OnInit {
   onAdjustQuantity(qty: number, product: IProduct) {
     this.quantity = qty;
 
-    this.isUpdatingCart.set(true);
-    this.quantity = qty;
+    if (this.productInCart()) {
+      this.isUpdatingCart.set(true);
 
-    this.cartService
-      .updateCartItem({
-        itemId: product.id,
-        unit: this.quantity,
-        productPrice: product.price!,
-      })
-      .subscribe({
-        next: (res) => {
-          this.isUpdatingCart.set(false);
-          const currentCart = this.cartService.cartSignal();
-          if (currentCart) {
-            const updatedItems = currentCart.cartItems.map((cartItem) => {
-              if (cartItem.id === this.productInCart()?.id!) {
-                return {
-                  ...cartItem,
-                  unit: qty,
-                  total: qty * cartItem.product.price,
-                };
-              }
-              return cartItem;
-            });
+      this.cartService
+        .updateCartItem({
+          itemId: product.id,
+          unit: this.quantity,
+          productPrice: product.price!,
+        })
+        .subscribe({
+          next: (res) => {
+            this.isUpdatingCart.set(false);
+            const currentCart = this.cartService.cartSignal();
+            if (currentCart) {
+              const updatedItems = currentCart.cartItems.map((cartItem) => {
+                if (cartItem.id === this.productInCart()?.id!) {
+                  return {
+                    ...cartItem,
+                    unit: qty,
+                    total: qty * cartItem.product.price,
+                  };
+                }
+                return cartItem;
+              });
 
-            const newCart = { ...currentCart, cartItems: updatedItems };
+              const newCart = { ...currentCart, cartItems: updatedItems };
 
-            // this.cart$ = of(newCart);
-            // this.cart.set(newCart);
-            this.cartService.cartSignal.set(newCart);
-            localStorage.setItem(
-              this.cartService.CART_KEY,
-              JSON.stringify(newCart),
-            );
-          }
-        },
-        error: (err) => {
-          this.isUpdatingCart.set(false);
-        },
-      });
+              // this.cart$ = of(newCart);
+              // this.cart.set(newCart);
+              this.cartService.cartSignal.set(newCart);
+              localStorage.setItem(
+                this.cartService.CART_KEY,
+                JSON.stringify(newCart),
+              );
+            }
+          },
+          error: (err) => {
+            this.isUpdatingCart.set(false);
+          },
+        });
+    }
   }
 
   averageRating(): number {
