@@ -1,0 +1,10 @@
+[build]
+  command = "npx nx build rl-ecommerce --configuration=production"
+  publish = "dist/apps/your-app/browser"
+  base = "/"
+
+  [[redirects]]
+    from = "/*"
+    to = "/index.html"
+    status = 200
+    force = true
