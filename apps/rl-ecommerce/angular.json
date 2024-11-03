@@ -13,7 +13,7 @@
     "build": {
       "executor": "@angular-devkit/build-angular:application",
       "options": {
-        "outputPath": "dist/apps/rl-ecommerce/browser",
+        "outputPath": "dist/apps/rl-ecommerce/browser/browser",
         "index": "apps/rl-ecommerce/src/index.html",
         "browser": "apps/rl-ecommerce/src/main.ts",
         "polyfills": ["zone.js"],
