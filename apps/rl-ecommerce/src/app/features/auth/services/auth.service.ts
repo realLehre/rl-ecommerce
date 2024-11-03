@@ -28,6 +28,7 @@ export class AuthService {
   private cookieService = inject(CookieService);
   private supabase!: SupabaseClient;
   user = signal<IUser | null>(null);
+  USER_STORAGE_KEY = 'shshyeo948dnsks7h0';
   constructor() {
     this.supabase = createClient(
       environment.supabaseUrl,
@@ -35,7 +36,7 @@ export class AuthService {
     );
     this.onAuthStateChanged();
 
-    const user = this.cookieService.get('shshyeo948dnsks7h0');
+    const user = this.cookieService.get(this.USER_STORAGE_KEY);
     if (user) {
       const userObj = JSON.parse(user);
       this.user.set(userObj);
@@ -92,7 +93,7 @@ export class AuthService {
           fullName: session?.user.user_metadata?.['full_name'],
         };
         this.user.set(data);
-        this.cookieService.set('shshyeo948dnsks7h0', JSON.stringify(data), {
+        this.cookieService.set(this.USER_STORAGE_KEY, JSON.stringify(data), {
           path: '/',
           secure: true,
           sameSite: 'Strict',

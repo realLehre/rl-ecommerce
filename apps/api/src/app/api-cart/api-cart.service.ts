@@ -64,7 +64,7 @@ export class ApiCartService {
   ) {
     const cart = await this.getOrCreateCart(userId);
     return this.prisma.$transaction(async (prisma) => {
-      await prisma.cartItem.create({
+      return prisma.cartItem.create({
         data: {
           cartId: cart.id,
           productId,

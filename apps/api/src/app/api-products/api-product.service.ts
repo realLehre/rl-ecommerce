@@ -25,6 +25,9 @@ export class ApiProductService {
           include: {
             user: true,
           },
+          orderBy: {
+            createdAt: 'desc',
+          },
         },
       },
       where: {
@@ -78,6 +81,9 @@ export class ApiProductService {
         ratings: {
           include: {
             user: true,
+          },
+          orderBy: {
+            createdAt: 'desc',
           },
         },
       },

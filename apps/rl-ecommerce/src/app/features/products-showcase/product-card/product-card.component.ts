@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  computed,
   inject,
   input,
   OnInit,
@@ -20,11 +21,20 @@ import { CartService } from '../../../shared/services/cart.service';
 import { ToastService } from '../../../shared/services/toast.service';
 import { UserAccountService } from '../../user/user-account/services/user-account.service';
 import { ReviewService } from '../../../shared/services/review.service';
+import { ProductQuantityComponent } from '../../../shared/components/product-quantity/product-quantity.component';
+import { ICartItems } from '../../../shared/models/cart.interface';
 
 @Component({
   selector: 'app-product-card',
   standalone: true,
-  imports: [CurrencyPipe, SkeletonModule, LoaderComponent, NgClass, NgStyle],
+  imports: [
+    CurrencyPipe,
+    SkeletonModule,
+    LoaderComponent,
+    NgClass,
+    NgStyle,
+    ProductQuantityComponent,
+  ],
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -42,6 +52,19 @@ export class ProductCardComponent {
   stars = signal(
     Array.from({ length: 5 }, (_, i) => ({ star: i + 1, active: false })),
   );
+  quantity: number = 1;
+  isUpdatingCart = signal(false);
+
+  productInCart = computed(() => {
+    if (this.cartService.cartSignal()) {
+      return this.cartService
+        .cartSignal()
+        ?.cartItems?.find(
+          (cartItem) => cartItem.productId === this.product().id,
+        );
+    }
+    return;
+  });
 
   onViewDetails(product: IProduct) {
     this.productService.activeProduct.set(product);
@@ -70,9 +93,14 @@ export class ProductCardComponent {
           const cartTotal = this.cartService.cartTotal;
 
           this.cartService.cartTotal.set(cartTotal()! + 1);
+          const cart = { ...this.cartService.cartSignal() };
 
           this.cartService.cartSignal.set(null);
           this.cartService.getCart().subscribe();
+          this.cartService.cartSignal.set({
+            ...this.cartService.cartSignal()!,
+            cartItems: [...cart?.cartItems!, res as ICartItems],
+          });
           this.toast.showToast({
             type: 'success',
             message: `${this.product().name} added to cart!`,
@@ -84,6 +112,49 @@ export class ProductCardComponent {
             type: 'error',
             message: err.error.message,
           });
+        },
+      });
+  }
+
+  onAdjustQuantity(qty: number) {
+    this.isUpdatingCart.set(true);
+    this.quantity = qty;
+
+    this.cartService
+      .updateCartItem({
+        itemId: this.productInCart()?.id!,
+        unit: this.quantity,
+        productPrice: this.productInCart()?.product.price!,
+      })
+      .subscribe({
+        next: (res) => {
+          this.isUpdatingCart.set(false);
+          const currentCart = this.cartService.cartSignal();
+          if (currentCart) {
+            const updatedItems = currentCart.cartItems.map((cartItem) => {
+              if (cartItem.id === this.productInCart()?.id!) {
+                return {
+                  ...cartItem,
+                  unit: qty,
+                  total: qty * cartItem.product.price,
+                };
+              }
+              return cartItem;
+            });
+
+            const newCart = { ...currentCart, cartItems: updatedItems };
+
+            // this.cart$ = of(newCart);
+            // this.cart.set(newCart);
+            this.cartService.cartSignal.set(newCart);
+            localStorage.setItem(
+              this.cartService.CART_KEY,
+              JSON.stringify(newCart),
+            );
+          }
+        },
+        error: (err) => {
+          this.isUpdatingCart.set(false);
         },
       });
   }

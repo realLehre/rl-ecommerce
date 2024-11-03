@@ -68,7 +68,9 @@ export class ProductsService {
   }
 
   getProductById(id: string) {
-    return this.http.get<IProduct>(`${this.baseUrl}${id}`);
+    return this.http
+      .get<IProduct>(`${this.baseUrl}${id}`)
+      .pipe(tap((res) => this.activeProduct.set(res)));
   }
 
   getSimilarProducts(categoryId: string, productId: string) {

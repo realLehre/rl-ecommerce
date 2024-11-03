@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  computed,
   inject,
   OnInit,
   signal,
@@ -73,6 +74,18 @@ export class ProductDetailsComponent implements OnInit {
   stars = signal(
     Array.from({ length: 5 }, (_, i) => ({ star: i + 1, active: false })),
   );
+  productInCart = computed(() => {
+    if (this.cartService.cartSignal()) {
+      return this.cartService
+        .cartSignal()
+        ?.cartItems?.find(
+          (cartItem) =>
+            cartItem.productId === this.route.snapshot.queryParams['id'],
+        );
+    }
+    return;
+  });
+  isUpdatingCart = signal(false);
 
   ngOnInit() {
     this.productId = this.route.snapshot.queryParams['id'];
@@ -128,8 +141,49 @@ export class ProductDetailsComponent implements OnInit {
     this.isCollapsed.set(!this.isCollapsed());
   }
 
-  onAdjustQuantity(qty: number) {
+  onAdjustQuantity(qty: number, product: IProduct) {
     this.quantity = qty;
+
+    this.isUpdatingCart.set(true);
+    this.quantity = qty;
+
+    this.cartService
+      .updateCartItem({
+        itemId: product.id,
+        unit: this.quantity,
+        productPrice: product.price!,
+      })
+      .subscribe({
+        next: (res) => {
+          this.isUpdatingCart.set(false);
+          const currentCart = this.cartService.cartSignal();
+          if (currentCart) {
+            const updatedItems = currentCart.cartItems.map((cartItem) => {
+              if (cartItem.id === this.productInCart()?.id!) {
+                return {
+                  ...cartItem,
+                  unit: qty,
+                  total: qty * cartItem.product.price,
+                };
+              }
+              return cartItem;
+            });
+
+            const newCart = { ...currentCart, cartItems: updatedItems };
+
+            // this.cart$ = of(newCart);
+            // this.cart.set(newCart);
+            this.cartService.cartSignal.set(newCart);
+            localStorage.setItem(
+              this.cartService.CART_KEY,
+              JSON.stringify(newCart),
+            );
+          }
+        },
+        error: (err) => {
+          this.isUpdatingCart.set(false);
+        },
+      });
   }
 
   averageRating(): number {

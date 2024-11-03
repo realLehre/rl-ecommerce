@@ -54,6 +54,7 @@ export interface IOrderBody {
 }
 @Injectable()
 export class ApiOrderService {
+  eventUsed!: any;
   constructor(private prisma: PrismaService) {}
 
   async getOrder(
@@ -154,7 +155,9 @@ export class ApiOrderService {
           totalAmount: data.totalAmount,
           paymentMethod: data.paymentMethod,
           orderStatus: 'CONFIRMED',
-          deliveryStatus: 'PENDING',
+          deliveryStatus: this.determineDeliveryStatus(
+            this.generateDeliveryEvents(),
+          ),
           orderItems: {
             create: data.cart.cartItems.map((cartItem: any) => ({
               productId: cartItem.productId,
@@ -162,36 +165,7 @@ export class ApiOrderService {
               unit: cartItem.unit,
             })),
           },
-          deliveryEvents: [
-            {
-              id: uuidv4(),
-              remark: 'Customer paid',
-              status: 'PAID',
-              createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString(),
-            },
-            {
-              id: uuidv4(),
-              remark: 'Order confirmed',
-              status: 'CONFIRMED',
-              createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString(),
-            },
-            {
-              id: uuidv4(),
-              remark: 'Order assigned for delivery',
-              status: null,
-              createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString(),
-            },
-            {
-              id: uuidv4(),
-              remark: 'Order delivered',
-              status: null,
-              createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString(),
-            },
-          ],
+          deliveryEvents: this.eventUsed,
         },
       });
     });
@@ -213,5 +187,60 @@ export class ApiOrderService {
     });
 
     return order;
+  }
+
+  generateDeliveryEvents(): any {
+    const thirdStatus = Math.random() > 0.5 ? 'PACKED' : null;
+    const fourthStatus =
+      Math.random() > 0.5 && thirdStatus !== null ? 'DELIVERED' : null;
+
+    return [
+      {
+        id: uuidv4(),
+        remark: 'Customer paid',
+        status: 'PAID',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+      {
+        id: uuidv4(),
+        remark: 'Order confirmed',
+        status: 'CONFIRMED',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+      {
+        id: uuidv4(),
+        remark: 'Order assigned for delivery',
+        status: thirdStatus,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+      {
+        id: uuidv4(),
+        remark: 'Order delivered',
+        status: fourthStatus,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+    ];
+  }
+
+  determineDeliveryStatus(events: any) {
+    this.eventUsed = events;
+    const lastEvent = [...events]
+      .reverse()
+      .find((event) => event.status !== null);
+
+    switch (lastEvent?.status) {
+      case 'CONFIRMED':
+        return 'PENDING';
+      case 'PACKED':
+        return 'PACKED';
+      case 'DELIVERED':
+        return 'DELIVERED';
+      default:
+        return 'DELIVERED'; // Default if no events have a non-null status
+    }
   }
 }

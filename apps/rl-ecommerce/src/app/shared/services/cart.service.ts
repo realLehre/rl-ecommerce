@@ -68,6 +68,7 @@ export class CartService {
         shippingCost: 100,
         product: data.product,
         id: this.generateRandomId(),
+        productId: data.product.id,
       };
       this.guestCart.cartItems?.push(guestCartItem as ICartItems);
       this.cartSignal.set(this.guestCart as ICart);

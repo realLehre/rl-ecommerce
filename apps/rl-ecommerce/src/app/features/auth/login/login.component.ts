@@ -17,6 +17,7 @@ import { NgClass } from '@angular/common';
 import { AuthService } from '../services/auth.service';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 import { ToastService } from '../../../shared/services/toast.service';
+import { UserAccountService } from '../../user/user-account/services/user-account.service';
 
 @Component({
   selector: 'app-login',
@@ -30,6 +31,7 @@ export class LoginComponent implements OnInit {
   fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private toastService = inject(ToastService);
+  private userAccountService = inject(UserAccountService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   loginForm!: FormGroup;
@@ -67,6 +69,7 @@ export class LoginComponent implements OnInit {
           type: 'success',
           message: 'Signed in successfully!',
         });
+        this.userAccountService.getUser().subscribe();
         const returnUrl = this.route.snapshot.queryParams['returnUrl'];
         this.router.navigateByUrl(returnUrl || '/');
       } catch (error) {
@@ -74,6 +77,16 @@ export class LoginComponent implements OnInit {
         this.isLoading.set(false);
       }
     }
+  }
+
+  onSignInWithGoogle() {
+    this.authService.continueWithGoogle().then((res) => {
+      this.userAccountService.getUser().subscribe();
+      this.toastService.showToast({
+        type: 'success',
+        message: 'Logged in successfully!,',
+      });
+    });
   }
 
   onTogglePasswordVisibility(index: number) {

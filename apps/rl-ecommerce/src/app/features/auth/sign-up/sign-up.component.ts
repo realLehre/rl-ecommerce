@@ -21,6 +21,7 @@ import { LoaderComponent } from '../../../shared/components/loader/loader.compon
 import { ToastService } from '../../../shared/services/toast.service';
 import { ToastModule } from 'primeng/toast';
 import { PasswordMatchDirective } from '../directives/password-match.directive';
+import { UserAccountService } from '../../user/user-account/services/user-account.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -42,6 +43,7 @@ export class SignUpComponent implements OnInit {
   private authService = inject(AuthService);
   private cdr = inject(ChangeDetectorRef);
   private toastService = inject(ToastService);
+  private userAccountService = inject(UserAccountService);
   fb = inject(FormBuilder);
   private vcr = inject(ViewContainerRef);
   isLoading = signal<boolean>(false);
@@ -79,7 +81,7 @@ export class SignUpComponent implements OnInit {
           });
           return;
         }
-
+        this.userAccountService.getUser().subscribe();
         this.toastService.showToast({
           type: 'success',
           message: 'Sign up successfully!',
@@ -97,6 +99,7 @@ export class SignUpComponent implements OnInit {
 
   onSignInWithGoogle() {
     this.authService.continueWithGoogle().then((res) => {
+      this.userAccountService.getUser().subscribe();
       this.toastService.showToast({
         type: 'success',
         message: 'Logged in successfully!,',

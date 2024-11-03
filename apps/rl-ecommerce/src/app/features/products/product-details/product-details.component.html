@@ -98,17 +98,18 @@
             <h3 class="text-xs text-type_title font-semibold">QUANTITY</h3>
             <div>
               <app-product-quantity
-                [quantity]="quantity"
-                (quantityChanged)="onAdjustQuantity($event)"
+                [quantity]="productInCart()?.unit || 1"
+                [isLoading]="isUpdatingCart()"
+                (quantityChanged)="onAdjustQuantity($event, product)"
               />
             </div>
           </div>
 
           <div
-            class="flex items-center justify-between mt-8 flex-wrap gap-x-3 gap-y-2 text-sm mobile:text-base"
+            class="flex items-center justify-between mt-8 flex-wrap gap-x-3 gap-y-3 text-sm mobile:text-base"
           >
             <button
-              class="min-w-[190px] rounded-full text-white font-medium bg-primary py-2 flex-1 h-12 hidden mobile:block"
+              class="min-w-[190px] rounded-full text-white font-medium bg-primary py-2 flex-1 h-12 hidden mobile:block hover:text-type_title_gray hover:border-primary hover:border-[2px] hover:bg-transparent"
               routerLink="/checkout"
             >
               Proceed to Checkout
@@ -119,18 +120,20 @@
             >
               Buy Now
             </button>
-            <button
-              class="min-w-[120px] flex items-center justify-center space-x-3 mobile:min-w-[190px] rounded-full font-medium border-primary border-[2px] text-type_title_gray py-2 flex-1 h-12"
-              [disabled]="isAddingToCart()"
-              (click)="onAddToCart(product)"
-            >
-              @if (isAddingToCart()) {
-                <app-loader
-                  [customStyle]="{ width: '24px', border: '3px solid #000' }"
-                />
-              }
-              <span> Add to Cart </span>
-            </button>
+            @if (!productInCart()) {
+              <button
+                class="min-w-[120px] flex items-center justify-center space-x-3 mobile:min-w-[190px] rounded-full font-medium border-primary border-[2px] text-type_title_gray py-2 flex-1 h-12 hover:bg-primary hover:text-white"
+                [disabled]="isAddingToCart()"
+                (click)="onAddToCart(product)"
+              >
+                @if (isAddingToCart()) {
+                  <app-loader
+                    [customStyle]="{ width: '24px', border: '3px solid #000' }"
+                  />
+                }
+                <span> Add to Cart </span>
+              </button>
+            }
           </div>
         </div>
       </div>

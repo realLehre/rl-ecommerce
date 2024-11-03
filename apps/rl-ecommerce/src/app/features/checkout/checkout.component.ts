@@ -107,11 +107,13 @@ export class CheckoutComponent {
       .subscribe({
         next: (res) => {
           this.router.navigate(['/', 'orders']);
-          this.cartService.cartSignal.set(null);
+          localStorage.removeItem(this.cartService.CART_KEY);
+          setTimeout(() => {
+            this.cartService.cartSignal.set(null);
+          }, 300);
           this.cartService.cartTotal.set(null);
           this.cartService.getCart().subscribe();
           this.orderService.orderSignal.set(null);
-          localStorage.removeItem(this.cartService.CART_KEY);
           this.toast.showToast({
             type: 'success',
             message: 'Order placed successfully!',

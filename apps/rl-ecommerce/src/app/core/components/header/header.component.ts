@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  computed,
   ElementRef,
   inject,
   OnInit,
@@ -12,7 +13,10 @@ import { AsyncPipe, CurrencyPipe, NgClass } from '@angular/common';
 import { LayoutService } from '../../../shared/services/layout.service';
 import { Router, RouterLink } from '@angular/router';
 import { MenuModule } from 'primeng/menu';
-import { AuthService } from '../../../features/auth/services/auth.service';
+import {
+  AuthService,
+  IUser,
+} from '../../../features/auth/services/auth.service';
 import {
   debounceTime,
   distinctUntilChanged,
@@ -29,6 +33,8 @@ import { LoaderComponent } from '../../../shared/components/loader/loader.compon
 import { ProductOptionsService } from '../../../features/product-options/services/product-options.service';
 import { NumberOfFiltersPipe } from '../../../shared/pipes/number-of-filters.pipe';
 import { CartService } from '../../../shared/services/cart.service';
+import { UserAccountService } from '../../../features/user/user-account/services/user-account.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-header',
@@ -52,7 +58,11 @@ export class HeaderComponent implements AfterViewInit, OnInit {
   private optionsService = inject(ProductOptionsService);
   private cartService = inject(CartService);
   user = this.authService.user;
-  userName = this.user()?.fullName.split(' ')[0]!;
+  private userAccountService = inject(UserAccountService);
+  private cookieService = inject(CookieService);
+  userName = computed(() => {
+    return this.user()?.fullName.split(' ')[0]!;
+  });
   private layoutService = inject(LayoutService);
   private router = inject(Router);
   @ViewChild('input', { static: true }) searchInput!: ElementRef;
@@ -108,6 +118,7 @@ export class HeaderComponent implements AfterViewInit, OnInit {
     this.authService.signOut();
     this.cartService.cartSignal.set(null);
     this.cartService.cartTotal.set(null);
+    this.userAccountService.userSignal.set(null);
   }
   onToggleSearch() {
     if (this.searchInput.nativeElement.value) {

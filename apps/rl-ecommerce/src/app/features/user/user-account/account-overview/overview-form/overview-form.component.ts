@@ -21,6 +21,7 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { catchError, switchMap, tap } from 'rxjs';
 import { LoaderComponent } from '../../../../../shared/components/loader/loader.component';
 import { ToastService } from '../../../../../shared/services/toast.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-overview-form',
@@ -39,6 +40,7 @@ export class OverviewFormComponent implements OnInit {
   private addressService = inject(AddressService);
   private toastService = inject(ToastService);
   private userAccountService = inject(UserAccountService);
+  private cookieService = inject(CookieService);
   user = input.required<IUser | null>();
   profileForm!: FormGroup;
   cancelEdit = output<void>();
@@ -66,7 +68,11 @@ export class OverviewFormComponent implements OnInit {
 
       this.userAccountService.updateUser(data).subscribe({
         next: (res) => {
-          localStorage.setItem('hdjeyu7830nsk083hd', JSON.stringify(res));
+          localStorage.setItem(
+            this.userAccountService.USER_ACCOUNT_STORAGE_KEY,
+            JSON.stringify(res),
+          );
+          // const user = this.cookieService.get(this.USER_STORAGE_KEY);
           this.isLoading.set(false);
           this.toastService.showToast({
             type: 'success',
