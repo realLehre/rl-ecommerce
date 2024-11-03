@@ -3,8 +3,17 @@
   publish = "dist/apps/rl-ecommerce/browser"
   base = "/"
 
+[build.environment]
+NODE_VERSION = "18"
+NPM_FLAGS = "--legacy-peer-deps"
+NETLIFY_USE_YARN = "false"
+NX_WORKSPACE = "true"
+
   [[redirects]]
     from = "/*"
     to = "/index.html"
     status = 200
     force = true
+
+[[plugins]]
+package = "@nrwl/workspace/plugins/netlify"
