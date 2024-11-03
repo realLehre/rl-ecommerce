@@ -19,6 +19,7 @@ import { LoaderComponent } from '../../../shared/components/loader/loader.compon
 import { CartService } from '../../../shared/services/cart.service';
 import { ToastService } from '../../../shared/services/toast.service';
 import { UserAccountService } from '../../user/user-account/services/user-account.service';
+import { ReviewService } from '../../../shared/services/review.service';
 
 @Component({
   selector: 'app-product-card',
@@ -34,6 +35,7 @@ export class ProductCardComponent {
   private toast = inject(ToastService);
   private cartService = inject(CartService);
   private userService = inject(UserAccountService);
+  private reviewService = inject(ReviewService);
   user = this.userService.user;
   product = input.required<IProduct>();
   isAddingToCart = signal(false);
@@ -43,6 +45,7 @@ export class ProductCardComponent {
 
   onViewDetails(product: IProduct) {
     this.productService.activeProduct.set(product);
+    this.reviewService.seeingFullReview.set(false);
     this.router.navigate(
       ['/product/' + this.productService.createSlug(product.name)],
       {

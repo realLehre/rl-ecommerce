@@ -46,6 +46,16 @@
               >
                 Review product
               </button>
+            } @else if (
+              deliveryStatus()?.toLowerCase() === 'delivered' &&
+              order()?.orderItems?.[i]?.rating
+            ) {
+              <button
+                class="py-2 text-green-600 italic underline text-sm"
+                (click)="onSeeReview(item, order()?.orderItems?.[i]!)"
+              >
+                Product reviewed
+              </button>
             }
           </div>
         }
@@ -171,21 +181,24 @@
             type="button"
             (click)="onCloseDialog()"
           >
-            Cancel</button
-          ><button
-            class="px-4 py-2 flex items-center justify-center space-x-2 bg-primary h-[38px] text-white rounded-md hover:bg-opacity-80 focus:outline-none disabled:bg-type_grey flex-1 disabled:cursor-not-allowed"
-            [disabled]="
-              isSubmitting() || reviewForm.invalid || selectedRating == 0
-            "
-            type="submit"
-          >
-            @if (isSubmitting()) {
-              <app-loader
-                [customStyle]="{ width: '16px', border: '3px solid #fff' }"
-              />
-            }
-            <span>Submit</span>
+            {{ isReadOnly() ? 'Close' : 'Cancel' }}
           </button>
+          @if (!isReadOnly()) {
+            <button
+              class="px-4 py-2 flex items-center justify-center space-x-2 bg-primary h-[38px] text-white rounded-md hover:bg-opacity-80 focus:outline-none disabled:bg-type_grey flex-1 disabled:cursor-not-allowed"
+              [disabled]="
+                isSubmitting() || reviewForm.invalid || selectedRating == 0
+              "
+              type="submit"
+            >
+              @if (isSubmitting()) {
+                <app-loader
+                  [customStyle]="{ width: '16px', border: '3px solid #fff' }"
+                />
+              }
+              <span>Submit</span>
+            </button>
+          }
         </div>
       </form>
     </div>

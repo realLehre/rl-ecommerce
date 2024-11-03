@@ -140,9 +140,9 @@
       </div>
 
       <div class="mt-[80px]">
-        <!--      <app-recommended-products-->
-        <!--        [query]="{ productId: product.id, categoryId: product.categoryId }"-->
-        <!--      />-->
+        <app-recommended-products
+          [query]="{ productId: product.id, categoryId: product.categoryId }"
+        />
       </div>
     } @else {
       <app-large-reviews [reviews]="product.ratings" />

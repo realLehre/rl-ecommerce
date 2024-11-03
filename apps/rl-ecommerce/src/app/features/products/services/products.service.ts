@@ -68,21 +68,7 @@ export class ProductsService {
   }
 
   getProductById(id: string) {
-    // const saved = JSON.parse(localStorage.getItem('productDetails')!);
-    // if (saved) {
-    //   return of(saved);
-    // } else {
-    //   return this.http
-    //     .get<IProduct>(`${this.baseUrl}${id}`)
-    //     .pipe(
-    //       tap((res) =>
-    //         localStorage.setItem('productDetails', JSON.stringify(res)),
-    //       ),
-    //     );
-    // }
-    return this.http
-      .get<IProduct>(`${this.baseUrl}${id}`)
-      .pipe(tap((res) => this.activeProduct.set(res)));
+    return this.http.get<IProduct>(`${this.baseUrl}${id}`);
   }
 
   getSimilarProducts(categoryId: string, productId: string) {

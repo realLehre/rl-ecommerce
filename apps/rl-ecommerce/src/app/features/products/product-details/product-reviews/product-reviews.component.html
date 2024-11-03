@@ -19,7 +19,7 @@
       }
       <h1 class="text-type_title text-xl mobile:text-[25px]">Reviews</h1>
     </div>
-    @if (!showingFullReview()) {
+    @if (!showingFullReview() && reviews().length > 5) {
       <button
         class="text-primary flex items-center space-x-2 group"
         (click)="onSeeFullReviews()"
@@ -90,7 +90,7 @@
 
                 <div class="w-[80%] flex items-center space-x-3">
                   <div
-                    class="top-0 left-0 h-2 bg-yellow-400 rounded-lg"
+                    class="top-0 left-0 h-[5px] bg-yellow-400 rounded-lg"
                     [ngStyle]="{
                       width: count.totalRating
                         ? (count.totalRating / reviews().length) * 100 + '%'

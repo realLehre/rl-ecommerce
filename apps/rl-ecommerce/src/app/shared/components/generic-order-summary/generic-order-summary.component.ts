@@ -67,11 +67,15 @@ export class GenericOrderSummaryComponent implements OnInit {
   selectedRating = 0;
   reviewForm!: FormGroup;
   reviewGiven = output<void>();
+  isReadOnly = signal(false);
 
   ngOnInit() {
     this.reviewForm = new FormGroup<any>({
-      title: new FormControl(null, Validators.required),
-      comment: new FormControl(null),
+      title: new FormControl(
+        { value: null, disabled: this.isReadOnly() },
+        Validators.required,
+      ),
+      comment: new FormControl({ value: null, disabled: this.isReadOnly() }),
     });
   }
 
@@ -99,6 +103,9 @@ export class GenericOrderSummaryComponent implements OnInit {
   }
 
   onSetStar(index: number) {
+    if (this.isReadOnly()) {
+      return;
+    }
     const idx = index + 1;
     this.selectedRating = index + 1;
     let newStars = Array.from({ length: 5 }, (_, i) => ({
@@ -153,5 +160,21 @@ export class GenericOrderSummaryComponent implements OnInit {
 
   onCloseDialog() {
     this.showReviewDialog.set(false);
+    this.isReadOnly.set(false);
+    this.reviewForm.enable();
+  }
+
+  onSeeReview(item: ICartItems, orderItem: IOrderItem) {
+    this.onSetStar(orderItem.rating.rating - 1);
+    this.isReadOnly.set(true);
+    this.reviewForm.disable();
+    this.selectedProduct = item;
+    this.selectedOrderItem = orderItem;
+    this.showReviewDialog.set(true);
+
+    this.reviewForm.setValue({
+      title: orderItem.rating.title,
+      comment: orderItem.rating?.comment || '',
+    });
   }
 }

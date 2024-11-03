@@ -82,18 +82,12 @@ export class ProductDetailsComponent implements OnInit {
     }
     this.product$ = this.productService.getProductById(this.productId);
 
-    if (this.activeProduct()) {
-      this.product$ = of(this.activeProduct() as IProduct);
-    } else {
-      this.router.events
-        .pipe(filter((event) => event instanceof NavigationEnd))
-        .subscribe(() => {
-          if (!this.reviewService.seeingFullReview()) {
-            this.productId = this.route.snapshot.queryParams['id'];
-            this.product$ = this.productService.getProductById(this.productId);
-          }
-        });
-    }
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.productId = this.route.snapshot.queryParams['id'];
+        this.product$ = this.productService.getProductById(this.productId);
+      });
 
     this.cdr.detectChanges();
   }
@@ -139,11 +133,15 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   averageRating(): number {
-    const totalRating = this.activeProduct()!.ratings.reduce(
-      (acc: number, rating: any) => acc + rating.rating,
-      0,
-    );
-    return totalRating / this.activeProduct()!.ratings.length || 0;
+    if (this.activeProduct()?.ratings) {
+      const totalRating = this.activeProduct()?.ratings.reduce(
+        (acc: number, rating: any) => acc + rating.rating,
+        0,
+      );
+      return totalRating! / this.activeProduct()?.ratings.length! || 0;
+    } else {
+      return 0;
+    }
   }
 
   getStarWidth(starIndex: number): string {
