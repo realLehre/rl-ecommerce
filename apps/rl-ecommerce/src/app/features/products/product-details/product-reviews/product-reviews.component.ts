@@ -11,6 +11,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { IProductRating } from '../../model/product.interface';
 import { ReviewService } from '../../../../shared/services/review.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-reviews',
@@ -22,6 +23,8 @@ import { ReviewService } from '../../../../shared/services/review.service';
 })
 export class ProductReviewsComponent implements OnInit {
   private reviewService = inject(ReviewService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
   reviews = input<IProductRating[]>([]);
   showShortReview = input<boolean>(true);
   stars = signal(
@@ -75,10 +78,19 @@ export class ProductReviewsComponent implements OnInit {
 
   onSeeFullReviews() {
     this.reviewService.seeingFullReview.set(true);
-    window.scrollTo(0, 0);
+    this.router.navigate([], {
+      queryParams: { reviews: true },
+      queryParamsHandling: 'merge',
+      relativeTo: this.route,
+    });
   }
 
   onCloseFullReview() {
     this.reviewService.seeingFullReview.set(false);
+    this.router.navigate([], {
+      queryParams: { reviews: null },
+      queryParamsHandling: 'merge',
+      relativeTo: this.route,
+    });
   }
 }

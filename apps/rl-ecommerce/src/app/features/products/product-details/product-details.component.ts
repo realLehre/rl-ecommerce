@@ -72,6 +72,10 @@ export class ProductDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.productId = this.route.snapshot.queryParams['id'];
+    const isShowingReviews = this.route.snapshot.queryParams['reviews'];
+    if (isShowingReviews) {
+      this.reviewService.seeingFullReview.set(true);
+    }
     this.product$ = this.productService.getProductById(this.productId);
 
     if (this.activeProduct()) {
@@ -80,10 +84,13 @@ export class ProductDetailsComponent implements OnInit {
       this.router.events
         .pipe(filter((event) => event instanceof NavigationEnd))
         .subscribe(() => {
-          this.productId = this.route.snapshot.queryParams['id'];
-          this.product$ = this.productService.getProductById(this.productId);
+          if (!this.reviewService.seeingFullReview()) {
+            this.productId = this.route.snapshot.queryParams['id'];
+            this.product$ = this.productService.getProductById(this.productId);
+          }
         });
     }
+
     this.cdr.detectChanges();
   }
 
