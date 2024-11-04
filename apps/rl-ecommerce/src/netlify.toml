@@ -1,16 +1,14 @@
 [build]
-  command = "npx nx build rl-ecommerce --configuration=production"
-  publish = "dist/apps/rl-ecommerce/browser"
-  base = "/"
+command = "npx nx build rl-ecommerce --configuration=production"
+publish = "dist/apps/rl-ecommerce/browser"
 
 [build.environment]
 NODE_VERSION = "18"
-NETLIFY_USE_YARN = "false"
-NX_WORKSPACE = "true"
+NPM_FLAGS = "--legacy-peer-deps"
 
-  [[redirects]]
-    from = "/*"
-    to = "/index.html"
-    status = 200
-    force = true
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
+force = true
 
