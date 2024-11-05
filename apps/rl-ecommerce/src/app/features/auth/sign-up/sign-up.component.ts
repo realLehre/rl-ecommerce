@@ -59,10 +59,7 @@ export class SignUpComponent implements OnInit {
       lastName: [null, Validators.required],
       email: [null, [Validators.required, Validators.email]],
       password: [null, [Validators.required, Validators.minLength(6)]],
-      confirmPassword: [
-        'Test1234',
-        [Validators.required, Validators.minLength(6)],
-      ],
+      confirmPassword: [null, [Validators.required, Validators.minLength(6)]],
     });
 
     this.toastService.vcr = this.vcr;
