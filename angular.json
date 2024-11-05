@@ -22,11 +22,7 @@
             "assets": [
               "apps/rl-ecommerce/src/favicon.ico",
               "apps/rl-ecommerce/src/assets",
-              {
-                "glob": "_redirects",
-                "input": "apps/rl-ecommerce/src",
-                "output": "/"
-              }
+              "apps/rl-ecommerce/src/_redirects"
             ],
             "styles": [
               "apps/rl-ecommerce/src/styles.scss",
