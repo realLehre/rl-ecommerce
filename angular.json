@@ -21,7 +21,12 @@
             "tsConfig": "apps/rl-ecommerce/tsconfig.app.json",
             "assets": [
               "apps/rl-ecommerce/src/favicon.ico",
-              "apps/rl-ecommerce/src/assets"
+              "apps/rl-ecommerce/src/assets",
+              {
+                "glob": "_redirects",
+                "input": "apps/rl-ecommerce/src",
+                "output": "/"
+              }
             ],
             "styles": [
               "apps/rl-ecommerce/src/styles.scss",

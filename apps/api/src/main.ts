@@ -16,7 +16,11 @@ async function bootstrap() {
 
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
-  app.enableCors();
+  app.enableCors({
+    origin: ['http://localhost:4200', 'https://rl-toy-spot.netlify.app'],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
   const port = process.env['PORT'] || 3000;
   await app.listen(port);
   Logger.log(
