@@ -6,7 +6,10 @@
     "start": "nx serve",
     "build": "nx build",
     "watch": "nx build --watch --configuration development",
-    "test": "nx test"
+    "test": "nx test",
+    "install:ci": "npm ci",
+    "build:api": "nx build api",
+    "start:api": "node dist/apps/api/main.js"
   },
   "private": true,
   "dependencies": {

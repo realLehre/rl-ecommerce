@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: api
+    env: node
+    buildCommand: npm run install:ci && npm run build:api
+    startCommand: npm run start:api
+    envVars:
+      - key: NODE_ENV
+        value: production
