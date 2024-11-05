@@ -61,7 +61,6 @@ export class SignUpComponent implements OnInit {
       password: [null, [Validators.required, Validators.minLength(6)]],
       confirmPassword: [null, [Validators.required, Validators.minLength(6)]],
     });
-
     this.toastService.vcr = this.vcr;
   }
 
