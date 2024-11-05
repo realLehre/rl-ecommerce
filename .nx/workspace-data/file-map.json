@@ -88,11 +88,11 @@
       },
       {
         "file": "package-lock.json",
-        "hash": "6593043024902346457"
+        "hash": "3255506446123876970"
       },
       {
         "file": "package.json",
-        "hash": "10136570263014236430"
+        "hash": "3379253674540316849"
       },
       {
         "file": "prisma/migrations/20241015105151_init/migration.sql",
@@ -1945,50 +1945,6 @@
           "hash": "17700927949365452100"
         }
       ],
-      "api-e2e": [
-        {
-          "file": "apps/api-e2e/eslint.config.js",
-          "hash": "17472210594086834595"
-        },
-        {
-          "file": "apps/api-e2e/jest.config.ts",
-          "hash": "16237957319090451515"
-        },
-        {
-          "file": "apps/api-e2e/project.json",
-          "hash": "18010798395537753667"
-        },
-        {
-          "file": "apps/api-e2e/src/api/api.spec.ts",
-          "hash": "110394728024017389",
-          "deps": [
-            "npm:axios"
-          ]
-        },
-        {
-          "file": "apps/api-e2e/src/support/global-setup.ts",
-          "hash": "2568409276037275290"
-        },
-        {
-          "file": "apps/api-e2e/src/support/global-teardown.ts",
-          "hash": "5275447082211835490"
-        },
-        {
-          "file": "apps/api-e2e/src/support/test-setup.ts",
-          "hash": "10984585515912236441",
-          "deps": [
-            "npm:axios"
-          ]
-        },
-        {
-          "file": "apps/api-e2e/tsconfig.json",
-          "hash": "15443990093475294480"
-        },
-        {
-          "file": "apps/api-e2e/tsconfig.spec.json",
-          "hash": "14954872453723519891"
-        }
-      ],
       "api": [
         {
           "file": "apps/api/eslint.config.js",
@@ -2260,6 +2216,50 @@
           "deps": [
             "npm:@nx/webpack"
           ]
+        }
+      ],
+      "api-e2e": [
+        {
+          "file": "apps/api-e2e/eslint.config.js",
+          "hash": "17472210594086834595"
+        },
+        {
+          "file": "apps/api-e2e/jest.config.ts",
+          "hash": "16237957319090451515"
+        },
+        {
+          "file": "apps/api-e2e/project.json",
+          "hash": "18010798395537753667"
+        },
+        {
+          "file": "apps/api-e2e/src/api/api.spec.ts",
+          "hash": "110394728024017389",
+          "deps": [
+            "npm:axios"
+          ]
+        },
+        {
+          "file": "apps/api-e2e/src/support/global-setup.ts",
+          "hash": "2568409276037275290"
+        },
+        {
+          "file": "apps/api-e2e/src/support/global-teardown.ts",
+          "hash": "5275447082211835490"
+        },
+        {
+          "file": "apps/api-e2e/src/support/test-setup.ts",
+          "hash": "10984585515912236441",
+          "deps": [
+            "npm:axios"
+          ]
+        },
+        {
+          "file": "apps/api-e2e/tsconfig.json",
+          "hash": "15443990093475294480"
+        },
+        {
+          "file": "apps/api-e2e/tsconfig.spec.json",
+          "hash": "14954872453723519891"
         }
       ]
     }
