@@ -1,5 +1,5 @@
 [build]
-command = "npx nx build rl-ecommerce --configuration=production"
+command = "cp angular.netlify.json angular.json && npx nx build rl-ecommerce --configuration=production"
 publish = "dist/apps/rl-ecommerce/browser"
 
 [build.environment]
@@ -11,4 +11,3 @@ from = "/*"
 to = "/index.html"
 status = 200
 force = true
-
