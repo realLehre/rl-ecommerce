@@ -8,7 +8,7 @@
     "watch": "nx build --watch --configuration development",
     "test": "nx test",
     "install:ci": "npm ci",
-    "build:api": "nx build api",
+    "build:api": "npx nx build api",
     "start:api": "node dist/apps/api/main.js"
   },
   "private": true,
