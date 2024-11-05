@@ -1,5 +1,5 @@
 [build]
-command = "cp angular.netlify.json angular.json && npx nx build rl-ecommerce --configuration=production"
+command = " npx nx build rl-ecommerce --configuration=production"
 publish = "dist/apps/rl-ecommerce/browser"
 
 [build.environment]
