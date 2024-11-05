@@ -1,26 +1,23 @@
-# Use the official Node.js image.
-FROM node:18
+# Use a Node.js base image
+FROM node:18-alpine
 
-# Set the working directory.
+# Set working directory in the container
 WORKDIR /app
 
-# Copy the root package.json and lock files
-COPY package*.json ./
+# Copy package.json and package-lock.json first
+COPY package.json package-lock.json ./
 
-# Copy Nx workspace configuration files to use `nx` commands.
-COPY nx.json ./
-COPY tsconfig.base.json ./
-COPY apps/api ./apps/api
-COPY libs ./libs
-
-# Install dependencies (this uses the root package.json).
+# Install dependencies
 RUN npm install
 
-# Build the NestJS application
-RUN npx nx build apps/api
+# Copy the rest of the application code
+COPY . .
 
-# Expose port 3000 (or your configured NestJS port)
+# Build the NX application
+RUN npx nx build api
+
+# Expose the port your NestJS app will run on
 EXPOSE 3000
 
-# Start the NestJS server
+# Start the application
 CMD ["node", "dist/apps/api/main.js"]
