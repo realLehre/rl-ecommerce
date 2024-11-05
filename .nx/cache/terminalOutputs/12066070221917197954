@@ -1,0 +1,56 @@
+
+[2m> [22m[2mnx run[22m api:build  [2m[existing outputs match the cache, left as is][22m
+
+[2m> [22mwebpack-cli build --node-env=production
+
+chunk (runtime: main) [1m[32mmain.js[39m[22m (main) 45.8 KiB [1m[33m[entry][39m[22m [1m[32m[rendered][39m[22m
+webpack compiled [1m[32msuccessfully[39m[22m (2d52cb228a973e6e)
+
+
+
+[0m[7m[1m[32m NX [39m[22m[27m[0m  [32mSuccessfully ran target [1mbuild[22m for project api[39m
+
+[2mNx read the output from the cache instead of running the command for 1 out of 1 tasks.[22m
+
+[1m[31mDebugger listening on ws://localhost:9229/9dcf295c-4157-433e-b78f-25dc9c93ecc3[39m[22m
+[1m[31mDebugger listening on ws://localhost:9229/9dcf295c-4157-433e-b78f-25dc9c93ecc3[39m[22m
+[1m[31mFor help, see: https://nodejs.org/en/docs/inspector[39m[22m
+[1m[31m[39m[22m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +19ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAppController {/api}:[39m[38;5;3m +5ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api, GET} route[39m[38;5;3m +2ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mApiUserController {/api/users}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/users, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/users/:id, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/users/:id, PATCH} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mApiAddressController {/api/users}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/users/:id/address, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/users/address/delete/:id, DELETE} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/users/:id/address, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/users/address/edit/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/users/:userId/address/default/:addressId, PATCH} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mApiCategoryController {/api/category}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/category/create, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/category, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mApiProductController {/api/product}:[39m[38;5;3m +1ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/product/all, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/product/:id, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/product/:productId/similar/:categoryId, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/product/create, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/product, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mApiCartController {/api/cart}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/cart/:id, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/cart/add, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/cart/:id/update, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/cart/:id/delete, DELETE} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/cart/:id/merge, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mApiOrderController {/api/order}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/order/:id, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/order/user/:id, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/order/create, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mApiReviewController {/api/review}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:14 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/review/create, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:15 [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +1344ms[39m
+[32m[Nest] 14988  - [39m05/11/2024, 00:58:15 [32m    LOG[39m [32m🚀 Application is running on: http://localhost:3000/api[39m
+[1m[31mWatch error: Daemon closed the connection[39m[22m

@@ -1,0 +1,2266 @@
+{
+  "version": "6.0",
+  "nxVersion": "20.0.1",
+  "pathMappings": {},
+  "nxJsonPlugins": [
+    {
+      "name": "@nx/webpack/plugin",
+      "options": {
+        "buildTargetName": "build",
+        "serveTargetName": "serve",
+        "previewTargetName": "preview"
+      }
+    },
+    {
+      "name": "@nx/eslint/plugin",
+      "options": {
+        "targetName": "lint"
+      }
+    },
+    {
+      "name": "@nx/jest/plugin",
+      "options": {
+        "targetName": "test"
+      }
+    }
+  ],
+  "fileMap": {
+    "nonProjectFiles": [
+      {
+        "file": ".editorconfig",
+        "hash": "17241496168097493888"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "10576975515655598515"
+      },
+      {
+        "file": ".prettierignore",
+        "hash": "14688272390704683536"
+      },
+      {
+        "file": ".prettierrc",
+        "hash": "16267754514737964994"
+      },
+      {
+        "file": ".vscode/extensions.json",
+        "hash": "18037487075392171512"
+      },
+      {
+        "file": ".vscode/launch.json",
+        "hash": "17406702432687230417"
+      },
+      {
+        "file": ".vscode/tasks.json",
+        "hash": "10093397977228577162"
+      },
+      {
+        "file": "README.md",
+        "hash": "1737028044217367821"
+      },
+      {
+        "file": "angular.json",
+        "hash": "1023760254136412851"
+      },
+      {
+        "file": "eslint.config.js",
+        "hash": "2478217381773231556"
+      },
+      {
+        "file": "jest.config.ts",
+        "hash": "3494843969422251966"
+      },
+      {
+        "file": "jest.preset.js",
+        "hash": "9430166341120122740"
+      },
+      {
+        "file": "karma.conf.js",
+        "hash": "9656364725710720620"
+      },
+      {
+        "file": "libs/.gitkeep",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "nx.json",
+        "hash": "13167665309250682815"
+      },
+      {
+        "file": "package-lock.json",
+        "hash": "6593043024902346457"
+      },
+      {
+        "file": "package.json",
+        "hash": "10136570263014236430"
+      },
+      {
+        "file": "prisma/migrations/20241015105151_init/migration.sql",
+        "hash": "8520459261887685120"
+      },
+      {
+        "file": "prisma/migrations/20241015134407_second/migration.sql",
+        "hash": "4975335570547922870"
+      },
+      {
+        "file": "prisma/migrations/20241015165825_third/migration.sql",
+        "hash": "3349718055594348326"
+      },
+      {
+        "file": "prisma/migrations/20241018111128_fouth/migration.sql",
+        "hash": "16021492473702326255"
+      },
+      {
+        "file": "prisma/migrations/20241018174937_fifth/migration.sql",
+        "hash": "14023673766940856754"
+      },
+      {
+        "file": "prisma/migrations/20241018182359_sixth/migration.sql",
+        "hash": "8028548879869784564"
+      },
+      {
+        "file": "prisma/migrations/20241023115029_add_name_index/migration.sql",
+        "hash": "14234207058651212711"
+      },
+      {
+        "file": "prisma/migrations/20241024065511_add_cart_address/migration.sql",
+        "hash": "7713010672496280405"
+      },
+      {
+        "file": "prisma/migrations/20241024173253_remove_address_from_cart/migration.sql",
+        "hash": "6494099947102273055"
+      },
+      {
+        "file": "prisma/migrations/20241026101144_add_order_model/migration.sql",
+        "hash": "15410273471960396190"
+      },
+      {
+        "file": "prisma/migrations/20241026143818_remove_unique_userid_from_order/migration.sql",
+        "hash": "1185360863094109681"
+      },
+      {
+        "file": "prisma/migrations/20241026151303_refactor_order/migration.sql",
+        "hash": "1643765654473785699"
+      },
+      {
+        "file": "prisma/migrations/20241026161406_remove_orderid_from_cart/migration.sql",
+        "hash": "17166392914630329897"
+      },
+      {
+        "file": "prisma/migrations/20241027172013_add_orderstatus_filter/migration.sql",
+        "hash": "17277191531449383045"
+      },
+      {
+        "file": "prisma/migrations/20241029130848_add_cart_items_to_reviews/migration.sql",
+        "hash": "6560370539592149057"
+      },
+      {
+        "file": "prisma/migrations/20241029134601_test/migration.sql",
+        "hash": "2431136859519896668"
+      },
+      {
+        "file": "prisma/migrations/20241029144809_test2/migration.sql",
+        "hash": "2612674141286163753"
+      },
+      {
+        "file": "prisma/migrations/20241029155058_add_order_items/migration.sql",
+        "hash": "1451312287458084041"
+      },
+      {
+        "file": "prisma/migrations/20241030132748_removed_delivery_events_relation/migration.sql",
+        "hash": "1404628742181279109"
+      },
+      {
+        "file": "prisma/migrations/20241030134021_remove_unused_indexes/migration.sql",
+        "hash": "2143415116537904159"
+      },
+      {
+        "file": "prisma/migrations/migration_lock.toml",
+        "hash": "11493296588214560035"
+      },
+      {
+        "file": "prisma/schema.prisma",
+        "hash": "5951556605356754024"
+      },
+      {
+        "file": "tailwind.config.js",
+        "hash": "9607201657276309559"
+      },
+      {
+        "file": "tools/generators/.gitkeep",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "tools/tsconfig.tools.json",
+        "hash": "16088922570277978783"
+      },
+      {
+        "file": "tsconfig.base.json",
+        "hash": "7297309707956546853"
+      }
+    ],
+    "projectFileMap": {
+      "api": [
+        {
+          "file": "apps/api/eslint.config.js",
+          "hash": "17472210594086834595"
+        },
+        {
+          "file": "apps/api/jest.config.ts",
+          "hash": "11236996806909307999"
+        },
+        {
+          "file": "apps/api/project.json",
+          "hash": "11874880000837721775"
+        },
+        {
+          "file": "apps/api/src/app/api-address/api-address.controller.ts",
+          "hash": "12899307280972193652",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/api/src/app/api-address/api-address.service.ts",
+          "hash": "3743968119576716635",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/api/src/app/api-address/create-address.dto.ts",
+          "hash": "7800211406859166036",
+          "deps": [
+            "npm:@angular/forms"
+          ]
+        },
+        {
+          "file": "apps/api/src/app/api-cart/api-cart.controller.spec.ts",
+          "hash": "15869682753894097165",
+          "deps": [
+            "npm:@nestjs/testing"
+          ]
+        },
+        {
+          "file": "apps/api/src/app/api-cart/api-cart.controller.ts",
+          "hash": "7351767771178205226",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/api/src/app/api-cart/api-cart.service.spec.ts",
+          "hash": "1425693476127503871",
+          "deps": [
+            "npm:@nestjs/testing"
+          ]
+        },
+        {
+          "file": "apps/api/src/app/api-cart/api-cart.service.ts",
+          "hash": "17039619231846381213",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/api/src/app/api-category/api-category.controller.spec.ts",
+          "hash": "7842697753126669774",
+          "deps": [
+            "npm:@nestjs/testing"
+          ]
+        },
+        {
+          "file": "apps/api/src/app/api-category/api-category.controller.ts",
+          "hash": "5126837539568480752",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/api/src/app/api-category/api-category.service.spec.ts",
+          "hash": "18044962541289274509",
+          "deps": [
+            "npm:@nestjs/testing"
+          ]
+        },
+        {
+          "file": "apps/api/src/app/api-category/api-category.service.ts",
+          "hash": "4636564964235139391",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/api/src/app/api-order/api-order.controller.spec.ts",
+          "hash": "6576062436372131224",
+          "deps": [
+            "npm:@nestjs/testing"
+          ]
+        },
+        {
+          "file": "apps/api/src/app/api-order/api-order.controller.ts",
+          "hash": "3733886417891155681",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/api/src/app/api-order/api-order.service.spec.ts",
+          "hash": "17487813543799582166",
+          "deps": [
+            "npm:@nestjs/testing"
+          ]
+        },
+        {
+          "file": "apps/api/src/app/api-order/api-order.service.ts",
+          "hash": "3148302053400874088",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:uuid"
+          ]
+        },
+        {
+          "file": "apps/api/src/app/api-products/api-product.controller.spec.ts",
+          "hash": "15656783529237103857",
+          "deps": [
+            "npm:@nestjs/testing"
+          ]
+        },
+        {
+          "file": "apps/api/src/app/api-products/api-product.controller.ts",
+          "hash": "3199217283238964850",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/api/src/app/api-products/api-product.service.spec.ts",
+          "hash": "4745784779509955107",
+          "deps": [
+            "npm:@nestjs/testing"
+          ]
+        },
+        {
+          "file": "apps/api/src/app/api-products/api-product.service.ts",
+          "hash": "296533828052887155",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/api/src/app/api-review/api-review.controller.spec.ts",
+          "hash": "16480120629789277920",
+          "deps": [
+            "npm:@nestjs/testing"
+          ]
+        },
+        {
+          "file": "apps/api/src/app/api-review/api-review.controller.ts",
+          "hash": "13441240054724632437",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/api/src/app/api-review/api-review.service.spec.ts",
+          "hash": "2814568134771853496",
+          "deps": [
+            "npm:@nestjs/testing"
+          ]
+        },
+        {
+          "file": "apps/api/src/app/api-review/api-review.service.ts",
+          "hash": "12134937717848091847",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/api/src/app/api-user/api-user.controller.ts",
+          "hash": "11511661094071023458",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/api/src/app/api-user/api-user.service.ts",
+          "hash": "5154900325261922739",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/api/src/app/app.controller.spec.ts",
+          "hash": "9499997688052526633",
+          "deps": [
+            "npm:@nestjs/testing"
+          ]
+        },
+        {
+          "file": "apps/api/src/app/app.controller.ts",
+          "hash": "9005150069945785676",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/api/src/app/app.module.ts",
+          "hash": "16284953534051363607",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/api/src/app/app.service.spec.ts",
+          "hash": "8587461140686713758",
+          "deps": [
+            "npm:@nestjs/testing"
+          ]
+        },
+        {
+          "file": "apps/api/src/app/app.service.ts",
+          "hash": "9967902337593410053",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/api/src/app/http-exception.filter.ts",
+          "hash": "5288042850289517569",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:express",
+            "npm:@prisma/client"
+          ]
+        },
+        {
+          "file": "apps/api/src/app/prisma.service.ts",
+          "hash": "467632100030041031",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:@prisma/client"
+          ]
+        },
+        {
+          "file": "apps/api/src/assets/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/api/src/main.ts",
+          "hash": "10268273763446346611",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:@nestjs/core"
+          ]
+        },
+        {
+          "file": "apps/api/tsconfig.app.json",
+          "hash": "3171572500325445971"
+        },
+        {
+          "file": "apps/api/tsconfig.json",
+          "hash": "3490524966360018312"
+        },
+        {
+          "file": "apps/api/tsconfig.spec.json",
+          "hash": "11550347367511341917"
+        },
+        {
+          "file": "apps/api/webpack.config.js",
+          "hash": "3774360504015463941",
+          "deps": [
+            "npm:@nx/webpack"
+          ]
+        }
+      ],
+      "rl-ecommerce": [
+        {
+          "file": "apps/rl-ecommerce/project.json",
+          "hash": "14979389886460404634"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/_redirects",
+          "hash": "7289026612628632489"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/app.component.html",
+          "hash": "848395303240231261"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/app.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/app.component.spec.ts",
+          "hash": "8572347927590279275",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/app.component.ts",
+          "hash": "3641676479960123326",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/app.config.ts",
+          "hash": "17767052105546269420",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "npm:@angular/platform-browser",
+            "npm:@angular/common",
+            "npm:primeng",
+            "npm:ngx-cookie-service"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/app.routes.ts",
+          "hash": "7618713439209753460",
+          "deps": [
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/core/components/footer/footer.component.html",
+          "hash": "13713335011281097178"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/core/components/footer/footer.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/core/components/footer/footer.component.spec.ts",
+          "hash": "16138689727067120207",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/core/components/footer/footer.component.ts",
+          "hash": "5056560380862273646",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/core/components/header/header.component.html",
+          "hash": "7516236316373086061"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/core/components/header/header.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/core/components/header/header.component.spec.ts",
+          "hash": "18019974771912921764",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/core/components/header/header.component.ts",
+          "hash": "6021405455772425361",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:@angular/router",
+            "npm:primeng",
+            "npm:rxjs",
+            "npm:ngx-cookie-service"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/core/components/main-content/main-content.component.html",
+          "hash": "8782962832672588333"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/core/components/main-content/main-content.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/core/components/main-content/main-content.component.spec.ts",
+          "hash": "11445292238659150824",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/core/components/main-content/main-content.component.ts",
+          "hash": "6680114656825055305",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "npm:@angular/common"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/auth/auth.component.html",
+          "hash": "14161564229940878176"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/auth/auth.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/auth/auth.component.spec.ts",
+          "hash": "6069562382838068467",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/auth/auth.component.ts",
+          "hash": "794401348320663510",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/auth/auth.guard.spec.ts",
+          "hash": "8826885499913990525",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/auth/auth.guard.ts",
+          "hash": "4372610813959477307",
+          "deps": [
+            "npm:@angular/router",
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/auth/auth.routes.ts",
+          "hash": "2504821355428831785",
+          "deps": [
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/auth/directives/password-match.directive.spec.ts",
+          "hash": "2665699015768676968"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/auth/directives/password-match.directive.ts",
+          "hash": "14725838260875307658",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/forms"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/auth/login/login.component.html",
+          "hash": "1551581398530618054"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/auth/login/login.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/auth/login/login.component.spec.ts",
+          "hash": "6838080458541951293",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/auth/login/login.component.ts",
+          "hash": "3595037893811260863",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/forms",
+            "npm:@angular/router",
+            "npm:@angular/common"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/auth/services/auth.service.spec.ts",
+          "hash": "10697900076114607965",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/auth/services/auth.service.ts",
+          "hash": "12468759613622929125",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@supabase/supabase-js",
+            "npm:@angular/router",
+            "npm:ngx-cookie-service"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/auth/sign-up/sign-up.component.html",
+          "hash": "1900115221840765184"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/auth/sign-up/sign-up.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/auth/sign-up/sign-up.component.spec.ts",
+          "hash": "4341181150612226483",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/auth/sign-up/sign-up.component.ts",
+          "hash": "1842277448507606096",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/forms",
+            "npm:@angular/router",
+            "npm:@angular/common",
+            "npm:primeng"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/cart/cart.component.html",
+          "hash": "17822885105137443854"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/cart/cart.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/cart/cart.component.spec.ts",
+          "hash": "2891972155636604996",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/cart/cart.component.ts",
+          "hash": "11495552401771297399",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "npm:primeng",
+            "npm:@angular/common",
+            "npm:rxjs"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/cart/empty-cart/empty-cart.component.spec.ts",
+          "hash": "5510357689103145523",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/cart/empty-cart/empty-cart.component.ts",
+          "hash": "9025959031010675026",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/checkout/checkout-address/checkout-address.component.html",
+          "hash": "2825353848123287189"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/checkout/checkout-address/checkout-address.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/checkout/checkout-address/checkout-address.component.spec.ts",
+          "hash": "16884926415748999823",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/checkout/checkout-address/checkout-address.component.ts",
+          "hash": "2064091367518015370",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/forms",
+            "npm:primeng",
+            "npm:@angular/router",
+            "npm:@angular/common"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/checkout/checkout.component.html",
+          "hash": "1365659476449665749"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/checkout/checkout.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/checkout/checkout.component.spec.ts",
+          "hash": "6058582745385769274",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/checkout/checkout.component.ts",
+          "hash": "15860188380228426210",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/checkout/order-summary/order-summary.component.html",
+          "hash": "7912508041904432630"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/checkout/order-summary/order-summary.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/checkout/order-summary/order-summary.component.spec.ts",
+          "hash": "9435728503325310138",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/checkout/order-summary/order-summary.component.ts",
+          "hash": "9323187891878080810",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:primeng"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/checkout/payment-options/payment-options.component.html",
+          "hash": "17311093151287583195"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/checkout/payment-options/payment-options.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/checkout/payment-options/payment-options.component.spec.ts",
+          "hash": "10937083719405786207",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/checkout/payment-options/payment-options.component.ts",
+          "hash": "8257061213038550364",
+          "deps": [
+            "npm:@angular/core",
+            "npm:primeng",
+            "npm:@angular/common",
+            "npm:@angular/forms"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/homepage/homepage.component.html",
+          "hash": "1349801172191973686"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/homepage/homepage.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/homepage/homepage.component.spec.ts",
+          "hash": "6782442411317793350",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/homepage/homepage.component.ts",
+          "hash": "11885586981629353492",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/homepage/mobile-nav/mobile-nav.component.html",
+          "hash": "18081499386270111487"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/homepage/mobile-nav/mobile-nav.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/homepage/mobile-nav/mobile-nav.component.spec.ts",
+          "hash": "16737270233444949893",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/homepage/mobile-nav/mobile-nav.component.ts",
+          "hash": "12056043754928642218",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/homepage/product-nav/product-nav.component.html",
+          "hash": "9124648091743759183"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/homepage/product-nav/product-nav.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/homepage/product-nav/product-nav.component.spec.ts",
+          "hash": "15143448416482874299",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/homepage/product-nav/product-nav.component.ts",
+          "hash": "4164217500819546193",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/page-not-found/page-not-found.component.html",
+          "hash": "17152138344958668881"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/page-not-found/page-not-found.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/page-not-found/page-not-found.component.spec.ts",
+          "hash": "10008351564355059023",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/page-not-found/page-not-found.component.ts",
+          "hash": "2935068353339583215",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "npm:uuid"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/product-options/categories/categories.component.html",
+          "hash": "9318487381882507209"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/product-options/categories/categories.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/product-options/categories/categories.component.spec.ts",
+          "hash": "8750887020279569999",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/product-options/categories/categories.component.ts",
+          "hash": "9306884814511707104",
+          "deps": [
+            "npm:@angular/core",
+            "npm:rxjs",
+            "npm:@angular/common",
+            "npm:primeng",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/product-options/featured-product/featured-product.component.html",
+          "hash": "14347575424636035497"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/product-options/featured-product/featured-product.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/product-options/featured-product/featured-product.component.spec.ts",
+          "hash": "14190817799626020775",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/product-options/featured-product/featured-product.component.ts",
+          "hash": "6626808492945477267",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/product-options/filters/filters.component.html",
+          "hash": "11827075017189652084"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/product-options/filters/filters.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/product-options/filters/filters.component.spec.ts",
+          "hash": "13127002813578094942",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/product-options/filters/filters.component.ts",
+          "hash": "6246425256183866054",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:primeng",
+            "npm:@angular/forms",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/product-options/mobile-filters/mobile-filters.component.html",
+          "hash": "15230917539060576549"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/product-options/mobile-filters/mobile-filters.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/product-options/mobile-filters/mobile-filters.component.spec.ts",
+          "hash": "10177152320021572521",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/product-options/mobile-filters/mobile-filters.component.ts",
+          "hash": "16731243976519109685",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/product-options/models/product-options.interface.ts",
+          "hash": "16836830037209044815"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/product-options/services/product-options.service.spec.ts",
+          "hash": "1846035662264282819",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/product-options/services/product-options.service.ts",
+          "hash": "8253988001834881337",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:rxjs"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products-showcase/product-card/product-card.component.html",
+          "hash": "6943603160360850021"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products-showcase/product-card/product-card.component.scss",
+          "hash": "6807334413631795689"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products-showcase/product-card/product-card.component.spec.ts",
+          "hash": "17453545006425396284",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products-showcase/product-card/product-card.component.ts",
+          "hash": "7570545297007356633",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:@angular/router",
+            "npm:primeng"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products-showcase/products-showcase.component.html",
+          "hash": "3608812137967609040"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products-showcase/products-showcase.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products-showcase/products-showcase.component.spec.ts",
+          "hash": "12491459531414375594",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products-showcase/products-showcase.component.ts",
+          "hash": "4985877653919610555",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:primeng",
+            "npm:@angular/router",
+            "npm:rxjs",
+            "npm:ngx-pagination"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products/model/product.interface.ts",
+          "hash": "8501778210709807797"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products/product-details/large-reviews/large-reviews.component.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products/product-details/large-reviews/large-reviews.component.html",
+          "hash": "17820143936036482257"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products/product-details/large-reviews/large-reviews.component.spec.ts",
+          "hash": "15325554336766108788",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products/product-details/large-reviews/large-reviews.component.ts",
+          "hash": "11238509507056718257",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products/product-details/product-details-images/product-details-images.component.html",
+          "hash": "15666825472666289902"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products/product-details/product-details-images/product-details-images.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products/product-details/product-details-images/product-details-images.component.spec.ts",
+          "hash": "16456042754948492200",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products/product-details/product-details-images/product-details-images.component.ts",
+          "hash": "5368098254555227268",
+          "deps": [
+            "npm:@angular/core",
+            "npm:primeng"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products/product-details/product-details.component.html",
+          "hash": "13574225775713070158"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products/product-details/product-details.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products/product-details/product-details.component.spec.ts",
+          "hash": "14135667544472379339",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products/product-details/product-details.component.ts",
+          "hash": "1817814378205714707",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "npm:rxjs",
+            "npm:@angular/common",
+            "npm:primeng"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products/product-details/product-reviews/product-reviews.component.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products/product-details/product-reviews/product-reviews.component.html",
+          "hash": "14254318844512755921"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products/product-details/product-reviews/product-reviews.component.spec.ts",
+          "hash": "11337658090465134137",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products/product-details/product-reviews/product-reviews.component.ts",
+          "hash": "4997804661908435396",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products/promoted-products/promoted-products.component.html",
+          "hash": "15832803350133342805"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products/promoted-products/promoted-products.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products/promoted-products/promoted-products.component.spec.ts",
+          "hash": "10467857506866748689",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products/promoted-products/promoted-products.component.ts",
+          "hash": "12162485622773084013",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products/recommended-products/recommended-products.component.html",
+          "hash": "5553903409534643560"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products/recommended-products/recommended-products.component.scss",
+          "hash": "2860296928028755747"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products/recommended-products/recommended-products.component.spec.ts",
+          "hash": "1093844331261934979",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products/recommended-products/recommended-products.component.ts",
+          "hash": "10588474950311469780",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:rxjs",
+            "npm:primeng"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products/services/products.service.spec.ts",
+          "hash": "4636494386083501968",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/products/services/products.service.ts",
+          "hash": "892304299064014015",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:rxjs",
+            "npm:ngx-pagination"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/account-management/account-management.component.html",
+          "hash": "17222732018639163684"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/account-management/account-management.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/account-management/account-management.component.spec.ts",
+          "hash": "3028627310831181000",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/account-management/account-management.component.ts",
+          "hash": "10856359391433215309",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/address/address-card/address-card.component.html",
+          "hash": "12528435690180946890"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/address/address-card/address-card.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/address/address-card/address-card.component.spec.ts",
+          "hash": "6558491520704028143",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/address/address-card/address-card.component.ts",
+          "hash": "13583921435867652688",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "npm:primeng"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/address/address-form/address-form.component.html",
+          "hash": "13817615205080833540"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/address/address-form/address-form.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/address/address-form/address-form.component.spec.ts",
+          "hash": "3928049537838356329",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/address/address-form/address-form.component.ts",
+          "hash": "4701572783611103262",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/forms",
+            "npm:@angular/common",
+            "npm:primeng",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/address/address-form/directives/error-message.directive.spec.ts",
+          "hash": "1019494800001041"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/address/address-form/directives/error-message.directive.ts",
+          "hash": "12799081452424290994",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/forms"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/address/address-form/directives/phone-number.directive.spec.ts",
+          "hash": "4157149889351186890"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/address/address-form/directives/phone-number.directive.ts",
+          "hash": "3361040203700008458",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/address/address.component.html",
+          "hash": "774182246582388972"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/address/address.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/address/address.component.spec.ts",
+          "hash": "5046854804630637592",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/address/address.component.ts",
+          "hash": "1164088752821512277",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "npm:@angular/common",
+            "npm:primeng"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/address/services/address.service.spec.ts",
+          "hash": "1692243013745995746",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/address/services/address.service.ts",
+          "hash": "2030016530140829238",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/forms",
+            "npm:@angular/common",
+            "api",
+            "npm:rxjs"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/models/address.interface.ts",
+          "hash": "9610092034757529154"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-account/account-overview/account-overview.component.html",
+          "hash": "9683687378696099850"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-account/account-overview/account-overview.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-account/account-overview/account-overview.component.spec.ts",
+          "hash": "14036591840246893745",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-account/account-overview/account-overview.component.ts",
+          "hash": "1239525645661842541",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "npm:rxjs",
+            "npm:@angular/common",
+            "npm:primeng"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-account/account-overview/overview-form/overview-form.component.html",
+          "hash": "9095795619523045975"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-account/account-overview/overview-form/overview-form.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-account/account-overview/overview-form/overview-form.component.spec.ts",
+          "hash": "15046617683059696847",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-account/account-overview/overview-form/overview-form.component.ts",
+          "hash": "4758949823273317824",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/forms",
+            "npm:@angular/common",
+            "npm:rxjs",
+            "npm:ngx-cookie-service"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-account/services/user-account.service.spec.ts",
+          "hash": "14434765819454105818",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-account/services/user-account.service.ts",
+          "hash": "17869678458435593543",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:rxjs",
+            "npm:ngx-cookie-service"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-account/user-account.component.html",
+          "hash": "2357112443602531114"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-account/user-account.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-account/user-account.component.spec.ts",
+          "hash": "13556840763768686781",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-account/user-account.component.ts",
+          "hash": "8358130785241957584",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-nav/user-nav.component.html",
+          "hash": "9859237108013030497"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-nav/user-nav.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-nav/user-nav.component.spec.ts",
+          "hash": "4157480200710754050",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-nav/user-nav.component.ts",
+          "hash": "11325629158161914841",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-orders/order-review/order-review.component.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-orders/order-review/order-review.component.html",
+          "hash": "589448915288125377"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-orders/order-review/order-review.component.spec.ts",
+          "hash": "11765449594189854281",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-orders/order-review/order-review.component.ts",
+          "hash": "18150500389431129447",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-orders/services/user-orders.service.spec.ts",
+          "hash": "9165759470479465013",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-orders/services/user-orders.service.ts",
+          "hash": "8376851589313856697",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-orders/user-order-details/order-tracker/directives/order-status-icon.directive.spec.ts",
+          "hash": "6674182558631091235"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-orders/user-order-details/order-tracker/directives/order-status-icon.directive.ts",
+          "hash": "5934434755562061593",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-orders/user-order-details/order-tracker/order-tracker.component.html",
+          "hash": "7964580455601510615"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-orders/user-order-details/order-tracker/order-tracker.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-orders/user-order-details/order-tracker/order-tracker.component.spec.ts",
+          "hash": "12969096177821235451",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-orders/user-order-details/order-tracker/order-tracker.component.ts",
+          "hash": "697594794432294398",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-orders/user-order-details/order-tracker/pipes/delivery-event-remark.pipe.spec.ts",
+          "hash": "14083425432037103343"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-orders/user-order-details/order-tracker/pipes/delivery-event-remark.pipe.ts",
+          "hash": "12003862329631727813",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-orders/user-order-details/user-order-details.component.html",
+          "hash": "3477535427715887532"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-orders/user-order-details/user-order-details.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-orders/user-order-details/user-order-details.component.spec.ts",
+          "hash": "6414089113956053618",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-orders/user-order-details/user-order-details.component.ts",
+          "hash": "17000648101254350856",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "npm:@angular/common",
+            "npm:primeng"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-orders/user-orders-table/user-orders-table.component.html",
+          "hash": "7398769631577616271"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-orders/user-orders-table/user-orders-table.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-orders/user-orders-table/user-orders-table.component.spec.ts",
+          "hash": "16666353560167754584",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-orders/user-orders-table/user-orders-table.component.ts",
+          "hash": "6589236316307511330",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:@angular/forms",
+            "npm:primeng",
+            "npm:ngx-pagination",
+            "npm:@angular/router",
+            "npm:rxjs"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-orders/user-orders.component.html",
+          "hash": "13913196957495292055"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-orders/user-orders.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-orders/user-orders.component.spec.ts",
+          "hash": "8372931882209325958",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user-orders/user-orders.component.ts",
+          "hash": "737535389724049494",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:rxjs"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/features/user/user.routes.ts",
+          "hash": "12403008841204046384",
+          "deps": [
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/route-animations.ts",
+          "hash": "944436246978077382",
+          "deps": [
+            "npm:@angular/animations"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/components/breadcrumb/breadcrumb.component.html",
+          "hash": "6525416450459944141"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/components/breadcrumb/breadcrumb.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/components/breadcrumb/breadcrumb.component.spec.ts",
+          "hash": "717043444842330392",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/components/breadcrumb/breadcrumb.component.ts",
+          "hash": "2789320506558411374",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "npm:@angular/common"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/components/generic-order-summary/generic-order-summary.component.html",
+          "hash": "14291332345999940387"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/components/generic-order-summary/generic-order-summary.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/components/generic-order-summary/generic-order-summary.component.spec.ts",
+          "hash": "17992553379422959981",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/components/generic-order-summary/generic-order-summary.component.ts",
+          "hash": "15213886854689287987",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:primeng",
+            "npm:@angular/router",
+            "npm:@angular/forms"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/components/loader/loader.component.ts",
+          "hash": "15590087141256865303",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/components/product-quantity/product-quantity.component.html",
+          "hash": "7316190498530112346"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/components/product-quantity/product-quantity.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/components/product-quantity/product-quantity.component.spec.ts",
+          "hash": "459680172619651219",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/components/product-quantity/product-quantity.component.ts",
+          "hash": "4191306384613110265",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/components/toast/toast.component.html",
+          "hash": "17181232586599190317"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/components/toast/toast.component.scss",
+          "hash": "7574681223727743273"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/components/toast/toast.component.spec.ts",
+          "hash": "3085966900117805601",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/components/toast/toast.component.ts",
+          "hash": "14181899568264823073",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/components/unsaved-changes-alert/unsaved-changes-alert.component.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/components/unsaved-changes-alert/unsaved-changes-alert.component.html",
+          "hash": "13717780144904672848"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/components/unsaved-changes-alert/unsaved-changes-alert.component.spec.ts",
+          "hash": "6518632861585621377",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/components/unsaved-changes-alert/unsaved-changes-alert.component.ts",
+          "hash": "10290524428794641778",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:primeng"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/directives/order-status.directive.spec.ts",
+          "hash": "1948436045908153312"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/directives/order-status.directive.ts",
+          "hash": "7359876374604676630",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/guards/has-unsaved-changes.guard.spec.ts",
+          "hash": "3406347347326981594",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/guards/has-unsaved-changes.guard.ts",
+          "hash": "8730863390780742680",
+          "deps": [
+            "npm:@angular/router",
+            "npm:rxjs"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/models/cart.interface.ts",
+          "hash": "11544322836735409868"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/models/order.interface.ts",
+          "hash": "11550931976917252901"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/pipes/items-showing.pipe.spec.ts",
+          "hash": "14993086781357446618"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/pipes/items-showing.pipe.ts",
+          "hash": "13855276631770692503",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/pipes/number-of-filters.pipe.spec.ts",
+          "hash": "8372750295923611533"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/pipes/number-of-filters.pipe.ts",
+          "hash": "76661924192281750",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/pipes/subtotal.pipe.spec.ts",
+          "hash": "12514820940722732871"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/pipes/subtotal.pipe.ts",
+          "hash": "17315324165294621840",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/services/cart.service.spec.ts",
+          "hash": "5904820136775790015",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/services/cart.service.ts",
+          "hash": "14004209144625821139",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:rxjs"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/services/layout.service.spec.ts",
+          "hash": "12456615170619501160",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/services/layout.service.ts",
+          "hash": "255850284135433974",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/services/order.service.spec.ts",
+          "hash": "11399926683923846583",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/services/order.service.ts",
+          "hash": "15980720842310942871",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:rxjs",
+            "npm:ngx-pagination"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/services/payment.service.spec.ts",
+          "hash": "3646299357784274374",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/services/payment.service.ts",
+          "hash": "14937653872380837319",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/services/review.service.spec.ts",
+          "hash": "6545890728531525455",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/services/review.service.ts",
+          "hash": "3095580838069694377",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/services/toast.service.spec.ts",
+          "hash": "17532437836695669978",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/app/shared/services/toast.service.ts",
+          "hash": "13422422423441041963",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/404-2.png",
+          "hash": "17110413748284908127"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/404.png",
+          "hash": "3050477624033754083"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/banner.png",
+          "hash": "13251141661153942338"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/empty-cart.png",
+          "hash": "8495903162096081568"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/icons/Untitled-1.svg",
+          "hash": "9075165560332678467"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/icons/account-settings.png",
+          "hash": "10840039959602435553"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/icons/alert.svg",
+          "hash": "7739285063038544471"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/icons/arrow-right-up.svg",
+          "hash": "12520279586755417017"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/icons/arrow-right.svg",
+          "hash": "18185277360305945674"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/icons/bars.svg",
+          "hash": "9624072852117227619"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/icons/bullet.svg",
+          "hash": "18013766230748214894"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/icons/check.svg",
+          "hash": "2862626637162349887"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/icons/close.svg",
+          "hash": "1356699168072927189"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/icons/delete-bin.svg",
+          "hash": "9112083911679515782"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/icons/empty-cart.svg",
+          "hash": "10543485649925742108"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/icons/green-tick.svg",
+          "hash": "11947929382527906867"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/icons/information-fill.svg",
+          "hash": "15083146318680246100"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/icons/logo.png",
+          "hash": "10739307390097762664"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/icons/logo2-white.png",
+          "hash": "10261776988461854828"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/icons/logo2.svg",
+          "hash": "4466687648317331386"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/icons/map-pin.svg",
+          "hash": "11022877997649331938"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/icons/order-blank.svg",
+          "hash": "8685965411620297837"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/icons/order-loading.svg",
+          "hash": "14348145557524725717"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/icons/paystack-2.svg",
+          "hash": "13236840665551570016"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/icons/search.svg",
+          "hash": "8782892153563912105"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/icons/shopping-bag.svg",
+          "hash": "584685965116849673"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/icons/shopping-cart.svg",
+          "hash": "14270446947560781308"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/icons/sort.png",
+          "hash": "4461455601939872481"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/icons/sort.svg",
+          "hash": "7132462975078696657"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/icons/user.svg",
+          "hash": "6178755819174362645"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/toy-1.jpeg",
+          "hash": "1434180989664422887"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/toy-10.png",
+          "hash": "5097261804732160002"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/toy-2.jpeg",
+          "hash": "486183331817829935"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/toy-3.jpeg",
+          "hash": "8811549168437700473"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/toy-4.jpeg",
+          "hash": "3932416173548534977"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/toy-4.jpg",
+          "hash": "11228666988501883537"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/toy-5.jpeg",
+          "hash": "9261593245091797038"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/toy-6.jpeg",
+          "hash": "8927368395954255761"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/toy-7.jpeg",
+          "hash": "14772915404328403141"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/toy-8.jpeg",
+          "hash": "12276578804201355643"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/assets/images/toy-9.jpeg",
+          "hash": "1856531562620977819"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/environments/environment.development.ts",
+          "hash": "3488489636887956393"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/environments/environment.ts",
+          "hash": "3351438258444420149"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/favicon.ico",
+          "hash": "3988961587069885523"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/index.html",
+          "hash": "9253559397677891582"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/main.ts",
+          "hash": "16635586463787978962",
+          "deps": [
+            "npm:@angular/platform-browser"
+          ]
+        },
+        {
+          "file": "apps/rl-ecommerce/src/netlify.json",
+          "hash": "8772204018457857497"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/netlify.toml",
+          "hash": "1800956082654863707"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/styles.scss",
+          "hash": "17598542343437652818"
+        },
+        {
+          "file": "apps/rl-ecommerce/src/types/paystack.d.ts",
+          "hash": "9449317056658537143"
+        },
+        {
+          "file": "apps/rl-ecommerce/tsconfig.app.json",
+          "hash": "2381145790002888757"
+        },
+        {
+          "file": "apps/rl-ecommerce/tsconfig.spec.json",
+          "hash": "17700927949365452100"
+        }
+      ],
+      "api-e2e": [
+        {
+          "file": "apps/api-e2e/eslint.config.js",
+          "hash": "17472210594086834595"
+        },
+        {
+          "file": "apps/api-e2e/jest.config.ts",
+          "hash": "16237957319090451515"
+        },
+        {
+          "file": "apps/api-e2e/project.json",
+          "hash": "18010798395537753667"
+        },
+        {
+          "file": "apps/api-e2e/src/api/api.spec.ts",
+          "hash": "110394728024017389",
+          "deps": [
+            "npm:axios"
+          ]
+        },
+        {
+          "file": "apps/api-e2e/src/support/global-setup.ts",
+          "hash": "2568409276037275290"
+        },
+        {
+          "file": "apps/api-e2e/src/support/global-teardown.ts",
+          "hash": "5275447082211835490"
+        },
+        {
+          "file": "apps/api-e2e/src/support/test-setup.ts",
+          "hash": "10984585515912236441",
+          "deps": [
+            "npm:axios"
+          ]
+        },
+        {
+          "file": "apps/api-e2e/tsconfig.json",
+          "hash": "15443990093475294480"
+        },
+        {
+          "file": "apps/api-e2e/tsconfig.spec.json",
+          "hash": "14954872453723519891"
+        }
+      ]
+    }
+  }
