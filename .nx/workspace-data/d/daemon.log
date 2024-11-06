@@ -3222,3 +3222,61 @@ Failed to process project graph. Run "nx reset" to fix this. Please report the i
 [NX Daemon Server] - 2024-11-05T21:42:40.202Z - [WATCHER]: Stopping the watcher for D:\DESKTOP MAIN\dev projects\ANGULAR PROJECTS\rl-ecommerce (sources)
 [NX Daemon Server] - 2024-11-05T21:42:40.202Z - [WATCHER]: Stopping the watcher for D:\DESKTOP MAIN\dev projects\ANGULAR PROJECTS\rl-ecommerce (outputs)
 [NX Daemon Server] - 2024-11-05T21:42:40.210Z - Server stopped because: "LOCK_FILES_CHANGED"
+[NX Daemon Server] - 2024-11-05T21:42:41.611Z - Started listening on: \\.\pipe\nx\C:\Users\leree\AppData\Local\Temp\b552d67605c8229bd3a1\d.sock
+[NX Daemon Server] - 2024-11-05T21:42:41.614Z - [WATCHER]: Subscribed to changes within: D:\DESKTOP MAIN\dev projects\ANGULAR PROJECTS\rl-ecommerce (native)
+[NX Daemon Server] - 2024-11-05T21:42:41.618Z - Established a connection. Number of open connections: 1
+[NX Daemon Server] - 2024-11-05T21:42:41.621Z - Closed a connection. Number of open connections: 0
+[NX Daemon Server] - 2024-11-05T21:42:41.621Z - Established a connection. Number of open connections: 1
+[NX Daemon Server] - 2024-11-05T21:42:41.624Z - [REQUEST]: Client Request for Project Graph Received
+[NX Daemon Server] - 2024-11-05T21:42:42.351Z - [REQUEST]: Updated workspace context based on watched changes, recomputing project graph...
+[NX Daemon Server] - 2024-11-05T21:42:42.351Z - [REQUEST]: 
+[NX Daemon Server] - 2024-11-05T21:42:42.352Z - [REQUEST]: 
+[NX Daemon Server] - 2024-11-05T21:42:42.371Z - Time taken for 'loadNxPlugins' 724.4782000184059ms
+[NX Daemon Server] - 2024-11-05T21:42:42.371Z - Established a connection. Number of open connections: 2
+[NX Daemon Server] - 2024-11-05T21:42:42.372Z - Established a connection. Number of open connections: 3
+[NX Daemon Server] - 2024-11-05T21:42:42.372Z - Established a connection. Number of open connections: 4
+[NX Daemon Server] - 2024-11-05T21:42:42.373Z - Established a connection. Number of open connections: 5
+[NX Daemon Server] - 2024-11-05T21:42:42.373Z - Closed a connection. Number of open connections: 4
+[NX Daemon Server] - 2024-11-05T21:42:42.373Z - Closed a connection. Number of open connections: 3
+[NX Daemon Server] - 2024-11-05T21:42:42.377Z - [REQUEST]: Responding to the client. handleHashGlob
+[NX Daemon Server] - 2024-11-05T21:42:42.380Z - [REQUEST]: Responding to the client. handleGlob
+[NX Daemon Server] - 2024-11-05T21:42:42.382Z - Established a connection. Number of open connections: 4
+[NX Daemon Server] - 2024-11-05T21:42:42.383Z - Closed a connection. Number of open connections: 3
+[NX Daemon Server] - 2024-11-05T21:42:42.383Z - Established a connection. Number of open connections: 4
+[NX Daemon Server] - 2024-11-05T21:42:42.383Z - Done responding to the client handleHashGlob
+[NX Daemon Server] - 2024-11-05T21:42:42.383Z - Handled HASH_GLOB. Handling time: 2. Response time: 6.
+[NX Daemon Server] - 2024-11-05T21:42:42.383Z - Done responding to the client handleGlob
+[NX Daemon Server] - 2024-11-05T21:42:42.383Z - Handled GLOB. Handling time: 1. Response time: 3.
+[NX Daemon Server] - 2024-11-05T21:42:42.394Z - [REQUEST]: Responding to the client. handleHashGlob
+[NX Daemon Server] - 2024-11-05T21:42:42.397Z - Done responding to the client handleHashGlob
+[NX Daemon Server] - 2024-11-05T21:42:42.397Z - Handled HASH_GLOB. Handling time: 8. Response time: 3.
+[NX Daemon Server] - 2024-11-05T21:42:42.674Z - [REQUEST]: Responding to the client. handleHashGlob
+[NX Daemon Server] - 2024-11-05T21:42:42.674Z - Done responding to the client handleHashGlob
+[NX Daemon Server] - 2024-11-05T21:42:42.674Z - Handled HASH_GLOB. Handling time: 1. Response time: 0.
+[NX Daemon Server] - 2024-11-05T21:42:42.677Z - [REQUEST]: Responding to the client. handleHashGlob
+[NX Daemon Server] - 2024-11-05T21:42:42.677Z - Done responding to the client handleHashGlob
+[NX Daemon Server] - 2024-11-05T21:42:42.677Z - Handled HASH_GLOB. Handling time: 1. Response time: 0.
+[NX Daemon Server] - 2024-11-05T21:42:42.680Z - [REQUEST]: Responding to the client. handleHashGlob
+[NX Daemon Server] - 2024-11-05T21:42:42.680Z - Done responding to the client handleHashGlob
+[NX Daemon Server] - 2024-11-05T21:42:42.680Z - Handled HASH_GLOB. Handling time: 1. Response time: 0.
+[NX Daemon Server] - 2024-11-05T21:42:42.683Z - [REQUEST]: Responding to the client. handleHashGlob
+[NX Daemon Server] - 2024-11-05T21:42:42.683Z - Done responding to the client handleHashGlob
+[NX Daemon Server] - 2024-11-05T21:42:42.683Z - Handled HASH_GLOB. Handling time: 1. Response time: 0.
+[NX Daemon Server] - 2024-11-05T21:42:44.405Z - Time taken for 'build-project-configs' 2020.790099978447ms
+[NX Daemon Server] - 2024-11-05T21:42:44.539Z - [SYNC]: collect registered sync generators
+[NX Daemon Server] - 2024-11-05T21:42:44.540Z - [REQUEST]: Responding to the client. project-graph
+[NX Daemon Server] - 2024-11-05T21:42:44.542Z - Time taken for 'total for creating and serializing project graph' 2916.015399992466ms
+[NX Daemon Server] - 2024-11-05T21:42:44.542Z - Done responding to the client project-graph
+[NX Daemon Server] - 2024-11-05T21:42:44.543Z - Handled REQUEST_PROJECT_GRAPH. Handling time: 2916. Response time: 3.
+[NX Daemon Server] - 2024-11-05T21:42:44.551Z - [REQUEST]: Responding to the client. handleContextFileData
+[NX Daemon Server] - 2024-11-05T21:42:44.552Z - Done responding to the client handleContextFileData
+[NX Daemon Server] - 2024-11-05T21:42:44.552Z - Handled GET_CONTEXT_FILE_DATA. Handling time: 1. Response time: 1.
+[NX Daemon Server] - 2024-11-05T21:42:44.553Z - Closed a connection. Number of open connections: 3
+[NX Daemon Server] - 2024-11-05T22:20:29.706Z - [WATCHER]: Processing file changes in outputs
+[NX Daemon Server] - 2024-11-05T22:20:30.358Z - Established a connection. Number of open connections: 4
+[NX Daemon Server] - 2024-11-05T22:20:30.360Z - Closed a connection. Number of open connections: 3
+[NX Daemon Server] - 2024-11-05T22:20:30.361Z - Established a connection. Number of open connections: 4
+[NX Daemon Server] - 2024-11-05T22:20:30.373Z - [REQUEST]: Responding to the client. recordOutputsHash
+[NX Daemon Server] - 2024-11-05T22:20:30.373Z - Done responding to the client recordOutputsHash
+[NX Daemon Server] - 2024-11-05T22:20:30.373Z - Handled RECORD_OUTPUTS_HASH. Handling time: 2. Response time: 1.
+[NX Daemon Server] - 2024-11-05T22:20:30.457Z - Closed a connection. Number of open connections: 3

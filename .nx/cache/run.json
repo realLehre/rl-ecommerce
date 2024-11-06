@@ -1,21 +1,21 @@
 {
   "run": {
-    "command": "nx build api",
-    "startTime": "2024-11-05T21:05:10.150Z",
-    "endTime": "2024-11-05T21:05:10.179Z",
+    "command": "nx serve rl-ecommerce",
+    "startTime": "2024-11-05T06:28:29.973Z",
+    "endTime": "2024-11-05T22:20:30.394Z",
     "inner": false
   },
   "tasks": [
     {
-      "taskId": "api:build",
-      "target": "build",
-      "projectName": "api",
-      "hash": "12213794826984558219",
-      "startTime": "2024-11-05T21:05:10.164Z",
-      "endTime": "2024-11-05T21:05:10.171Z",
+      "taskId": "rl-ecommerce:serve:development",
+      "target": "serve",
+      "projectName": "rl-ecommerce",
+      "hash": "828311341929826048",
+      "startTime": "2024-11-05T06:28:29.988Z",
+      "endTime": "2024-11-05T22:20:30.379Z",
       "params": "",
-      "cacheStatus": "local-cache-hit",
-      "status": 0
+      "cacheStatus": "cache-miss",
+      "status": 1
     }
   ]
 }

@@ -9,7 +9,8 @@
     "test": "nx test",
     "install:ci": "npm ci",
     "build:api": "npx nx build api",
-    "start:api": "node dist/apps/api/main.js"
+    "start:api": "node dist/apps/api/main.js",
+    "vercel-build": "npx prisma generate && npm run build:api"
   },
   "private": true,
   "dependencies": {
