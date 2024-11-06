@@ -8,9 +8,7 @@
     "watch": "nx build --watch --configuration development",
     "test": "nx test",
     "install:ci": "npm ci",
-    "build:api": "npx nx build api",
-    "start:api": "node dist/apps/api/main.js",
-    "vercel-build": "npx prisma generate && npm run build:api"
+    "build:api": "npx nx build api"
   },
   "private": true,
   "dependencies": {
@@ -62,7 +60,6 @@
     "@nx/webpack": "20.0.1",
     "@nx/workspace": "20.0.1",
     "@schematics/angular": "^18.2.3",
-
     "@swc/helpers": "~0.5.11",
     "@tailwindcss/line-clamp": "^0.4.4",
     "@types/google.maps": "^3.58.1",
