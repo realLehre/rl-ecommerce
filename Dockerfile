@@ -1,11 +1,13 @@
 # Start with the official Node.js image
 FROM node:18-alpine
 
-# Set the working directory inside the container
-WORKDIR /app
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    # Add any other dependencies you need
 
-# Copy package files and install dependencies
-COPY package.json package-lock.json ./
+# Set up your application
+WORKDIR /app
+COPY package*.json ./
 RUN npm install
 
 # Copy your NestJS app source code into the container
