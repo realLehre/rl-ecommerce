@@ -1,0 +1,11 @@
+{
+  "build": {
+    "command": "npx prisma generate && npx nx build api --prod"
+  },
+  "start": {
+    "command": "node dist/apps/api/main.js"
+  },
+  "env": {
+    "PORT": "3000"
+  }
+}
