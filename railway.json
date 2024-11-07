@@ -1,6 +1,6 @@
 {
   "build": {
-    "command": "npm prisma generate && npm nx build api --prod"
+    "command": "npx prisma generate && npx nx build api --prod"
   },
   "start": {
     "command": "node dist/apps/api/main.js"
