@@ -21,6 +21,6 @@
   ],
   "env": {
     "DATABASE_URL": "postgres://postgres.tentdyesixetvyacewwr:supabasepasswordxxx234@aws-0-eu-central-1.pooler.supabase.com:5432/postgres?connection_limit=1",
-"PORT": 3000
+"PORT": "3000"
   }
 }
