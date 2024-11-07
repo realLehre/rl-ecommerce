@@ -20,8 +20,7 @@
     }
   ],
   "env": {
-    "DATABASE_URL": "postgres://postgres.tentdyesixetvyacewwr:supabasepasswordxxx@aws-0-eu-central-1.pooler.supabase.com:5432/postgres?pgbouncer=true&connection_limit=300",
-    "DIRECT_URL":"postgres://postgres.tentdyesixetvyacewwr:supabasepasswordxxx@aws-0-eu-central-1.pooler.supabase.com:6543/postgres",
-    "NODE_ENV": "production"
+    "DATABASE_URL": "postgres://postgres.tentdyesixetvyacewwr:supabasepasswordxxx@aws-0-eu-central-1.pooler.supabase.com:5432/postgres?connection_limit=1"
+
   }
 }
