@@ -2,14 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "src/main.ts",
+      "src": "apps/api/src/main.ts",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "src/main.ts",
+      "dest": "apps/api/src/main.ts",
       "methods": [
         "GET",
         "POST",
@@ -20,7 +20,7 @@
     }
   ],
   "env": {
-    "DATABASE_URL": "postgres://postgres.tentdyesixetvyacewwr:supabasepasswordxxx@aws-0-eu-central-1.pooler.supabase.com:5432/postgres?connection_limit=1"
-
+    "DATABASE_URL": "postgres://postgres.tentdyesixetvyacewwr:supabasepasswordxxx234@aws-0-eu-central-1.pooler.supabase.com:5432/postgres?connection_limit=1",
+"PORT": 3000
   }
 }
