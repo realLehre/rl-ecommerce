@@ -27,164 +27,128 @@
   "fileMap": {
     "nonProjectFiles": [
       {
-        "file": "Dockerfile",
-        "hash": "15686689772192051754"
-      },
-      {
-        "file": ".editorconfig",
-        "hash": "17241496168097493888"
-      },
-      {
-        "file": "package-lock.json",
-        "hash": "3255506446123876970"
-      },
-      {
-        "file": "prisma/migrations/20241018182359_sixth/migration.sql",
-        "hash": "8028548879869784564"
-      },
-      {
-        "file": "prisma/migrations/20241030132748_removed_delivery_events_relation/migration.sql",
-        "hash": "1404628742181279109"
-      },
-      {
-        "file": "prisma/migrations/20241015165825_third/migration.sql",
-        "hash": "3349718055594348326"
-      },
-      {
-        "file": "eslint.config.js",
-        "hash": "2478217381773231556"
-      },
-      {
-        "file": "prisma/migrations/20241024173253_remove_address_from_cart/migration.sql",
-        "hash": "6494099947102273055"
-      },
-      {
-        "file": ".prettierrc",
-        "hash": "16267754514737964994"
-      },
-      {
-        "file": "prisma/migrations/20241026101144_add_order_model/migration.sql",
-        "hash": "15410273471960396190"
-      },
-      {
-        "file": "tailwind.config.js",
-        "hash": "9607201657276309559"
-      },
-      {
-        "file": "karma.conf.js",
-        "hash": "9656364725710720620"
-      },
-      {
-        "file": "angular.json",
-        "hash": "1023760254136412851"
-      },
-      {
-        "file": "railway.json",
-        "hash": "13942934936741988622"
-      },
-      {
-        "file": "jest.config.ts",
-        "hash": "3494843969422251966"
-      },
-      {
-        "file": "prisma/migrations/20241018111128_fouth/migration.sql",
-        "hash": "16021492473702326255"
-      },
-      {
-        "file": "tsconfig.base.json",
-        "hash": "7297309707956546853"
-      },
-      {
-        "file": "libs/.gitkeep",
-        "hash": "3244421341483603138"
-      },
-      {
-        "file": "jest.preset.js",
-        "hash": "9430166341120122740"
-      },
-      {
-        "file": ".gitignore",
-        "hash": "9781254581694375375"
-      },
-      {
-        "file": "prisma/migrations/20241029144809_test2/migration.sql",
-        "hash": "2612674141286163753"
-      },
-      {
-        "file": "prisma/migrations/20241029130848_add_cart_items_to_reviews/migration.sql",
-        "hash": "6560370539592149057"
-      },
-      {
-        "file": "tools/tsconfig.tools.json",
-        "hash": "16088922570277978783"
-      },
-      {
-        "file": ".vscode/tasks.json",
-        "hash": "10093397977228577162"
-      },
-      {
-        "file": "prisma/migrations/20241015105151_init/migration.sql",
-        "hash": "8520459261887685120"
-      },
-      {
-        "file": "nx.json",
-        "hash": "13167665309250682815"
-      },
-      {
-        "file": "prisma/migrations/migration_lock.toml",
-        "hash": "11493296588214560035"
-      },
-      {
-        "file": "prisma/migrations/20241024065511_add_cart_address/migration.sql",
-        "hash": "7713010672496280405"
-      },
-      {
-        "file": "prisma/migrations/20241029134601_test/migration.sql",
-        "hash": "2431136859519896668"
+        "file": "prisma/migrations/20241027172013_add_orderstatus_filter/migration.sql",
+        "hash": "17277191531449383045"
       },
       {
         "file": "prisma/migrations/20241026143818_remove_unique_userid_from_order/migration.sql",
         "hash": "1185360863094109681"
       },
       {
-        "file": "prisma/migrations/20241023115029_add_name_index/migration.sql",
-        "hash": "14234207058651212711"
+        "file": "package.json",
+        "hash": "4818709360019067260"
+      },
+      {
+        "file": "prisma/migrations/20241015165825_third/migration.sql",
+        "hash": "3349718055594348326"
+      },
+      {
+        "file": "tsconfig.base.json",
+        "hash": "7297309707956546853"
+      },
+      {
+        "file": ".vscode/tasks.json",
+        "hash": "10093397977228577162"
+      },
+      {
+        "file": "prisma/migrations/20241030134021_remove_unused_indexes/migration.sql",
+        "hash": "2143415116537904159"
       },
       {
         "file": ".prettierignore",
         "hash": "14688272390704683536"
       },
       {
-        "file": "prisma/migrations/20241018174937_fifth/migration.sql",
-        "hash": "14023673766940856754"
+        "file": "eslint.config.js",
+        "hash": "2478217381773231556"
       },
       {
-        "file": "prisma/migrations/20241015134407_second/migration.sql",
-        "hash": "4975335570547922870"
+        "file": "prisma/migrations/migration_lock.toml",
+        "hash": "11493296588214560035"
       },
       {
-        "file": "prisma/migrations/20241027172013_add_orderstatus_filter/migration.sql",
-        "hash": "17277191531449383045"
+        "file": ".editorconfig",
+        "hash": "17241496168097493888"
       },
       {
-        "file": "prisma/schema.prisma",
-        "hash": "5951556605356754024"
+        "file": "jest.preset.js",
+        "hash": "9430166341120122740"
+      },
+      {
+        "file": "prisma/migrations/20241029144809_test2/migration.sql",
+        "hash": "2612674141286163753"
+      },
+      {
+        "file": "tailwind.config.js",
+        "hash": "9607201657276309559"
+      },
+      {
+        "file": "tools/tsconfig.tools.json",
+        "hash": "16088922570277978783"
+      },
+      {
+        "file": "prisma/migrations/20241015105151_init/migration.sql",
+        "hash": "8520459261887685120"
+      },
+      {
+        "file": "package-lock.json",
+        "hash": "3255506446123876970"
+      },
+      {
+        "file": "prisma/migrations/20241024173253_remove_address_from_cart/migration.sql",
+        "hash": "6494099947102273055"
+      },
+      {
+        "file": "nx.json",
+        "hash": "13167665309250682815"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "9781254581694375375"
       },
       {
         "file": "tools/generators/.gitkeep",
         "hash": "3244421341483603138"
       },
       {
-        "file": "package.json",
-        "hash": "4818709360019067260"
+        "file": ".vscode/extensions.json",
+        "hash": "18037487075392171512"
       },
       {
-        "file": ".vscode/launch.json",
-        "hash": "17406702432687230417"
+        "file": "prisma/migrations/20241029130848_add_cart_items_to_reviews/migration.sql",
+        "hash": "6560370539592149057"
+      },
+      {
+        "file": ".prettierrc",
+        "hash": "16267754514737964994"
+      },
+      {
+        "file": "karma.conf.js",
+        "hash": "9656364725710720620"
+      },
+      {
+        "file": "prisma/migrations/20241024065511_add_cart_address/migration.sql",
+        "hash": "7713010672496280405"
       },
       {
         "file": "prisma/migrations/20241029155058_add_order_items/migration.sql",
         "hash": "1451312287458084041"
+      },
+      {
+        "file": "prisma/migrations/20241030132748_removed_delivery_events_relation/migration.sql",
+        "hash": "1404628742181279109"
+      },
+      {
+        "file": "railway.json",
+        "hash": "9034343786631755213"
+      },
+      {
+        "file": "prisma/migrations/20241029134601_test/migration.sql",
+        "hash": "2431136859519896668"
+      },
+      {
+        "file": "prisma/migrations/20241023115029_add_name_index/migration.sql",
+        "hash": "14234207058651212711"
       },
       {
         "file": "README.md",
@@ -195,16 +159,52 @@
         "hash": "1643765654473785699"
       },
       {
-        "file": ".vscode/extensions.json",
-        "hash": "18037487075392171512"
+        "file": "prisma/migrations/20241018182359_sixth/migration.sql",
+        "hash": "8028548879869784564"
       },
       {
         "file": "prisma/migrations/20241026161406_remove_orderid_from_cart/migration.sql",
         "hash": "17166392914630329897"
       },
       {
-        "file": "prisma/migrations/20241030134021_remove_unused_indexes/migration.sql",
-        "hash": "2143415116537904159"
+        "file": "prisma/migrations/20241018174937_fifth/migration.sql",
+        "hash": "14023673766940856754"
+      },
+      {
+        "file": "prisma/schema.prisma",
+        "hash": "5951556605356754024"
+      },
+      {
+        "file": ".vscode/launch.json",
+        "hash": "17406702432687230417"
+      },
+      {
+        "file": "prisma/migrations/20241015134407_second/migration.sql",
+        "hash": "4975335570547922870"
+      },
+      {
+        "file": "prisma/migrations/20241018111128_fouth/migration.sql",
+        "hash": "16021492473702326255"
+      },
+      {
+        "file": "prisma/migrations/20241026101144_add_order_model/migration.sql",
+        "hash": "15410273471960396190"
+      },
+      {
+        "file": "Dockerfile",
+        "hash": "10727492362947876879"
+      },
+      {
+        "file": "libs/.gitkeep",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "angular.json",
+        "hash": "1023760254136412851"
+      },
+      {
+        "file": "jest.config.ts",
+        "hash": "3494843969422251966"
       }
     ],
     "projectFileMap": {

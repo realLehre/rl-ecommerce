@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Build the NestJS application
-RUN npx nx build api --prod
+RUN npm nx build api --prod
 
 # Expose the port that NestJS listens to
 EXPOSE 3000
