@@ -1,8 +1,8 @@
 {
   "run": {
     "command": "nx run api:build:development",
-    "startTime": "2024-11-06T18:21:31.814Z",
-    "endTime": "2024-11-06T18:21:31.862Z",
+    "startTime": "2024-11-06T19:14:29.057Z",
+    "endTime": "2024-11-06T19:14:36.908Z",
     "inner": false
   },
   "tasks": [
@@ -10,11 +10,11 @@
       "taskId": "api:build",
       "target": "build",
       "projectName": "api",
-      "hash": "13413866850813574147",
-      "startTime": "2024-11-06T18:21:31.832Z",
-      "endTime": "2024-11-06T18:21:31.851Z",
+      "hash": "4450735514217883011",
+      "startTime": "2024-11-06T19:14:29.073Z",
+      "endTime": "2024-11-06T19:14:36.906Z",
       "params": "",
-      "cacheStatus": "local-cache-hit",
+      "cacheStatus": "cache-miss",
       "status": 0
     }
   ]
