@@ -13961,6 +13961,11 @@
       },
       {
         "source": "api",
+        "target": "npm:@nestjs/platform-express",
+        "type": "static"
+      },
+      {
+        "source": "api",
         "target": "npm:@nx/webpack",
         "type": "static"
       }
