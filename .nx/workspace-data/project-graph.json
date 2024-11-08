@@ -13946,12 +13946,12 @@
       },
       {
         "source": "api",
-        "target": "npm:express",
+        "target": "npm:@prisma/client",
         "type": "static"
       },
       {
         "source": "api",
-        "target": "npm:@prisma/client",
+        "target": "npm:express",
         "type": "static"
       },
       {
