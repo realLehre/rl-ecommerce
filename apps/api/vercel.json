@@ -2,14 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "dist/apps/api/main.js",
+      "src": "src/main.ts",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "dist/apps/api/main.js"
+      "dest": "src/main.ts"
     }
   ],
   "buildCommand": "prisma generate && prisma migrate deploy && npx nx build api",
