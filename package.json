@@ -9,7 +9,7 @@
     "test": "nx test",
     "install:ci": "npm ci",
     "build:api": "npx nx build api",
-    "vercel-build": "prisma generate && prisma migrate deploy && npx nx build api --output dist/apps/api",
+    "vercel-build": "prisma generate && prisma migrate deploy && npx nx build api",
     "postinstall": "prisma generate"
   },
   "private": true,
