@@ -1,1 +1,0 @@
-import{R as i,ab as r}from"./chunk-RY22DRUR.js";var f=(()=>{let t=class t{constructor(){this.menuOpened=r(!1),this.mobileFilterOpened=r(!1)}};t.\u0275fac=function(n){return new(n||t)},t.\u0275prov=i({token:t,factory:t.\u0275fac,providedIn:"root"});let e=t;return e})();export{f as a};
