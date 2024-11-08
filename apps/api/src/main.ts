@@ -20,11 +20,11 @@ async function bootstrap() {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
-  const port = process.env['PORT'] || 3000;
-  await app.listen(port);
-  Logger.log(
-    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`,
-  );
+  // const port = process.env['PORT'] || 3000;
+  // await app.listen(port);
+  // Logger.log(
+  //   `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`,
+  // );
 }
 
 bootstrap();
