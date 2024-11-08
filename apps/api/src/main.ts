@@ -12,7 +12,11 @@ async function bootstrap() {
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
   app.enableCors({
-    origin: ['http://localhost:4200', 'https://rl-toy-spot.netlify.app'],
+    origin: [
+      'http://localhost:4200',
+      'https://rl-toy-spot.netlify.app',
+      'https://rl-ecommerce-three.vercel.app/',
+    ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });

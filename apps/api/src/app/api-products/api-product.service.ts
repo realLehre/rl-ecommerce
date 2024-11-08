@@ -1,11 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
-import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class ApiProductService {
-  prisma = new PrismaClient();
-  constructor() {}
+  constructor(private prisma: PrismaService) {}
 
   async getProducts(filters: {
     categoryId?: string;
