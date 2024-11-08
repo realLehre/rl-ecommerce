@@ -14,7 +14,7 @@ export class ApiCartController {
   constructor(private cartService: ApiCartService) {}
 
   @Get('test')
-  async testCart(@Param('id') userId: string) {
+  async testCart() {
     return 'Cart tested';
   }
 
