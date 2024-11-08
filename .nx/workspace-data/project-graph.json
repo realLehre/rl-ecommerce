@@ -251,14 +251,20 @@
         "metadata": {},
         "targets": {
           "build": {
+            "executor": "@nrwl/node:webpack",
+            "outputs": [
+              "{options.outputPath}"
+            ],
             "options": {
-              "cwd": "apps/api",
-              "args": [
-                "--node-env=production"
-              ],
-              "command": "webpack-cli build"
+              "outputPath": "dist/apps/api",
+              "main": "apps/api/src/main.ts",
+              "tsConfig": "apps/api/tsconfig.app.json",
+              "assets": [
+                "apps/api/src/assets"
+              ]
             },
-            "cache": true,
+            "configurations": {},
+            "parallelism": true,
             "dependsOn": [
               "^build"
             ],
@@ -266,29 +272,7 @@
               "production",
               "^production"
             ],
-            "outputs": [
-              "{workspaceRoot}/dist\\apps\\api"
-            ],
-            "metadata": {
-              "technologies": [
-                "webpack"
-              ],
-              "description": "Runs Webpack build",
-              "help": {
-                "command": "npx webpack-cli build --help",
-                "example": {
-                  "options": {
-                    "json": "stats.json"
-                  },
-                  "args": [
-                    "--profile"
-                  ]
-                }
-              }
-            },
-            "executor": "nx:run-commands",
-            "configurations": {},
-            "parallelism": true
+            "cache": true
           },
           "serve": {
             "executor": "@nx/js:node",

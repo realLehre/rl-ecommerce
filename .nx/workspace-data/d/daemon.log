@@ -6538,3 +6538,48 @@ Failed to process project graph. Run "nx reset" to fix this. Please report the i
 [NX Daemon Server] - 2024-11-08T11:41:38.765Z - Done responding to the client handleContextFileData
 [NX Daemon Server] - 2024-11-08T11:41:38.765Z - Handled GET_CONTEXT_FILE_DATA. Handling time: 1. Response time: 0.
 [NX Daemon Server] - 2024-11-08T11:41:38.767Z - Closed a connection. Number of open connections: 3
+[NX Daemon Server] - 2024-11-08T12:09:54.008Z - [WATCHER]: package.json was modified
+[NX Daemon Server] - 2024-11-08T12:09:54.009Z - [WATCHER]: Processing file changes in outputs
+[NX Daemon Server] - 2024-11-08T12:09:54.086Z - [WATCHER]: Processing file changes in outputs
+[NX Daemon Server] - 2024-11-08T12:09:54.118Z - [REQUEST]: Updated workspace context based on watched changes, recomputing project graph...
+[NX Daemon Server] - 2024-11-08T12:09:54.118Z - [REQUEST]: package.json
+[NX Daemon Server] - 2024-11-08T12:09:54.118Z - [REQUEST]: 
+[NX Daemon Server] - 2024-11-08T12:09:54.129Z - [REQUEST]: Responding to the client. handleHashGlob
+[NX Daemon Server] - 2024-11-08T12:09:54.132Z - [REQUEST]: Responding to the client. handleGlob
+[NX Daemon Server] - 2024-11-08T12:09:54.132Z - Time taken for 'hash changed files from watcher' 0.6485000010579824ms
+[NX Daemon Server] - 2024-11-08T12:09:54.135Z - [REQUEST]: Responding to the client. handleHashGlob
+[NX Daemon Server] - 2024-11-08T12:09:54.135Z - Done responding to the client handleHashGlob
+[NX Daemon Server] - 2024-11-08T12:09:54.135Z - Handled HASH_GLOB. Handling time: 1. Response time: 6.
+[NX Daemon Server] - 2024-11-08T12:09:54.136Z - Done responding to the client handleGlob
+[NX Daemon Server] - 2024-11-08T12:09:54.136Z - Handled GLOB. Handling time: 1. Response time: 4.
+[NX Daemon Server] - 2024-11-08T12:09:54.136Z - Done responding to the client handleHashGlob
+[NX Daemon Server] - 2024-11-08T12:09:54.136Z - Handled HASH_GLOB. Handling time: 1. Response time: 1.
+[NX Daemon Server] - 2024-11-08T12:09:54.138Z - [REQUEST]: Responding to the client. handleHashGlob
+[NX Daemon Server] - 2024-11-08T12:09:54.139Z - Done responding to the client handleHashGlob
+[NX Daemon Server] - 2024-11-08T12:09:54.139Z - Handled HASH_GLOB. Handling time: 1. Response time: 1.
+[NX Daemon Server] - 2024-11-08T12:09:54.142Z - [REQUEST]: Responding to the client. handleHashGlob
+[NX Daemon Server] - 2024-11-08T12:09:54.146Z - Done responding to the client handleHashGlob
+[NX Daemon Server] - 2024-11-08T12:09:54.146Z - Handled HASH_GLOB. Handling time: 1. Response time: 4.
+[NX Daemon Server] - 2024-11-08T12:09:54.148Z - [REQUEST]: Responding to the client. handleHashGlob
+[NX Daemon Server] - 2024-11-08T12:09:54.148Z - Done responding to the client handleHashGlob
+[NX Daemon Server] - 2024-11-08T12:09:54.148Z - Handled HASH_GLOB. Handling time: 1. Response time: 0.
+[NX Daemon Server] - 2024-11-08T12:09:54.151Z - [REQUEST]: Responding to the client. handleHashGlob
+[NX Daemon Server] - 2024-11-08T12:09:54.151Z - Done responding to the client handleHashGlob
+[NX Daemon Server] - 2024-11-08T12:09:54.151Z - Handled HASH_GLOB. Handling time: 1. Response time: 0.
+[NX Daemon Server] - 2024-11-08T12:09:54.166Z - Time taken for 'build-project-configs' 37.15029999986291ms
+[NX Daemon Server] - 2024-11-08T12:09:54.206Z - [SYNC]: collect registered sync generators
+[NX Daemon Server] - 2024-11-08T12:09:54.207Z - [SYNC]: project graph hash is the same, not collecting task sync generators
+[NX Daemon Server] - 2024-11-08T12:09:54.207Z - [SYNC]: nx.json hash is the same, not collecting global sync generators
+[NX Daemon Server] - 2024-11-08T12:09:54.207Z - Time taken for 'total execution time for createProjectGraph()' 30.156099999323487ms
+[NX Daemon Server] - 2024-11-08T12:09:55.026Z - Established a connection. Number of open connections: 4
+[NX Daemon Server] - 2024-11-08T12:09:55.027Z - Closed a connection. Number of open connections: 3
+[NX Daemon Server] - 2024-11-08T12:09:55.027Z - Established a connection. Number of open connections: 4
+[NX Daemon Server] - 2024-11-08T12:09:55.028Z - [REQUEST]: Client Request for Project Graph Received
+[NX Daemon Server] - 2024-11-08T12:09:55.029Z - [REQUEST]: Responding to the client. project-graph
+[NX Daemon Server] - 2024-11-08T12:09:55.030Z - Time taken for 'total for creating and serializing project graph' 0.3806999996304512ms
+[NX Daemon Server] - 2024-11-08T12:09:55.031Z - Done responding to the client project-graph
+[NX Daemon Server] - 2024-11-08T12:09:55.031Z - Handled REQUEST_PROJECT_GRAPH. Handling time: 1. Response time: 2.
+[NX Daemon Server] - 2024-11-08T12:09:55.039Z - [REQUEST]: Responding to the client. handleContextFileData
+[NX Daemon Server] - 2024-11-08T12:09:55.039Z - Done responding to the client handleContextFileData
+[NX Daemon Server] - 2024-11-08T12:09:55.039Z - Handled GET_CONTEXT_FILE_DATA. Handling time: 1. Response time: 0.
+[NX Daemon Server] - 2024-11-08T12:09:55.040Z - Closed a connection. Number of open connections: 3
