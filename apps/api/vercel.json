@@ -1,5 +1,8 @@
 {
   "version": 2,
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/api" }
+  ],
   "builds": [
     {
       "src": "src/main.ts",
@@ -9,7 +12,7 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "src/main.ts",
+      "dest": "dist/apps/api/main.js",
       "methods": [
         "GET",
         "POST",
