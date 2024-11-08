@@ -13,6 +13,11 @@ import { ApiCartService } from './api-cart.service';
 export class ApiCartController {
   constructor(private cartService: ApiCartService) {}
 
+  @Get('test')
+  async testCart(@Param('id') userId: string) {
+    return 'Cart tested';
+  }
+
   @Get(':id')
   async getOrCreateCart(@Param('id') userId: string) {
     return this.cartService.getOrCreateCart(userId);

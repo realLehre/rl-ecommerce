@@ -1,8 +1,0 @@
-[build]
-command = "prisma generate && prisma migrate deploy && npx nx build api"
-functions = "dist/apps/api"
-
-[[redirects]]
-from = "/api/*"
-to = "/.netlify/functions/:splat"
-status = 200
