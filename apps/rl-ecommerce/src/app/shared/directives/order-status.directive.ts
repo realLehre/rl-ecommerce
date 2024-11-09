@@ -14,7 +14,7 @@ import {
 export class OrderStatusDirective implements OnInit {
   private el = inject(ElementRef);
   private renderer = inject(Renderer2);
-  orderStatus = input.required<string>();
+  orderStatus = input.required<string>({ alias: 'appOrderStatus' });
   constructor() {}
 
   ngOnInit() {
