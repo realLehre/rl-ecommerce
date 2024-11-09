@@ -128,6 +128,13 @@ export class UserOrdersTableComponent implements OnInit {
         );
         this.rangeDates = [minDate, maxDate];
       }
+      if (this.filter.itemsToShow) {
+        this.totalItemsToShow = this.filter.itemsToShow;
+        this.config.itemsPerPage = this.filter.itemsToShow;
+      }
+      if (this.filter.page) {
+        this.config.currentPage = this.filter.page;
+      }
 
       this.filterNumber = this.findFilterNumber();
     }
@@ -154,7 +161,7 @@ export class UserOrdersTableComponent implements OnInit {
           res?.totalItemsInPage!,
           this.totalItemsToShow,
         );
-        // this.config.itemsPerPage = res?.totalItemsInPage!;
+        this.config.itemsPerPage = this.totalItemsToShow;
         this.config.currentPage = res?.currentPage!;
         this.config.totalItems = res?.totalItems;
         this.isLoading.set(false);
@@ -178,6 +185,7 @@ export class UserOrdersTableComponent implements OnInit {
   onChangeItemsToShow(total: number) {
     this.filter = { ...this.filter, page: 1, itemsToShow: total };
     this.totalItemsToShow = total;
+    this.config.itemsPerPage = total;
     this.reFetchOrder();
   }
 
