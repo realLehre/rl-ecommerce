@@ -36,6 +36,7 @@ import { CartService } from '../../../shared/services/cart.service';
 import { UserAccountService } from '../../../features/user/user-account/services/user-account.service';
 import { CookieService } from 'ngx-cookie-service';
 import { AccountInfoService } from '../../../features/user/user-account/services/account-info.service';
+import { OrderService } from '../../../shared/services/order.service';
 
 @Component({
   selector: 'app-header',
@@ -59,8 +60,6 @@ export class HeaderComponent implements AfterViewInit, OnInit {
   private optionsService = inject(ProductOptionsService);
   private cartService = inject(CartService);
   user = this.authService.user;
-  private userAccountService = inject(UserAccountService);
-  private accountInfoService = inject(AccountInfoService);
   userName = computed(() => {
     return this.user()?.fullName.split(' ')[0]!;
   });
@@ -117,9 +116,6 @@ export class HeaderComponent implements AfterViewInit, OnInit {
 
   onSignOut() {
     this.authService.signOut();
-    this.cartService.cartSignal.set(null);
-    this.cartService.cartTotal.set(null);
-    this.userAccountService.userSignal.set(null);
   }
   onToggleSearch() {
     if (this.searchInput.nativeElement.value) {

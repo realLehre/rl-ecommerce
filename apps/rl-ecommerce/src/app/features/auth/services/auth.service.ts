@@ -83,7 +83,9 @@ export class AuthService {
     sessionStorage.clear();
     this.cookieService.deleteAll('/');
     this.user.set(null);
-    this.router.navigate(['/']);
+    this.router.navigate(['/']).then(() => {
+      window.location.reload();
+    });
   }
 
   onAuthStateChanged() {

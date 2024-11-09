@@ -154,9 +154,9 @@ export class UserOrdersTableComponent implements OnInit {
           res?.totalItemsInPage!,
           this.totalItemsToShow,
         );
-        this.config.totalItems = res?.totalItems;
-        this.config.itemsPerPage = res?.totalItemsInPage!;
+        // this.config.itemsPerPage = res?.totalItemsInPage!;
         this.config.currentPage = res?.currentPage!;
+        this.config.totalItems = res?.totalItems;
         this.isLoading.set(false);
       },
       error: (err) => {
