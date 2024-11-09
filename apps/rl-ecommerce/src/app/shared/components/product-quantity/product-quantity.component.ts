@@ -1,12 +1,14 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  inject,
   input,
   OnInit,
   output,
   signal,
 } from '@angular/core';
 import { LoaderComponent } from '../loader/loader.component';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-product-quantity',
@@ -17,7 +19,9 @@ import { LoaderComponent } from '../loader/loader.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductQuantityComponent implements OnInit {
+  private toast = inject(ToastService);
   quantity = input.required<number>();
+  productUnitsLeft = input.required<number>();
   quantityMain!: number;
   quantityChanged = output<number>();
   isLoading = input<boolean>(false);
@@ -31,6 +35,13 @@ export class ProductQuantityComponent implements OnInit {
       return;
     }
     if (action.toLowerCase() == 'increase') {
+      if (this.quantityMain == this.productUnitsLeft()) {
+        this.toast.showToast({
+          type: 'error',
+          message: 'Order quantity can not exceed available units!',
+        });
+        return;
+      }
       this.quantityMain++;
     } else {
       if (this.quantity() == 1) {

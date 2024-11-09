@@ -3,7 +3,7 @@ import { environment } from '../../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
 import { UserAccountService } from '../../features/user/user-account/services/user-account.service';
 import { ICart, ICartItems } from '../models/cart.interface';
-import { map, of, tap } from 'rxjs';
+import { map, of, retry, tap } from 'rxjs';
 import { IProduct } from '../../features/products/model/product.interface';
 
 @Injectable({
@@ -39,6 +39,7 @@ export class CartService {
       return this.cartSignal()
         ? of(this.cartSignal())
         : this.http.get<ICart>(`${this.apiUrl}/${this.user()?.id}`).pipe(
+            retry(3),
             tap((res) => {
               this.cartSignal.set(res);
               this.cartTotal.set(res.cartItems.length);

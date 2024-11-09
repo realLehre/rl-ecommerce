@@ -17,22 +17,26 @@
     <div
       class="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[92%] h-[92%] bg-[#3D3D3D] clip-polygon z-[103]"
     >
-      <!--      <div-->
-      <!--        class="absolute shadow-md top-0 right-0 bg-yellow-400 text-black py-1 px-3 text-[10px] font-semibold text-center leading-[1]"-->
-      <!--      >-->
-      <!--        <div>SOLD</div>-->
-      <!--        <div>OUT</div>-->
-      <!--      </div>-->
+      @if (product().isSoldOut) {
+        <div
+          class="absolute shadow-md top-0 right-0 bg-yellow-400 text-black py-1 px-3 text-[10px] font-semibold text-center leading-[1]"
+        >
+          <div>SOLD</div>
+          <div>OUT</div>
+        </div>
+      }
       <img
         [src]="product().imageUrls[1]"
         [alt]="product().name"
         class="hidden group-hover:inline w-full h-full object-cover"
         alt=""
+        loading="lazy"
       />
       <img
         [src]="product().image"
         [alt]="product().name"
         class="inline group-hover:hidden w-full h-full object-cover"
+        loading="lazy"
       />
     </div>
   </div>
@@ -69,41 +73,44 @@
         {{ product().price | currency: '₦' : 'symbol' : '1.0-0' }}
       </p>
 
-      <div>
-        @if (!productInCart()) {
-          <button
-            class="flex items-center rounded-full justify-between space-x-2 border-[2px] border-primary px-3 py-2 whitespace-nowrap text-xs w-full mobile:w-auto min-w-[100px] text-type_title_gray group hover:bg-primary hover:text-white"
-            [disabled]="isAddingToCart()"
-            (click)="onAddToCart()"
-          >
-            @if (isAddingToCart()) {
-              <app-loader
-                [customStyle]="{ width: '18px', border: '3px solid #000' }"
-              />
-            } @else {
-              <span class="font-medium">Add to Cart</span>
-            }
-            <svg
-              width="18"
-              height="19"
-              viewBox="0 0 32 33"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              class="fill-type_title_gray group-hover:!fill-white"
+      @if (!product().isSoldOut) {
+        <div>
+          @if (!productInCart()) {
+            <button
+              class="flex items-center rounded-full justify-between space-x-2 border-[2px] border-primary px-3 py-2 whitespace-nowrap text-xs w-full mobile:w-auto min-w-[100px] text-type_title_gray group hover:bg-primary hover:text-white"
+              [disabled]="isAddingToCart()"
+              (click)="onAddToCart()"
             >
-              <path
-                d="M5.33328 9.05198L1.00928 4.72932L2.89594 2.84265L7.21861 7.16665H27.5413C27.7491 7.16664 27.954 7.2152 28.1398 7.30847C28.3255 7.40175 28.4868 7.53714 28.6109 7.70385C28.735 7.87055 28.8184 8.06396 28.8545 8.26863C28.8905 8.4733 28.8783 8.68357 28.8186 8.88265L25.6186 19.5493C25.5363 19.8241 25.3675 20.065 25.1374 20.2363C24.9073 20.4075 24.6281 20.5 24.3413 20.5H7.99994V23.1667H22.6666V25.8333H6.66661C6.31299 25.8333 5.97385 25.6928 5.7238 25.4428C5.47375 25.1927 5.33328 24.8536 5.33328 24.5V9.05198ZM7.99994 9.83332V17.8333H23.3493L25.7493 9.83332H7.99994ZM7.33328 31.1667C6.80284 31.1667 6.29414 30.9559 5.91906 30.5809C5.54399 30.2058 5.33328 29.6971 5.33328 29.1667C5.33328 28.6362 5.54399 28.1275 5.91906 27.7524C6.29414 27.3774 6.80284 27.1667 7.33328 27.1667C7.86371 27.1667 8.37242 27.3774 8.74749 27.7524C9.12256 28.1275 9.33328 28.6362 9.33328 29.1667C9.33328 29.6971 9.12256 30.2058 8.74749 30.5809C8.37242 30.9559 7.86371 31.1667 7.33328 31.1667ZM23.3333 31.1667C22.8028 31.1667 22.2941 30.9559 21.9191 30.5809C21.544 30.2058 21.3333 29.6971 21.3333 29.1667C21.3333 28.6362 21.544 28.1275 21.9191 27.7524C22.2941 27.3774 22.8028 27.1667 23.3333 27.1667C23.8637 27.1667 24.3724 27.3774 24.7475 27.7524C25.1226 28.1275 25.3333 28.6362 25.3333 29.1667C25.3333 29.6971 25.1226 30.2058 24.7475 30.5809C24.3724 30.9559 23.8637 31.1667 23.3333 31.1667Z"
-              />
-            </svg>
-          </button>
-        } @else {
-          <app-product-quantity
-            [quantity]="productInCart()?.unit!"
-            [isLoading]="isUpdatingCart()"
-            (quantityChanged)="onAdjustQuantity($event)"
-          />
-        }
-      </div>
+              @if (isAddingToCart()) {
+                <app-loader
+                  [customStyle]="{ width: '18px', border: '3px solid #000' }"
+                />
+              } @else {
+                <span class="font-medium">Add to Cart</span>
+              }
+              <svg
+                width="18"
+                height="19"
+                viewBox="0 0 32 33"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                class="fill-type_title_gray group-hover:!fill-white"
+              >
+                <path
+                  d="M5.33328 9.05198L1.00928 4.72932L2.89594 2.84265L7.21861 7.16665H27.5413C27.7491 7.16664 27.954 7.2152 28.1398 7.30847C28.3255 7.40175 28.4868 7.53714 28.6109 7.70385C28.735 7.87055 28.8184 8.06396 28.8545 8.26863C28.8905 8.4733 28.8783 8.68357 28.8186 8.88265L25.6186 19.5493C25.5363 19.8241 25.3675 20.065 25.1374 20.2363C24.9073 20.4075 24.6281 20.5 24.3413 20.5H7.99994V23.1667H22.6666V25.8333H6.66661C6.31299 25.8333 5.97385 25.6928 5.7238 25.4428C5.47375 25.1927 5.33328 24.8536 5.33328 24.5V9.05198ZM7.99994 9.83332V17.8333H23.3493L25.7493 9.83332H7.99994ZM7.33328 31.1667C6.80284 31.1667 6.29414 30.9559 5.91906 30.5809C5.54399 30.2058 5.33328 29.6971 5.33328 29.1667C5.33328 28.6362 5.54399 28.1275 5.91906 27.7524C6.29414 27.3774 6.80284 27.1667 7.33328 27.1667C7.86371 27.1667 8.37242 27.3774 8.74749 27.7524C9.12256 28.1275 9.33328 28.6362 9.33328 29.1667C9.33328 29.6971 9.12256 30.2058 8.74749 30.5809C8.37242 30.9559 7.86371 31.1667 7.33328 31.1667ZM23.3333 31.1667C22.8028 31.1667 22.2941 30.9559 21.9191 30.5809C21.544 30.2058 21.3333 29.6971 21.3333 29.1667C21.3333 28.6362 21.544 28.1275 21.9191 27.7524C22.2941 27.3774 22.8028 27.1667 23.3333 27.1667C23.8637 27.1667 24.3724 27.3774 24.7475 27.7524C25.1226 28.1275 25.3333 28.6362 25.3333 29.1667C25.3333 29.6971 25.1226 30.2058 24.7475 30.5809C24.3724 30.9559 23.8637 31.1667 23.3333 31.1667Z"
+                />
+              </svg>
+            </button>
+          } @else {
+            <app-product-quantity
+              [quantity]="productInCart()?.unit!"
+              [isLoading]="isUpdatingCart()"
+              [productUnitsLeft]="product().unit"
+              (quantityChanged)="onAdjustQuantity($event)"
+            />
+          }
+        </div>
+      }
     </div>
   </div>
 </div>

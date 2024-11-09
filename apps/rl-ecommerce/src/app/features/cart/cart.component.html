@@ -73,6 +73,7 @@
                     <app-product-quantity
                       [quantity]="item.unit"
                       [isLoading]="isUpdating()[i]"
+                      [productUnitsLeft]="item.product.unit"
                       (quantityChanged)="onAdjustQuantity($event, item, i)"
                     />
                   </td>
@@ -134,6 +135,7 @@
                 <app-product-quantity
                   [quantity]="item.unit"
                   [isLoading]="isUpdating()[i]"
+                  [productUnitsLeft]="item.product.unit"
                   (quantityChanged)="onAdjustQuantity($event, item, i)"
                 />
               </div>
