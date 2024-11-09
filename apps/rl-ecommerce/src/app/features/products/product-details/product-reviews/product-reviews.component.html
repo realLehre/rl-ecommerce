@@ -110,27 +110,27 @@
           <div class="">
             @for (review of reviewComments(); track review.id; let i = $index) {
               <div
-                class="flex items-start space-x-4 pt-5"
-                [ngClass]="{
-                  'pb-5 border-b-[2px] border-border_subtle':
-                    i + 1 < reviews().length,
-                }"
+                class="grid grid-cols-[1fr_3fr] space-x-4 pt-5 pb-5 border-b-[2px] border-border_subtle"
               >
-                <h3 class="capitalize font-medium">{{ review.user.name }}</h3>
+                <h3 class="capitalize font-medium text-sm mobile:text-base">
+                  {{ review.user.name }}
+                </h3>
 
                 <div>
                   <div class="flex items-center space-x-3">
-                    <div>
+                    <div class="flex items-center space-x-1">
                       @for (star of stars(); track star.star; let i = $index) {
                         <i
-                          class="fa fa-star text-xl text-gray-300"
+                          class="fa fa-star text-lg mobile:text-xl text-gray-300"
                           [ngClass]="{
                             '!text-yellow-400': i + 1 <= review.rating,
                           }"
                         ></i>
                       }
                     </div>
-                    <p class="text-sm">{{ review.createdAt | date }}</p>
+                    <p class="text-xs mobile:text-sm">
+                      {{ review.createdAt | date }}
+                    </p>
                   </div>
 
                   <div class="mt-2">
@@ -139,7 +139,9 @@
                     </h3>
 
                     @if (review.comment) {
-                      <p class="text-type_grey mt-2 leading-tight">
+                      <p
+                        class="text-type_grey mt-2 leading-tight text-sm mobile:text-base"
+                      >
                         {{ review.comment }}
                       </p>
                     }

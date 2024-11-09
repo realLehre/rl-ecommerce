@@ -2,7 +2,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../../environments/environment.development';
 import { IProduct, IProductResponse } from '../model/product.interface';
-import { of, tap } from 'rxjs';
+import { of, retry, tap } from 'rxjs';
 import { PaginationInstance } from 'ngx-pagination';
 
 interface IProductFilter {
@@ -54,6 +54,7 @@ export class ProductsService {
     return this.productSignal()
       ? of(this.productSignal())
       : this.http.get<IProductResponse>(`${this.baseUrl}all`, { params }).pipe(
+          retry(3),
           tap((res) => {
             this.paginationConfig.set({
               currentPage: res.currentPage,
@@ -68,15 +69,16 @@ export class ProductsService {
   }
 
   getProductById(id: string) {
-    return this.http
-      .get<IProduct>(`${this.baseUrl}${id}`)
-      .pipe(tap((res) => this.activeProduct.set(res)));
+    return this.http.get<IProduct>(`${this.baseUrl}${id}`).pipe(
+      retry(3),
+      tap((res) => this.activeProduct.set(res)),
+    );
   }
 
   getSimilarProducts(categoryId: string, productId: string) {
-    return this.http.get<IProduct[]>(
-      `${this.baseUrl}${productId}/similar/${categoryId}`,
-    );
+    return this.http
+      .get<IProduct[]>(`${this.baseUrl}${productId}/similar/${categoryId}`)
+      .pipe(retry(3));
   }
 
   getSearchedProducts(input: string) {

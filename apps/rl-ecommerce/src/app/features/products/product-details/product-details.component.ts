@@ -149,7 +149,7 @@ export class ProductDetailsComponent implements OnInit {
 
       this.cartService
         .updateCartItem({
-          itemId: product.id,
+          itemId: this.productInCart()?.id!,
           unit: this.quantity,
           productPrice: product.price!,
         })
@@ -179,9 +179,18 @@ export class ProductDetailsComponent implements OnInit {
                 JSON.stringify(newCart),
               );
             }
+
+            this.toast.showToast({
+              type: 'success',
+              message: product.name + ' ' + 'quantity adjusted!',
+            });
           },
           error: (err) => {
             this.isUpdatingCart.set(false);
+            this.toast.showToast({
+              type: 'error',
+              message: err.error.message,
+            });
           },
         });
     }
