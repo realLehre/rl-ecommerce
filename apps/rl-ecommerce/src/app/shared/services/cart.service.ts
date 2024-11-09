@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
 import { UserAccountService } from '../../features/user/user-account/services/user-account.service';
 import { ICart, ICartItems } from '../models/cart.interface';

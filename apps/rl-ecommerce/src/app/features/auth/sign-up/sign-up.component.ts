@@ -94,13 +94,7 @@ export class SignUpComponent implements OnInit {
   }
 
   onSignInWithGoogle() {
-    this.authService.continueWithGoogle().then((res) => {
-      // this.userAccountService.getUser().subscribe();
-      // this.toastService.showToast({
-      //   type: 'success',
-      //   message: 'Logged in successfully!,',
-      // });
-    });
+    this.authService.continueWithGoogle();
   }
 
   isInvalidAndTouched(controlName: string): boolean {

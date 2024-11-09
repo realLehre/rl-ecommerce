@@ -2,7 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { AuthService, IUser } from '../../../auth/services/auth.service';
 import { HttpClient } from '@angular/common/http';
 
-import { environment } from '../../../../../environments/environment';
+import { environment } from '../../../../../environments/environment.development';
 import { of, tap } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 

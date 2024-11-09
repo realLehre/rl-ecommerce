@@ -3,7 +3,7 @@ import { UserAccountService } from '../../features/user/user-account/services/us
 import { IAddress } from '../../features/user/models/address.interface';
 import { ICart, ICartItems } from '../models/cart.interface';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.development';
 import { IOrder, IOrderResponse } from '../models/order.interface';
 import { of, tap } from 'rxjs';
 import { PaginationInstance } from 'ngx-pagination';

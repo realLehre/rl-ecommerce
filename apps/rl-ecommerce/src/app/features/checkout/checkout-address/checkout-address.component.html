@@ -49,7 +49,7 @@
           <button
             class="text-blue-500 hover:text-blue-600 w-6 h-6"
             [routerLink]="['/', 'user', 'address-management']"
-            [queryParams]="{ edit: true }"
+            [queryParams]="{ edit: true, fromCheckout: true }"
             (click)="onEditAddress(address)"
           >
             <svg
@@ -69,7 +69,7 @@
     <button
       class="border-0 outline-0 text-primary font-semibold py-2 mt-4"
       [routerLink]="['/', 'user', 'address-management']"
-      [queryParams]="{ add: true }"
+      [queryParams]="{ add: true, fromCheckout: true }"
     >
       <i class="fa fa-plus mr-1"></i> <span>Add Address</span>
     </button>

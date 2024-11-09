@@ -80,15 +80,7 @@ export class LoginComponent implements OnInit {
   }
 
   async onSignInWithGoogle() {
-    await this.authService.continueWithGoogle().then((res) => {
-      // this.userAccountService.getUser().subscribe();
-      // this.toastService.showToast({
-      //   type: 'success',
-      //   message: 'Logged in successfully!,',
-      // });
-      console.log(1);
-    });
-    console.log(1);
+    await this.authService.continueWithGoogle();
   }
 
   onTogglePasswordVisibility(index: number) {

@@ -35,6 +35,7 @@ import { NumberOfFiltersPipe } from '../../../shared/pipes/number-of-filters.pip
 import { CartService } from '../../../shared/services/cart.service';
 import { UserAccountService } from '../../../features/user/user-account/services/user-account.service';
 import { CookieService } from 'ngx-cookie-service';
+import { AccountInfoService } from '../../../features/user/user-account/services/account-info.service';
 
 @Component({
   selector: 'app-header',
@@ -59,7 +60,7 @@ export class HeaderComponent implements AfterViewInit, OnInit {
   private cartService = inject(CartService);
   user = this.authService.user;
   private userAccountService = inject(UserAccountService);
-  private cookieService = inject(CookieService);
+  private accountInfoService = inject(AccountInfoService);
   userName = computed(() => {
     return this.user()?.fullName.split(' ')[0]!;
   });

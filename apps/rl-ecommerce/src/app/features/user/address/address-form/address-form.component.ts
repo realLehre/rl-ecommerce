@@ -23,7 +23,7 @@ import { PhoneNumberDirective } from './directives/phone-number.directive';
 import { AddressService } from '../services/address.service';
 import { ErrorMessageDirective } from './directives/error-message.directive';
 import { CheckboxModule } from 'primeng/checkbox';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { CanComponentDeactivate } from '../../../../shared/guards/has-unsaved-changes.guard';
@@ -53,6 +53,7 @@ export class AddressFormComponent implements OnInit, AfterViewInit, OnDestroy {
   private fb = inject(FormBuilder);
   private toast = inject(ToastService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private ref!: DynamicDialogRef;
   private dialogService = inject(DialogService);
   closeForm = output<void>();
@@ -64,6 +65,7 @@ export class AddressFormComponent implements OnInit, AfterViewInit, OnDestroy {
   addressTouched = output<boolean>();
   activeAddress!: IAddress | null;
   address$ = this.addressService.getAddress();
+  fromCheckout = signal(false);
 
   constructor() {}
 
@@ -112,6 +114,10 @@ export class AddressFormComponent implements OnInit, AfterViewInit, OnDestroy {
         this.addressTouched.emit(true);
       }
     });
+
+    this.route.queryParams.subscribe((params) => {
+      if (params['fromCheckout']) this.fromCheckout.set(true);
+    });
   }
 
   ngAfterViewInit() {
@@ -157,6 +163,10 @@ export class AddressFormComponent implements OnInit, AfterViewInit, OnDestroy {
             this.closeForm.emit();
             this.addressForm.reset();
             this.addressTouched.emit(false);
+
+            if (this.fromCheckout()) {
+              this.router.navigate(['/', 'checkout']);
+            }
           },
           error: (err) => {
             this.isLoading.set(false);
@@ -182,6 +192,9 @@ export class AddressFormComponent implements OnInit, AfterViewInit, OnDestroy {
               this.closeForm.emit();
               this.addressTouched.emit(false);
               this.addressForm.reset();
+              if (this.fromCheckout()) {
+                this.router.navigate(['/', 'checkout']);
+              }
             },
             error: (err) => {
               this.isLoading.set(false);
