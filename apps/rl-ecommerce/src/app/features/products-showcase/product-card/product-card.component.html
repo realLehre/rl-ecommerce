@@ -24,6 +24,14 @@
           <div>SOLD</div>
           <div>OUT</div>
         </div>
+      } @else if (product().previousPrice) {
+        <div
+          class="absolute shadow-md top-0 right-0 p-[2px] rounded-sm bg-primary text-white text-sm bg-opacity-75"
+        >
+          -{{
+            product().price | pricePercentageDecrease: product().previousPrice
+          }}%
+        </div>
       }
       <img
         [src]="product().imageUrls[1]"
@@ -69,9 +77,18 @@
     <div
       class="flex items-start mobile:items-center flex-col mobile:flex-row justify-between gap-x-2 gap-y-4"
     >
-      <p class="text-type_title md:text-lg text-base font-semibold">
-        {{ product().price | currency: '₦' : 'symbol' : '1.0-0' }}
-      </p>
+      <div>
+        <p class="text-type_title md:text-lg text-base font-semibold">
+          {{ product().price | currency: '₦' : 'symbol' : '1.0-0' }}
+        </p>
+        @if (product().previousPrice) {
+          <p
+            class="text-type_grey md:text-base text-xs font-medium mt-1 line-through"
+          >
+            {{ product().previousPrice | currency: '₦' : 'symbol' : '1.0-0' }}
+          </p>
+        }
+      </div>
 
       @if (!product().isSoldOut) {
         <div>

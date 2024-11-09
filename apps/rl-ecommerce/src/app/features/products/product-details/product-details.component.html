@@ -27,11 +27,34 @@
               {{ product.name || activeProduct()?.name }}
             </h1>
 
-            <p
-              class="text-[20px] mobile:text-3xl text-type_title font-semibold"
-            >
-              {{ product.price | currency: '₦' : 'symbol' : '1.0-0' }}
-            </p>
+            <div class="flex items-center gap-x-2 flex-wrap">
+              <p
+                class="text-[20px] mobile:text-3xl text-type_title font-semibold"
+              >
+                {{ product.price | currency: '₦' : 'symbol' : '1.0-0' }}
+              </p>
+
+              @if (product.previousPrice) {
+                <div class="flex items-center space-x-1">
+                  <p
+                    class="text-type_grey mobile:text-lg text-sm font-medium line-through"
+                  >
+                    {{
+                      product.previousPrice | currency: '₦' : 'symbol' : '1.0-0'
+                    }}
+                  </p>
+
+                  <div
+                    class="p-[2px] rounded-sm bg-primary text-white text-xs mobile:text-sm bg-opacity-70"
+                  >
+                    -{{
+                      product.price
+                        | pricePercentageDecrease: product.previousPrice
+                    }}%
+                  </div>
+                </div>
+              }
+            </div>
 
             @if (!product.isSoldOut) {
               <div

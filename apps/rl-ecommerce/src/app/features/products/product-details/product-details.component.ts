@@ -29,6 +29,7 @@ import { ToastService } from '../../../shared/services/toast.service';
 import { ProductReviewsComponent } from './product-reviews/product-reviews.component';
 import { LargeReviewsComponent } from './large-reviews/large-reviews.component';
 import { ReviewService } from '../../../shared/services/review.service';
+import { PricePercentageDecreasePipe } from '../../../shared/pipes/price-percentage-decrease.pipe';
 
 @Component({
   selector: 'app-product-details',
@@ -47,6 +48,7 @@ import { ReviewService } from '../../../shared/services/review.service';
     ProductReviewsComponent,
     LargeReviewsComponent,
     NgStyle,
+    PricePercentageDecreasePipe,
   ],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.scss',

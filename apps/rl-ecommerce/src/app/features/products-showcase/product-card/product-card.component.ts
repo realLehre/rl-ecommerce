@@ -23,6 +23,7 @@ import { UserAccountService } from '../../user/user-account/services/user-accoun
 import { ReviewService } from '../../../shared/services/review.service';
 import { ProductQuantityComponent } from '../../../shared/components/product-quantity/product-quantity.component';
 import { ICartItems } from '../../../shared/models/cart.interface';
+import { PricePercentageDecreasePipe } from '../../../shared/pipes/price-percentage-decrease.pipe';
 
 @Component({
   selector: 'app-product-card',
@@ -34,6 +35,7 @@ import { ICartItems } from '../../../shared/models/cart.interface';
     NgClass,
     NgStyle,
     ProductQuantityComponent,
+    PricePercentageDecreasePipe,
   ],
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.scss',
