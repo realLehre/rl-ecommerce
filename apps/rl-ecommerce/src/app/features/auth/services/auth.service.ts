@@ -104,7 +104,6 @@ export class AuthService {
           sameSite: 'Strict',
           expires: session?.expires_in,
         });
-        console.log(1);
         localStorage.removeItem('sb-tentdyesixetvyacewwr-auth-token');
         this.http
           .get<IUser>(`${this.baseUrl}users/${this.user()?.id}`)
@@ -146,7 +145,6 @@ export class AuthService {
   }
 
   getError(err: AuthApiError | AuthError) {
-    console.log(err);
     switch (err.code) {
       case 'user_already_exists':
         return err.message;

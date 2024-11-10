@@ -22,7 +22,7 @@ import { ToastService } from '../../../shared/services/toast.service';
 import { UserAccountService } from '../../user/user-account/services/user-account.service';
 import { ReviewService } from '../../../shared/services/review.service';
 import { ProductQuantityComponent } from '../../../shared/components/product-quantity/product-quantity.component';
-import { ICartItems } from '../../../shared/models/cart.interface';
+import { ICart, ICartItems } from '../../../shared/models/cart.interface';
 import { PricePercentageDecreasePipe } from '../../../shared/pipes/price-percentage-decrease.pipe';
 
 @Component({
@@ -96,13 +96,15 @@ export class ProductCardComponent {
 
           this.cartService.cartTotal.set(cartTotal()! + 1);
 
-          const cart = { ...this.cartService.cartSignal() } || {};
+          const cart = this.cartService.cartSignal() || ({} as ICart);
           this.cartService.cartSignal.set(null);
           this.cartService.getCart().subscribe();
           const newCartItem = { ...res, product: this.product() as IProduct };
           this.cartService.cartSignal.set({
             ...this.cartService.cartSignal()!,
-            cartItems: [...cart?.cartItems!, newCartItem as any],
+            cartItems: Array.isArray(cart?.cartItems!)
+              ? [...cart?.cartItems!, newCartItem as any]
+              : [newCartItem],
           });
           this.toast.showToast({
             type: 'success',

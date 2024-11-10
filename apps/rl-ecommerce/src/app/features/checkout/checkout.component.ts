@@ -106,12 +106,13 @@ export class CheckoutComponent {
       })
       .subscribe({
         next: (res) => {
-          this.router.navigate(['/', 'orders']);
+          this.router.navigate(['/', 'orders']).then(() => {
+            setTimeout(() => {
+              this.cartService.cartSignal.set(null);
+            }, 300);
+            this.cartService.cartTotal.set(null);
+          });
           localStorage.removeItem(this.cartService.CART_KEY);
-          setTimeout(() => {
-            this.cartService.cartSignal.set(null);
-          }, 300);
-          this.cartService.cartTotal.set(null);
           this.cartService.getCart().subscribe();
           this.orderService.orderSignal.set(null);
           this.toast.showToast({

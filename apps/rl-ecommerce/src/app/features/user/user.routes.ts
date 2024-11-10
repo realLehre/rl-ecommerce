@@ -30,6 +30,13 @@ export const userRoutes: Routes = [
             '../user/account-management/account-management.component'
           ).then((c) => c.AccountManagementComponent),
       },
+      {
+        path: 'pending-reviews',
+        loadComponent: () =>
+          import('./pending-reviews/pending-reviews.component').then(
+            (c) => c.PendingReviewsComponent,
+          ),
+      },
     ],
   },
 ];
