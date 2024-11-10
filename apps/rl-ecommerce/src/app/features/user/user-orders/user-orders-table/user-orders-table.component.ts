@@ -110,7 +110,7 @@ export class UserOrdersTableComponent implements OnInit {
       sessionStorage.getItem(this.FILTER_STORAGE_KEY)!,
     );
     if (storedFilter) {
-      this.filter = storedFilter;
+      this.filter = { ...storedFilter };
       if (this.filter.minPrice && this.filter.maxPrice) {
         this.rangeValues = [this.filter.minPrice, this.filter.maxPrice];
       }

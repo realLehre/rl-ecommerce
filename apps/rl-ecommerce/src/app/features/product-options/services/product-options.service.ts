@@ -6,7 +6,7 @@ import {
   ISavedProductOptionQueries,
   ISubCategory,
 } from '../models/product-options.interface';
-import { of, tap } from 'rxjs';
+import { of, retry, tap } from 'rxjs';
 import { IProductResponse } from '../../products/model/product.interface';
 
 @Injectable({
@@ -49,9 +49,10 @@ export class ProductOptionsService {
   getCategories() {
     return this.categoriesSignal()
       ? of(this.categoriesSignal())
-      : this.http
-          .get<ICategory[]>(`${this.url}`)
-          .pipe(tap((res) => this.categoriesSignal.set(res)));
+      : this.http.get<ICategory[]>(`${this.url}`).pipe(
+          retry(3),
+          tap((res) => this.categoriesSignal.set(res)),
+        );
   }
 
   createSlug(name: string): string {
