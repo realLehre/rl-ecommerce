@@ -2,7 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment.development';
 import { AuthService } from '../../features/auth/services/auth.service';
-import { map, retry } from 'rxjs';
+import { map, of, retry, tap } from 'rxjs';
 import { IOrder } from '../models/order.interface';
 
 @Injectable({
@@ -14,6 +14,7 @@ export class ReviewService {
   user = this.authService.user;
   private readonly url = environment.apiUrl + 'review';
   seeingFullReview = signal(false);
+  pendingReviewsSignal = signal<IOrder[] | null>(null);
   constructor() {}
 
   createReview(data: any) {
@@ -21,11 +22,12 @@ export class ReviewService {
   }
 
   getPendingReviews() {
-    return this.http
-      .get<IOrder[]>(`${this.url}/pending/${this.user()?.id}`)
-      .pipe(
-        map((res) => res.filter((order) => order.orderItems.length > 0)),
-        retry(3),
-      );
+    return this.pendingReviewsSignal()
+      ? of(this.pendingReviewsSignal())
+      : this.http.get<IOrder[]>(`${this.url}/pending/${this.user()?.id}`).pipe(
+          map((res) => res.filter((order) => order.orderItems.length > 0)),
+          tap((res) => this.pendingReviewsSignal.set(res)),
+          retry(3),
+        );
   }
 }

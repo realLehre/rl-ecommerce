@@ -24,6 +24,7 @@ import { ReviewService } from '../../../shared/services/review.service';
 import { ProductQuantityComponent } from '../../../shared/components/product-quantity/product-quantity.component';
 import { ICart, ICartItems } from '../../../shared/models/cart.interface';
 import { PricePercentageDecreasePipe } from '../../../shared/pipes/price-percentage-decrease.pipe';
+import { ImagePreloadDirective } from '../../../shared/directives/image-preload.directive';
 
 @Component({
   selector: 'app-product-card',
@@ -36,6 +37,7 @@ import { PricePercentageDecreasePipe } from '../../../shared/pipes/price-percent
     NgStyle,
     ProductQuantityComponent,
     PricePercentageDecreasePipe,
+    ImagePreloadDirective,
   ],
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.scss',

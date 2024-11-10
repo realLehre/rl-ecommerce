@@ -1,12 +1,15 @@
 @if (orders$ | async; as orders) {
   <div>
+    <h1 class="text-base mobile:text-2xl font-medium">Pending reviews</h1>
     @for (order of orders; track order.id; let i = $index) {
       @for (orderItem of order.orderItems; track orderItem.id; let i = $index) {
         <div
-          class="grid items-start grid-cols-1 mobile:grid-cols-[2fr_1fr] gap-x-2 gap-y-4 justify-between pt-5 pb-5 border-b-[2px] border-border_subtle"
+          class="grid items-start grid-cols-1 mobile:grid-cols-[2fr_1fr] gap-x-2 gap-y-4 justify-between pt-5 pb-5 border-b-[2px] border-border_subtle mt-1"
         >
           <div class="flex items-center space-x-2">
             <img
+              appImagePreload
+              [image]="orderItem.product?.image!"
               [src]="orderItem.product?.image"
               [alt]="orderItem.product?.name"
               class="w-[80px] h-[80px] min-w-[80px] min-h-[80px] object-cover"
@@ -23,12 +26,15 @@
           </div>
 
           <button
-            class="text-primary text-sm font-semibold mobile:py-2 mr-auto mobile:mr-0 mobile:ml-auto"
+            class="text-primary text-sm font-semibold mr-auto mobile:mr-0 mobile:ml-auto"
+            (click)="onOpenReviewDialog(orderItem, order.userId)"
           >
             RATE THIS PRODUCT
           </button>
         </div>
       }
+    } @empty {
+      <p class="text-sm mt-2 text-type_grey">You have no pending reviews</p>
     }
   </div>
 } @else {
@@ -52,7 +58,7 @@
         </div>
       </div>
 
-      <div class="w-[150px]">
+      <div class="w-[150px] mr-auto mobile:mr-0 mobile:ml-auto">
         <p-skeleton width="100%" height="2rem" />
       </div>
     </div>

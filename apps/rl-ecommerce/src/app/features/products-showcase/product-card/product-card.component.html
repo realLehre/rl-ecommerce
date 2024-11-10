@@ -34,6 +34,8 @@
         </div>
       }
       <img
+        appImagePreload
+        [image]="product().imageUrls[1]"
         [src]="product().imageUrls[1]"
         [alt]="product().name"
         class="hidden group-hover:inline w-full h-full object-cover"
@@ -41,10 +43,11 @@
         loading="lazy"
       />
       <img
+        appImagePreload
+        [image]="product().image"
         [src]="product().image"
         [alt]="product().name"
         class="inline group-hover:hidden w-full h-full object-cover"
-        loading="lazy"
       />
     </div>
   </div>
