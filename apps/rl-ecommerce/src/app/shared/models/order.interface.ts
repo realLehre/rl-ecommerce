@@ -1,4 +1,5 @@
 import { ICartItems } from './cart.interface';
+import { IProduct } from '../../features/products/model/product.interface';
 
 export interface IOrderBody {
   userId: string;
@@ -65,6 +66,7 @@ export interface IOrderItem {
   total: number;
   createdAt: string;
   rating?: any;
+  product?: IProduct;
 }
 
 export interface User {
