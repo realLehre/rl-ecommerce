@@ -4,18 +4,18 @@
     (click)="onViewDetails(product())"
   >
     <div
-      class="absolute top-0 left-0 w-full h-full bg-[#3D3D3D] clip-polygon z-[100]"
+      class="absolute top-0 left-0 w-full h-full bg-[#a4a4a4] clip-polygon z-[100]"
     ></div>
     <div
       class="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[99%] h-[99%] bg-white clip-polygon z-[101]"
     ></div>
 
     <div
-      class="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[93%] h-[93%] bg-[#3D3D3D] clip-polygon z-[102]"
+      class="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[93%] h-[93%] bg-[#a4a4a4] clip-polygon z-[102]"
     ></div>
 
     <div
-      class="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[92%] h-[92%] bg-[#3D3D3D] clip-polygon z-[103]"
+      class="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[92%] h-[92%] bg-[#a4a4a4] clip-polygon z-[103]"
     >
       @if (product().isSoldOut) {
         <div
@@ -26,7 +26,7 @@
         </div>
       } @else if (product().previousPrice) {
         <div
-          class="absolute shadow-md top-0 right-0 p-[2px] rounded-sm bg-primary text-white text-sm bg-opacity-75"
+          class="absolute shadow-md top-0 right-0 p-[2px] bg-primary text-white text-sm bg-opacity-75"
         >
           -{{
             product().price | pricePercentageDecrease: product().previousPrice
@@ -34,8 +34,6 @@
         </div>
       }
       <img
-        appImagePreload
-        [image]="product().imageUrls[1]"
         [src]="product().imageUrls[1]"
         [alt]="product().name"
         class="hidden group-hover:inline w-full h-full object-cover"
@@ -43,8 +41,6 @@
         loading="lazy"
       />
       <img
-        appImagePreload
-        [image]="product().image"
         [src]="product().image"
         [alt]="product().name"
         class="inline group-hover:hidden w-full h-full object-cover"

@@ -24,7 +24,7 @@
 
     <div
       class="min-[760px]:w-1/2 min-[760px]:h-[43px] h-full py-2 px-3 min-[760px]:bg-transparent bg-bg_main min-[760px]:relative absolute w-full top-0 left-0 -translate-y-[100%] min-[760px]:translate-y-0 transition ease-in-out flex items-center justify-center z-[1000]"
-      [ngClass]="{ 'translate-y-0': searchShown() }"
+      [ngClass]="searchShown() ? 'translate-y-0' : '-translate-y-[100%]'"
     >
       <div class="relative w-full h-10 flex items-center justify-between">
         <div class="w-full h-full">
@@ -75,8 +75,6 @@
                   <div class="flex items-center space-x-2 w-[70%]">
                     <div class="w-8 h-8 min-w-8 min-h-8 rounded-md">
                       <img
-                        appImagePreload
-                        [image]="toy.image"
                         [src]="toy.image"
                         [alt]="toy.name"
                         alt=""
