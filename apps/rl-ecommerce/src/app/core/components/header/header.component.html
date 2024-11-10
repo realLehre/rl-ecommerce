@@ -65,7 +65,7 @@
             @if (products()) {
               @for (toy of products(); track toy.name; let i = $index) {
                 <div
-                  class="flex items-center justify-between space-x-3 text-type_title py-[10px] px-3 cursor-pointer hover:bg-border_subtle"
+                  class="flex items-center justify-between space-x-3 text-type_title py-[10px] px-3 cursor-pointer hover:bg-[#80002021]"
                   [ngClass]="{
                     'border-b border-border_subtle':
                       i < products()?.length! - 1,
@@ -75,7 +75,10 @@
                   <div class="flex items-center space-x-2 w-[70%]">
                     <div class="w-8 h-8 min-w-8 min-h-8 rounded-md">
                       <img
+                        appImagePreload
+                        [image]="toy.image"
                         [src]="toy.image"
+                        [alt]="toy.name"
                         alt=""
                         class="w-full h-full object-cover"
                       />
@@ -193,14 +196,14 @@
       } @else {
         <div class="w-full">
           <div
-            class="flex items-center space-x-4 px-3 py-2 hover:bg-border_subtle cursor-pointer"
+            class="flex items-center space-x-4 px-3 py-2 hover:bg-[#80002021] cursor-pointer"
             routerLink="/user"
           >
             <img src="assets/images/icons/user.svg" alt="" class="w-5" />
             <p class="text-type_caption">My Account</p>
           </div>
           <div
-            class="flex items-center space-x-4 px-3 py-2 hover:bg-border_subtle cursor-pointer"
+            class="flex items-center space-x-4 px-3 py-2 hover:bg-[#80002021] cursor-pointer"
             routerLink="/orders"
           >
             <svg

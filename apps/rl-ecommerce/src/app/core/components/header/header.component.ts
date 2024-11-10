@@ -37,6 +37,7 @@ import { UserAccountService } from '../../../features/user/user-account/services
 import { CookieService } from 'ngx-cookie-service';
 import { AccountInfoService } from '../../../features/user/user-account/services/account-info.service';
 import { OrderService } from '../../../shared/services/order.service';
+import { ImagePreloadDirective } from '../../../shared/directives/image-preload.directive';
 
 @Component({
   selector: 'app-header',
@@ -49,6 +50,7 @@ import { OrderService } from '../../../shared/services/order.service';
     AsyncPipe,
     LoaderComponent,
     NumberOfFiltersPipe,
+    ImagePreloadDirective,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
