@@ -13,7 +13,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ErrorMessageDirective } from '../../user/address/address-form/directives/error-message.directive';
 import { NgClass } from '@angular/common';
 import { AuthService } from '../services/auth.service';
@@ -46,6 +46,8 @@ export class SignUpComponent implements OnInit {
   private userAccountService = inject(UserAccountService);
   fb = inject(FormBuilder);
   private vcr = inject(ViewContainerRef);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
   isLoading = signal<boolean>(false);
   signupForm!: FormGroup;
   showPassword: boolean[] = [];
@@ -82,6 +84,8 @@ export class SignUpComponent implements OnInit {
           type: 'success',
           message: 'Sign up successfully!',
         });
+        const returnUrl = this.route.snapshot.queryParams['returnUrl'];
+        this.router.navigateByUrl(returnUrl || '/');
       } catch (error: any) {
         this.toastService.showToast({
           type: 'error',
