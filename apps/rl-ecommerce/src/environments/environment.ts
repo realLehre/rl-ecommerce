@@ -7,4 +7,5 @@ export const environment = {
   apiUrl: 'https://rl-ecommerce-api-production.up.railway.app/api/',
   paystackKey: 'sk_test_32ac4a7a61f44b662aa4d522ead086f0b13d31b6',
   publicPaystackKey: 'pk_test_b95a88357b0b5b7c4e20ccceb1ac928bb2f9a5bf',
+  googleAuthRedirect: 'https://rl-toy-spot.netlify.app',
 };

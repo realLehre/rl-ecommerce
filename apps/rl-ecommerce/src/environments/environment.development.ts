@@ -6,4 +6,5 @@ export const environment = {
   apiUrl: 'http://localhost:3000/api/',
   paystackKey: 'sk_test_32ac4a7a61f44b662aa4d522ead086f0b13d31b6',
   publicPaystackKey: 'pk_test_b95a88357b0b5b7c4e20ccceb1ac928bb2f9a5bf',
+  googleAuthRedirect: 'http://localhost:4200',
 };

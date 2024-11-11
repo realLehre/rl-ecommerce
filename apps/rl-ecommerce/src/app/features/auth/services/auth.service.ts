@@ -67,6 +67,9 @@ export class AuthService {
   async continueWithGoogle() {
     await this.supabase.auth.signInWithOAuth({
       provider: 'google',
+      options: {
+        redirectTo: environment.googleAuthRedirect,
+      },
     });
   }
 
