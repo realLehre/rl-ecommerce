@@ -30,6 +30,8 @@ import { ProductReviewsComponent } from './product-reviews/product-reviews.compo
 import { LargeReviewsComponent } from './large-reviews/large-reviews.component';
 import { ReviewService } from '../../../shared/services/review.service';
 import { PricePercentageDecreasePipe } from '../../../shared/pipes/price-percentage-decrease.pipe';
+import { AuthService } from '../../auth/services/auth.service';
+import { ICart } from '../../../shared/models/cart.interface';
 
 @Component({
   selector: 'app-product-details',
@@ -62,6 +64,7 @@ export class ProductDetailsComponent implements OnInit {
   private userService = inject(UserAccountService);
   private reviewService = inject(ReviewService);
   private toast = inject(ToastService);
+  private authService = inject(AuthService);
   activeProduct = this.productService.activeProduct;
   product$!: Observable<IProduct>;
   similarProducts!: Observable<IProduct[]>;
@@ -102,6 +105,18 @@ export class ProductDetailsComponent implements OnInit {
       .subscribe(() => {
         this.productId = this.route.snapshot.queryParams['id'];
         this.product$ = this.productService.getProductById(this.productId);
+
+        this.productInCart = computed(() => {
+          if (this.cartService.cartSignal()) {
+            return this.cartService
+              .cartSignal()
+              ?.cartItems?.find(
+                (cartItem) =>
+                  cartItem.productId === this.route.snapshot.queryParams['id'],
+              );
+          }
+          return;
+        });
       });
 
     this.cdr.detectChanges();
@@ -122,8 +137,24 @@ export class ProductDetailsComponent implements OnInit {
 
           this.cartService.cartTotal.set(cartTotal()! + 1);
 
+          //   this.cartService.cartSignal.set(null);
+          //
+          // this.cartService.getCart().subscribe();
+
+          const cart = this.cartService.cartSignal() || ({} as ICart);
           this.cartService.cartSignal.set(null);
           this.cartService.getCart().subscribe();
+          const newCartItem = {
+            ...res,
+            product: this.activeProduct() as IProduct,
+          };
+          this.cartService.cartSignal.set({
+            ...this.cartService.cartSignal()!,
+            cartItems: Array.isArray(cart?.cartItems!)
+              ? [...cart?.cartItems!, newCartItem as any]
+              : [newCartItem],
+          });
+
           this.toast.showToast({
             type: 'success',
             message: `${product.name} added to cart!`,
@@ -144,15 +175,13 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   onAdjustQuantity(qty: number, product: IProduct) {
-    this.quantity = qty;
-
     if (this.productInCart()) {
       this.isUpdatingCart.set(true);
 
       this.cartService
         .updateCartItem({
           itemId: this.productInCart()?.id!,
-          unit: this.quantity,
+          unit: qty,
           productPrice: product.price!,
         })
         .subscribe({

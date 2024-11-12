@@ -31,7 +31,6 @@ export class LoginComponent implements OnInit {
   fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private toastService = inject(ToastService);
-  private userAccountService = inject(UserAccountService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   loginForm!: FormGroup;
@@ -69,7 +68,6 @@ export class LoginComponent implements OnInit {
           type: 'success',
           message: 'Signed in successfully!',
         });
-        this.userAccountService.getUser().subscribe();
         const returnUrl = this.route.snapshot.queryParams['returnUrl'];
         this.router.navigateByUrl(returnUrl || '/');
       } catch (error) {

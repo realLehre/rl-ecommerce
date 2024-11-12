@@ -43,7 +43,6 @@ export class SignUpComponent implements OnInit {
   private authService = inject(AuthService);
   private cdr = inject(ChangeDetectorRef);
   private toastService = inject(ToastService);
-  private userAccountService = inject(UserAccountService);
   fb = inject(FormBuilder);
   private vcr = inject(ViewContainerRef);
   private router = inject(Router);
@@ -79,7 +78,6 @@ export class SignUpComponent implements OnInit {
           });
           return;
         }
-        this.userAccountService.getUser().subscribe();
         this.toastService.showToast({
           type: 'success',
           message: 'Sign up successfully!',

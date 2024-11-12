@@ -72,9 +72,8 @@ export class CartService {
         productId: data.product.id,
       };
       this.guestCart.cartItems?.push(guestCartItem as ICartItems);
-      this.cartSignal.set(this.guestCart as ICart);
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.guestCart));
-      return of(this.guestCart);
+      return of(guestCartItem);
     }
   }
 

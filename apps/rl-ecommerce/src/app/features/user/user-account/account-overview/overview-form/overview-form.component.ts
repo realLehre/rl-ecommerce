@@ -86,7 +86,6 @@ export class OverviewFormComponent implements OnInit {
             type: 'error',
             message: err.error.message,
           });
-          console.log(err);
         },
       });
     }

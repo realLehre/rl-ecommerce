@@ -25,6 +25,7 @@ import { LoaderComponent } from '../../shared/components/loader/loader.component
 import { PrimeTemplate } from 'primeng/api';
 import { ProductsService } from '../products/services/products.service';
 import { IProduct } from '../products/model/product.interface';
+import { ToastService } from '../../shared/services/toast.service';
 
 @Component({
   selector: 'app-cart',
@@ -50,8 +51,7 @@ export class CartComponent implements OnInit {
   private cartService = inject(CartService);
   private productService = inject(ProductsService);
   private router = inject(Router);
-  // cart$ = this.cartService.getCart();
-  // cart$!: Observable<ICart>;
+  private toast = inject(ToastService);
   cart = this.cartService.cartSignal as WritableSignal<ICart>;
   quantity: number = 1;
   isUpdating = signal<boolean[]>([false]);
@@ -99,10 +99,18 @@ export class CartComponent implements OnInit {
               JSON.stringify(newCart),
             );
           }
+          this.toast.showToast({
+            type: 'success',
+            message: item.product.name + ' ' + 'quantity adjusted!',
+          });
         },
         error: (err) => {
           loadings[idx] = false;
           this.isUpdating.set([...loadings]);
+          this.toast.showToast({
+            type: 'error',
+            message: err.error.message,
+          });
         },
       });
   }
@@ -137,9 +145,18 @@ export class CartComponent implements OnInit {
             JSON.stringify(newCart),
           );
         }
+        this.toast.showToast({
+          type: 'success',
+          message:
+            this.activeCartItem.product.name + ' ' + 'deleted from cart!',
+        });
       },
       error: (err) => {
         this.isLoading.set(false);
+        this.toast.showToast({
+          type: 'error',
+          message: err.error.message,
+        });
       },
     });
   }
