@@ -74,7 +74,7 @@ export class FiltersComponent {
         page: null,
       },
       queryParamsHandling: 'merge',
-      fragment: 't',
+      fragment: 'products',
     });
   }
 
@@ -104,7 +104,7 @@ export class FiltersComponent {
         sort,
       },
       queryParamsHandling: 'merge',
-      fragment: 't',
+      fragment: 'products',
     });
   }
 
@@ -131,7 +131,7 @@ export class FiltersComponent {
         sort: null,
       },
       queryParamsHandling: 'merge',
-      fragment: 't',
+      fragment: 'products',
     });
   }
 

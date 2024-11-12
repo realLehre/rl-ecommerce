@@ -54,7 +54,7 @@ export class CategoriesComponent implements OnInit {
           category: this.createSlug(cat.name),
         },
         queryParamsHandling: 'replace',
-        fragment: 't',
+        fragment: 'products',
       });
     } else {
       if (this.optionsService.currentCategory() == null) {
@@ -68,7 +68,7 @@ export class CategoriesComponent implements OnInit {
         relativeTo: this.route,
         queryParams: { category: null, subCategory: null, page: null },
         queryParamsHandling: 'replace',
-        fragment: 't',
+        fragment: 'products',
       });
     }
   }

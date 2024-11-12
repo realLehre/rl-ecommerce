@@ -38,6 +38,8 @@ import { CookieService } from 'ngx-cookie-service';
 import { AccountInfoService } from '../../../features/user/user-account/services/account-info.service';
 import { OrderService } from '../../../shared/services/order.service';
 import { ImagePreloadDirective } from '../../../shared/directives/image-preload.directive';
+import { ReviewService } from '../../../shared/services/review.service';
+import { AddressService } from '../../../features/user/address/services/address.service';
 
 @Component({
   selector: 'app-header',
@@ -61,6 +63,11 @@ export class HeaderComponent implements AfterViewInit, OnInit {
   private productService = inject(ProductsService);
   private optionsService = inject(ProductOptionsService);
   private cartService = inject(CartService);
+  private userAccountService = inject(UserAccountService);
+  private reviewService = inject(ReviewService);
+  private orderService = inject(OrderService);
+  private productOptionsService = inject(ProductOptionsService);
+  private addressService = inject(AddressService);
   user = this.authService.user;
   userName = computed(() => {
     return this.user()?.fullName.split(' ')[0]!;
@@ -118,6 +125,16 @@ export class HeaderComponent implements AfterViewInit, OnInit {
 
   onSignOut() {
     this.authService.signOut();
+    this.router.navigate(['/']).then(() => {
+      this.cartService.cartSignal.set(null);
+      this.cartService.cartTotal.set(null);
+      this.userAccountService.userSignal.set(null);
+      this.reviewService.pendingReviewsSignal.set(null);
+      this.orderService.orderSignal.set(null);
+      this.productOptionsService.categoriesSignal.set(null);
+      this.productService.productSignal.set(null);
+      this.addressService.addressSignal.set(null);
+    });
   }
   onToggleSearch() {
     if (this.searchInput.nativeElement.value) {

@@ -6,7 +6,7 @@ import {
   SupabaseClient,
 } from '@supabase/supabase-js';
 import { environment } from '../../../../environments/environment.development';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -24,6 +24,7 @@ export interface IUser {
 })
 export class AuthService {
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private cookieService = inject(CookieService);
   private http = inject(HttpClient);
   private baseUrl = environment.apiUrl;
@@ -31,6 +32,7 @@ export class AuthService {
   user = signal<IUser | null>(null);
   USER_STORAGE_KEY = 'shshyeo948dnsks7h0';
   USER_ACCOUNT_STORAGE_KEY = 'hdjeyu7830nsk083hd';
+  savedReturnUrl: string = 'djdhw923jsjhak9';
   constructor() {
     this.supabase = createClient(
       environment.supabaseUrl,
@@ -65,12 +67,33 @@ export class AuthService {
   }
 
   async continueWithGoogle() {
-    await this.supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: environment.googleAuthRedirect,
-      },
-    });
+    const returnUrl = this.route.snapshot.queryParams['returnUrl'];
+    const baseRoute = this.getBaseRoute(window.location.href);
+
+    if (returnUrl) {
+      const returnRoute = baseRoute + returnUrl;
+      const newReturnUrl = returnUrl.split('/');
+      localStorage.setItem(this.savedReturnUrl, JSON.stringify(newReturnUrl));
+
+      await this.supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: returnRoute,
+        },
+      });
+    } else {
+      await this.supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: environment.googleAuthRedirect,
+        },
+      });
+    }
+  }
+
+  getBaseRoute(url: string): string {
+    const urlObj = new URL(url);
+    return `${urlObj.protocol}//${urlObj.host}`;
   }
 
   login(data: { email: string; password: string }) {
@@ -86,9 +109,6 @@ export class AuthService {
     sessionStorage.clear();
     this.cookieService.deleteAll('/');
     this.user.set(null);
-    this.router.navigate(['/']).then(() => {
-      window.location.reload();
-    });
   }
 
   onAuthStateChanged() {
@@ -107,6 +127,10 @@ export class AuthService {
           sameSite: 'Strict',
           expires: session?.expires_in,
         });
+        const savedUrl = JSON.parse(localStorage.getItem(this.savedReturnUrl)!);
+        if (savedUrl) {
+          this.router.navigate([...savedUrl]);
+        }
         localStorage.removeItem('sb-tentdyesixetvyacewwr-auth-token');
         this.http
           .get<IUser>(`${this.baseUrl}users/${this.user()?.id}`)
@@ -116,6 +140,7 @@ export class AuthService {
             }),
           )
           .subscribe();
+        localStorage.removeItem(this.savedReturnUrl);
       } else if (event === 'SIGNED_OUT') {
         this.cookieService.deleteAll('/');
 

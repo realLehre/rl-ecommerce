@@ -97,8 +97,8 @@ export class SignUpComponent implements OnInit {
     }
   }
 
-  onSignInWithGoogle() {
-    this.authService.continueWithGoogle();
+  async onSignInWithGoogle() {
+    await this.authService.continueWithGoogle();
   }
 
   isInvalidAndTouched(controlName: string): boolean {

@@ -86,7 +86,7 @@ export class ProductsShowcaseComponent implements OnInit {
         ...filteredQuery,
       },
       queryParamsHandling: 'merge',
-      fragment: 't',
+      fragment: 'products',
     });
 
     this.products$ = this.productService.getProducts(newQuery);
@@ -131,7 +131,7 @@ export class ProductsShowcaseComponent implements OnInit {
         page: event,
       },
       queryParamsHandling: 'merge',
-      fragment: 't',
+      fragment: 'products',
     });
     setTimeout(() => {
       window.scrollTo({

@@ -49,7 +49,7 @@ export class ProductNavComponent implements OnInit, AfterViewInit {
         relativeTo: this.route,
         queryParams: { subCategory: null },
         queryParamsHandling: 'merge',
-        fragment: 't',
+        fragment: 'products',
       });
     } else {
       this.currentSubCategory.set(cat);
@@ -66,7 +66,7 @@ export class ProductNavComponent implements OnInit, AfterViewInit {
             page: null,
           },
           queryParamsHandling: 'merge',
-          fragment: 't',
+          fragment: 'products',
         });
       }, 80);
     }
