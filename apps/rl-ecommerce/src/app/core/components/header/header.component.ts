@@ -127,6 +127,7 @@ export class HeaderComponent implements AfterViewInit, OnInit {
     this.authService.signOut();
     this.router.navigate(['/']).then(() => {
       this.cartService.cartSignal.set(null);
+      this.cartItems.set(0);
       this.cartService.cartTotal.set(null);
       this.userAccountService.userSignal.set(null);
       this.reviewService.pendingReviewsSignal.set(null);

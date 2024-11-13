@@ -108,6 +108,7 @@ export class ProductCardComponent {
               ? [...cart?.cartItems!, newCartItem as any]
               : [newCartItem],
           });
+
           this.toast.showToast({
             type: 'success',
             message: `${this.product().name} added to cart!`,
@@ -151,9 +152,8 @@ export class ProductCardComponent {
 
             const newCart = { ...currentCart, cartItems: updatedItems };
 
-            // this.cart$ = of(newCart);
-            // this.cart.set(newCart);
             this.cartService.cartSignal.set(newCart);
+
             localStorage.setItem(
               this.cartService.CART_KEY,
               JSON.stringify(newCart),

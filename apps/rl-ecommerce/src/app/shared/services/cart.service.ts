@@ -5,6 +5,8 @@ import { UserAccountService } from '../../features/user/user-account/services/us
 import { ICart, ICartItems } from '../models/cart.interface';
 import { map, of, retry, tap } from 'rxjs';
 import { IProduct } from '../../features/products/model/product.interface';
+import { DialogService } from 'primeng/dynamicdialog';
+import { MergeCartAlertDialogComponent } from '../components/merge-cart-alert-dialog/merge-cart-alert-dialog.component';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +15,7 @@ export class CartService {
   private apiUrl = environment.apiUrl + 'cart';
   private http = inject(HttpClient);
   private userService = inject(UserAccountService);
+  private dialogService = inject(DialogService);
   user = this.userService.user;
   cartSignal = signal<ICart | null>(null);
   cartTotal = signal<number | null>(null);
@@ -43,7 +46,7 @@ export class CartService {
             tap((res) => {
               this.cartSignal.set(res);
               this.cartTotal.set(res.cartItems.length);
-              this.mergeCart()?.subscribe();
+              this.onShowMergeCartDialog();
               localStorage.setItem(this.CART_KEY, JSON.stringify(res));
             }),
           );
@@ -110,19 +113,30 @@ export class CartService {
     }
   }
 
-  mergeCart() {
+  onShowMergeCartDialog() {
     if (this.guestCart.cartItems?.length) {
-      return this.http
-        .post<ICart>(`${this.apiUrl}/${this.user()?.id}/merge`, this.guestCart)
-        .pipe(
-          tap((res) => {
-            localStorage.removeItem(this.STORAGE_KEY);
-            this.cartSignal.set(res);
-            this.cartTotal.set(res.cartItems.length);
-          }),
-        );
+      this.dialogService.open(MergeCartAlertDialogComponent, {
+        width: '25rem',
+        breakpoints: {
+          '450px': '90vw',
+        },
+        focusOnShow: false,
+      });
     }
-    return;
+  }
+
+  mergeCart() {
+    return this.http
+      .post<ICart>(`${this.apiUrl}/${this.user()?.id}/merge`, this.guestCart)
+      .pipe(
+        tap((res) => {
+          localStorage.removeItem(this.STORAGE_KEY);
+          localStorage.setItem(this.CART_KEY, JSON.stringify(res));
+          this.cartSignal.set(res);
+          this.cartTotal.set(res.cartItems.length);
+          this.guestCart.cartItems = [];
+        }),
+      );
   }
 
   generateRandomId(length: number = 10): string {
