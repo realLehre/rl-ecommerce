@@ -31,7 +31,7 @@ export class CartService {
 
     const cart = JSON.parse(localStorage.getItem(this.CART_KEY)!);
 
-    if (cart) {
+    if (cart && this.user()) {
       this.cartSignal.set(cart);
       this.cartTotal.set(cart.cartItems.length);
     }
@@ -58,6 +58,7 @@ export class CartService {
   }
 
   addToCart(data: { unit: number; product: IProduct }) {
+    const old = this.cartSignal();
     if (this.user()) {
       return this.http.post(`${this.apiUrl}/add`, {
         userId: this.user()?.id,
@@ -74,8 +75,10 @@ export class CartService {
         id: this.generateRandomId(),
         productId: data.product.id,
       };
-      this.guestCart.cartItems?.push(guestCartItem as ICartItems);
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.guestCart));
+
+      // this.guestCart.cartItems?.push(guestCartItem as ICartItems);
+      // localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.guestCart));
+      // this.cartSignal.set(old);
       return of(guestCartItem);
     }
   }

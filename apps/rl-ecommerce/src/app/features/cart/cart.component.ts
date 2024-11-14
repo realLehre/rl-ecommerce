@@ -58,7 +58,15 @@ export class CartComponent implements OnInit {
   showDeleteDialog = signal(false);
   activeCartItem!: ICartItems;
   isLoading = signal(false);
-  ngOnInit() {}
+  ngOnInit() {
+    if (!this.cart()) {
+      const cartData: Partial<ICart> = {
+        cartItems: [],
+      };
+
+      this.cart.set(cartData as ICart);
+    }
+  }
 
   onAdjustQuantity(qty: number, item: ICartItems, idx: number) {
     let loadings = [...this.isUpdating()];

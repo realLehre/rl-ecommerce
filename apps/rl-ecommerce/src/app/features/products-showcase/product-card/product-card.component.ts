@@ -17,7 +17,7 @@ import { ToastService } from '../../../shared/services/toast.service';
 import { UserAccountService } from '../../user/user-account/services/user-account.service';
 import { ReviewService } from '../../../shared/services/review.service';
 import { ProductQuantityComponent } from '../../../shared/components/product-quantity/product-quantity.component';
-import { ICart } from '../../../shared/models/cart.interface';
+import { ICart, ICartItems } from '../../../shared/models/cart.interface';
 import { PricePercentageDecreasePipe } from '../../../shared/pipes/price-percentage-decrease.pipe';
 import { ImagePreloadDirective } from '../../../shared/directives/image-preload.directive';
 
@@ -80,7 +80,6 @@ export class ProductCardComponent {
     if (this.user()) {
       this.isAddingToCart.set(true);
     }
-
     this.cartService
       .addToCart({
         product: this.product(),
@@ -93,7 +92,7 @@ export class ProductCardComponent {
 
           this.cartService.cartTotal.set(cartTotal()! + 1);
 
-          const cart = this.cartService.cartSignal() || ({} as ICart);
+          const cart = { ...this.cartService.cartSignal() } || ({} as ICart);
           this.cartService.cartSignal.set(null);
           this.cartService.getCart().subscribe();
           const newCartItem = { ...res, product: this.product() as IProduct };
@@ -103,7 +102,14 @@ export class ProductCardComponent {
               ? [...cart?.cartItems!, newCartItem as any]
               : [newCartItem],
           });
-
+          if (!this.user()) {
+            this.cartService.guestCart.cartItems?.push(res as ICartItems);
+            localStorage.setItem(
+              this.cartService.STORAGE_KEY,
+              JSON.stringify(this.cartService.guestCart),
+            );
+            this.cartService.cartTotal.set(cartTotal()! + 1);
+          }
           this.toast.showToast({
             type: 'success',
             message: `${this.product().name} added to cart!`,
