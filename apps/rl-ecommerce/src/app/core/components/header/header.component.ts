@@ -13,19 +13,13 @@ import { AsyncPipe, CurrencyPipe, NgClass } from '@angular/common';
 import { LayoutService } from '../../../shared/services/layout.service';
 import { Router, RouterLink } from '@angular/router';
 import { MenuModule } from 'primeng/menu';
-import {
-  AuthService,
-  IUser,
-} from '../../../features/auth/services/auth.service';
+import { AuthService } from '../../../features/auth/services/auth.service';
 import {
   debounceTime,
   distinctUntilChanged,
   filter,
   fromEvent,
   map,
-  Observable,
-  of,
-  switchMap,
 } from 'rxjs';
 import { ProductsService } from '../../../features/products/services/products.service';
 import { IProduct } from '../../../features/products/model/product.interface';
@@ -34,8 +28,6 @@ import { ProductOptionsService } from '../../../features/product-options/service
 import { NumberOfFiltersPipe } from '../../../shared/pipes/number-of-filters.pipe';
 import { CartService } from '../../../shared/services/cart.service';
 import { UserAccountService } from '../../../features/user/user-account/services/user-account.service';
-import { CookieService } from 'ngx-cookie-service';
-import { AccountInfoService } from '../../../features/user/user-account/services/account-info.service';
 import { OrderService } from '../../../shared/services/order.service';
 import { ImagePreloadDirective } from '../../../shared/directives/image-preload.directive';
 import { ReviewService } from '../../../shared/services/review.service';
@@ -78,11 +70,6 @@ export class HeaderComponent implements AfterViewInit, OnInit {
   searchShown = signal(false);
   isSearching = this.productService.isSearchingProducts;
   cartItems = this.cartService.cartTotal;
-
-  searchedProducts$: Observable<IProduct[] | null> = of(
-    this.productService.searchedProductsSignal(),
-  );
-
   products = this.productService.searchedProductsSignal;
 
   ngOnInit() {

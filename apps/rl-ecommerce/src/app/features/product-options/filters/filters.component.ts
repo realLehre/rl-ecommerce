@@ -117,9 +117,12 @@ export class FiltersComponent {
     const savedQuery: ISavedProductOptionQueries = JSON.parse(
       sessionStorage.getItem('hshs82haa02sshs92s')!,
     );
-
-    delete savedQuery.price;
-    delete savedQuery.sort;
+    if (savedQuery?.price) {
+      delete savedQuery.price;
+    }
+    if (savedQuery?.sort) {
+      delete savedQuery.sort;
+    }
 
     sessionStorage.setItem('hshs82haa02sshs92s', JSON.stringify(savedQuery));
 

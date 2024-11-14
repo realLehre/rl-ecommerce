@@ -141,10 +141,6 @@ export class ProductsShowcaseComponent implements OnInit {
     }, 100);
   }
 
-  checkNumberOfFiltersApplied(): number {
-    return this.optionsService.checkNumberOfFiltersApplied();
-  }
-
   onOpenMobileFilter() {
     this.layoutService.mobileFilterOpened.set(
       !this.layoutService.mobileFilterOpened(),

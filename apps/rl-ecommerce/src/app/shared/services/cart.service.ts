@@ -3,7 +3,7 @@ import { environment } from '../../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
 import { UserAccountService } from '../../features/user/user-account/services/user-account.service';
 import { ICart, ICartItems } from '../models/cart.interface';
-import { map, of, retry, tap } from 'rxjs';
+import { of, retry, tap } from 'rxjs';
 import { IProduct } from '../../features/products/model/product.interface';
 import { DialogService } from 'primeng/dynamicdialog';
 import { MergeCartAlertDialogComponent } from '../components/merge-cart-alert-dialog/merge-cart-alert-dialog.component';

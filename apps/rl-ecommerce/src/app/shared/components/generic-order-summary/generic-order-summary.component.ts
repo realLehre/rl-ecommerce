@@ -13,8 +13,6 @@ import { DialogModule } from 'primeng/dialog';
 import { LoaderComponent } from '../loader/loader.component';
 import { PrimeTemplate } from 'primeng/api';
 import { IOrder, IOrderItem } from '../../models/order.interface';
-import { ReviewService } from '../../services/review.service';
-import { ToastService } from '../../services/toast.service';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ReviewFormDialogComponent } from '../review-form-dialog/review-form-dialog.component';
 

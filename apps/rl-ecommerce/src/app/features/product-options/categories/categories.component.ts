@@ -1,10 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ProductOptionsService } from '../services/product-options.service';
-import { Observable } from 'rxjs';
-import {
-  ICategory,
-  ISavedProductOptionQueries,
-} from '../models/product-options.interface';
+import { ICategory } from '../models/product-options.interface';
 import { AsyncPipe, NgClass } from '@angular/common';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -38,20 +34,16 @@ export class CategoriesComponent implements OnInit {
     this.productService.productSignal.set(null);
     this.optionsService.currentPage.set(1);
     this.optionsService.currentPriceFilter.set(null);
-    this.optionsService.currentSort.set('old');
     if (cat) {
       this.optionsService.currentCategory.set(cat);
       this.optionsService.currentSubCategory.set(null);
-      // const savedQuery: ISavedProductOptionQueries = JSON.parse(
-      //   sessionStorage.getItem('hshs82haa02sshs92s')!,
-      // );
 
       const queryData = { category: cat };
       sessionStorage.setItem('hshs82haa02sshs92s', JSON.stringify(queryData));
       this.router.navigate([], {
         relativeTo: this.route,
         queryParams: {
-          category: this.createSlug(cat.name),
+          category: this.productService.createSlug(cat.name),
         },
         queryParamsHandling: 'replace',
         fragment: 'products',
@@ -71,12 +63,5 @@ export class CategoriesComponent implements OnInit {
         fragment: 'products',
       });
     }
-  }
-
-  createSlug(name: string): string {
-    return name
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-') // Replace spaces and special characters with hyphen
-      .replace(/^-+|-+$/g, ''); // Trim leading or trailing hyphens
   }
 }

@@ -1,19 +1,14 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   computed,
   inject,
   input,
-  OnInit,
   signal,
 } from '@angular/core';
 import { CurrencyPipe, NgClass, NgStyle } from '@angular/common';
 import { Router } from '@angular/router';
-import {
-  IProduct,
-  IProductRating,
-} from '../../products/model/product.interface';
+import { IProduct } from '../../products/model/product.interface';
 import { ProductsService } from '../../products/services/products.service';
 import { SkeletonModule } from 'primeng/skeleton';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
@@ -22,7 +17,7 @@ import { ToastService } from '../../../shared/services/toast.service';
 import { UserAccountService } from '../../user/user-account/services/user-account.service';
 import { ReviewService } from '../../../shared/services/review.service';
 import { ProductQuantityComponent } from '../../../shared/components/product-quantity/product-quantity.component';
-import { ICart, ICartItems } from '../../../shared/models/cart.interface';
+import { ICart } from '../../../shared/models/cart.interface';
 import { PricePercentageDecreasePipe } from '../../../shared/pipes/price-percentage-decrease.pipe';
 import { ImagePreloadDirective } from '../../../shared/directives/image-preload.directive';
 
@@ -179,23 +174,18 @@ export class ProductCardComponent {
       (acc: number, rating: any) => acc + rating.rating,
       0,
     );
-    return totalRating / this.product().ratings.length || 0; // Return 0 if there are no ratings
+    return totalRating / this.product().ratings.length || 0;
   }
 
   getStarWidth(starIndex: number): string {
-    const fullStars = Math.floor(this.averageRating()); // Number of fully colored stars
-    const partialFill = (this.averageRating() % 1) * 100; // Percentage for partial star
+    const fullStars = Math.floor(this.averageRating());
+    const partialFill = (this.averageRating() % 1) * 100;
 
-    // Set full color for stars that should be fully filled
     if (starIndex < fullStars) {
       return '100%';
-    }
-    // Set partial color for the next star if applicable
-    else if (starIndex === fullStars) {
+    } else if (starIndex === fullStars) {
       return `${partialFill}%`;
-    }
-    // No color for the remaining stars
-    else {
+    } else {
       return '0%';
     }
   }
