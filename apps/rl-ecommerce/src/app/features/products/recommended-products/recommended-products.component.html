@@ -51,11 +51,11 @@
 
   <div
     #carouselContainer
-    class="overflow-x-auto space-x-4 scrollbar-hide scroll-smooth grid grid-flow-col auto-cols-[minmax(220px,1fr)] gap-x-3 mt-6 snap-proximity snap-x hide-scrollbar w-full"
+    class="overflow-x-auto space-x-4 scrollbar-hide scroll-smooth grid grid-flow-col auto-cols-[minmax(220px,1fr)] gap-x-3 mt-6 hide-scrollbar w-full"
   >
     @if (products$ | async; as products) {
       @for (product of products; track product.id) {
-        <app-product-card [product]="product" class="snap-center" />
+        <app-product-card [product]="product" />
       }
     } @else {
       @for (t of [1, 2, 3, 4]; track t) {
