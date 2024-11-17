@@ -1,11 +1,18 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './features/auth/auth.guard';
+import { adminGuard } from './features/admin/admin.guard';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'homepage',
+    redirectTo: 'admin',
     pathMatch: 'full',
+  },
+  {
+    path: 'admin',
+    loadChildren: () =>
+      import('./features/admin/admin.routes').then((r) => r.adminRoutes),
+    canActivate: [adminGuard],
   },
   {
     path: '',

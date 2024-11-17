@@ -121,17 +121,14 @@ export class AuthService {
           fullName: session?.user.user_metadata?.['full_name'],
         };
         this.user.set(data);
+
         this.cookieService.set(this.USER_STORAGE_KEY, JSON.stringify(data), {
           path: '/',
           secure: true,
           sameSite: 'Strict',
           expires: session?.expires_in,
         });
-        const savedUrl = JSON.parse(localStorage.getItem(this.savedReturnUrl)!);
-        if (savedUrl) {
-          this.router.navigate([...savedUrl]);
-        }
-        localStorage.removeItem('sb-tentdyesixetvyacewwr-auth-token');
+
         this.http
           .get<IUser>(`${this.baseUrl}users/${this.user()?.id}`)
           .pipe(
@@ -140,10 +137,16 @@ export class AuthService {
             }),
           )
           .subscribe();
+
+        const savedUrl = JSON.parse(localStorage.getItem(this.savedReturnUrl)!);
+        if (savedUrl) {
+          this.router.navigate([...savedUrl]);
+        }
+
+        localStorage.removeItem('sb-tentdyesixetvyacewwr-auth-token');
         localStorage.removeItem(this.savedReturnUrl);
       } else if (event === 'SIGNED_OUT') {
         this.cookieService.deleteAll('/');
-
         this.user.set(null);
       }
     });

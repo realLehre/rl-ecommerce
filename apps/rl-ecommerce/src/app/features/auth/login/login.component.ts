@@ -68,8 +68,14 @@ export class LoginComponent implements OnInit {
           type: 'success',
           message: 'Signed in successfully!',
         });
+        const user = this.authService.user;
+
         const returnUrl = this.route.snapshot.queryParams['returnUrl'];
-        this.router.navigateByUrl(returnUrl || '/');
+        if (user()?.id !== '8133ae62-c817-4339-a62d-dc718ce99568') {
+          this.router.navigateByUrl(returnUrl || '/');
+        } else {
+          this.router.navigate(['/', 'admin']);
+        }
       } catch (error) {
       } finally {
         this.isLoading.set(false);
