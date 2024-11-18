@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { AdminSidenavComponent } from './admin-sidenav/admin-sidenav.component';
 import { AdminMainComponent } from './admin-main/admin-main.component';
 
@@ -8,5 +8,6 @@ import { AdminMainComponent } from './admin-main/admin-main.component';
   imports: [AdminSidenavComponent, AdminMainComponent],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminComponent {}

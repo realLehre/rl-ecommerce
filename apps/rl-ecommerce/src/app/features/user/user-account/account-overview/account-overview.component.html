@@ -10,7 +10,7 @@
     >
       @if (user$ | async; as user) {
         <div
-          class="rounded-lg bg-bg_subtle shadow-sm hover:shadow-lg hover:scale-105 transform transition-all duration-300 ease-in-out overflow-hidden"
+          class="rounded-lg bg-bg_subtle shadow-sm transform transition-all duration-300 ease-in-out overflow-hidden"
         >
           <div
             class="px-6 py-4 flex justify-between items-center border-b border-gray-300"
@@ -71,7 +71,7 @@
       @if (address$ | async; as address) {
         @if (address.length) {
           <div
-            class="rounded-lg bg-bg_subtle shadow-sm overflow-hidden hover:shadow-lg hover:scale-105 transform transition-all duration-300 ease-in-out"
+            class="rounded-lg bg-bg_subtle shadow-sm overflow-hidden transform transition-all duration-300 ease-in-out"
           >
             <div
               class="px-6 py-4 flex justify-between items-center border-b border-gray-300"

@@ -161,5 +161,56 @@
         </li>
       </ul>
     </div>
+
+    <div>
+      <h3 class="font-medium text-type_title_gray mb-2 px-5">CATEGORY</h3>
+      <ul>
+        <li>
+          <a
+            class="flex items-center space-x-3 px-5 py-2 hover:bg-bg_main"
+            routerLink="/admin/add-category"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10 2.66659H3.33333V13.3333H12.6667V5.33325H10V2.66659ZM2 1.99459C2 1.62925 2.298 1.33325 2.666 1.33325H10.6667L14 4.66659V13.9953C14.0006 14.0828 13.984 14.1696 13.951 14.2507C13.9181 14.3319 13.8695 14.4057 13.808 14.468C13.7466 14.5304 13.6734 14.58 13.5928 14.6141C13.5121 14.6481 13.4255 14.666 13.338 14.6666H2.662C2.48692 14.6654 2.31934 14.5953 2.19548 14.4716C2.07161 14.3478 2.0014 14.1803 2 14.0053V1.99459ZM7.33333 7.33325V5.33325H8.66667V7.33325H10.6667V8.66659H8.66667V10.6666H7.33333V8.66659H5.33333V7.33325H7.33333Z"
+                class="fill-type_grey"
+              />
+            </svg>
+
+            <span class="text-type_grey">Add Categories</span>
+          </a>
+        </li>
+
+        <li>
+          <a
+            class="flex items-center space-x-3 px-5 py-2 hover:bg-bg_main"
+            routerLink="/admin/categories"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 512 512"
+              width="17"
+              class="fill-type_grey"
+            >
+              <path
+                d="M464 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-6 400H54a6 6 0 0 1 -6-6V86a6 6 0 0 1 6-6h404a6 6 0 0 1 6 6v340a6 6 0 0 1 -6 6zm-42-92v24c0 6.6-5.4 12-12 12H204c-6.6 0-12-5.4-12-12v-24c0-6.6 5.4-12 12-12h200c6.6 0 12 5.4 12 12zm0-96v24c0 6.6-5.4 12-12 12H204c-6.6 0-12-5.4-12-12v-24c0-6.6 5.4-12 12-12h200c6.6 0 12 5.4 12 12zm0-96v24c0 6.6-5.4 12-12 12H204c-6.6 0-12-5.4-12-12v-24c0-6.6 5.4-12 12-12h200c6.6 0 12 5.4 12 12zm-252 12c0 19.9-16.1 36-36 36s-36-16.1-36-36 16.1-36 36-36 36 16.1 36 36zm0 96c0 19.9-16.1 36-36 36s-36-16.1-36-36 16.1-36 36-36 36 16.1 36 36zm0 96c0 19.9-16.1 36-36 36s-36-16.1-36-36 16.1-36 36-36 36 16.1 36 36z"
+                class="stroke-type_grey"
+              />
+            </svg>
+            <span class="text-type_grey">All Categories</span>
+          </a>
+        </li>
+      </ul>
+    </div>
   </div>
 </div>

@@ -5,4 +5,14 @@
   border-top-right-radius: 3px;
   font-weight: 500;
   color: #333333;
+
+  & svg {
+    fill: #333333;
+    stroke: #333333;
+
+    & path {
+      //fill: #333333;
+      stroke: #333333;
+    }
+  }
 }

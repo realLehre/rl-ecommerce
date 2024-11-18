@@ -49,6 +49,20 @@ export const adminRoutes: Routes = [
             './admin-completed-orders/admin-completed-orders.component'
           ).then((c) => c.AdminCompletedOrdersComponent),
       },
+      {
+        path: 'categories',
+        loadComponent: () =>
+          import('./admin-categories/admin-categories.component').then(
+            (c) => c.AdminCategoriesComponent,
+          ),
+      },
+      {
+        path: 'add-category',
+        loadComponent: () =>
+          import(
+            './admin-categories/admin-add-category/admin-add-category.component'
+          ).then((c) => c.AdminAddCategoryComponent),
+      },
     ],
   },
 ];
