@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AdminProductsService {
-  products = [
+  products = of([
     {
       id: '0398ebc0-3788-4424-b8c7-3b7259ae6b38',
       name: 'Autumn Chic Fashion Doll',
@@ -727,6 +728,6 @@ export class AdminProductsService {
       },
       ratings: [],
     },
-  ];
+  ]);
   constructor() {}
 }

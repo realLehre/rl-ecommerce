@@ -1,1 +1,169 @@
-<p>admin-products works!</p>
+<div>
+  <app-generic-table [data]="products()" [title]="'Product List'">
+    <button
+      class="bg-primary rounded-full text-white hover:bg-opacity-85 font-medium py-[6px] px-7 whitespace-nowrap text-[10px] mobile:text-sm"
+      ngProjectAs="add-button"
+    >
+      Add Product
+    </button>
+    <ng-template #headers>
+      <th
+        class="hidden mobile:block px-2 mobile:px-4 py-3 text-left text-[10px] mobile:text-xs text-type_gray font-medium"
+        (click)="sortTable('name')"
+      >
+        <div class="flex items-center space-x-1">
+          <span> PRODUCT NAME</span>
+          <span class="flex flex-col">
+            <i
+              class="fa fa-caret-up text-xs"
+              [ngClass]="
+                sortDirection === 'asc' && sortUsed
+                  ? 'opacity-100'
+                  : 'opacity-30'
+              "
+            ></i>
+            <i
+              class="fa fa-caret-down text-xs -mt-[10px]"
+              [ngClass]="
+                sortDirection === 'desc' ? 'opacity-100' : 'opacity-30'
+              "
+            ></i>
+          </span>
+        </div>
+      </th>
+
+      <th
+        (click)="sortTable('price')"
+        class="px-2 mobile:px-4 py-3 text-left cursor-pointer text-[10px] mobile:text-xs text-type_gray font-medium"
+      >
+        <div class="flex items-center space-x-1">
+          <span> PRICE</span>
+          <span class="flex flex-col">
+            <i
+              class="fa fa-caret-up text-xs"
+              [ngClass]="
+                sortDirection === 'asc' && sortUsed
+                  ? 'opacity-100'
+                  : 'opacity-30'
+              "
+            ></i>
+            <i
+              class="fa fa-caret-down text-xs -mt-[10px]"
+              [ngClass]="
+                sortDirection === 'desc' ? 'opacity-100' : 'opacity-30'
+              "
+            ></i>
+          </span>
+        </div>
+      </th>
+      <th
+        (click)="sortTable('name')"
+        class="px-2 mobile:px-4 py-3 text-left cursor-pointer text-[10px] mobile:text-xs text-type_gray font-medium"
+      >
+        <div class="flex items-center space-x-1">
+          <span>CATEGORY</span>
+
+          <span class="flex flex-col">
+            <i
+              class="fa fa-caret-up text-xs"
+              [ngClass]="
+                sortDirection === 'asc' && sortUsed
+                  ? 'opacity-100'
+                  : 'opacity-30'
+              "
+            ></i>
+            <i
+              class="fa fa-caret-down text-xs -mt-[10px]"
+              [ngClass]="
+                sortDirection === 'desc' ? 'opacity-100' : 'opacity-30'
+              "
+            ></i>
+          </span>
+        </div>
+      </th>
+      <th
+        class="px-2 mobile:px-4 py-3 text-left text-[10px] mobile:text-xs text-type_gray font-medium"
+        (click)="sortTable('unit')"
+      >
+        <div class="flex items-center space-x-1">
+          <span>IN STOCK</span>
+
+          <span class="flex flex-col">
+            <i
+              class="fa fa-caret-up text-xs"
+              [ngClass]="
+                sortDirection === 'asc' && sortUsed
+                  ? 'opacity-100'
+                  : 'opacity-30'
+              "
+            ></i>
+            <i
+              class="fa fa-caret-down text-xs -mt-[10px]"
+              [ngClass]="
+                sortDirection === 'desc' ? 'opacity-100' : 'opacity-30'
+              "
+            ></i>
+          </span>
+        </div>
+      </th>
+      <th
+        class="px-2 mobile:px-4 py-3 text-left text-[10px] mobile:text-xs text-type_gray font-medium"
+        (click)="sortTable('createdAt')"
+      >
+        <div class="flex items-center space-x-1">
+          <span>DATE ADDED</span>
+
+          <span class="flex flex-col">
+            <i
+              class="fa fa-caret-up text-xs"
+              [ngClass]="
+                sortDirection === 'asc' && sortUsed
+                  ? 'opacity-100'
+                  : 'opacity-30'
+              "
+            ></i>
+            <i
+              class="fa fa-caret-down text-xs -mt-[10px]"
+              [ngClass]="
+                sortDirection === 'desc' ? 'opacity-100' : 'opacity-30'
+              "
+            ></i>
+          </span>
+        </div>
+      </th>
+      <th
+        class="px-2 mobile:px-4 py-3 text-left text-[10px] mobile:text-xs text-type_gray font-medium"
+      >
+        ACTION
+      </th>
+    </ng-template>
+
+    <ng-template #rows let-product="row">
+      <td class="hidden mobile:block px-2 mobile:px-4 py-5 font-semibold">
+        {{ product.name }}
+      </td>
+
+      <td class="px-2 mobile:px-4 py-5">
+        {{ product.price | currency: '₦' : 'symbol' : '1.0-0' }}
+      </td>
+      <td class="px-2 mobile:px-4 py-5">
+        {{ product.category.name }}
+      </td>
+      <td class="px-2 mobile:px-4 py-5">
+        {{ product.unit }}
+      </td>
+      <td class="px-2 mobile:px-4 py-5">
+        {{ product.createdAt | date }}
+      </td>
+      <td class="px-2 mobile:px-4 py-2">
+        <button class="py-2 px-3" (click)="onViewProduct(product)">
+          <div>
+            <div class="rounded-full w-1 h-1 bg-type_grey"></div>
+            <div class="rounded-full w-1 h-1 bg-type_grey my-[1px]"></div>
+            <div class="rounded-full w-1 h-1 bg-type_grey"></div>
+          </div>
+        </button>
+      </td>
+    </ng-template>
+  </app-generic-table>
+</div>

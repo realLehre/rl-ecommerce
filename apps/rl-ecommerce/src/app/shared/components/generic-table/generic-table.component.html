@@ -1,1 +1,29 @@
-<table></table>
+<div>
+  <div class="flex items-center justify-between mb-8">
+    <h2 class="text-type_title_gray text-base mobile:text-[20px] font-medium">
+      {{ title() }}
+    </h2>
+
+    <ng-content select="add-button"> </ng-content>
+  </div>
+
+  <table class="min-w-full px-2">
+    <thead class="bg-border_subtle border border-border_subtle">
+      <tr>
+        <ng-container *ngTemplateOutlet="headers"></ng-container>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (item of data() | paginate: config; track item.id; let i = $index) {
+        <tr
+          class="border-b border-border_subtle text-type_title_gray text-xs mobile:text-sm font-medium"
+        >
+          <ng-container
+            *ngTemplateOutlet="rows; context: { row: item, index: i }"
+          />
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
