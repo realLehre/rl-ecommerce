@@ -5,11 +5,20 @@ import { CurrencyPipe, DatePipe, NgClass } from '@angular/common';
 import { IOrder } from '../../../shared/models/order.interface';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ICategory, IProduct } from '../../products/model/product.interface';
+import { MenuModule } from 'primeng/menu';
+import { PrimeTemplate } from 'primeng/api';
 
 @Component({
   selector: 'app-admin-products',
   standalone: true,
-  imports: [GenericTableComponent, NgClass, CurrencyPipe, DatePipe],
+  imports: [
+    GenericTableComponent,
+    NgClass,
+    CurrencyPipe,
+    DatePipe,
+    MenuModule,
+    PrimeTemplate,
+  ],
   templateUrl: './admin-products.component.html',
   styleUrl: './admin-products.component.scss',
 })
@@ -20,7 +29,9 @@ export class AdminProductsComponent {
   sortColumn: keyof IProduct | keyof ICategory | '' = '';
   sortDirection: 'asc' | 'desc' = 'asc';
 
-  onViewProduct(product: IProduct) {}
+  onEdit() {}
+
+  onDelete() {}
 
   sortTable(column: keyof IProduct | keyof ICategory): void {
     if (this.sortColumn === column) {

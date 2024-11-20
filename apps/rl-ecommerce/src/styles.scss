@@ -79,6 +79,11 @@ body {
   background-color: theme('colors.bg_subtle');
 }
 
+.product-menu {
+  //position: relative;
+  transform: translateX(-220px);
+}
+
 .user-order-menu {
   background-color: theme('colors.bg_subtle');
   width: 250px;

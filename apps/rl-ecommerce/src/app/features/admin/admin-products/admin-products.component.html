@@ -1,4 +1,4 @@
-<div>
+<div class="w-full">
   <app-generic-table [data]="products()" [title]="'Product List'">
     <button
       class="bg-primary rounded-full text-white hover:bg-opacity-85 font-medium py-[6px] px-7 whitespace-nowrap text-[10px] mobile:text-sm"
@@ -8,7 +8,7 @@
     </button>
     <ng-template #headers>
       <th
-        class="hidden mobile:block px-2 mobile:px-4 py-3 text-left text-[10px] mobile:text-xs text-type_gray font-medium"
+        class="hidden mobile:table-cell px-2 mobile:px-4 py-3 text-left text-[10px] mobile:text-xs text-type_gray font-medium"
         (click)="sortTable('name')"
       >
         <div class="flex items-center space-x-1">
@@ -85,7 +85,7 @@
         class="px-2 mobile:px-4 py-3 text-left text-[10px] mobile:text-xs text-type_gray font-medium"
         (click)="sortTable('unit')"
       >
-        <div class="flex items-center space-x-1">
+        <div class="flex items-center whitespace-nowrap space-x-1">
           <span>IN STOCK</span>
 
           <span class="flex flex-col">
@@ -110,7 +110,7 @@
         class="px-2 mobile:px-4 py-3 text-left text-[10px] mobile:text-xs text-type_gray font-medium"
         (click)="sortTable('createdAt')"
       >
-        <div class="flex items-center space-x-1">
+        <div class="flex items-center whitespace-nowrap space-x-1">
           <span>DATE ADDED</span>
 
           <span class="flex flex-col">
@@ -140,7 +140,12 @@
 
     <ng-template #rows let-product="row">
       <td class="hidden mobile:block px-2 mobile:px-4 py-5 font-semibold">
-        {{ product.name }}
+        <div class="flex items-center space-x-2">
+          <div class="w-10 h-10 rounded-md overflow-hidden">
+            <img [src]="product.image" [alt]="product.name" />
+          </div>
+          <p>{{ product.name }}</p>
+        </div>
       </td>
 
       <td class="px-2 mobile:px-4 py-5">
@@ -156,7 +161,7 @@
         {{ product.createdAt | date }}
       </td>
       <td class="px-2 mobile:px-4 py-2">
-        <button class="py-2 px-3" (click)="onViewProduct(product)">
+        <button class="py-2 px-3" (click)="menu.toggle($event)">
           <div>
             <div class="rounded-full w-1 h-1 bg-type_grey"></div>
             <div class="rounded-full w-1 h-1 bg-type_grey my-[1px]"></div>
@@ -164,6 +169,26 @@
           </div>
         </button>
       </td>
+
+      <p-menu #menu [popup]="true" styleClass="product-menu">
+        <ng-template pTemplate="start">
+          <div class="w-full flex flex-col py-2">
+            <button
+              class="bg-transparent border-0 py-2 px-4 text-left text-type_title_gray hover:text-primary font-semibold"
+              (click)="onEdit()"
+            >
+              Edit
+            </button>
+
+            <button
+              class="bg-transparent border-0 py-2 px-4 text-left text-type_title_gray hover:text-primary font-semibold"
+              (click)="onDelete()"
+            >
+              Delete
+            </button>
+          </div>
+        </ng-template>
+      </p-menu>
     </ng-template>
   </app-generic-table>
 </div>

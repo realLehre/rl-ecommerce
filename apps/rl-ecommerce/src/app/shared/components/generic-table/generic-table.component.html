@@ -1,4 +1,4 @@
-<div>
+<div class="w-full">
   <div class="flex items-center justify-between mb-8">
     <h2 class="text-type_title_gray text-base mobile:text-[20px] font-medium">
       {{ title() }}
@@ -7,23 +7,45 @@
     <ng-content select="add-button"> </ng-content>
   </div>
 
-  <table class="min-w-full px-2">
-    <thead class="bg-border_subtle border border-border_subtle">
-      <tr>
-        <ng-container *ngTemplateOutlet="headers"></ng-container>
-      </tr>
-    </thead>
+  <div class="py-6 border-[2px] border-border_subtle rounded-lg">
+    <div class="flex items-center justify-between gap-x-6 gap-y-2 mb-6 px-4">
+      <div class="max-w-[300px] min-w-[170px] grow h-8 relative">
+        <img
+          src="assets/images/icons/search.svg"
+          alt=""
+          class="absolute left-3 top-1/2 -translate-y-1/2 w-5"
+        />
+        <input
+          class="w-full focus:outline-0 rounded-full bg-bg_subtle border border-border_subtle h-full pl-10 text-type_caption font-medium placeholder:text-type_caption"
+          placeholder="Search"
+          [formControl]="searchInput"
+          id="toTop"
+        />
+      </div>
+    </div>
 
-    <tbody>
-      @for (item of data() | paginate: config; track item.id; let i = $index) {
-        <tr
-          class="border-b border-border_subtle text-type_title_gray text-xs mobile:text-sm font-medium"
-        >
-          <ng-container
-            *ngTemplateOutlet="rows; context: { row: item, index: i }"
-          />
+    <table class="min-w-full px-2">
+      <thead class="bg-border_subtle border border-border_subtle">
+        <tr class="">
+          <ng-container *ngTemplateOutlet="headers"></ng-container>
         </tr>
-      }
-    </tbody>
-  </table>
+      </thead>
+
+      <tbody>
+        @for (
+          item of data() | paginate: config;
+          track item.id;
+          let i = $index
+        ) {
+          <tr
+            class="border-b border-border_subtle text-type_title_gray text-xs mobile:text-sm font-medium"
+          >
+            <ng-container
+              *ngTemplateOutlet="rows; context: { row: item, index: i }"
+            />
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
 </div>
