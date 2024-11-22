@@ -80,8 +80,12 @@ body {
 }
 
 .product-menu {
-  //position: relative;
-  transform: translateX(-220px);
+  background-color: theme('colors.bg_subtle');
+}
+
+.admin-product-order-menu {
+  background-color: theme('colors.bg_subtle');
+  width: 250px;
 }
 
 .user-order-menu {
