@@ -1,5 +1,9 @@
 <div class="w-full">
-  <app-generic-table [data]="products()" [title]="'Product List'">
+  <app-generic-table
+    [data]="products()"
+    [tableData]="products().products"
+    [title]="'Product List'"
+  >
     <button
       class="bg-primary rounded-full text-white hover:bg-opacity-85 font-medium py-[6px] px-7 whitespace-nowrap text-[10px] mobile:text-sm"
       ngProjectAs="add-button"
@@ -177,7 +181,7 @@
         {{ product.createdAt | date }}
       </td>
       <td class="px-2 mobile:px-4 py-2">
-        <button class="py-2 px-3" (click)="menu.toggle($event)">
+        <button class="py-2 px-3" (click)="onOpenMenu($event, product)">
           <div>
             <div class="rounded-full w-1 h-1 bg-type_grey"></div>
             <div class="rounded-full w-1 h-1 bg-type_grey my-[1px]"></div>
@@ -190,14 +194,20 @@
         <ng-template pTemplate="start">
           <div class="w-full flex flex-col py-2">
             <button
-              class="bg-transparent border-0 py-2 px-4 text-left text-type_title_gray hover:text-primary font-semibold"
+              class="bg-transparent border-0 py-1 px-4 text-left text-type_title_gray hover:text-primary font-semibold text-sm"
+              (click)="onViewDetails()"
+            >
+              View Details
+            </button>
+            <button
+              class="bg-transparent border-0 py-1 px-4 text-left text-type_title_gray hover:text-primary font-semibold text-sm"
               (click)="onEdit()"
             >
               Edit
             </button>
 
             <button
-              class="bg-transparent border-0 py-2 px-4 text-left text-type_title_gray hover:text-primary font-semibold"
+              class="bg-transparent border-0 py-1 px-4 text-left text-type_title_gray hover:text-primary font-semibold text-sm"
               (click)="onDelete()"
             >
               Delete

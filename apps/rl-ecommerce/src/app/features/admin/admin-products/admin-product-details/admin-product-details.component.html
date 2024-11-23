@@ -1,0 +1,162 @@
+<div class="max-w-[1200px] mx-auto">
+  @if (product$ | async; as product) {
+    <div class="flex items-start flex-col min-[700px]:flex-row gap-10 mt-8">
+      <div
+        class="min-[850px]:w-[500px] min-[450px]:w-[400px] w-full max-[450px]:h-[300px] max-[700px]:self-center"
+      >
+        <app-product-details-images [images]="product.imageUrls" />
+      </div>
+
+      <div class="w-full">
+        <div class="space-y-2 min-[700px]:space-y-4">
+          <h1 class="text-2xl mobile:text-[40px] text-type_caption leading-10">
+            {{ product.name }}
+          </h1>
+
+          <div class="flex items-center gap-x-2 flex-wrap">
+            <p
+              class="text-[20px] mobile:text-3xl text-type_title font-semibold"
+            >
+              {{ product.price | currency: '₦' : 'symbol' : '1.0-0' }}
+            </p>
+
+            @if (product.previousPrice) {
+              <div class="flex items-center space-x-1">
+                <p
+                  class="text-type_grey mobile:text-lg text-sm font-medium line-through"
+                >
+                  {{
+                    product.previousPrice | currency: '₦' : 'symbol' : '1.0-0'
+                  }}
+                </p>
+
+                <div
+                  class="p-[2px] rounded-sm bg-primary text-white text-xs mobile:text-sm bg-opacity-70"
+                >
+                  -{{
+                    product.price
+                      | pricePercentageDecrease: product.previousPrice
+                  }}%
+                </div>
+              </div>
+            }
+          </div>
+
+          <div class="text-sm mobile:text-base text-type_grey">
+            <p [ngClass]="{ 'line-clamp-[8]': isCollapsed() }">
+              {{ product.description }}
+            </p>
+          </div>
+          @if (product.description.length > limit) {
+            <a
+              href="javascript:void(0)"
+              (click)="toggleCollapse()"
+              class="text-sm font-medium text-primary"
+            >
+              {{ isCollapsed() ? 'Read More' : 'Show Less' }}
+            </a>
+          }
+        </div>
+
+        <div class="w-full h-[1px] my-6 bg-border_subtle"></div>
+
+        <div class="mt-5">
+          <h3 class="text-xs text-type_title font-semibold">CATEGORY</h3>
+          <p class="text-type_caption">{{ product.category.name }}</p>
+        </div>
+
+        <div class="space-y-2 mt-5">
+          <h3 class="text-xs text-type_title font-semibold">
+            QUANTITY AVAILABLE
+          </h3>
+          <button
+            class="p-1 px-2 rounded-md border border-border_subtle text-sm mt-2 bg-[#F7F7F7]"
+          >
+            {{ product.unit }} Pieces
+          </button>
+        </div>
+
+        <div
+          class="flex items-center justify-between mt-8 flex-wrap gap-x-3 gap-y-3 text-sm mobile:text-base"
+        >
+          <button
+            class="min-w-[190px] rounded-full text-white font-medium bg-primary py-2 flex-1 h-12 hover:text-type_title_gray hover:border-primary hover:border-[2px] hover:bg-transparent"
+            routerLink="/checkout"
+          >
+            Edit Product
+          </button>
+
+          <button
+            class="min-w-[120px] flex items-center justify-center space-x-3 mobile:min-w-[190px] rounded-full font-medium border-red_primary border-[2px] text-red_primary py-2 flex-1 h-12 hover:bg-red_primary hover:text-white"
+            [disabled]="isDeletingProduct()"
+            (click)="onDeleteProduct(product)"
+          >
+            @if (isDeletingProduct()) {
+              <app-loader
+                [customStyle]="{
+                  width: '24px',
+                  border: '3px solid #000',
+                }"
+              />
+            }
+            <span> Add to Cart </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div class="flex items-start flex-col min-[700px]:flex-row gap-10 mt-8">
+      <div
+        class="min-[850px]:w-[500px] min-[450px]:w-[400px] w-full max-[450px]:h-[300px] max-[700px]:self-center"
+      >
+        <div class="mb-6">
+          <p-skeleton width="100%" height="400px" />
+        </div>
+
+        <div class="hidden mobile:block">
+          <p-skeleton width="100%" height="50px" />
+        </div>
+      </div>
+
+      <div class="w-full">
+        <div class="space-y-2 min-[700px]:space-y-4">
+          <div>
+            <p-skeleton width="100%" height="2rem" />
+          </div>
+          <div>
+            <p-skeleton width="10rem" height="2rem" />
+          </div>
+          <div>
+            <p-skeleton width="100%" height="150px" />
+          </div>
+        </div>
+
+        <div class="w-full h-[1px] my-6 bg-border_subtle"></div>
+
+        <div class="space-y-1">
+          <div>
+            <p-skeleton width="10rem" height="2rem" />
+          </div>
+          <div>
+            <p-skeleton width="20rem" height="2rem" />
+          </div>
+        </div>
+
+        <div class="mt-5">
+          <p-skeleton width="20rem" height="4rem" />
+        </div>
+
+        <div
+          class="flex items-center justify-between mt-8 flex-wrap gap-x-3 gap-y-2 text-sm mobile:text-base"
+        >
+          <div class="flex-1">
+            <p-skeleton width="100%" height="3rem" borderRadius="50px" />
+          </div>
+          <div class="flex-1">
+            <p-skeleton width="100%" height="3rem" borderRadius="50px" />
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

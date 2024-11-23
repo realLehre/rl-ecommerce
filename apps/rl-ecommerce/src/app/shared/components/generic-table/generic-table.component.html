@@ -35,7 +35,7 @@
 
       <tbody>
         @for (
-          item of data().products | paginate: config;
+          item of tableData() | paginate: config;
           track item.id;
           let i = $index
         ) {

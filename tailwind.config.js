@@ -21,6 +21,7 @@ module.exports = {
     extend: {
       colors: {
         primary: '#800020',
+        red_primary: '#C62828',
         type_title: '#1C1C1C',
         type_title_gray: '#333333',
         type_grey: '#555555',

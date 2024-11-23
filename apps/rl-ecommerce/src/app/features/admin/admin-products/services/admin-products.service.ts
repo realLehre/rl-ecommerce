@@ -1,10 +1,12 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { of } from 'rxjs';
+import { IProduct } from '../../../products/model/product.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AdminProductsService {
+  activeProduct = signal<IProduct | null>(null);
   productsData = of({
     totalPages: 3,
     products: [

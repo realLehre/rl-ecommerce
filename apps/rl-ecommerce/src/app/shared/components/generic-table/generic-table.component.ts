@@ -31,6 +31,7 @@ export class GenericTableComponent {
   @ContentChild('rows') rows!: TemplateRef<any>;
   title = input.required<string>();
   data = input.required<any>();
+  tableData = input.required<any[]>();
   config: PaginationInstance = {
     id: 'userOrderPagination',
     itemsPerPage: 10,

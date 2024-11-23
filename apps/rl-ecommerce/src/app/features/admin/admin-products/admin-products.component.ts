@@ -11,6 +11,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
 import { SliderModule } from 'primeng/slider';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin-products',
@@ -33,9 +34,11 @@ import { FormsModule } from '@angular/forms';
 })
 export class AdminProductsComponent {
   private productService = inject(AdminProductsService);
+  private router = inject(Router);
   products = toSignal(this.productService.productsData, {
     initialValue: { totalPages: 1, products: [] },
   });
+  selectedProduct!: IProduct;
   sortUsed: boolean = false;
   sortColumn: keyof IProduct | keyof ICategory | '' = '';
   sortDirection: 'asc' | 'desc' = 'asc';
@@ -61,6 +64,10 @@ export class AdminProductsComponent {
   };
   rangeDates: any[] = [];
 
+  onViewDetails() {
+    this.router.navigate(['/', 'admin', 'product', this.selectedProduct.id]);
+  }
+
   onEdit() {}
 
   onDelete() {}
@@ -68,6 +75,12 @@ export class AdminProductsComponent {
   onApplyFilter() {
     // this.filterNumber = this.findFilterNumber();
     this.menu.hide();
+  }
+
+  onOpenMenu(event: Event, product: IProduct) {
+    this.menu.show(event);
+    this.selectedProduct = product;
+    this.productService.activeProduct.set(product);
   }
 
   onDateChanged() {
