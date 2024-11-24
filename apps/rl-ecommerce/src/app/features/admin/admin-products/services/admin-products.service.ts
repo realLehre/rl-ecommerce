@@ -1,12 +1,35 @@
-import { Injectable, signal } from '@angular/core';
-import { of } from 'rxjs';
-import { IProduct } from '../../../products/model/product.interface';
+import { inject, Injectable, signal } from '@angular/core';
+import { of, retry } from 'rxjs';
+import {
+  ICategory,
+  IProduct,
+  IProductResponse,
+  ISubCategory,
+} from '../../../products/model/product.interface';
+import { environment } from '../../../../../environments/environment.development';
+import { HttpClient, HttpParams } from '@angular/common/http';
+
+export interface IAdminProductFilter {
+  minPrice?: number;
+  maxPrice?: number;
+  itemsToShow: number;
+  page?: number;
+  productId?: string;
+  productName?: string;
+  category?: ICategory;
+  subCategory?: ISubCategory;
+  minDate?: any;
+  maxDate?: any;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class AdminProductsService {
+  private http = inject(HttpClient);
+  private apiUrl = environment.apiUrl + 'product';
   activeProduct = signal<IProduct | null>(null);
+  productQueried = signal(false);
   productsData = of({
     totalPages: 3,
     products: [
@@ -736,6 +759,45 @@ export class AdminProductsService {
   });
 
   constructor() {}
+
+  getProducts(filters: IAdminProductFilter) {
+    let params = new HttpParams();
+
+    if (filters?.minPrice) {
+      params = params.set('minPrice', filters.minPrice.toString());
+      this.productQueried.set(true);
+    }
+    if (filters?.maxPrice) {
+      params = params.set('maxPrice', filters.maxPrice.toString());
+      this.productQueried.set(true);
+    }
+    if (filters?.category) {
+      params = params.set('deliveryStatus', filters.category.id);
+      this.productQueried.set(true);
+    }
+    if (filters?.page) {
+      params = params.set('page', filters.page);
+    }
+    if (filters?.itemsToShow) {
+      params = params.set('pageSize', filters.itemsToShow);
+    }
+    if (filters?.subCategory) {
+      params = params.set('orderId', filters.subCategory.id);
+      this.productQueried.set(true);
+    }
+    if (filters?.minDate) {
+      params = params.set('minDate', filters.minDate);
+      this.productQueried.set(true);
+    }
+    if (filters?.maxDate) {
+      params = params.set('maxDate', filters.maxDate);
+      this.productQueried.set(true);
+    }
+
+    return this.http
+      .get<IProductResponse>(`${this.apiUrl}/all`, { params })
+      .pipe(retry(3));
+  }
 
   formatDate(date: Date) {
     return new Date(date).toISOString();

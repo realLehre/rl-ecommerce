@@ -35,7 +35,7 @@
 
       <tbody>
         @for (
-          item of tableData() | paginate: config;
+          item of tableData() | paginate: config()!;
           track item.id;
           let i = $index
         ) {
@@ -75,7 +75,7 @@
       >
         <pagination-template
           #p="paginationApi"
-          [id]="config.id!"
+          [id]="config()?.id!"
           (pageChange)="pageChange($event)"
           class="h-fit min-h-auto"
         >
@@ -135,8 +135,8 @@
       >
         <button
           class="h-8 w-8 flex items-center border-0 outline-0 justify-center cursor-pointer disabled:opacity-30"
-          [disabled]="config.currentPage === 1"
-          (click)="pageChange(config.currentPage - 1)"
+          [disabled]="config()?.currentPage! === 1"
+          (click)="pageChange(config()?.currentPage! - 1)"
           [attr.aria-label]="'Previous page'"
         >
           <svg
@@ -155,7 +155,7 @@
         >
           <span
             class="h-8 flex items-center justify-center px-5 bg-primary rounded"
-            >{{ config.currentPage }}</span
+            >{{ config()?.currentPage }}</span
           >
           <div class="space-x-1">
             <span>of</span>
@@ -165,8 +165,8 @@
 
         <button
           class="h-8 w-8 flex items-center border-0 outline-0 justify-center cursor-pointer disabled:opacity-30"
-          [disabled]="config.currentPage === data().totalPages"
-          (click)="pageChange(config.currentPage + 1)"
+          [disabled]="config()?.currentPage! === data().totalPages"
+          (click)="pageChange(config()?.currentPage! + 1)"
           [attr.aria-label]="'Next page'"
         >
           <svg

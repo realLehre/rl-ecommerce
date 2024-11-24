@@ -29,7 +29,7 @@ export const adminRoutes: Routes = [
           ).then((c) => c.AdminAddProductComponent),
       },
       {
-        path: 'product/:id',
+        path: 'products/:id',
         loadComponent: () =>
           import(
             './admin-products/admin-product-details/admin-product-details.component'
