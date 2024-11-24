@@ -4,6 +4,7 @@ import {
   InMemoryScrollingOptions,
   PreloadAllModules,
   provideRouter,
+  withComponentInputBinding,
   withInMemoryScrolling,
   withPreloading,
 } from '@angular/router';
@@ -27,6 +28,7 @@ export const appConfig: ApplicationConfig = {
       routes,
       inMemoryScrollingFeature,
       withPreloading(PreloadAllModules),
+      withComponentInputBinding(),
     ),
     provideAnimationsAsync(),
     importProvidersFrom([BrowserAnimationsModule]),

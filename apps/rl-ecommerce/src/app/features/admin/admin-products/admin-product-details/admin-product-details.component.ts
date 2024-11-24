@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, Input, input, signal } from '@angular/core';
 import { AsyncPipe, CurrencyPipe, NgClass } from '@angular/common';
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 import { LargeReviewsComponent } from '../../../products/product-details/large-reviews/large-reviews.component';
@@ -8,11 +8,12 @@ import { ProductDetailsImagesComponent } from '../../../products/product-details
 import { ProductQuantityComponent } from '../../../../shared/components/product-quantity/product-quantity.component';
 import { ProductReviewsComponent } from '../../../products/product-details/product-reviews/product-reviews.component';
 import { RecommendedProductsComponent } from '../../../products/recommended-products/recommended-products.component';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { SkeletonModule } from 'primeng/skeleton';
 import { AdminProductsService } from '../services/admin-products.service';
-import { of } from 'rxjs';
+import { of, switchMap } from 'rxjs';
 import { IProduct } from '../../../products/model/product.interface';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-admin-product-details',
@@ -37,7 +38,11 @@ import { IProduct } from '../../../products/model/product.interface';
 })
 export class AdminProductDetailsComponent {
   productService = inject(AdminProductsService);
-  product$ = of(this.productService.activeProduct());
+  private router = inject(Router);
+  id = input.required<string>();
+  product$ = toObservable(this.id).pipe(
+    switchMap((id) => this.productService.getProductById(id!)),
+  );
   isDeletingProduct = signal(false);
   isCollapsed = signal(true);
   limit = 200;
