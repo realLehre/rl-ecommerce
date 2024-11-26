@@ -243,9 +243,10 @@
             <p class="text-sm text-type_title mb-1">Category</p>
             <div class="w-full">
               <p-dropdown
-                [options]="categories"
+                [options]="categories()!"
                 [(ngModel)]="selectedCategory"
                 (ngModelChange)="onChangeCategory($event)"
+                [loading]="!categories()"
                 optionLabel="name"
                 placeholder="Select Category"
                 styleClass="deliveryStatusDropdown"
@@ -261,7 +262,7 @@
                 [(ngModel)]="selectedSubCategory"
                 (ngModelChange)="onChangeSubCategory($event)"
                 optionLabel="name"
-                placeholder="Select Category"
+                placeholder="Select Subcategory"
                 styleClass="deliveryStatusDropdown"
               />
             </div>
@@ -290,6 +291,7 @@
             <p class="text-sm text-type_title mb-1">Date range</p>
             <div class="relative">
               <p-calendar
+                stop-click-propagation
                 [(ngModel)]="rangeDates"
                 (ngModelChange)="onDateChanged()"
                 selectionMode="range"

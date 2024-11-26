@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   computed,
   ContentChild,
@@ -29,6 +30,7 @@ import { SkeletonModule } from 'primeng/skeleton';
   ],
   templateUrl: './generic-table.component.html',
   styleUrl: './generic-table.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GenericTableComponent {
   @ContentChild('headers') headers!: TemplateRef<any>;
@@ -47,7 +49,6 @@ export class GenericTableComponent {
   onChangeItemsToShow(total: number) {
     // this.totalItemsToShow.set(total)
     this.itemsToShowChanged.emit(total);
-    // this.config()?.itemsPerPage.set(total)
   }
 
   pageChange(event: any) {

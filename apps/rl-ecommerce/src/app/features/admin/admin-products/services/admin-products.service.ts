@@ -46,7 +46,7 @@ export class AdminProductsService {
       this.productQueried.set(true);
     }
     if (filters?.category) {
-      params = params.set('deliveryStatus', filters.category.id);
+      params = params.set('categoryId', filters.category.id);
       this.productQueried.set(true);
     }
     if (filters?.page) {
@@ -56,7 +56,7 @@ export class AdminProductsService {
       params = params.set('pageSize', filters.itemsToShow);
     }
     if (filters?.subCategory) {
-      params = params.set('orderId', filters.subCategory.id);
+      params = params.set('subCategoryId', filters.subCategory.id);
       this.productQueried.set(true);
     }
     if (filters?.minDate) {

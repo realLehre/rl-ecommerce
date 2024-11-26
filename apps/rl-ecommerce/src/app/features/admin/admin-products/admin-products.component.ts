@@ -1,16 +1,27 @@
-import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import {
   AdminProductsService,
   IAdminProductFilter,
 } from './services/admin-products.service';
 import { GenericTableComponent } from '../../../shared/components/generic-table/generic-table.component';
-import { CurrencyPipe, DatePipe, DecimalPipe, NgClass } from '@angular/common';
-import { IOrder } from '../../../shared/models/order.interface';
-import { toSignal } from '@angular/core/rxjs-interop';
 import {
-  ICategory,
+  AsyncPipe,
+  CurrencyPipe,
+  DatePipe,
+  DecimalPipe,
+  NgClass,
+} from '@angular/common';
+import {
   IProduct,
   IProductResponse,
+  ICategory,
   ISubCategory,
 } from '../../products/model/product.interface';
 import { Menu, MenuModule } from 'primeng/menu';
@@ -22,6 +33,10 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SkeletonModule } from 'primeng/skeleton';
 import { PaginationInstance } from 'ngx-pagination';
+import { ProductOptionsService } from '../../product-options/services/product-options.service';
+import { Observable } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { PrimeNgDatepickerDirective } from '../../../shared/directives/prime-ng-datepicker.directive';
 
 @Component({
   selector: 'app-admin-products',
@@ -39,12 +54,16 @@ import { PaginationInstance } from 'ngx-pagination';
     SliderModule,
     FormsModule,
     SkeletonModule,
+    AsyncPipe,
+    PrimeNgDatepickerDirective,
   ],
   templateUrl: './admin-products.component.html',
   styleUrl: './admin-products.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminProductsComponent implements OnInit {
   private productService = inject(AdminProductsService);
+  private optionsService = inject(ProductOptionsService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   productData!: IProductResponse;
@@ -55,7 +74,9 @@ export class AdminProductsComponent implements OnInit {
   @ViewChild('filterMenu') menu!: Menu;
   filterNumber = 0;
   rangeValues = [2000, 10000];
-  categories: ICategory[] = [];
+  categories$: Observable<ICategory[] | null> =
+    this.optionsService.getCategories();
+  categories = toSignal(this.optionsService.getCategories());
   selectedCategory!: ICategory;
   subCategories: ISubCategory[] = [];
   selectedSubCategory!: ICategory;
@@ -195,6 +216,7 @@ export class AdminProductsComponent implements OnInit {
   }
 
   onDateChanged() {
+    console.log(1);
     if (this.rangeDates[0] && this.rangeDates[1]) {
       let dates = [...this.rangeDates];
       dates = dates.map((date) => this.productService.formatDate(date));
@@ -207,16 +229,16 @@ export class AdminProductsComponent implements OnInit {
     }
   }
 
-  onChangeCategory(cat: ICategory) {
+  onChangeCategory(cat: ICategory | any) {
     this.selectedCategory = cat;
     this.filter = { ...this.filter, page: 1, category: cat };
-    this.getProducts();
+    this.subCategories = cat?.subCategories!;
+    console.log(cat);
   }
 
-  onChangeSubCategory(subcat: ISubCategory) {
-    this.selectedSubCategory = subcat;
-    this.filter = { ...this.filter, page: 1, subCategory: subcat };
-    this.getProducts();
+  onChangeSubCategory(subCat: ISubCategory) {
+    this.selectedSubCategory = subCat;
+    this.filter = { ...this.filter, page: 1, subCategory: subCat };
   }
 
   onRangeValueChanged(value: any[]) {
@@ -231,6 +253,11 @@ export class AdminProductsComponent implements OnInit {
     if (this.filterNumber == 0) {
       return;
     }
+    this.router.navigate([], {
+      queryParams: null,
+      queryParamsHandling: 'replace',
+      relativeTo: this.route,
+    });
     this.onReturn();
     this.menu.hide();
   }
@@ -263,7 +290,7 @@ export class AdminProductsComponent implements OnInit {
     return number;
   }
 
-  sortTable(column: keyof IProduct | keyof ICategory): void {
+  sortTable(column: keyof IProduct): void {
     if (this.sortColumn === column) {
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     } else {
