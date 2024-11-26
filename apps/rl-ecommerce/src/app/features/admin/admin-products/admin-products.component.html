@@ -4,7 +4,9 @@
       [data]="productData"
       [config]="config"
       [tableData]="productData.products"
+      [itemsToShowInput]="filter.itemsToShow"
       (pageChanged)="pageChange($event)"
+      (itemsToShowChanged)="itemsToShowChange($event)"
       [title]="'Product List'"
     >
       <button
@@ -17,7 +19,7 @@
       <button
         class="h-8 border-border_subtle border-[2px] px-2 bg-transparent rounded-full text-type_caption flex items-center space-x-2 relative"
         ngProjectAs="table-filters"
-        (click)="menu.toggle($event)"
+        (click)="filterMenu.toggle($event)"
       >
         @if (filterNumber) {
           <span
@@ -221,7 +223,7 @@
       </ng-template>
     </app-generic-table>
   </div>
-  <p-menu #menu [popup]="true" styleClass="admin-product-order-menu">
+  <p-menu #filterMenu [popup]="true" styleClass="admin-product-order-menu">
     <ng-template pTemplate="start">
       <div class="py-3 px-3 w-[250px]">
         <div class="flex items-center justify-between space-x-3">
@@ -238,12 +240,26 @@
 
         <div class="mt-2">
           <div>
-            <p class="text-sm text-type_title mb-1">Status</p>
+            <p class="text-sm text-type_title mb-1">Category</p>
             <div class="w-full">
               <p-dropdown
                 [options]="categories"
                 [(ngModel)]="selectedCategory"
                 (ngModelChange)="onChangeCategory($event)"
+                optionLabel="name"
+                placeholder="Select Category"
+                styleClass="deliveryStatusDropdown"
+              />
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <p class="text-sm text-type_title mb-1">Subcategory</p>
+            <div class="w-full">
+              <p-dropdown
+                [options]="subCategories"
+                [(ngModel)]="selectedSubCategory"
+                (ngModelChange)="onChangeSubCategory($event)"
                 optionLabel="name"
                 placeholder="Select Category"
                 styleClass="deliveryStatusDropdown"
@@ -299,12 +315,14 @@
         <div class="flex items-center justify-between mt-8">
           <button
             class="rounded-md font-medium border-primary border-[2px] text-primary py-2 h-8 w-[80px] flex items-center justify-center px-4"
+            type="button"
             (click)="menu.toggle($event)"
           >
             Cancel
           </button>
           <button
             class="rounded-md text-white font-medium bg-primary py-2 px-4 h-8 w-[80px] flex items-center justify-center"
+            type="button"
             (click)="onApplyFilter()"
           >
             Apply

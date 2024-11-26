@@ -1,5 +1,6 @@
 import {
   Component,
+  computed,
   ContentChild,
   inject,
   input,
@@ -36,13 +37,16 @@ export class GenericTableComponent {
   data = input.required<any>();
   tableData = input.required<any[]>();
   config = input<PaginationInstance>();
+  itemsToShowInput = input<number>(10);
   searchInput: FormControl = new FormControl(null);
   itemsToShow: number[] = [1, 5, 10, 15, 20, 25];
-  totalItemsToShow: number = 10;
+  totalItemsToShow = computed(() => this.itemsToShowInput());
   pageChanged = output<number>();
+  itemsToShowChanged = output<number>();
 
   onChangeItemsToShow(total: number) {
-    this.totalItemsToShow = total;
+    // this.totalItemsToShow.set(total)
+    this.itemsToShowChanged.emit(total);
     // this.config()?.itemsPerPage.set(total)
   }
 

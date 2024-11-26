@@ -30,6 +30,7 @@ export class AdminProductsService {
   private apiUrl = environment.apiUrl + 'product';
   activeProduct = signal<IProduct | null>(null);
   productQueried = signal(false);
+  PRODUCT_QUERY_STORED_KEY = 'D82jxf927jks20jds';
 
   constructor() {}
 
@@ -77,6 +78,14 @@ export class AdminProductsService {
       retry(3),
       tap((res) => this.activeProduct.set(res)),
     );
+  }
+
+  createSlug(name: string): any {
+    if (!name) return;
+    return name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-') // Replace spaces and special characters with hyphen
+      .replace(/^-+|-+$/g, ''); // Trim leading or trailing hyphens
   }
 
   formatDate(date: Date) {

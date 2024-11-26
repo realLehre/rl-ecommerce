@@ -58,7 +58,7 @@
           Result per page
         </h4>
         <select
-          [ngModel]="totalItemsToShow"
+          [ngModel]="totalItemsToShow()"
           (ngModelChange)="onChangeItemsToShow($event)"
           class="text-type_title_gray bg-transparent h-[30px] px-1 pr-0 rounded-[4px] focus:outline-0 border border-border_subtle flex items-center justify-center"
         >
