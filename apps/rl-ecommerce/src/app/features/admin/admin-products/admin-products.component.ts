@@ -91,6 +91,7 @@ export class AdminProductsComponent implements OnInit {
     itemsPerPage: 10,
     currentPage: 1,
   };
+  productQueried = this.productService.productQueried;
 
   ngOnInit() {
     const savedFilters = JSON.parse(
@@ -155,8 +156,6 @@ export class AdminProductsComponent implements OnInit {
         this.config.itemsPerPage = totalItemsToShow;
         this.config.currentPage = res?.currentPage!;
         this.config.totalItems = res?.totalItems;
-        console.log(this.config);
-        console.log(res);
       },
       error: (err) => {
         this.isFetching.set(false);
@@ -216,7 +215,6 @@ export class AdminProductsComponent implements OnInit {
   }
 
   onDateChanged() {
-    console.log(1);
     if (this.rangeDates[0] && this.rangeDates[1]) {
       let dates = [...this.rangeDates];
       dates = dates.map((date) => this.productService.formatDate(date));
@@ -233,7 +231,6 @@ export class AdminProductsComponent implements OnInit {
     this.selectedCategory = cat;
     this.filter = { ...this.filter, page: 1, category: cat };
     this.subCategories = cat?.subCategories!;
-    console.log(cat);
   }
 
   onChangeSubCategory(subCat: ISubCategory) {
@@ -271,6 +268,7 @@ export class AdminProductsComponent implements OnInit {
     this.rangeValues = [2000, 10000];
     sessionStorage.removeItem(this.productService.PRODUCT_QUERY_STORED_KEY);
     this.filterNumber = 0;
+    this.productService.productQueried.set(false);
     // this.searchInput.reset();
     this.getProducts();
   }
