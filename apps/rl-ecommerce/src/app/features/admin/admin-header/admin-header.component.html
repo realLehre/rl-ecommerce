@@ -1,10 +1,30 @@
-<div class="w-full px-6 py-4 flex shadow-sm shadow-grey-300">
-  <button class="ml-auto flex flex-col" (click)="menu.toggle($event)">
-    <h3 class="text-lg text-type_title_gray font-medium">John Payne</h3>
-    <p class="text-xs text-type_caption">Admin</p>
-  </button>
-</div>
+<div
+  class="flex items-center justify-center shadow-sm shadow-grey-300 h-[76px]"
+>
+  <div class="w-full px-6 py-4 flex items-center justify-between">
+    <button class="block min-[760px]:hidden text-type_caption text-[20px]">
+      <i class="fa fa-bars"></i>
+    </button>
 
+    <div class="px-5 block min-[760px]:hidden">
+      <img
+        src="assets/images/icons/logo.png"
+        alt=""
+        class="w-[100px] min-[760px]:w-[120px]"
+      />
+    </div>
+
+    <button
+      class="min-[760px]:ml-auto flex flex-col"
+      (click)="menu.toggle($event)"
+    >
+      <h3 class="text-sm mobile:text-lg text-type_title_gray font-medium">
+        John Payne
+      </h3>
+      <p class="text-xs text-type_caption">Admin</p>
+    </button>
+  </div>
+</div>
 <p-menu #menu [popup]="true" styleClass="header-menu">
   <ng-template pTemplate="start">
     <div class="w-full py-3 text-center">

@@ -34,29 +34,31 @@
       <ng-content select="table-filters" />
     </div>
 
-    <table class="min-w-full px-2">
-      <thead class="bg-border_subtle border border-border_subtle">
-        <tr class="">
-          <ng-container *ngTemplateOutlet="headers"></ng-container>
-        </tr>
-      </thead>
-
-      <tbody>
-        @for (
-          item of tableData() | paginate: config()!;
-          track item.id;
-          let i = $index
-        ) {
-          <tr
-            class="border-b border-border_subtle text-type_title_gray text-xs mobile:text-sm font-medium"
-          >
-            <ng-container
-              *ngTemplateOutlet="rows; context: { row: item, index: i }"
-            />
+    <div class="overflow-x-auto">
+      <table class="min-w-full px-2">
+        <thead class="bg-border_subtle border border-border_subtle">
+          <tr class="">
+            <ng-container *ngTemplateOutlet="headers"></ng-container>
           </tr>
-        }
-      </tbody>
-    </table>
+        </thead>
+
+        <tbody>
+          @for (
+            item of tableData() | paginate: config()!;
+            track item.id;
+            let i = $index
+          ) {
+            <tr
+              class="border-b border-border_subtle text-type_title_gray text-xs mobile:text-sm font-medium"
+            >
+              <ng-container
+                *ngTemplateOutlet="rows; context: { row: item, index: i }"
+              />
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
 
     <div
       class="flex flex-col min-[760px]:flex-row min-[760px]:items-center items-start justify-between gap-x-5 gap-y-4 mt-8 px-4"
