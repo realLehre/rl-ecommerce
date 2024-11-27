@@ -6,9 +6,11 @@
         [config]="config"
         [tableData]="productData.products"
         [itemsToShowInput]="filter.itemsToShow"
+        [title]="'Product List'"
+        [searchValueInput]="filter?.name"
         (pageChanged)="pageChange($event)"
         (itemsToShowChanged)="itemsToShowChange($event)"
-        [title]="'Product List'"
+        (searchValueEmit)="searchChanged($event)"
       >
         <button
           class="bg-primary rounded-full text-white hover:bg-opacity-85 font-medium py-[6px] px-7 whitespace-nowrap text-[10px] mobile:text-sm"
@@ -167,8 +169,14 @@
         <ng-template #rows let-product="row">
           <td class="hidden mobile:block px-2 mobile:px-4 py-5 font-semibold">
             <div class="flex items-center space-x-2">
-              <div class="w-10 h-10 rounded-md overflow-hidden">
-                <img [src]="product.image" [alt]="product.name" />
+              <div
+                class="w-10 h-10 min-w-10 min-h-10 rounded-md overflow-hidden"
+              >
+                <img
+                  [src]="product.image"
+                  [alt]="product.name"
+                  class="w-full"
+                />
               </div>
               <p>{{ product.name }}</p>
             </div>

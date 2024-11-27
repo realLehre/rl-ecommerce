@@ -21,6 +21,14 @@
           [formControl]="searchInput"
           id="toTop"
         />
+        @if (searchInput.value && searchInput.value !== '') {
+          <button
+            class="text-type_caption absolute right-3 top-1/2 -translate-y-1/2 text-lg"
+            (click)="onClearSearch()"
+          >
+            <i class="fa fa-times"></i>
+          </button>
+        }
       </div>
 
       <ng-content select="table-filters" />

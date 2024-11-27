@@ -20,6 +20,7 @@ export interface IAdminProductFilter {
   subCategory?: ISubCategory;
   minDate?: any;
   maxDate?: any;
+  name?: string;
 }
 
 @Injectable({
@@ -65,6 +66,10 @@ export class AdminProductsService {
     }
     if (filters?.maxDate) {
       params = params.set('maxDate', filters.maxDate);
+      this.productQueried.set(true);
+    }
+    if (filters?.name) {
+      params = params.set('name', filters.name);
       this.productQueried.set(true);
     }
 

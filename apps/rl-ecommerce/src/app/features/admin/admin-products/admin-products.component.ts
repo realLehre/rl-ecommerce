@@ -115,7 +115,7 @@ export class AdminProductsComponent implements OnInit {
       );
       this.rangeDates = [minDate, maxDate];
     }
-
+    console.log(this.filter.name);
     const newRouteQueries = Object.fromEntries(
       Object.entries(this.createRouteQuery()).filter(
         ([_, value]) => value !== undefined,
@@ -140,6 +140,7 @@ export class AdminProductsComponent implements OnInit {
       subCategory: this.productService.createSlug(
         this.filter.subCategory?.name!,
       ),
+      name: this.filter.name,
     };
   }
 
@@ -244,6 +245,20 @@ export class AdminProductsComponent implements OnInit {
       minPrice: value[0],
       maxPrice: value[1],
     };
+  }
+
+  searchChanged(name: string | null) {
+    this.filter = { ...this.filter, name: name! };
+
+    sessionStorage.setItem(
+      this.productService.PRODUCT_QUERY_STORED_KEY,
+      JSON.stringify(this.filter),
+    );
+    this.router.navigate([], {
+      queryParams: { name },
+      relativeTo: this.route,
+    });
+    this.getProducts();
   }
 
   onClearFilter() {
