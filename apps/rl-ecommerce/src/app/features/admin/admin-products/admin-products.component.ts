@@ -72,6 +72,7 @@ export class AdminProductsComponent implements OnInit {
   sortColumn: keyof IProduct | keyof ICategory | '' = '';
   sortDirection: 'asc' | 'desc' = 'asc';
   @ViewChild('filterMenu') menu!: Menu;
+  @ViewChild('menu') productActionMenu!: Menu;
   filterNumber = 0;
   rangeValues = [2000, 10000];
   categories$: Observable<ICategory[] | null> =
@@ -115,7 +116,6 @@ export class AdminProductsComponent implements OnInit {
       );
       this.rangeDates = [minDate, maxDate];
     }
-    console.log(this.filter.name);
     const newRouteQueries = Object.fromEntries(
       Object.entries(this.createRouteQuery()).filter(
         ([_, value]) => value !== undefined,
@@ -209,8 +209,8 @@ export class AdminProductsComponent implements OnInit {
     this.getProducts();
   }
 
-  onOpenMenu(event: Event, product: IProduct) {
-    this.menu.show(event);
+  onOpenProductActionMenu(event: Event, product: IProduct) {
+    this.productActionMenu.show(event);
     this.selectedProduct = product;
     this.productService.activeProduct.set(product);
   }
@@ -303,7 +303,7 @@ export class AdminProductsComponent implements OnInit {
     return number;
   }
 
-  sortTable(column: keyof IProduct): void {
+  sortTable(column: any): void {
     if (this.sortColumn === column) {
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     } else {
@@ -312,21 +312,20 @@ export class AdminProductsComponent implements OnInit {
     }
     this.sortUsed = true;
 
-    this.productData.products.sort((a, b) => {
-      // if(column == 'category'){
-      //   const valueA = a[column];
-      //   const valueB = b[column];
-      // } else {
-      //
-      // const valueA = a[column];
-      // const valueB = b[column];
-      // }
+    this.productData.products.sort((a: any, b: any) => {
+      let valueA, valueB;
+      if (column == 'category') {
+        valueA = a[column].name;
+        valueB = b[column].name;
+      } else {
+        valueA = a[column];
+        valueB = b[column];
+      }
 
-      const valueA = a[column];
-      const valueB = b[column];
-
-      if (valueA < valueB) return this.sortDirection === 'asc' ? -1 : 1;
-      if (valueA > valueB) return this.sortDirection === 'asc' ? 1 : -1;
+      if (valueA && valueB) {
+        if (valueA < valueB) return this.sortDirection === 'asc' ? -1 : 1;
+        if (valueA > valueB) return this.sortDirection === 'asc' ? 1 : -1;
+      }
 
       return 0;
     });
