@@ -7,7 +7,7 @@
         [tableData]="productData.products"
         [itemsToShowInput]="filter.itemsToShow"
         [title]="'Product List'"
-        [searchValueInput]="filter?.name"
+        [searchValueInput]="filter.name"
         (pageChanged)="pageChange($event)"
         (itemsToShowChanged)="itemsToShowChange($event)"
         (searchValueEmit)="searchChanged($event)"
