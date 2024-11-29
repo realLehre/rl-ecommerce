@@ -1,4 +1,11 @@
-import { Component, inject, Input, input, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  Input,
+  input,
+  signal,
+} from '@angular/core';
 import { AsyncPipe, CurrencyPipe, NgClass } from '@angular/common';
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 import { LargeReviewsComponent } from '../../../products/product-details/large-reviews/large-reviews.component';
@@ -35,6 +42,7 @@ import { toObservable } from '@angular/core/rxjs-interop';
   ],
   templateUrl: './admin-product-details.component.html',
   styleUrl: './admin-product-details.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminProductDetailsComponent {
   productService = inject(AdminProductsService);

@@ -80,14 +80,14 @@
           class="flex items-center justify-between mt-8 flex-wrap gap-x-3 gap-y-3 text-sm mobile:text-base"
         >
           <button
-            class="min-w-[190px] rounded-full text-white font-medium bg-primary py-2 flex-1 h-12 hover:text-type_title_gray border-[2px] border-primary hover:border-[2px] hover:bg-transparent"
+            class="min-w-[150px] rounded-full text-white font-medium bg-primary py-2 flex-1 h-12 hover:text-type_title_gray border-[2px] border-primary hover:border-[2px] hover:bg-transparent"
             routerLink="/checkout"
           >
             Edit Product
           </button>
 
           <button
-            class="min-w-[120px] flex items-center justify-center space-x-3 mobile:min-w-[190px] rounded-full font-medium border-red_primary border-[2px] text-red_primary py-2 flex-1 h-12 hover:bg-red_primary hover:text-white"
+            class="min-w-[150px] flex items-center justify-center space-x-3 rounded-full font-medium border-red_primary border-[2px] text-red_primary py-2 flex-1 h-12 hover:bg-red_primary hover:text-white"
             [disabled]="isDeletingProduct()"
             (click)="onDeleteProduct(product)"
           >

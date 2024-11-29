@@ -36,7 +36,7 @@
 
         <ng-template #headers>
           <th
-            class="hidden mobile:table-cell cursor-pointer px-2 mobile:px-4 py-3 text-left text-[10px] mobile:text-xs text-type_gray font-medium"
+            class="cursor-pointer px-2 mobile:px-4 py-3 text-left text-[10px] mobile:text-xs text-type_gray font-medium"
             (click)="sortTable('name')"
           >
             <div class="flex items-center space-x-1">
@@ -86,7 +86,7 @@
           </th>
           <th
             (click)="sortTable('category')"
-            class="px-2 mobile:px-4 py-3 text-left cursor-pointer text-[10px] mobile:text-xs text-type_gray font-medium"
+            class="px-2 mobile:px-4 py-3 text-left cursor-pointer text-[10px] mobile:text-xs text-type_gray font-medium hidden mobile:table-cell"
           >
             <div class="flex items-center space-x-1">
               <span>CATEGORY</span>
@@ -110,7 +110,7 @@
             </div>
           </th>
           <th
-            class="px-2 mobile:px-4 py-3 text-left cursor-pointer text-[10px] mobile:text-xs text-type_gray font-medium"
+            class="px-2 mobile:px-4 py-3 text-left cursor-pointer text-[10px] mobile:text-xs text-type_gray font-medium hidden mobile:table-cell"
             (click)="sortTable('unit')"
           >
             <div class="flex items-center space-x-1">
@@ -135,7 +135,7 @@
             </div>
           </th>
           <th
-            class="px-2 mobile:px-4 py-3 text-left cursor-pointer text-[10px] mobile:text-xs text-type_gray font-medium"
+            class="px-2 mobile:px-4 py-3 text-left cursor-pointer text-[10px] mobile:text-xs text-type_gray font-medium hidden mobile:table-cell"
             (click)="sortTable('createdAt')"
           >
             <div class="flex items-center space-x-1">
@@ -167,10 +167,10 @@
         </ng-template>
 
         <ng-template #rows let-product="row">
-          <td class="hidden mobile:block px-2 mobile:px-4 py-5 font-semibold">
+          <td class="px-2 mobile:px-4 py-5 font-semibold">
             <div class="flex items-center space-x-2">
               <div
-                class="w-10 h-10 min-w-10 min-h-10 rounded-md overflow-hidden"
+                class="w-8 mobile:w-10 h-8 mobile:h-10 min-w-8 mobile:min-w-10 min-h-8 mobile:min-h-10 rounded-md overflow-hidden"
               >
                 <img
                   [src]="product.image"
@@ -185,13 +185,13 @@
           <td class="px-2 mobile:px-4 py-5 font-semibold">
             {{ product.price | currency: '₦' : 'symbol' : '1.0-0' }}
           </td>
-          <td class="px-2 mobile:px-4 py-5">
+          <td class="px-2 mobile:px-4 py-5 hidden mobile:table-cell">
             {{ product.category.name }}
           </td>
-          <td class="px-2 mobile:px-4 py-5">
+          <td class="px-2 mobile:px-4 py-5 hidden mobile:table-cell">
             {{ product.unit }}
           </td>
-          <td class="px-2 mobile:px-4 py-5">
+          <td class="px-2 mobile:px-4 py-5 hidden mobile:table-cell">
             {{ product.createdAt | date }}
           </td>
           <td class="px-2 mobile:px-4 py-2">
