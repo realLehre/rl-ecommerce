@@ -1,4 +1,10 @@
 <div class="max-w-[1200px] mx-auto">
+  <button
+    class="outline-0 flex items-center justify-center h-6 w-6 rounded-[3px] border-[1px] border-border_subtle"
+    (click)="onNavigateBack()"
+  >
+    <i class="fa fa-angle-left font-bold"></i>
+  </button>
   @if (product$ | async; as product) {
     <div class="flex items-start flex-col min-[700px]:flex-row gap-10 mt-8">
       <div

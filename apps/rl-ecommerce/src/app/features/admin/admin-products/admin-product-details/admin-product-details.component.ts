@@ -6,7 +6,7 @@ import {
   input,
   signal,
 } from '@angular/core';
-import { AsyncPipe, CurrencyPipe, NgClass } from '@angular/common';
+import { AsyncPipe, CurrencyPipe, Location, NgClass } from '@angular/common';
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 import { LargeReviewsComponent } from '../../../products/product-details/large-reviews/large-reviews.component';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
@@ -47,6 +47,7 @@ import { toObservable } from '@angular/core/rxjs-interop';
 export class AdminProductDetailsComponent {
   productService = inject(AdminProductsService);
   private router = inject(Router);
+  private location = inject(Location);
   id = input.required<string>();
   product$ = toObservable(this.id).pipe(
     switchMap((id) => this.productService.getProductById(id!)),
@@ -59,5 +60,9 @@ export class AdminProductDetailsComponent {
 
   toggleCollapse() {
     this.isCollapsed.set(!this.isCollapsed());
+  }
+
+  onNavigateBack() {
+    this.location.back();
   }
 }
