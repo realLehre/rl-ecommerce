@@ -27,9 +27,14 @@
         "styles": [
           "apps/rl-ecommerce/src/styles.scss",
           "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
-          "node_modules/primeng/resources/primeng.min.css"
+          "node_modules/primeng/resources/primeng.min.css",
+          "node_modules/quill/dist/quill.core.css",
+          "node_modules/quill/dist/quill.bubble.css",
+          "node_modules/quill/dist/quill.snow.css",
+          "node_modules/katex/dist/katex.min.css",
+          "node_modules/quill-mention/dist/quill.mention.css"
         ],
-        "scripts": []
+        "scripts": [ "node_modules/quill/dist/quill.js"]
       },
       "configurations": {
         "production": {

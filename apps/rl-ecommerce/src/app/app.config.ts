@@ -15,6 +15,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { provideHttpClient } from '@angular/common/http';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { CookieService } from 'ngx-cookie-service';
+
 const scrollConfig: InMemoryScrollingOptions = {
   anchorScrolling: 'enabled',
   scrollPositionRestoration: 'enabled',
