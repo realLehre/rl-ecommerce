@@ -122,30 +122,32 @@ body {
   }
 }
 
-.add-product-dropdown {
-  width: 100% !important;
-  padding: 8px 12px;
-  background-color: theme('colors.bg_subtle');
-  border: 2px solid #eaeaea;
-
-  & .p-dropdown-item {
-    padding: 8px 12px !important;
-  }
-
-  & .p-dropdown-trigger {
-    width: 10px !important;
-  }
-}
-
-.withError {
-  width: 100% !important;
-  padding: 8px 12px;
-  background-color: theme('colors.bg_subtle');
-  border: 2px solid red;
-  & .p-dropdown-item {
-    padding: 8px 12px !important;
-  }
-}
+//.add-product-dropdown {
+//  width: 100% !important;
+//  max-width: 100% !important;
+//  padding: 8px 12px;
+//  background-color: theme('colors.bg_subtle');
+//  border: 2px solid #eaeaea;
+//
+//  & .p-dropdown-item {
+//    padding: 8px 12px !important;
+//  }
+//
+//  & .p-dropdown-trigger {
+//    width: 10px !important;
+//  }
+//}
+//
+//.withError {
+//  width: 100% !important;
+//  padding: 8px 12px;
+//  background-color: theme('colors.bg_subtle');
+//  border: 2px solid red;
+//
+//  & .p-dropdown-item {
+//    padding: 8px 12px !important;
+//  }
+//}
 
 ::-webkit-scrollbar {
   width: 10px;

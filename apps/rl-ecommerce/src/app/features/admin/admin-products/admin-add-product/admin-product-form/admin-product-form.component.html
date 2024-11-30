@@ -1,0 +1,164 @@
+<div class="w-full">
+  <h2
+    class="text-type_title_gray text-base mobile:text-[20px] font-medium mb-6"
+  >
+    Add Product
+  </h2>
+
+  <form [formGroup]="productForm" class="space-y-6 w-full">
+    <div class="">
+      <label
+        for="name"
+        class="block text-sm font-medium text-gray-700 mb-1"
+        [ngClass]="{ 'text-red-500': isInvalidAndTouched('name') }"
+        >Product Name</label
+      >
+      <div class="flex-grow">
+        <input
+          type="text"
+          id="name"
+          formControlName="name"
+          class="w-full px-3 py-2 border-[2px] rounded-md focus:outline-none bg-bg_subtle"
+          [ngClass]="{ 'border-red-500': isInvalidAndTouched('name') }"
+        />
+
+        @if (isInvalidAndTouched('name')) {
+          <p
+            class="mt-1 text-sm text-red-500 h-5"
+            appErrorMessage
+            [controlName]="'firstName'"
+          ></p>
+        }
+      </div>
+    </div>
+
+    <div class="">
+      <label
+        for="price"
+        class="block text-sm font-medium text-gray-700 mb-1"
+        [ngClass]="{ 'text-red-500': isInvalidAndTouched('price') }"
+        >Price</label
+      >
+      <div class="flex-grow">
+        <input
+          type="number"
+          id="price"
+          formControlName="price"
+          class="w-full px-3 py-2 border-[2px] rounded-md focus:outline-none bg-bg_subtle"
+          [ngClass]="{ 'border-red-500': isInvalidAndTouched('price') }"
+        />
+
+        @if (isInvalidAndTouched('price')) {
+          <p
+            class="mt-1 text-sm text-red-500 h-5"
+            appErrorMessage
+            [controlName]="'price'"
+          ></p>
+        }
+      </div>
+    </div>
+
+    <div class="flex items-start w-full gap-x-6 gap-y-6">
+      <div class="flex-1">
+        <label
+          for="category"
+          class="block text-sm font-medium text-gray-700 mb-1"
+          [ngClass]="{ 'text-red-500': isInvalidAndTouched('category') }"
+          >Category</label
+        >
+        <div class="flex-grow">
+          <div class="w-full">
+            <select
+              id="category"
+              formControlName="category"
+              class="w-full max-w-full truncate overflow-hidden whitespace-nowrap px-3 py-2 border-[2px] rounded-md focus:outline-none bg-bg_subtle"
+            >
+              @if (!categories()) {
+                <option [value]="null">Loading...</option>
+              } @else {
+                <option [value]="null">Select a category</option>
+              }
+
+              @for (category of categories(); track category.id) {
+                <option [value]="category.id">{{ category.name }}</option>
+              }
+            </select>
+            <!--            <p-dropdown-->
+            <!--              [options]="categories()!"-->
+            <!--              formControlName="category"-->
+            <!--              [loading]="!categories()"-->
+            <!--              optionLabel="name"-->
+            <!--              id="category"-->
+            <!--              [styleClass]="-->
+            <!--                isInvalidAndTouched('category')-->
+            <!--                  ? 'withError'-->
+            <!--                  : 'add-product-dropdown'-->
+            <!--              "-->
+            <!--            />-->
+          </div>
+
+          @if (isInvalidAndTouched('category')) {
+            <p
+              class="mt-1 text-sm text-red-500 h-5"
+              appErrorMessage
+              [controlName]="'category'"
+            ></p>
+          }
+        </div>
+      </div>
+
+      <div class="flex-1">
+        <label
+          for="subCategory"
+          class="block text-sm font-medium text-gray-700 mb-1"
+          [ngClass]="{ 'text-red-500': isInvalidAndTouched('subCategory') }"
+          >Subcategory</label
+        >
+        <div class="flex-grow">
+          <div class="w-full">
+            <select
+              formControlName="subCategory"
+              id="subCategory"
+              class="w-full max-w-full truncate overflow-hidden whitespace-nowrap px-3 py-2 border-[2px] rounded-md focus:outline-none bg-bg_subtle"
+            >
+              @if (!subCategories.length) {
+                <option [value]="null">
+                  You have to select a category first.
+                </option>
+              } @else {
+                <option [value]="null">Select a subcategory</option>
+              }
+
+              @for (subCategory of subCategories; track subCategory.id) {
+                <option [value]="subCategory.id">{{ subCategory.name }}</option>
+              }
+            </select>
+            <!--            <p-dropdown-->
+            <!--              [options]="subCategories"-->
+            <!--              formControlName="subCategory"-->
+            <!--              optionLabel="name"-->
+            <!--              id="subCategory"-->
+            <!--              [styleClass]="-->
+            <!--                isInvalidAndTouched('subCategory')-->
+            <!--                  ? 'withError'-->
+            <!--                  : 'add-product-dropdown'-->
+            <!--              "-->
+            <!--              emptyMessage="Please, select a category first"-->
+            <!--              [ngClass]="{-->
+            <!--                'border-red-500': isInvalidAndTouched('subCategory'),-->
+            <!--              }"-->
+            <!--            />-->
+          </div>
+
+          @if (isInvalidAndTouched('subCategory')) {
+            <p
+              class="mt-1 text-sm text-red-500 h-5"
+              appErrorMessage
+              [controlName]="'subCategory'"
+            ></p>
+          }
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
