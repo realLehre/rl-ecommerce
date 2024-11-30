@@ -23,6 +23,13 @@ export interface IAdminProductFilter {
   name?: string;
 }
 
+export interface IProductImages {
+  hasUploaded: boolean;
+  isUploading: boolean;
+  selectedFile: File | null;
+  imageUrl: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })

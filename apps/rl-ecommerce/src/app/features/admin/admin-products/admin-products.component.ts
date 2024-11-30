@@ -248,7 +248,7 @@ export class AdminProductsComponent implements OnInit {
   }
 
   searchChanged(name: string | null) {
-    this.filter = { ...this.filter, name: name! };
+    this.filter = { ...this.filter, name: name!, page: 1 };
 
     sessionStorage.setItem(
       this.productService.PRODUCT_QUERY_STORED_KEY,
@@ -284,6 +284,11 @@ export class AdminProductsComponent implements OnInit {
     sessionStorage.removeItem(this.productService.PRODUCT_QUERY_STORED_KEY);
     this.filterNumber = 0;
     this.productService.productQueried.set(false);
+    this.router.navigate([], {
+      queryParams: null,
+      queryParamsHandling: 'replace',
+      relativeTo: this.route,
+    });
     // this.searchInput.reset();
     this.getProducts();
   }

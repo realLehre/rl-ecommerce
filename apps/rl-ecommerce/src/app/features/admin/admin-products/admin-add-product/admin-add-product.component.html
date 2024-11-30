@@ -1,5 +1,29 @@
-<div class="flex items-start">
-  <div class="w-full">
-    <app-admin-product-form />
+<div>
+  <h2
+    class="text-type_title_gray text-base mobile:text-[20px] font-medium mb-6"
+  >
+    Add Product
+  </h2>
+
+  <div class="flex items-start flex-col min-[960px]:flex-row gap-8">
+    <div class="flex-1">
+      <app-admin-product-form />
+
+      <button
+        class="rounded-full text-white font-medium bg-primary py-2 h-12 w-full mt-10 hover:bg-opacity-80 hidden min-[960px]:block"
+      >
+        Publish
+      </button>
+    </div>
+
+    <div class="flex-1 w-full min-[960px]:w-auto">
+      <app-admin-product-images />
+    </div>
   </div>
+
+  <button
+    class="rounded-full text-white font-medium bg-primary py-2 h-12 w-full mt-10 hover:bg-opacity-80 block min-[960px]:hidden"
+  >
+    Publish
+  </button>
 </div>

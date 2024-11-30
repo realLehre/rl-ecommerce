@@ -59,6 +59,7 @@ export class AdminProductFormComponent implements OnInit {
     this.productForm = this.fb.group({
       name: [null, Validators.required],
       price: [null, Validators.required],
+      quantity: [null, Validators.required],
       category: [null, Validators.required],
       subCategory: [null, Validators.required],
       description: [null, Validators.required],
@@ -78,7 +79,6 @@ export class AdminProductFormComponent implements OnInit {
       });
 
     this.modules = {
-      imageResizor: {},
       toolbar: {
         container: [
           ['bold', 'italic', 'underline', 'strike'], // toggled buttons
@@ -90,8 +90,6 @@ export class AdminProductFormComponent implements OnInit {
           [{ size: ['small', false, 'large', 'huge'] }], // custom dropdown
           [{ header: [1, 2, 3, 4, 5, 6, false] }],
           [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-          [{ font: [] }],
-          [{ align: [] }],
         ],
         handlers: {
           'custom-dropdown': function (value: string) {
