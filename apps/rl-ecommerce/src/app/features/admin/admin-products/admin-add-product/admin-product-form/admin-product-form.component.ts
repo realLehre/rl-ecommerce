@@ -19,15 +19,13 @@ import {
   ISubCategory,
 } from '../../../../product-options/models/product-options.interface';
 import { DropdownModule } from 'primeng/dropdown';
-import { JsonPipe, NgClass } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { ErrorMessageDirective } from '../../../../user/address/address-form/directives/error-message.directive';
-import {
-  EditorChangeContent,
-  EditorChangeSelection,
-  QuillEditorComponent,
-} from 'ngx-quill';
+import { QuillEditorComponent, QuillModules } from 'ngx-quill';
 import Quill from 'quill';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { EditorModule } from 'primeng/editor';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-admin-product-form',
@@ -38,7 +36,8 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
     ErrorMessageDirective,
     ReactiveFormsModule,
     QuillEditorComponent,
-    JsonPipe,
+    EditorModule,
+    RouterLink,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './admin-product-form.component.html',
@@ -52,10 +51,9 @@ export class AdminProductFormComponent implements OnInit {
   productForm!: FormGroup;
   categories = toSignal(this.optionsService.getCategories());
   subCategories: ISubCategory[] = [];
-
-  blurred = false;
-  focused = false;
   html = signal<any>('');
+  modules: QuillModules = {};
+  editorCreated = signal(false);
 
   ngOnInit() {
     this.productForm = this.fb.group({
@@ -78,6 +76,37 @@ export class AdminProductFormComponent implements OnInit {
         this.html.set(id);
         console.log(id);
       });
+
+    this.modules = {
+      imageResizor: {},
+      toolbar: {
+        container: [
+          ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+          ['blockquote'],
+          [{ header: 1 }, { header: 2 }], // custom button values
+          [{ list: 'ordered' }, { list: 'bullet' }],
+          [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
+          [{ direction: 'rtl' }], // text direction
+          [{ size: ['small', false, 'large', 'huge'] }], // custom dropdown
+          [{ header: [1, 2, 3, 4, 5, 6, false] }],
+          [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+          [{ font: [] }],
+          [{ align: [] }],
+        ],
+        handlers: {
+          'custom-dropdown': function (value: string) {
+            if (value) {
+              //@ts-expect-error
+              const cursorPosition = this.quill.getSelection().index;
+              //@ts-expect-error
+              this.quill.insertText(cursorPosition, value);
+              //@ts-expect-error
+              this.quill.setSelection(cursorPosition + value.length); // Place cursor after inserted text
+            }
+          },
+        },
+      },
+    };
   }
 
   get sanitizedDescription(): SafeHtml {
@@ -92,34 +121,6 @@ export class AdminProductFormComponent implements OnInit {
   }
 
   created(event: Quill | any) {
-    // tslint:disable-next-line:no-console
-    console.log('editor-created', event);
-  }
-
-  changedEditor(event: EditorChangeContent | EditorChangeSelection | any) {
-    // tslint:disable-next-line:no-console
-    // console.log('editor-change', event);
-  }
-
-  focus($event: any) {
-    // tslint:disable-next-line:no-console
-    console.log('focus', $event);
-    this.focused = true;
-    this.blurred = false;
-  }
-  nativeFocus($event: any) {
-    // tslint:disable-next-line:no-console
-    console.log('native-focus', $event);
-  }
-
-  blur($event: any) {
-    // tslint:disable-next-line:no-console
-    console.log('blur', $event);
-    this.focused = false;
-    this.blurred = true;
-  }
-  nativeBlur($event: any) {
-    // tslint:disable-next-line:no-console
-    console.log('native-blur', $event);
+    this.editorCreated.set(true);
   }
 }

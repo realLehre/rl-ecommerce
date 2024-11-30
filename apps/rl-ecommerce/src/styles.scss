@@ -13,6 +13,18 @@
   box-sizing: border-box;
 }
 
+.desc ul {
+  list-style-type: disc !important;
+  margin: 0.5em 0;
+  padding-left: 1.5em;
+}
+
+.desc ol {
+  list-style-type: decimal !important;
+  margin: 0.5em 0;
+  padding-left: 1.5em;
+}
+
 html,
 body {
   width: 100%;
@@ -123,6 +135,20 @@ body {
     width: 100% !important;
     padding: 2px;
   }
+}
+
+.ql-toolbar {
+  background: #fff;
+  border-top-right-radius: 6px;
+  border-top-left-radius: 6px;
+  border-color: theme('colors.border_subtle');
+}
+
+.ql-container.ql-snow {
+  background-color: theme('colors.bg_subtle') !important;
+  border-bottom-right-radius: 6px;
+  border-bottom-left-radius: 6px;
+  border-color: theme('colors.border_subtle');
 }
 
 //.add-product-dropdown {
