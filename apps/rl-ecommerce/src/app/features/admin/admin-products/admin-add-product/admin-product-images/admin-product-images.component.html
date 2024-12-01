@@ -11,7 +11,6 @@
       <input
         type="file"
         #fileDropRef
-        multiple
         (change)="fileBrowseHandler($event, 'single')"
         class="bg-transparent h-full w-full z-[10] absolute left-0 top-0 opacity-0"
       />
@@ -67,7 +66,6 @@
               type="file"
               #fileDropRef
               id="fileDropRef"
-              multiple
               (change)="fileBrowseHandler($event, 'multiple', i)"
               class="bg-transparent h-full w-full z-[10] absolute left-0 top-0 opacity-0"
             />
