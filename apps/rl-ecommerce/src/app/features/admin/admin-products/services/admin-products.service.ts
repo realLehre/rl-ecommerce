@@ -8,27 +8,7 @@ import {
 } from '../../../products/model/product.interface';
 import { environment } from '../../../../../environments/environment.development';
 import { HttpClient, HttpParams } from '@angular/common/http';
-
-export interface IAdminProductFilter {
-  minPrice?: number;
-  maxPrice?: number;
-  itemsToShow: number;
-  page?: number;
-  productId?: string;
-  productName?: string;
-  category?: ICategory;
-  subCategory?: ISubCategory;
-  minDate?: any;
-  maxDate?: any;
-  name?: string;
-}
-
-export interface IProductImages {
-  hasUploaded: boolean;
-  isUploading: boolean;
-  selectedFile: File | null;
-  imageUrl: string;
-}
+import { IAdminProductFilter } from '../admin-product.interface';
 
 @Injectable({
   providedIn: 'root',

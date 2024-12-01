@@ -6,10 +6,7 @@ import {
   signal,
   ViewChild,
 } from '@angular/core';
-import {
-  AdminProductsService,
-  IAdminProductFilter,
-} from './services/admin-products.service';
+import { AdminProductsService } from './services/admin-products.service';
 import { GenericTableComponent } from '../../../shared/components/generic-table/generic-table.component';
 import {
   AsyncPipe,
@@ -37,6 +34,7 @@ import { ProductOptionsService } from '../../product-options/services/product-op
 import { Observable } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { PrimeNgDatepickerDirective } from '../../../shared/directives/prime-ng-datepicker.directive';
+import { IAdminProductFilter } from './admin-product.interface';
 
 @Component({
   selector: 'app-admin-products',

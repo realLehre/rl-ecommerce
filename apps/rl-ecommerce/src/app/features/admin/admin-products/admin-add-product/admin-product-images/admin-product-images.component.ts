@@ -5,7 +5,7 @@ import {
   signal,
 } from '@angular/core';
 import { DragAndDropDirective } from '../../../../../shared/directives/drag-and-drop.directive';
-import { IProductImages } from '../../services/admin-products.service';
+import { IProductImages } from '../../admin-product.interface';
 
 @Component({
   selector: 'app-admin-product-images',
@@ -42,7 +42,7 @@ export class AdminProductImagesComponent implements OnInit {
     if (type === 'multiple') {
       this.processFile(file, 'multiple', index);
     } else {
-      this.processFile(event[0], 'single');
+      this.processFile(file, 'single');
     }
   }
 

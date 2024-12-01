@@ -7,10 +7,14 @@
 
   <div class="flex items-start flex-col min-[960px]:flex-row gap-8">
     <div class="flex-1">
-      <app-admin-product-form />
+      <app-admin-product-form (formValue)="onGetFormValue($event)" />
 
       <button
         class="rounded-full text-white font-medium bg-primary py-2 h-12 w-full mt-10 hover:bg-opacity-80 hidden min-[960px]:block"
+        [ngClass]="{
+          'opacity-50 cursor-not-allowed': isProductCreateDataInvalid(),
+          'hover:bg-opacity-80': isProductCreateDataInvalid(),
+        }"
       >
         Publish
       </button>
@@ -23,6 +27,10 @@
 
   <button
     class="rounded-full text-white font-medium bg-primary py-2 h-12 w-full mt-10 hover:bg-opacity-80 block min-[960px]:hidden"
+    [ngClass]="{
+      'opacity-50 cursor-not-allowed': isProductCreateDataInvalid(),
+      'hover:bg-opacity-80': isProductCreateDataInvalid(),
+    }"
   >
     Publish
   </button>

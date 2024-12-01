@@ -106,18 +106,6 @@
                 <option [value]="category.id">{{ category.name }}</option>
               }
             </select>
-            <!--            <p-dropdown-->
-            <!--              [options]="categories()!"-->
-            <!--              formControlName="category"-->
-            <!--              [loading]="!categories()"-->
-            <!--              optionLabel="name"-->
-            <!--              id="category"-->
-            <!--              [styleClass]="-->
-            <!--                isInvalidAndTouched('category')-->
-            <!--                  ? 'withError'-->
-            <!--                  : 'add-product-dropdown'-->
-            <!--              "-->
-            <!--            />-->
           </div>
 
           @if (isInvalidAndTouched('category')) {
@@ -159,21 +147,6 @@
                 <option [value]="subCategory.id">{{ subCategory.name }}</option>
               }
             </select>
-            <!--            <p-dropdown-->
-            <!--              [options]="subCategories"-->
-            <!--              formControlName="subCategory"-->
-            <!--              optionLabel="name"-->
-            <!--              id="subCategory"-->
-            <!--              [styleClass]="-->
-            <!--                isInvalidAndTouched('subCategory')-->
-            <!--                  ? 'withError'-->
-            <!--                  : 'add-product-dropdown'-->
-            <!--              "-->
-            <!--              emptyMessage="Please, select a category first"-->
-            <!--              [ngClass]="{-->
-            <!--                'border-red-500': isInvalidAndTouched('subCategory'),-->
-            <!--              }"-->
-            <!--            />-->
           </div>
 
           @if (isInvalidAndTouched('subCategory')) {

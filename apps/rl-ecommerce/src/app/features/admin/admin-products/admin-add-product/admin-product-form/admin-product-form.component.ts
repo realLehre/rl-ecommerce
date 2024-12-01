@@ -4,6 +4,7 @@ import {
   CUSTOM_ELEMENTS_SCHEMA,
   inject,
   OnInit,
+  output,
   signal,
 } from '@angular/core';
 import { ProductOptionsService } from '../../../../product-options/services/product-options.service';
@@ -26,6 +27,7 @@ import Quill from 'quill';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { EditorModule } from 'primeng/editor';
 import { RouterLink } from '@angular/router';
+import { MQuillService } from '../../../../../shared/services/quill-service.service';
 
 @Component({
   selector: 'app-admin-product-form',
@@ -45,24 +47,32 @@ import { RouterLink } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminProductFormComponent implements OnInit {
+  private quillService = inject(MQuillService);
   private optionsService = inject(ProductOptionsService);
   private sanitizer = inject(DomSanitizer);
   private fb = inject(FormBuilder);
   productForm!: FormGroup;
-  categories = toSignal(this.optionsService.getCategories());
   subCategories: ISubCategory[] = [];
+  modules: QuillModules = this.quillService.modules;
+  formValue = output<any>();
+  categories = toSignal(this.optionsService.getCategories());
   html = signal<any>('');
-  modules: QuillModules = {};
   editorCreated = signal(false);
 
   ngOnInit() {
     this.productForm = this.fb.group({
       name: [null, Validators.required],
       price: [null, Validators.required],
+      previousPrice: [null],
       quantity: [null, Validators.required],
       category: [null, Validators.required],
       subCategory: [null, Validators.required],
       description: [null, Validators.required],
+    });
+    this.formValue.emit(this.productForm);
+
+    this.productForm.valueChanges.subscribe((value) => {
+      this.formValue.emit(this.productForm);
     });
 
     this.productForm.get('category')?.valueChanges.subscribe((id: string) => {
@@ -77,34 +87,6 @@ export class AdminProductFormComponent implements OnInit {
         this.html.set(id);
         console.log(id);
       });
-
-    this.modules = {
-      toolbar: {
-        container: [
-          ['bold', 'italic', 'underline', 'strike'], // toggled buttons
-          ['blockquote'],
-          [{ header: 1 }, { header: 2 }], // custom button values
-          [{ list: 'ordered' }, { list: 'bullet' }],
-          [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
-          [{ direction: 'rtl' }], // text direction
-          [{ size: ['small', false, 'large', 'huge'] }], // custom dropdown
-          [{ header: [1, 2, 3, 4, 5, 6, false] }],
-          [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-        ],
-        handlers: {
-          'custom-dropdown': function (value: string) {
-            if (value) {
-              //@ts-expect-error
-              const cursorPosition = this.quill.getSelection().index;
-              //@ts-expect-error
-              this.quill.insertText(cursorPosition, value);
-              //@ts-expect-error
-              this.quill.setSelection(cursorPosition + value.length); // Place cursor after inserted text
-            }
-          },
-        },
-      },
-    };
   }
 
   get sanitizedDescription(): SafeHtml {
