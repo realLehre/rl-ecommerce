@@ -1,11 +1,14 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  inject,
   OnInit,
   signal,
 } from '@angular/core';
 import { DragAndDropDirective } from '../../../../../shared/directives/drag-and-drop.directive';
 import { IProductImages } from '../../admin-product.interface';
+import { PhotoUploadService } from './services/photo-upload.service';
+import { concatMap } from 'rxjs';
 
 @Component({
   selector: 'app-admin-product-images',
@@ -16,6 +19,7 @@ import { IProductImages } from '../../admin-product.interface';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminProductImagesComponent implements OnInit {
+  private photoUploadService = inject(PhotoUploadService);
   uploadBoxes = signal<IProductImages[]>([]);
   coverImage = signal<IProductImages>({
     hasUploaded: false,
@@ -70,6 +74,8 @@ export class AdminProductImagesComponent implements OnInit {
         return;
       }
 
+      console.log(file);
+
       const reader = new FileReader();
       reader.onload = () => {
         if (type == 'multiple') {
@@ -83,6 +89,8 @@ export class AdminProductImagesComponent implements OnInit {
           });
         }
       };
+
+      this.uploadFile(file);
       reader.readAsDataURL(file);
     }
   }
@@ -117,10 +125,10 @@ export class AdminProductImagesComponent implements OnInit {
       imageUrl: '',
     });
   }
-  // uploadFile(file: any) {
-  //   this.selectedFile = file;
-  //   const formData = new FormData();
-  //   formData.append('file', file, this.selectedFile?.name);
-  //   console.log(this.selectedFile);
-  // }
+  uploadFile(file: File) {
+    const filePath = file.name;
+    this.photoUploadService
+      .upLoadImage(filePath, file)
+      .subscribe((res) => console.log(res));
+  }
 }
