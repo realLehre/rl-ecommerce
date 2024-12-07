@@ -20,7 +20,9 @@ export class PhotoUploadService {
     return defer(
       (): Observable<any> =>
         from(
-          this.supabase.storage.from('product-images').upload(filePath, file),
+          this.supabase.storage
+            .from('just-product-images')
+            .upload(filePath, file),
         ),
     );
   }
@@ -32,7 +34,7 @@ export class PhotoUploadService {
     //     map(({ data }) => data.publicUrl)
     // );
     const { data } = this.supabase.storage
-      .from('product-images')
+      .from('just-product-images')
       .getPublicUrl(filePath);
     return defer(() => from(data.publicUrl));
   }
