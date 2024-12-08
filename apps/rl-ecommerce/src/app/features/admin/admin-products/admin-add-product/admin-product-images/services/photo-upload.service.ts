@@ -1,23 +1,24 @@
-import { Injectable } from '@angular/core';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import { environment } from '../../../../../../../environments/environment.development';
-import { defer, from, map, Observable } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { defer, from, map, Observable, of } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
+import { AuthService } from '../../../../../auth/services/auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PhotoUploadService {
-  private supabase!: SupabaseClient;
+  private readonly authService = inject(AuthService);
+  private supabase = this.authService.supabase;
 
-  constructor() {
-    this.supabase = createClient(
-      environment.supabaseUrl,
-      environment.supabaseKey,
-    );
-  }
+  constructor() {}
 
-  upLoadImage(filePath: string, file: File): Observable<any> {
+  upLoadImage(
+    filePath: string,
+    file: File,
+  ): Observable<{
+    data: { id: string; path: string; fullPath: string };
+    error: any;
+  }> {
     const fileName = uuidv4() + '-' + file.name;
     return defer(
       (): Observable<any> =>
@@ -29,15 +30,13 @@ export class PhotoUploadService {
     );
   }
 
-  getImageUrl(filePath: string): Observable<string> {
-    // return defer(() =>
-    //     from(this.supabase.storage.from('product-images').getPublicUrl(filePath))
-    // ).pipe(
-    //     map(({ data }) => data.publicUrl)
-    // );
-    const { data } = this.supabase.storage
-      .from('just-product-images')
-      .getPublicUrl(filePath);
-    return defer(() => from(data.publicUrl));
+  getImageUrl(filePath: string): Observable<any> {
+    return defer(() =>
+      from(
+        this.supabase.storage
+          .from('just-product-images')
+          .createSignedUrl(filePath, 315576000),
+      ),
+    ).pipe(map(({ data }) => data));
   }
 }

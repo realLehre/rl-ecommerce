@@ -8,7 +8,7 @@ import {
 import { DragAndDropDirective } from '../../../../../shared/directives/drag-and-drop.directive';
 import { IProductImages } from '../../admin-product.interface';
 import { PhotoUploadService } from './services/photo-upload.service';
-import { concatMap } from 'rxjs';
+import { concatMap, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-admin-product-images',
@@ -129,6 +129,10 @@ export class AdminProductImagesComponent implements OnInit {
     const filePath = file.name;
     this.photoUploadService
       .upLoadImage(filePath, file)
+      .pipe(
+        tap((res) => console.log(res)),
+        switchMap((res) => this.photoUploadService.getImageUrl(res.data.path)),
+      )
       .subscribe((res) => console.log(res));
   }
 }

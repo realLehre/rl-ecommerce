@@ -28,11 +28,13 @@ export class AuthService {
   private cookieService = inject(CookieService);
   private http = inject(HttpClient);
   private baseUrl = environment.apiUrl;
-  private supabase!: SupabaseClient;
+  supabase!: SupabaseClient;
   user = signal<IUser | null>(null);
   USER_STORAGE_KEY = 'shshyeo948dnsks7h0';
   USER_ACCOUNT_STORAGE_KEY = 'hdjeyu7830nsk083hd';
   savedReturnUrl: string = 'djdhw923jsjhak9';
+  cachedAuthEvent = signal(false);
+
   constructor() {
     this.supabase = createClient(
       environment.supabaseUrl,
@@ -129,6 +131,15 @@ export class AuthService {
           expires: session?.expires_in,
         });
 
+        const savedUrl = JSON.parse(localStorage.getItem(this.savedReturnUrl)!);
+        if (savedUrl) {
+          this.router.navigate([...savedUrl]);
+        }
+
+        if (this.cachedAuthEvent()) {
+          return;
+        }
+
         this.http
           .get<IUser>(`${this.baseUrl}users/${this.user()?.id}`)
           .pipe(
@@ -138,11 +149,7 @@ export class AuthService {
           )
           .subscribe();
 
-        const savedUrl = JSON.parse(localStorage.getItem(this.savedReturnUrl)!);
-        if (savedUrl) {
-          this.router.navigate([...savedUrl]);
-        }
-
+        this.cachedAuthEvent.set(true);
         // localStorage.removeItem('sb-tentdyesixetvyacewwr-auth-token');
         localStorage.removeItem(this.savedReturnUrl);
       } else if (event === 'SIGNED_OUT') {
