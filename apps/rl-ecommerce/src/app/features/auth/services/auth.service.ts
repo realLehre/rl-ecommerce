@@ -143,7 +143,7 @@ export class AuthService {
           this.router.navigate([...savedUrl]);
         }
 
-        localStorage.removeItem('sb-tentdyesixetvyacewwr-auth-token');
+        // localStorage.removeItem('sb-tentdyesixetvyacewwr-auth-token');
         localStorage.removeItem(this.savedReturnUrl);
       } else if (event === 'SIGNED_OUT') {
         this.cookieService.deleteAll('/');

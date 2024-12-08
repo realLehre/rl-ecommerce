@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from '../../../../../../../environments/environment.development';
 import { defer, from, map, Observable } from 'rxjs';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
   providedIn: 'root',
@@ -17,12 +18,13 @@ export class PhotoUploadService {
   }
 
   upLoadImage(filePath: string, file: File): Observable<any> {
+    const fileName = uuidv4() + '-' + file.name;
     return defer(
       (): Observable<any> =>
         from(
           this.supabase.storage
             .from('just-product-images')
-            .upload(filePath, file),
+            .upload(fileName, file),
         ),
     );
   }
