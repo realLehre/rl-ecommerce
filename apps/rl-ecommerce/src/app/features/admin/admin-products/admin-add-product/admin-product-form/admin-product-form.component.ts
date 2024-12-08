@@ -64,9 +64,9 @@ export class AdminProductFormComponent implements OnInit {
       name: [null, Validators.required],
       price: [null, Validators.required],
       previousPrice: [null],
-      quantity: [null, Validators.required],
-      category: [null, Validators.required],
-      subCategory: [null, Validators.required],
+      unit: [null, Validators.required],
+      categoryId: [null, Validators.required],
+      subCategoryId: [null, Validators.required],
       description: [null, Validators.required],
     });
     this.formValue.emit(this.productForm);
@@ -75,7 +75,7 @@ export class AdminProductFormComponent implements OnInit {
       this.formValue.emit(this.productForm);
     });
 
-    this.productForm.get('category')?.valueChanges.subscribe((id: string) => {
+    this.productForm.get('categoryId')?.valueChanges.subscribe((id: string) => {
       this.subCategories = this.categories()?.find(
         (cat) => cat.id == id,
       )?.subCategories!;
@@ -83,9 +83,8 @@ export class AdminProductFormComponent implements OnInit {
 
     this.productForm
       .get('description')
-      ?.valueChanges.subscribe((id: string) => {
-        this.html.set(id);
-        console.log(id);
+      ?.valueChanges.subscribe((value: string) => {
+        this.html.set(value);
       });
   }
 

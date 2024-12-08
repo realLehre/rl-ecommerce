@@ -4,6 +4,7 @@ import { AdminProductImagesComponent } from './admin-product-images/admin-produc
 import { RouterLink } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { NgClass } from '@angular/common';
+import { flatten } from '@nestjs/common';
 
 @Component({
   selector: 'app-admin-add-product',
@@ -20,12 +21,29 @@ import { NgClass } from '@angular/common';
 })
 export class AdminAddProductComponent {
   productForm!: FormGroup;
+  coverImage: string = '';
+  imageUrls: string[] = [];
 
   isProductCreateDataInvalid() {
-    return this.productForm?.invalid;
+    return this.productForm?.invalid || this.coverImage == '';
   }
 
   onGetFormValue(event: any) {
     this.productForm = event;
+  }
+
+  onGetImageUrls(event: { imageUrls: string[]; coverImageUrl: string }) {
+    console.log(event);
+    this.coverImage = event.coverImageUrl;
+    this.imageUrls = event.imageUrls;
+  }
+
+  onSubmit() {
+    console.log({
+      ...this.productForm.value,
+      image: this.coverImage,
+      imageUrls: this.imageUrls,
+      videoUrls: [],
+    });
   }
 }

@@ -11,6 +11,7 @@
 
       <button
         class="rounded-full text-white font-medium bg-primary py-2 h-12 w-full mt-10 hover:bg-opacity-80 hidden min-[960px]:block"
+        (click)="onSubmit()"
         [ngClass]="{
           'opacity-50 cursor-not-allowed': isProductCreateDataInvalid(),
           'hover:bg-opacity-80': isProductCreateDataInvalid(),
@@ -21,12 +22,13 @@
     </div>
 
     <div class="flex-1 w-full min-[960px]:w-auto">
-      <app-admin-product-images />
+      <app-admin-product-images (imageUrlsEmit)="onGetImageUrls($event)" />
     </div>
   </div>
 
   <button
     class="rounded-full text-white font-medium bg-primary py-2 h-12 w-full mt-10 hover:bg-opacity-80 block min-[960px]:hidden"
+    (click)="onSubmit()"
     [ngClass]="{
       'opacity-50 cursor-not-allowed': isProductCreateDataInvalid(),
       'hover:bg-opacity-80': isProductCreateDataInvalid(),

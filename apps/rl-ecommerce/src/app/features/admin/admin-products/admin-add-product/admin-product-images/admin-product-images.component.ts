@@ -3,12 +3,13 @@ import {
   Component,
   inject,
   OnInit,
+  output,
   signal,
 } from '@angular/core';
 import { DragAndDropDirective } from '../../../../../shared/directives/drag-and-drop.directive';
 import { IProductImages } from '../../admin-product.interface';
 import { PhotoUploadService } from './services/photo-upload.service';
-import { concatMap, switchMap, tap } from 'rxjs';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-admin-product-images',
@@ -27,6 +28,9 @@ export class AdminProductImagesComponent implements OnInit {
     selectedFile: null,
     imageUrl: '',
   });
+  imageUrls: string[] = [];
+  coverImageUrl!: string;
+  imageUrlsEmit = output<{ imageUrls: string[]; coverImageUrl: string }>();
 
   ngOnInit() {
     // Initialize 4 upload boxes
@@ -74,8 +78,6 @@ export class AdminProductImagesComponent implements OnInit {
         return;
       }
 
-      console.log(file);
-
       const reader = new FileReader();
       reader.onload = () => {
         if (type == 'multiple') {
@@ -90,7 +92,7 @@ export class AdminProductImagesComponent implements OnInit {
         }
       };
 
-      this.uploadFile(file);
+      this.uploadFile(file, type, index);
       reader.readAsDataURL(file);
     }
   }
@@ -115,6 +117,11 @@ export class AdminProductImagesComponent implements OnInit {
       imageUrl: '',
     };
     this.uploadBoxes.set(boxes);
+    this.imageUrls = this.imageUrls.filter((_, i) => i !== index);
+    this.imageUrlsEmit.emit({
+      imageUrls: this.imageUrls,
+      coverImageUrl: this.coverImageUrl,
+    });
   }
 
   removeCoverImage() {
@@ -124,15 +131,30 @@ export class AdminProductImagesComponent implements OnInit {
       selectedFile: null,
       imageUrl: '',
     });
+    this.coverImageUrl = '';
+    this.imageUrlsEmit.emit({
+      imageUrls: this.imageUrls,
+      coverImageUrl: this.coverImageUrl,
+    });
   }
-  uploadFile(file: File) {
+
+  uploadFile(file: File, type?: string, index?: number) {
     const filePath = file.name;
     this.photoUploadService
       .upLoadImage(filePath, file)
       .pipe(
-        tap((res) => console.log(res)),
         switchMap((res) => this.photoUploadService.getImageUrl(res.data.path)),
       )
-      .subscribe((res) => console.log(res));
+      .subscribe((res) => {
+        if (type == 'multiple') {
+          this.imageUrls[index!] = res.signedUrl;
+        } else {
+          this.coverImageUrl = res.signedUrl;
+        }
+        this.imageUrlsEmit.emit({
+          imageUrls: this.imageUrls,
+          coverImageUrl: this.coverImageUrl,
+        });
+      });
   }
 }
