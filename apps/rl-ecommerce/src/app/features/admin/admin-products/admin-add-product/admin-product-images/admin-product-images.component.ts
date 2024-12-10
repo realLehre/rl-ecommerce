@@ -31,6 +31,7 @@ export class AdminProductImagesComponent implements OnInit {
   imageUrls: string[] = [];
   coverImageUrl!: string;
   imageUrlsEmit = output<{ imageUrls: string[]; coverImageUrl: string }>();
+  previousImageUrl!: string | null;
 
   ngOnInit() {
     // Initialize 4 upload boxes
@@ -82,6 +83,7 @@ export class AdminProductImagesComponent implements OnInit {
       reader.onload = () => {
         if (type == 'multiple') {
           this.updateUploadBox(index!, file, reader.result as string);
+          this.previousImageUrl = this.imageUrls[index!];
         } else {
           this.coverImage.set({
             hasUploaded: true,
@@ -89,9 +91,9 @@ export class AdminProductImagesComponent implements OnInit {
             selectedFile: file,
             imageUrl: reader.result as string,
           });
+          this.previousImageUrl = this.coverImageUrl;
         }
       };
-
       this.uploadFile(file, type, index);
       reader.readAsDataURL(file);
     }
@@ -155,6 +157,15 @@ export class AdminProductImagesComponent implements OnInit {
           imageUrls: this.imageUrls,
           coverImageUrl: this.coverImageUrl,
         });
+
+        if (this.previousImageUrl) {
+          this.photoUploadService
+            .removeImage(this.previousImageUrl)
+            .subscribe((res) => {
+              this.previousImageUrl = null;
+            });
+        }
+        console.log(this.coverImageUrl);
       });
   }
 }

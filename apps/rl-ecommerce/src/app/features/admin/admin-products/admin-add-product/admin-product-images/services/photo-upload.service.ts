@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { defer, from, map, Observable, of } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 import { AuthService } from '../../../../../auth/services/auth.service';
@@ -8,7 +8,9 @@ import { AuthService } from '../../../../../auth/services/auth.service';
 })
 export class PhotoUploadService {
   private readonly authService = inject(AuthService);
+  isChangingImage = signal(false);
   private supabase = this.authService.supabase;
+  BUCKET_NAME = 'just-product-images';
 
   constructor() {}
 
@@ -23,9 +25,7 @@ export class PhotoUploadService {
     return defer(
       (): Observable<any> =>
         from(
-          this.supabase.storage
-            .from('just-product-images')
-            .upload(fileName, file),
+          this.supabase.storage.from(this.BUCKET_NAME).upload(fileName, file),
         ),
     );
   }
@@ -34,9 +34,22 @@ export class PhotoUploadService {
     return defer(() =>
       from(
         this.supabase.storage
-          .from('just-product-images')
+          .from(this.BUCKET_NAME)
           .createSignedUrl(filePath, 315576000),
       ),
     ).pipe(map(({ data }) => data));
+  }
+
+  removeImage(imageUrl: string): Observable<any> {
+    const imagePath = this.BUCKET_NAME + '/' + this.getImagePath(imageUrl);
+    console.log(imagePath);
+    return defer(() =>
+      from(this.supabase.storage.from(this.BUCKET_NAME).remove([imagePath])),
+    );
+  }
+
+  getImagePath(url: string): string {
+    const basePath = url.split('?')[0];
+    return basePath.split('/').pop()!;
   }
 }
