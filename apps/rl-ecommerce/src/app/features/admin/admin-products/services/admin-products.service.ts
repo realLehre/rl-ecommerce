@@ -9,6 +9,7 @@ import {
 import { environment } from '../../../../../environments/environment.development';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { IAdminProductFilter } from '../admin-product.interface';
+import { FormGroup } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root',
@@ -86,5 +87,11 @@ export class AdminProductsService {
 
   formatDateToLocale(date: Date) {
     return new Date(date);
+  }
+
+  getFormControlStatus(form: FormGroup): boolean {
+    return Object.values(form.controls).some(
+      (control) => control.value !== null && control.value !== '',
+    );
   }
 }
