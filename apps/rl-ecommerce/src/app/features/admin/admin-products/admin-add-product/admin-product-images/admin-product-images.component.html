@@ -35,19 +35,25 @@
           <p class="text-type_grey text-xs">(max file : 5mb)</p>
         </div>
       } @else {
-        <div class="h-full w-full relative">
-          <img
-            [src]="coverImage().imageUrl"
-            class="h-full w-full object-cover z-[8] rounded-lg"
-            alt="Uploaded image"
-          />
-          <button
-            (click)="removeCoverImage()"
-            class="absolute top-2 right-2 bg-red-500 text-white rounded-md h-6 w-6 font-semibold z-[12] flex item-center justify-center leading-tight hover:bg-red-700"
-          >
-            x
-          </button>
-        </div>
+        @if (!coverImage().isUploading) {
+          <div class="h-full w-full relative">
+            <img
+              [src]="coverImage().imageUrl"
+              class="h-full w-full object-cover z-[8] rounded-lg"
+              alt="Uploaded image"
+            />
+            <button
+              (click)="removeCoverImage()"
+              class="absolute top-2 right-2 bg-red-500 text-white rounded-md h-6 w-6 font-semibold z-[12] flex item-center justify-center leading-tight hover:bg-red-700"
+            >
+              x
+            </button>
+          </div>
+        } @else {
+          <div class="w-full h-full absolute bg-opacity-75 bg-white z-10">
+            loading...
+          </div>
+        }
       }
     </div>
 
