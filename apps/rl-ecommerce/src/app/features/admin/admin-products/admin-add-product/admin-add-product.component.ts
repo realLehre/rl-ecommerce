@@ -4,6 +4,7 @@ import {
   computed,
   HostListener,
   inject,
+  signal,
 } from '@angular/core';
 import { AdminProductFormComponent } from './admin-product-form/admin-product-form.component';
 import { AdminProductImagesComponent } from './admin-product-images/admin-product-images.component';
@@ -12,6 +13,7 @@ import { FormGroup } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { CanComponentDeactivate } from '../../../../shared/guards/has-unsaved-changes.guard';
 import { AdminProductsService } from '../services/admin-products.service';
+import { ToastService } from '../../../../shared/services/toast.service';
 
 @Component({
   selector: 'app-admin-add-product',
@@ -27,10 +29,12 @@ import { AdminProductsService } from '../services/admin-products.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminAddProductComponent implements CanComponentDeactivate {
-  productService = inject(AdminProductsService);
+  private productService = inject(AdminProductsService);
+  private toastService = inject(ToastService);
   productForm!: FormGroup;
   coverImage: string = '';
   imageUrls: string[] = [];
+  isSubmitting = signal(false);
 
   isProductCreateDataInvalid() {
     return this.productForm?.invalid || this.coverImage == '';
@@ -48,6 +52,33 @@ export class AdminAddProductComponent implements CanComponentDeactivate {
   }
 
   onSubmit() {
+    if (this.isProductCreateDataInvalid()) {
+      return;
+    }
+    this.isSubmitting.set(true);
+    this.productService
+      .addProduct({
+        ...this.productForm.value,
+        image: this.coverImage,
+        imageUrls: this.imageUrls,
+        videoUrls: [],
+      })
+      .subscribe({
+        next: () => {
+          this.isSubmitting.set(false);
+          this.toastService.showToast({
+            message: 'Product added successfully!',
+            type: 'success',
+          });
+        },
+        error: (error) => {
+          this.isSubmitting.set(false);
+          this.toastService.showToast({
+            type: 'error',
+            message: error.error.message,
+          });
+        },
+      });
     console.log({
       ...this.productForm.value,
       image: this.coverImage,

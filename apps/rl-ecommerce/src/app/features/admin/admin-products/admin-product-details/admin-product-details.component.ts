@@ -21,6 +21,7 @@ import { AdminProductsService } from '../services/admin-products.service';
 import { of, switchMap } from 'rxjs';
 import { IProduct } from '../../../products/model/product.interface';
 import { toObservable } from '@angular/core/rxjs-interop';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-admin-product-details',
@@ -45,9 +46,10 @@ import { toObservable } from '@angular/core/rxjs-interop';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminProductDetailsComponent {
-  productService = inject(AdminProductsService);
+  private productService = inject(AdminProductsService);
   private router = inject(Router);
   private location = inject(Location);
+  private sanitizer = inject(DomSanitizer);
   id = input.required<string>();
   product$ = toObservable(this.id).pipe(
     switchMap((id) => this.productService.getProductById(id!)),
@@ -55,6 +57,10 @@ export class AdminProductDetailsComponent {
   isDeletingProduct = signal(false);
   isCollapsed = signal(true);
   limit = 200;
+
+  sanitizedDescription(desc: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(desc);
+  }
 
   onDeleteProduct(product: IProduct) {}
 

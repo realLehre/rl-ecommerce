@@ -62,6 +62,12 @@
               {{ isCollapsed() ? 'Read More' : 'Show Less' }}
             </a>
           }
+
+          <div
+            [innerHTML]="sanitizedDescription(product.description)"
+            [ngClass]="{ 'line-clamp-[8]': isCollapsed() }"
+            class="prose desc text-sm mobile:text-base text-type_grey"
+          ></div>
         </div>
 
         <div class="w-full h-[1px] my-6 bg-border_subtle"></div>

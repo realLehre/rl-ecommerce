@@ -45,7 +45,7 @@ export class PhotoUploadService {
   }
 
   removeImage(imageUrl: string): Observable<any> {
-    const imagePath = this.BUCKET_NAME + '/' + this.getImagePath(imageUrl);
+    const imagePath = this.getImagePath(imageUrl);
     console.log(imagePath);
     return defer(() =>
       from(this.supabase.storage.from(this.BUCKET_NAME).remove([imagePath])),

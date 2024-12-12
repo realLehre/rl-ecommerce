@@ -8,7 +8,10 @@ import {
 } from '../../../products/model/product.interface';
 import { environment } from '../../../../../environments/environment.development';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { IAdminProductFilter } from '../admin-product.interface';
+import {
+  IAdminProductFilter,
+  IProductFormData,
+} from '../admin-product.interface';
 import { FormGroup } from '@angular/forms';
 
 @Injectable({
@@ -64,6 +67,10 @@ export class AdminProductsService {
     return this.http
       .get<IProductResponse>(`${this.apiUrl}/all`, { params })
       .pipe(retry(3));
+  }
+
+  addProduct(formData: IProductFormData) {
+    return this.http.post(this.apiUrl + '/create', formData);
   }
 
   getProductById(id: string) {

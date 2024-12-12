@@ -44,20 +44,6 @@ export class AdminProductImagesComponent implements OnInit {
         imageUrl: '',
       }));
     this.uploadBoxes.set(boxes);
-    this.coverImage.set({
-      hasUploaded: true,
-      isUploading: true,
-      selectedFile: null,
-      imageUrl:
-        'https://tentdyesixetvyacewwr.supabase.co/storage/v1/object/sign/just-product-images/162e2868-cec7-412b-992f-bcaa8e875896-download.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJqdXN0LXByb2R1Y3QtaW1hZ2VzLzE2MmUyODY4LWNlYzctNDEyYi05OTJmLWJjYWE4ZTg3NTg5Ni1kb3dubG9hZC5wbmciLCJpYXQiOjE3MzM5ODI4MTUsImV4cCI6MTc2NTUxODgxNX0.EJ_ALTOanZbiV8F2tOAbWpRP4YoVw40weqCgfVNoHLM&t=2024-12-12T05%3A53%3A34.984Z',
-    });
-
-    setTimeout(() => {
-      this.coverImage.set({
-        ...this.coverImage(),
-        isUploading: false,
-      });
-    }, 5000);
   }
 
   fileBrowseHandler(event: any, type: string, index?: number) {
@@ -71,8 +57,14 @@ export class AdminProductImagesComponent implements OnInit {
 
   onFileDropped(event: any, type: string, index?: number) {
     if (type === 'multiple') {
+      if (this.uploadBoxes()[index!].isUploading) {
+        return;
+      }
       this.processFile(event[0], 'multiple', index);
     } else {
+      if (this.coverImage().isUploading) {
+        return;
+      }
       this.processFile(event[0], 'single');
     }
   }
@@ -160,7 +152,6 @@ export class AdminProductImagesComponent implements OnInit {
   }
 
   uploadFile(file: File, type?: string, index?: number) {
-    console.log(index);
     const filePath = file.name;
     this.photoUploadService
       .upLoadImage(filePath, file)
@@ -195,7 +186,6 @@ export class AdminProductImagesComponent implements OnInit {
               this.previousImageUrl = null;
             });
         }
-        console.log(this.coverImageUrl);
       });
   }
 }
