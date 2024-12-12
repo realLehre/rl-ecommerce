@@ -43,16 +43,21 @@
           />
           <button
             (click)="removeCoverImage()"
-            class="absolute top-2 right-2 bg-red-500 text-white rounded-md h-6 w-6 font-semibold z-[12] flex item-center justify-center leading-tight hover:bg-red-700"
+            class="absolute top-2 right-2 bg-red-500 text-white rounded-md h-6 w-6 pb-[1px] z-[12] flex items-center leading-0 justify-center hover:bg-red-700"
           >
-            x
+            <i class="fa fa-times"></i>
           </button>
         </div>
         @if (coverImage().isUploading) {
           <div
-            class="w-full h-full flex items-center justify-center absolute bg-opacity-75 bg-white z-[13]"
+            class="w-full h-full flex items-center justify-center absolute bg-opacity-80 blur-sm bg-white z-[13]"
+          ></div>
+          <div
+            class="w-full h-full flex items-center justify-center absolute z-[14]"
           >
-            Uploading...
+            <app-loader
+              [customStyle]="{ width: '40px', border: '4px solid #000' }"
+            />
           </div>
         }
       }
@@ -105,16 +110,24 @@
                 />
                 <button
                   (click)="removeImage(i)"
-                  class="absolute top-2 right-2 text-red-500 h-6 w-6 font-semibold z-[12] flex item-center justify-center leading-tight text-2xl"
+                  class="absolute top-2 right-2 bg-red-500 text-white rounded-md h-6 w-6 pb-[1px] z-[12] flex items-center leading-0 justify-center hover:bg-red-700"
                 >
                   <i class="fa fa-times"></i>
                 </button>
               </div>
               @if (box.isUploading) {
                 <div
-                  class="w-full h-full flex items-center justify-center absolute bg-opacity-50 bg-white z-[13]"
+                  class="w-full h-full flex items-center justify-center absolute bg-opacity-80 blur-sm bg-white z-[13]"
+                ></div>
+                <div
+                  class="w-full h-full flex items-center justify-center absolute z-[14]"
                 >
-                  Uploading...
+                  <app-loader
+                    [customStyle]="{
+                      width: '40px',
+                      border: '4px solid #666666',
+                    }"
+                  />
                 </div>
               }
             }

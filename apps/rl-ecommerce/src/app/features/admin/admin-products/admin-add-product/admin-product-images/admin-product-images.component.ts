@@ -10,11 +10,12 @@ import { DragAndDropDirective } from '../../../../../shared/directives/drag-and-
 import { IProductImages } from '../../admin-product.interface';
 import { PhotoUploadService } from './services/photo-upload.service';
 import { switchMap } from 'rxjs';
+import { LoaderComponent } from '../../../../../shared/components/loader/loader.component';
 
 @Component({
   selector: 'app-admin-product-images',
   standalone: true,
-  imports: [DragAndDropDirective],
+  imports: [DragAndDropDirective, LoaderComponent],
   templateUrl: './admin-product-images.component.html',
   styleUrl: './admin-product-images.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
