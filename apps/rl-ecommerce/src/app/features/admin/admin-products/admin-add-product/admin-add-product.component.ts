@@ -4,6 +4,7 @@ import {
   computed,
   HostListener,
   inject,
+  OnDestroy,
   signal,
 } from '@angular/core';
 import { AdminProductFormComponent } from './admin-product-form/admin-product-form.component';
@@ -14,6 +15,7 @@ import { NgClass } from '@angular/common';
 import { CanComponentDeactivate } from '../../../../shared/guards/has-unsaved-changes.guard';
 import { AdminProductsService } from '../services/admin-products.service';
 import { ToastService } from '../../../../shared/services/toast.service';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 
 @Component({
   selector: 'app-admin-add-product',
@@ -23,12 +25,15 @@ import { ToastService } from '../../../../shared/services/toast.service';
     AdminProductImagesComponent,
     RouterLink,
     NgClass,
+    LoaderComponent,
   ],
   templateUrl: './admin-add-product.component.html',
   styleUrl: './admin-add-product.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AdminAddProductComponent implements CanComponentDeactivate {
+export class AdminAddProductComponent
+  implements CanComponentDeactivate, OnDestroy
+{
   private productService = inject(AdminProductsService);
   private toastService = inject(ToastService);
   productForm!: FormGroup;
@@ -106,5 +111,9 @@ export class AdminAddProductComponent implements CanComponentDeactivate {
     if (!this.canDeactivate()) {
       $event.returnValue = true;
     }
+  }
+
+  ngOnDestroy() {
+    this.canDeactivate();
   }
 }

@@ -188,4 +188,16 @@ export class AdminProductImagesComponent implements OnInit {
         }
       });
   }
+
+  onAddNewUploadBox() {
+    this.uploadBoxes.set([
+      ...this.uploadBoxes(),
+      {
+        hasUploaded: false,
+        isUploading: false,
+        selectedFile: null,
+        imageUrl: '',
+      },
+    ]);
+  }
 }
