@@ -5,17 +5,19 @@ import {
   HostListener,
   inject,
   OnDestroy,
+  OnInit,
   signal,
 } from '@angular/core';
 import { AdminProductFormComponent } from './admin-product-form/admin-product-form.component';
 import { AdminProductImagesComponent } from './admin-product-images/admin-product-images.component';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { CanComponentDeactivate } from '../../../../shared/guards/has-unsaved-changes.guard';
 import { AdminProductsService } from '../services/admin-products.service';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
+import { IProduct } from '../../../products/model/product.interface';
 
 @Component({
   selector: 'app-admin-add-product',
@@ -32,14 +34,32 @@ import { LoaderComponent } from '../../../../shared/components/loader/loader.com
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminAddProductComponent
-  implements CanComponentDeactivate, OnDestroy
+  implements CanComponentDeactivate, OnInit, OnDestroy
 {
   private productService = inject(AdminProductsService);
   private toastService = inject(ToastService);
+  private route = inject(ActivatedRoute);
   productForm!: FormGroup;
   coverImage: string = '';
   imageUrls: string[] = [];
+  productData!: IProduct;
+  isEditing = signal(false);
   isSubmitting = signal(false);
+
+  ngOnInit() {
+    this.route.queryParams.subscribe((params) => {
+      if (params['edit']) {
+        this.isEditing.set(true);
+        const productData: IProduct = JSON.parse(
+          localStorage.getItem('selectedProduct')!,
+        );
+        if (productData) {
+          this.productData = productData;
+          console.log(this.productData);
+        }
+      }
+    });
+  }
 
   isProductCreateDataInvalid() {
     return this.productForm?.invalid || this.coverImage == '';
@@ -114,6 +134,6 @@ export class AdminAddProductComponent
   }
 
   ngOnDestroy() {
-    this.canDeactivate();
+    // this.canDeactivate();
   }
 }

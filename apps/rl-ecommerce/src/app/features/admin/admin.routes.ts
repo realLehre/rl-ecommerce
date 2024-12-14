@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { hasUnsavedChangesGuard } from '../../shared/guards/has-unsaved-changes.guard';
 
 export const adminRoutes: Routes = [
   { path: '', redirectTo: 'users', pathMatch: 'full' },
@@ -27,6 +28,7 @@ export const adminRoutes: Routes = [
           import(
             './admin-products/admin-add-product/admin-add-product.component'
           ).then((c) => c.AdminAddProductComponent),
+        canDeactivate: [hasUnsavedChangesGuard],
       },
       {
         path: 'products/:id',

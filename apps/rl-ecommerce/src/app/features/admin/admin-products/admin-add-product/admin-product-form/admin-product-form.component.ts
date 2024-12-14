@@ -1,8 +1,10 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   CUSTOM_ELEMENTS_SCHEMA,
   inject,
+  input,
   OnInit,
   output,
   signal,
@@ -26,8 +28,8 @@ import { QuillEditorComponent, QuillModules } from 'ngx-quill';
 import Quill from 'quill';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { EditorModule } from 'primeng/editor';
-import { RouterLink } from '@angular/router';
 import { MQuillService } from '../../../../../shared/services/quill-service.service';
+import { IProduct } from '../../../../products/model/product.interface';
 
 @Component({
   selector: 'app-admin-product-form',
@@ -39,7 +41,6 @@ import { MQuillService } from '../../../../../shared/services/quill-service.serv
     ReactiveFormsModule,
     QuillEditorComponent,
     EditorModule,
-    RouterLink,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './admin-product-form.component.html',
@@ -52,12 +53,19 @@ export class AdminProductFormComponent implements OnInit {
   private sanitizer = inject(DomSanitizer);
   private fb = inject(FormBuilder);
   productForm!: FormGroup;
-  subCategories: ISubCategory[] = [];
   modules: QuillModules = this.quillService.modules;
   formValue = output<any>();
   categories = toSignal(this.optionsService.getCategories());
+  categoryId = signal<string>('');
   html = signal<any>('');
   editorCreated = signal(false);
+  productData = input<IProduct | undefined>(undefined);
+  subCategories = computed((): ISubCategory[] => {
+    return (
+      this.categories()?.find((category) => category.id == this.categoryId())
+        ?.subCategories ?? []
+    );
+  });
 
   ngOnInit() {
     this.productForm = this.fb.group({
@@ -69,6 +77,20 @@ export class AdminProductFormComponent implements OnInit {
       subCategoryId: [null, Validators.required],
       description: [null, Validators.required],
     });
+
+    if (this.productData()) {
+      this.productForm.setValue({
+        name: this.productData()?.name,
+        price: this.productData()?.price,
+        previousPrice: this.productData()?.previousPrice,
+        unit: this.productData()?.unit,
+        categoryId: this.productData()?.categoryId,
+        subCategoryId: this.productData()?.subCategoryId,
+        description: this.productData()?.description,
+      });
+      this.categoryId.set(this.productData()?.categoryId as string);
+    }
+
     this.formValue.emit(this.productForm);
 
     this.productForm.valueChanges.subscribe((value) => {
@@ -76,9 +98,7 @@ export class AdminProductFormComponent implements OnInit {
     });
 
     this.productForm.get('categoryId')?.valueChanges.subscribe((id: string) => {
-      this.subCategories = this.categories()?.find(
-        (cat) => cat.id == id,
-      )?.subCategories!;
+      this.categoryId.set(id);
     });
 
     this.productForm

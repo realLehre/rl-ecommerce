@@ -166,7 +166,12 @@ export class AdminProductsComponent implements OnInit {
     this.router.navigate(['/', 'admin', 'products', this.selectedProduct.id]);
   }
 
-  onEdit() {}
+  onEdit() {
+    localStorage.setItem(
+      'selectedProduct',
+      JSON.stringify(this.selectedProduct),
+    );
+  }
 
   onDelete() {}
 

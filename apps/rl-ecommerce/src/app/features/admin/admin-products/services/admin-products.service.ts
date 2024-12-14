@@ -98,7 +98,8 @@ export class AdminProductsService {
 
   getFormControlStatus(form: FormGroup): boolean {
     return Object.values(form.controls).some(
-      (control) => control.value !== null && control.value !== '',
+      (control) =>
+        control.value !== null && control.value !== '' && control.value !== 0,
     );
   }
 }
