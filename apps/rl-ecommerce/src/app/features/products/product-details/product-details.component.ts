@@ -24,14 +24,13 @@ import { IProduct } from '../model/product.interface';
 import { AsyncPipe, CurrencyPipe, NgClass, NgStyle } from '@angular/common';
 import { SkeletonModule } from 'primeng/skeleton';
 import { CartService } from '../../../shared/services/cart.service';
-import { UserAccountService } from '../../user/user-account/services/user-account.service';
 import { ToastService } from '../../../shared/services/toast.service';
 import { ProductReviewsComponent } from './product-reviews/product-reviews.component';
 import { LargeReviewsComponent } from './large-reviews/large-reviews.component';
 import { ReviewService } from '../../../shared/services/review.service';
 import { PricePercentageDecreasePipe } from '../../../shared/pipes/price-percentage-decrease.pipe';
-import { AuthService } from '../../auth/services/auth.service';
 import { ICart } from '../../../shared/models/cart.interface';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-product-details',
@@ -61,10 +60,9 @@ export class ProductDetailsComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private productService = inject(ProductsService);
   private cartService = inject(CartService);
-  private userService = inject(UserAccountService);
   private reviewService = inject(ReviewService);
   private toast = inject(ToastService);
-  private authService = inject(AuthService);
+  private sanitizer = inject(DomSanitizer);
   activeProduct = this.productService.activeProduct;
   product$!: Observable<IProduct>;
   similarProducts!: Observable<IProduct[]>;
@@ -225,6 +223,16 @@ export class ProductDetailsComponent implements OnInit {
           },
         });
     }
+  }
+
+  sanitizedDescription(desc: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(desc);
+  }
+
+  stripedDescription(desc: string) {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = desc;
+    return tempDiv.textContent || tempDiv.innerText || '';
   }
 
   averageRating(): number {

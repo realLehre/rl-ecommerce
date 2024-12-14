@@ -22,9 +22,10 @@ import { SkeletonModule } from 'primeng/skeleton';
   templateUrl: './recommended-products.component.html',
   styleUrl: './recommended-products.component.scss',
 })
-export class RecommendedProductsComponent implements OnInit {
+export class RecommendedProductsComponent implements OnInit, AfterViewInit {
   private productService = inject(ProductsService);
-  @ViewChild('carouselContainer') carouselContainer!: ElementRef;
+  @ViewChild('carouselContainer')
+  carouselContainer!: ElementRef;
   query = input<{ productId: string; categoryId: string }>();
   products$!: Observable<IProduct[]>;
 
@@ -51,10 +52,12 @@ export class RecommendedProductsComponent implements OnInit {
   }
 
   checkArrowVisibility() {
-    const container = this.carouselContainer.nativeElement;
-    this.showLeftArrow = container.scrollLeft > 0;
-    this.showRightArrow =
-      container.scrollLeft < container.scrollWidth - container.clientWidth;
+    const container = this.carouselContainer?.nativeElement;
+    if (container) {
+      this.showLeftArrow = container.scrollLeft > 0;
+      this.showRightArrow =
+        container.scrollLeft < container.scrollWidth - container.clientWidth;
+    }
   }
 
   scroll(direction: 'left' | 'right') {

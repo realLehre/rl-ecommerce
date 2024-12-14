@@ -2,19 +2,13 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  Input,
   input,
   signal,
 } from '@angular/core';
 import { AsyncPipe, CurrencyPipe, Location, NgClass } from '@angular/common';
-import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
-import { LargeReviewsComponent } from '../../../products/product-details/large-reviews/large-reviews.component';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { PricePercentageDecreasePipe } from '../../../../shared/pipes/price-percentage-decrease.pipe';
 import { ProductDetailsImagesComponent } from '../../../products/product-details/product-details-images/product-details-images.component';
-import { ProductQuantityComponent } from '../../../../shared/components/product-quantity/product-quantity.component';
-import { ProductReviewsComponent } from '../../../products/product-details/product-reviews/product-reviews.component';
-import { RecommendedProductsComponent } from '../../../products/recommended-products/recommended-products.component';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { SkeletonModule } from 'primeng/skeleton';
 import { AdminProductsService } from '../services/admin-products.service';
@@ -28,16 +22,10 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
   standalone: true,
   imports: [
     AsyncPipe,
-    BreadcrumbComponent,
     CurrencyPipe,
-    LargeReviewsComponent,
     LoaderComponent,
     PricePercentageDecreasePipe,
     ProductDetailsImagesComponent,
-    ProductQuantityComponent,
-    ProductReviewsComponent,
-    RecommendedProductsComponent,
-    RouterLink,
     SkeletonModule,
     NgClass,
   ],
@@ -65,9 +53,7 @@ export class AdminProductDetailsComponent {
   stripedDescription(desc: string) {
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = desc;
-    const plainText = tempDiv.textContent || tempDiv.innerText || '';
-    console.log(plainText.trim());
-    return plainText;
+    return tempDiv.textContent || tempDiv.innerText || '';
   }
 
   onDeleteProduct(product: IProduct) {}

@@ -75,12 +75,27 @@
               </p>
             }
 
-            <div class="text-sm mobile:text-base text-type_grey">
-              <p [ngClass]="{ 'line-clamp-[8]': isCollapsed() }">
-                {{ product.description }}
-              </p>
-            </div>
-            @if (product.description.length > limit) {
+            <!--            <div class="text-sm mobile:text-base text-type_grey">-->
+            <!--              <p [ngClass]="{ 'line-clamp-[8]': isCollapsed() }">-->
+            <!--                {{ product.description }}-->
+            <!--              </p>-->
+            <!--            </div>-->
+            <!--            @if (product.description.length > limit) {-->
+            <!--              <a-->
+            <!--                href="javascript:void(0)"-->
+            <!--                (click)="toggleCollapse()"-->
+            <!--                class="text-sm font-medium text-primary"-->
+            <!--              >-->
+            <!--                {{ isCollapsed() ? 'Read More' : 'Show Less' }}-->
+            <!--              </a>-->
+            <!--            }-->
+
+            <div
+              [innerHTML]="sanitizedDescription(product.description)"
+              [ngClass]="{ 'line-clamp-[8]': isCollapsed() }"
+              class="prose desc text-sm mobile:text-base text-type_grey leading-tight"
+            ></div>
+            @if (stripedDescription(product.description).length > limit) {
               <a
                 href="javascript:void(0)"
                 (click)="toggleCollapse()"
