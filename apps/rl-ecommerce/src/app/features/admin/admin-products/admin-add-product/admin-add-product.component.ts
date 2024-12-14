@@ -85,7 +85,7 @@ export class AdminAddProductComponent
       .addProduct({
         ...this.productForm.value,
         image: this.coverImage,
-        imageUrls: this.imageUrls,
+        imageUrls: [this.coverImage, ...this.imageUrls],
         videoUrls: [],
       })
       .subscribe({

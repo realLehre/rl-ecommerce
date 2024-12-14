@@ -34,7 +34,10 @@
     </div>
 
     <div class="flex-1 w-full min-[960px]:w-auto">
-      <app-admin-product-images (imageUrlsEmit)="onGetImageUrls($event)" />
+      <app-admin-product-images
+        (imageUrlsEmit)="onGetImageUrls($event)"
+        [productData]="productData"
+      />
     </div>
   </div>
 

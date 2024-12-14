@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
+  input,
   OnInit,
   output,
   signal,
@@ -11,6 +12,7 @@ import { IProductImages } from '../../admin-product.interface';
 import { PhotoUploadService } from './services/photo-upload.service';
 import { switchMap } from 'rxjs';
 import { LoaderComponent } from '../../../../../shared/components/loader/loader.component';
+import { IProduct } from '../../../../products/model/product.interface';
 
 @Component({
   selector: 'app-admin-product-images',
@@ -33,6 +35,7 @@ export class AdminProductImagesComponent implements OnInit {
   coverImageUrl!: string;
   imageUrlsEmit = output<{ imageUrls: string[]; coverImageUrl: string }>();
   previousImageUrl!: string | null;
+  productData = input<IProduct | undefined>(undefined);
 
   ngOnInit() {
     const boxes = Array(4)
@@ -44,6 +47,20 @@ export class AdminProductImagesComponent implements OnInit {
         imageUrl: '',
       }));
     this.uploadBoxes.set(boxes);
+
+    if (this.productData()) {
+      this.coverImage.set({
+        ...this.coverImage(),
+        hasUploaded: true,
+        imageUrl: this.productData()?.image!,
+      });
+
+      this.uploadBoxes.set(
+        this.photoUploadService.prefillUploadBoxes(
+          this.productData()?.imageUrls as string[],
+        ),
+      );
+    }
   }
 
   fileBrowseHandler(event: any, type: string, index?: number) {

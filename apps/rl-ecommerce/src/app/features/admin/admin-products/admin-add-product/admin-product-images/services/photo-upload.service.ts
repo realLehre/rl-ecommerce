@@ -2,6 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { defer, from, map, Observable, of } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 import { AuthService } from '../../../../../auth/services/auth.service';
+import { IProductImages } from '../../../admin-product.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -55,5 +56,21 @@ export class PhotoUploadService {
   getImagePath(url: string): string {
     const basePath = url.split('?')[0];
     return basePath.split('/').pop()!;
+  }
+
+  prefillUploadBoxes(data: string[]): IProductImages[] {
+    const uploadBoxes = [];
+
+    for (let v = 0; v < data.length; v++) {
+      if (v > 0 && data.length > 1) {
+        uploadBoxes.push({
+          hasUploaded: true,
+          isUploading: false,
+          selectedFile: null,
+          imageUrl: data[v],
+        });
+      }
+    }
+    return uploadBoxes as IProductImages[];
   }
 }
