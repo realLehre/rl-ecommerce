@@ -83,6 +83,15 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  onAdminSignIn() {
+    this.isLoading.set(true);
+    this.loginForm.setValue({
+      email: 'admin@admin.com',
+      password: 'Test1234@admin',
+    });
+    this.onSubmit();
+  }
+
   async onSignInWithGoogle() {
     await this.authService.continueWithGoogle();
   }
