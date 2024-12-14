@@ -10,7 +10,7 @@ import {
 import { DragAndDropDirective } from '../../../../../shared/directives/drag-and-drop.directive';
 import { IProductImages } from '../../admin-product.interface';
 import { PhotoUploadService } from './services/photo-upload.service';
-import { switchMap } from 'rxjs';
+import { catchError, switchMap, throwError } from 'rxjs';
 import { LoaderComponent } from '../../../../../shared/components/loader/loader.component';
 import { IProduct } from '../../../../products/model/product.interface';
 
@@ -36,6 +36,8 @@ export class AdminProductImagesComponent implements OnInit {
   imageUrlsEmit = output<{ imageUrls: string[]; coverImageUrl: string }>();
   previousImageUrl!: string | null;
   productData = input<IProduct | undefined>(undefined);
+  uploadError = signal<boolean[]>([]);
+  coverImageUploadError = signal<boolean>(false);
 
   ngOnInit() {
     const boxes = Array(4)
@@ -107,6 +109,9 @@ export class AdminProductImagesComponent implements OnInit {
         if (type == 'multiple') {
           this.updateUploadBox(index!, file, reader.result as string, true);
           this.previousImageUrl = this.imageUrls[index!];
+          const errors = this.uploadError();
+          errors[index!] = false;
+          this.uploadError.set(errors);
         } else {
           this.coverImage.set({
             hasUploaded: true,
@@ -115,6 +120,7 @@ export class AdminProductImagesComponent implements OnInit {
             imageUrl: reader.result as string,
           });
           this.previousImageUrl = this.coverImageUrl;
+          this.coverImageUploadError.set(false);
         }
       };
       this.uploadFile(file, type, index);
@@ -174,35 +180,45 @@ export class AdminProductImagesComponent implements OnInit {
       .upLoadImage(filePath, file)
       .pipe(
         switchMap((res) => this.photoUploadService.getImageUrl(res.data.path)),
-      )
-      .subscribe((res) => {
-        if (type == 'multiple') {
-          this.imageUrls[index!] = res.signedUrl;
-          const boxes = [...this.uploadBoxes()];
-          boxes[index!] = {
-            ...boxes[index!],
-            isUploading: false,
-          };
-          this.uploadBoxes.set(boxes);
-        } else {
-          this.coverImageUrl = res.signedUrl;
-          this.coverImage.set({
-            ...this.coverImage(),
-            isUploading: false,
-          });
-        }
-        this.imageUrlsEmit.emit({
-          imageUrls: this.imageUrls,
-          coverImageUrl: this.coverImageUrl,
-        });
+        catchError((err: any) => {
+          this.setBoxesOnError(type, index);
 
-        if (this.previousImageUrl) {
-          this.photoUploadService
-            .removeImage(this.previousImageUrl)
-            .subscribe((res) => {
-              this.previousImageUrl = null;
+          return throwError(() => err);
+        }),
+      )
+      .subscribe({
+        next: (res) => {
+          if (type == 'multiple') {
+            this.imageUrls[index!] = res.signedUrl;
+            const boxes = [...this.uploadBoxes()];
+            boxes[index!] = {
+              ...boxes[index!],
+              isUploading: false,
+            };
+            this.uploadBoxes.set(boxes);
+          } else {
+            this.coverImageUrl = res.signedUrl;
+            this.coverImage.set({
+              ...this.coverImage(),
+              isUploading: false,
             });
-        }
+          }
+          this.imageUrlsEmit.emit({
+            imageUrls: this.imageUrls,
+            coverImageUrl: this.coverImageUrl,
+          });
+
+          if (this.previousImageUrl) {
+            this.photoUploadService
+              .removeImage(this.previousImageUrl)
+              .subscribe((res) => {
+                this.previousImageUrl = null;
+              });
+          }
+        },
+        error: (err) => {
+          this.setBoxesOnError(type, index);
+        },
       });
   }
 
@@ -216,5 +232,28 @@ export class AdminProductImagesComponent implements OnInit {
         imageUrl: '',
       },
     ]);
+  }
+
+  setBoxesOnError(type?: string, index?: number) {
+    if (type == 'multiple') {
+      const boxes = [...this.uploadBoxes()];
+      boxes[index!] = {
+        ...boxes[index!],
+        isUploading: false,
+        imageUrl: '',
+      };
+      this.uploadBoxes.set(boxes);
+      const errors = this.uploadError();
+      errors[index!] = true;
+      this.uploadError.set(errors);
+    } else {
+      this.coverImage.set({
+        ...this.coverImage(),
+        isUploading: false,
+        imageUrl: '',
+      });
+      this.coverImageUrl = '';
+      this.coverImageUploadError.set(true);
+    }
   }
 }

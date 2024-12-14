@@ -34,7 +34,7 @@
           </p>
           <p class="text-type_grey text-xs">(max file : 5mb)</p>
         </div>
-      } @else {
+      } @else if (!coverImageUploadError()) {
         <div class="h-full w-full relative">
           <img
             [src]="coverImage().imageUrl"
@@ -60,6 +60,16 @@
             />
           </div>
         }
+      }
+      @if (coverImageUploadError()) {
+        <div
+          class="w-full h-full flex flex-col items-center justify-center absolute bg-opacity-80 bg-white"
+        >
+          <p class="text-sm">An error occurred while uploading!</p>
+          <button class="p-1 mt-3 text-sm rounded-md border border-type_grey">
+            Retry
+          </button>
+        </div>
       }
     </div>
 
@@ -101,13 +111,14 @@
                 </p>
                 <p class="text-type_grey text-xs">(max file : 5mb)</p>
               </div>
-            } @else {
+            } @else if (!uploadError()[i]) {
               <div class="h-full w-full relative">
                 <img
                   [src]="box.imageUrl"
                   class="h-full w-full object-cover z-[8] rounded-lg"
                   alt="Uploaded image"
                 />
+
                 <button
                   (click)="removeImage(i)"
                   class="absolute top-2 right-2 bg-red-500 text-white rounded-md h-6 w-6 pb-[1px] z-[12] flex items-center leading-0 justify-center hover:bg-red-700"
@@ -130,6 +141,18 @@
                   />
                 </div>
               }
+            }
+            @if (uploadError()[i]) {
+              <div
+                class="w-full h-full flex flex-col items-center justify-center absolute bg-opacity-80 bg-white"
+              >
+                <p class="text-sm">An error occurred while uploading!</p>
+                <button
+                  class="p-1 text-sm mt-3 rounded-md border border-type_grey"
+                >
+                  Retry
+                </button>
+              </div>
             }
           </div>
         }

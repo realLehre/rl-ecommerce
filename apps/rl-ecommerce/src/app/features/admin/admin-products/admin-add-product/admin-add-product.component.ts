@@ -55,7 +55,7 @@ export class AdminAddProductComponent
         );
         if (productData) {
           this.productData = productData;
-          console.log(this.productData);
+          this.coverImage = productData.image;
         }
       }
     });
@@ -81,35 +81,58 @@ export class AdminAddProductComponent
       return;
     }
     this.isSubmitting.set(true);
-    this.productService
-      .addProduct({
-        ...this.productForm.value,
-        image: this.coverImage,
-        imageUrls: [this.coverImage, ...this.imageUrls],
-        videoUrls: [],
-      })
-      .subscribe({
-        next: () => {
-          this.isSubmitting.set(false);
-          this.toastService.showToast({
-            message: 'Product added successfully!',
-            type: 'success',
-          });
-        },
-        error: (error) => {
-          this.isSubmitting.set(false);
-          this.toastService.showToast({
-            type: 'error',
-            message: error.error.message,
-          });
-        },
-      });
-    console.log({
-      ...this.productForm.value,
-      image: this.coverImage,
-      imageUrls: this.imageUrls,
-      videoUrls: [],
-    });
+    if (!this.isEditing()) {
+      this.productService
+        .addProduct({
+          ...this.productForm.value,
+          image: this.coverImage,
+          imageUrls: [this.coverImage, ...this.imageUrls],
+          videoUrls: [],
+        })
+        .subscribe({
+          next: () => {
+            this.isSubmitting.set(false);
+            this.toastService.showToast({
+              message: 'Product added successfully!',
+              type: 'success',
+            });
+          },
+          error: (error) => {
+            this.isSubmitting.set(false);
+            this.toastService.showToast({
+              type: 'error',
+              message: error.error.message,
+            });
+          },
+        });
+    } else
+      this.productService
+        .updateProduct(
+          {
+            ...this.productForm.value,
+            image: this.coverImage,
+            imageUrls: [this.coverImage, ...this.imageUrls],
+            videoUrls: [],
+          },
+          this.productData.id,
+        )
+        .subscribe({
+          next: () => {
+            this.isSubmitting.set(false);
+            this.toastService.showToast({
+              message: 'Product updated successfully!',
+              type: 'success',
+            });
+            this.isEditing.set(false);
+          },
+          error: (error) => {
+            this.isSubmitting.set(false);
+            this.toastService.showToast({
+              type: 'error',
+              message: error.error.message,
+            });
+          },
+        });
   }
 
   canDeactivate(): boolean {
