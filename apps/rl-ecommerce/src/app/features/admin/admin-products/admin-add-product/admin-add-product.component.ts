@@ -46,6 +46,7 @@ export class AdminAddProductComponent
   productData!: IProduct;
   isEditing = signal(false);
   isSubmitting = signal(false);
+  productAdded = signal(false);
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
@@ -63,16 +64,18 @@ export class AdminAddProductComponent
   }
 
   isProductCreateDataInvalid() {
-    return this.productForm?.invalid || this.coverImage == '';
+    return (
+      this.productForm?.invalid ||
+      this.coverImage == '' ||
+      this.productForm.value.price >= this.productForm.value.previousPrice
+    );
   }
 
   onGetFormValue(event: any) {
     this.productForm = event;
-    console.log(event);
   }
 
   onGetImageUrls(event: { imageUrls: string[]; coverImageUrl: string }) {
-    console.log(event);
     this.coverImage = event.coverImageUrl;
     this.imageUrls = event.imageUrls;
   }
@@ -86,6 +89,7 @@ export class AdminAddProductComponent
       this.productService
         .addProduct({
           ...this.productForm.value,
+          previousPrice: this.productForm.value.previousPrice ?? 0,
           image: this.coverImage,
           imageUrls: [this.coverImage, ...this.imageUrls],
           videoUrls: [],
@@ -97,6 +101,7 @@ export class AdminAddProductComponent
               message: 'Product added successfully!',
               type: 'success',
             });
+            this.productAdded.set(true);
             this.router.navigate(['/', 'admin', 'products']);
           },
           error: (error) => {
@@ -126,6 +131,7 @@ export class AdminAddProductComponent
               type: 'success',
             });
             this.isEditing.set(false);
+            this.productAdded.set(true);
             this.router.navigate(['/', 'admin', 'products', res.id]);
           },
           error: (error) => {
@@ -140,9 +146,10 @@ export class AdminAddProductComponent
 
   canDeactivate(): boolean {
     if (
-      this.productService.getFormControlStatus(this.productForm) ||
-      this.coverImage !== '' ||
-      this.imageUrls.length !== 0
+      (this.productService.getFormControlStatus(this.productForm) ||
+        this.coverImage !== '' ||
+        this.imageUrls.length !== 0) &&
+      !this.productAdded()
     ) {
       return confirm(
         'You have unsaved changes, are you sure you want to quit?',

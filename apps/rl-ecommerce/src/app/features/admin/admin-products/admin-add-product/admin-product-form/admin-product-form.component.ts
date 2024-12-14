@@ -26,7 +26,6 @@ import { NgClass } from '@angular/common';
 import { ErrorMessageDirective } from '../../../../user/address/address-form/directives/error-message.directive';
 import { QuillEditorComponent, QuillModules } from 'ngx-quill';
 import Quill from 'quill';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { EditorModule } from 'primeng/editor';
 import { MQuillService } from '../../../../../shared/services/quill-service.service';
 import { IProduct } from '../../../../products/model/product.interface';
@@ -50,7 +49,6 @@ import { IProduct } from '../../../../products/model/product.interface';
 export class AdminProductFormComponent implements OnInit {
   private quillService = inject(MQuillService);
   private optionsService = inject(ProductOptionsService);
-  private sanitizer = inject(DomSanitizer);
   private fb = inject(FormBuilder);
   productForm!: FormGroup;
   modules: QuillModules = this.quillService.modules;
@@ -71,7 +69,7 @@ export class AdminProductFormComponent implements OnInit {
     this.productForm = this.fb.group({
       name: [null, Validators.required],
       price: [null, Validators.required],
-      previousPrice: [0],
+      previousPrice: [null],
       unit: [null, Validators.required],
       categoryId: [null, Validators.required],
       subCategoryId: [null, Validators.required],
@@ -108,8 +106,12 @@ export class AdminProductFormComponent implements OnInit {
       });
   }
 
-  get sanitizedDescription(): SafeHtml {
-    return this.sanitizer.bypassSecurityTrustHtml(this.html());
+  isPreviousPriceMore() {
+    return (
+      this.productForm.get('previousPrice')?.value &&
+      this.productForm.get('price')?.value &&
+      this.productForm.value.price >= this.productForm.value.previousPrice
+    );
   }
 
   isInvalidAndTouched(control: any) {

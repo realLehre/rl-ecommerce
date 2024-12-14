@@ -2,7 +2,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../../environments/environment.development';
 import { IProduct, IProductResponse } from '../model/product.interface';
-import { of, retry, tap } from 'rxjs';
+import { catchError, of, retry, tap, throwError } from 'rxjs';
 import { PaginationInstance } from 'ngx-pagination';
 
 interface IProductFilter {
@@ -72,6 +72,7 @@ export class ProductsService {
     return this.http.get<IProduct>(`${this.baseUrl}${id}`).pipe(
       retry(3),
       tap((res) => this.activeProduct.set(res)),
+      catchError((err) => this.handleError(err)),
     );
   }
 
@@ -102,5 +103,9 @@ export class ProductsService {
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-') // Replace spaces and special characters with hyphen
       .replace(/^-+|-+$/g, ''); // Trim leading or trailing hyphens
+  }
+
+  private handleError(error: any) {
+    return throwError(() => new Error('An error occurred! Try again later'));
   }
 }

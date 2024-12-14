@@ -16,6 +16,8 @@ import { of, switchMap } from 'rxjs';
 import { IProduct } from '../../../products/model/product.interface';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { ProductDeleteDialogComponent } from '../product-delete-dialog/product-delete-dialog.component';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-admin-product-details',
@@ -38,6 +40,8 @@ export class AdminProductDetailsComponent {
   private router = inject(Router);
   private location = inject(Location);
   private sanitizer = inject(DomSanitizer);
+  private dialogService = inject(DialogService);
+  ref: DynamicDialogRef | undefined;
   id = input.required<string>();
   product$ = toObservable(this.id).pipe(
     switchMap((id) => this.productService.getProductById(id!)),
@@ -56,7 +60,22 @@ export class AdminProductDetailsComponent {
     return tempDiv.textContent || tempDiv.innerText || '';
   }
 
-  onDeleteProduct(product: IProduct) {}
+  onDeleteProduct(product: IProduct) {
+    this.productService.productToDelete.set(product);
+    this.ref = this.dialogService.open(ProductDeleteDialogComponent, {
+      width: '25rem',
+      breakpoints: {
+        '450px': '90vw',
+      },
+      focusOnShow: false,
+    });
+
+    this.ref.onClose.subscribe((res) => {
+      if (res == 'deleted') {
+        this.router.navigate(['/', 'admin', 'products']);
+      }
+    });
+  }
 
   toggleCollapse() {
     this.isCollapsed.set(!this.isCollapsed());
@@ -70,6 +89,6 @@ export class AdminProductDetailsComponent {
   }
 
   onNavigateBack() {
-    this.location.back();
+    this.router.navigate(['/', 'admin', 'products']);
   }
 }

@@ -66,7 +66,7 @@
           <div
             [innerHTML]="sanitizedDescription(product.description)"
             [ngClass]="{ 'line-clamp-[8]': isCollapsed() }"
-            class="prose desc text-sm mobile:text-base text-type_grey leading-tight"
+            class="prose desc text-sm mobile:text-base text-type_grey"
           ></div>
           @if (stripedDescription(product.description).length > limit) {
             <a

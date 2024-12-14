@@ -21,6 +21,7 @@ export class AdminProductsService {
   private http = inject(HttpClient);
   private apiUrl = environment.apiUrl + 'product';
   activeProduct = signal<IProduct | null>(null);
+  productToDelete = signal<IProduct | undefined>(undefined);
   productQueried = signal(false);
   PRODUCT_QUERY_STORED_KEY = 'D82jxf927jks20jds';
 

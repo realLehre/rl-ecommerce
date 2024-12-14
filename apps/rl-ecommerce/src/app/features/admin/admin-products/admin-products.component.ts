@@ -35,6 +35,8 @@ import { Observable } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { PrimeNgDatepickerDirective } from '../../../shared/directives/prime-ng-datepicker.directive';
 import { IAdminProductFilter } from './admin-product.interface';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { ProductDeleteDialogComponent } from './product-delete-dialog/product-delete-dialog.component';
 
 @Component({
   selector: 'app-admin-products',
@@ -52,7 +54,6 @@ import { IAdminProductFilter } from './admin-product.interface';
     SliderModule,
     FormsModule,
     SkeletonModule,
-    AsyncPipe,
     PrimeNgDatepickerDirective,
   ],
   templateUrl: './admin-products.component.html',
@@ -91,6 +92,8 @@ export class AdminProductsComponent implements OnInit {
     currentPage: 1,
   };
   productQueried = this.productService.productQueried;
+  private dialogService = inject(DialogService);
+  private ref: DynamicDialogRef | undefined;
 
   ngOnInit() {
     const savedFilters = JSON.parse(
@@ -176,7 +179,22 @@ export class AdminProductsComponent implements OnInit {
     });
   }
 
-  onDelete() {}
+  onDelete() {
+    this.productService.productToDelete.set(this.selectedProduct);
+    this.ref = this.dialogService.open(ProductDeleteDialogComponent, {
+      width: '25rem',
+      breakpoints: {
+        '450px': '90vw',
+      },
+      focusOnShow: false,
+    });
+
+    this.ref.onClose.subscribe((res) => {
+      if (res == 'deleted') {
+        this.onReturn();
+      }
+    });
+  }
 
   onApplyFilter() {
     this.filterNumber = this.findFilterNumber();

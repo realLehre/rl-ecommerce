@@ -13,7 +13,7 @@
       />
 
       <button
-        class="rounded-full text-white font-medium bg-primary py-2 h-12 w-full mt-10 hover:bg-opacity-80 hidden min-[960px]:block"
+        class="rounded-full text-white items-center justify-center space-x-2 font-medium bg-primary py-2 h-12 w-full mt-10 hover:bg-opacity-80 hidden min-[960px]:flex"
         (click)="onSubmit()"
         [disabled]="isProductCreateDataInvalid() || isSubmitting()"
         [ngClass]="{
@@ -25,7 +25,7 @@
           <app-loader
             [customStyle]="{
               width: '24px',
-              border: '3px solid #000',
+              border: '3px solid #fff',
             }"
           />
         }
@@ -42,7 +42,7 @@
   </div>
 
   <button
-    class="rounded-full text-white font-medium bg-primary py-2 h-12 w-full mt-10 hover:bg-opacity-80 block min-[960px]:hidden"
+    class="rounded-full text-white flex items-center justify-center space-x-2 font-medium bg-primary py-2 h-12 w-full mt-10 hover:bg-opacity-80 min-[960px]:hidden"
     (click)="onSubmit()"
     [disabled]="isProductCreateDataInvalid() || isSubmitting()"
     [ngClass]="{
@@ -54,7 +54,7 @@
       <app-loader
         [customStyle]="{
           width: '24px',
-          border: '3px solid #000',
+          border: '3px solid #fff',
         }"
       />
     }
