@@ -15,6 +15,7 @@ import {
   RouterLinkActive,
 } from '@angular/router';
 import { AuthService } from '../../auth/services/auth.service';
+import { StateAuthService } from '../../../shared/services/state-auth.service';
 
 @Component({
   selector: 'app-user-nav',
@@ -28,6 +29,7 @@ export class UserNavComponent implements AfterViewInit {
   router = inject(Router);
   private authService = inject(AuthService);
   private cdr = inject(ChangeDetectorRef);
+  private stateAuthService = inject(StateAuthService);
   activeTab: string;
 
   @ViewChildren('tabLink') tabLinks!: QueryList<ElementRef>;
@@ -82,5 +84,8 @@ export class UserNavComponent implements AfterViewInit {
 
   onLogOut() {
     this.authService.signOut();
+    this.router.navigate(['/']).then(() => {
+      this.stateAuthService.resetState();
+    });
   }
 }
