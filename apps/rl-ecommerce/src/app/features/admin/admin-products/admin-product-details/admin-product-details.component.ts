@@ -62,10 +62,25 @@ export class AdminProductDetailsComponent {
     return this.sanitizer.bypassSecurityTrustHtml(desc);
   }
 
+  stripedDescription(desc: string) {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = desc;
+    const plainText = tempDiv.textContent || tempDiv.innerText || '';
+    console.log(plainText.trim());
+    return plainText;
+  }
+
   onDeleteProduct(product: IProduct) {}
 
   toggleCollapse() {
     this.isCollapsed.set(!this.isCollapsed());
+  }
+
+  onEdit(product: IProduct) {
+    localStorage.setItem('selectedProduct', JSON.stringify(product));
+    this.router.navigate(['/', 'admin', 'add-product'], {
+      queryParams: { edit: true },
+    });
   }
 
   onNavigateBack() {

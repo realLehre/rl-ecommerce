@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { AdminProductFormComponent } from './admin-product-form/admin-product-form.component';
 import { AdminProductImagesComponent } from './admin-product-images/admin-product-images.component';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { CanComponentDeactivate } from '../../../../shared/guards/has-unsaved-changes.guard';
@@ -39,6 +39,7 @@ export class AdminAddProductComponent
   private productService = inject(AdminProductsService);
   private toastService = inject(ToastService);
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   productForm!: FormGroup;
   coverImage: string = '';
   imageUrls: string[] = [];
@@ -96,6 +97,7 @@ export class AdminAddProductComponent
               message: 'Product added successfully!',
               type: 'success',
             });
+            this.router.navigate(['/', 'admin', 'products']);
           },
           error: (error) => {
             this.isSubmitting.set(false);
@@ -117,13 +119,14 @@ export class AdminAddProductComponent
           this.productData.id,
         )
         .subscribe({
-          next: () => {
+          next: (res) => {
             this.isSubmitting.set(false);
             this.toastService.showToast({
               message: 'Product updated successfully!',
               type: 'success',
             });
             this.isEditing.set(false);
+            this.router.navigate(['/', 'admin', 'products', res.id]);
           },
           error: (error) => {
             this.isSubmitting.set(false);

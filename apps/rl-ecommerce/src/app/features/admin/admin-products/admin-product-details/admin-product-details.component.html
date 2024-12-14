@@ -66,9 +66,9 @@
           <div
             [innerHTML]="sanitizedDescription(product.description)"
             [ngClass]="{ 'line-clamp-[8]': isCollapsed() }"
-            class="prose desc text-sm mobile:text-base text-type_grey"
+            class="prose desc text-sm mobile:text-base text-type_grey leading-tight"
           ></div>
-          @if (product.description.length > limit) {
+          @if (stripedDescription(product.description).length > limit) {
             <a
               href="javascript:void(0)"
               (click)="toggleCollapse()"
@@ -102,8 +102,7 @@
         >
           <button
             class="min-w-[150px] rounded-full text-white font-medium bg-primary py-2 flex-1 h-12 hover:text-type_title_gray border-[2px] border-primary hover:border-[2px] hover:bg-transparent"
-            routerLink="/admin/add-product"
-            [queryParams]="{ edit: true }"
+            (click)="onEdit(product)"
           >
             Edit Product
           </button>

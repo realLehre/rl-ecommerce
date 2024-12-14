@@ -171,6 +171,9 @@ export class AdminProductsComponent implements OnInit {
       'selectedProduct',
       JSON.stringify(this.selectedProduct),
     );
+    this.router.navigate(['/', 'admin', 'add-product'], {
+      queryParams: { edit: true },
+    });
   }
 
   onDelete() {}

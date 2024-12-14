@@ -74,11 +74,14 @@ export class AdminProductsService {
   }
 
   updateProduct(formData: IProductFormData, id: string) {
-    return this.http.patch(this.apiUrl + id + '/update', formData);
+    return this.http.patch<IProduct>(
+      this.apiUrl + '/' + id + '/update',
+      formData,
+    );
   }
 
   deleteProduct(id: string) {
-    return this.http.delete(this.apiUrl + id + '/delete');
+    return this.http.delete(this.apiUrl + '/' + id + '/delete');
   }
 
   getProductById(id: string) {
