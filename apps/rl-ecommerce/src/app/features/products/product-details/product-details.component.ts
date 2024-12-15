@@ -65,7 +65,6 @@ export class ProductDetailsComponent implements OnInit {
   private sanitizer = inject(DomSanitizer);
   activeProduct = this.productService.activeProduct;
   product$!: Observable<IProduct>;
-  similarProducts!: Observable<IProduct[]>;
   quantity: number = 1;
   isLoading: boolean = false;
   isCollapsed = signal(true);

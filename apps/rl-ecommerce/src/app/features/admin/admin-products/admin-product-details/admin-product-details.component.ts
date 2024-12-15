@@ -18,6 +18,9 @@ import { toObservable } from '@angular/core/rxjs-interop';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ProductDeleteDialogComponent } from '../product-delete-dialog/product-delete-dialog.component';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { ProductReviewsComponent } from '../../../products/product-details/product-reviews/product-reviews.component';
+import { ReviewService } from '../../../../shared/services/review.service';
+import { LargeReviewsComponent } from '../../../products/product-details/large-reviews/large-reviews.component';
 
 @Component({
   selector: 'app-admin-product-details',
@@ -30,6 +33,8 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
     ProductDetailsImagesComponent,
     SkeletonModule,
     NgClass,
+    ProductReviewsComponent,
+    LargeReviewsComponent,
   ],
   templateUrl: './admin-product-details.component.html',
   styleUrl: './admin-product-details.component.scss',
@@ -41,6 +46,7 @@ export class AdminProductDetailsComponent {
   private location = inject(Location);
   private sanitizer = inject(DomSanitizer);
   private dialogService = inject(DialogService);
+  private reviewService = inject(ReviewService);
   ref: DynamicDialogRef | undefined;
   id = input.required<string>();
   product$ = toObservable(this.id).pipe(
@@ -49,6 +55,7 @@ export class AdminProductDetailsComponent {
   isDeletingProduct = signal(false);
   isCollapsed = signal(true);
   limit = 200;
+  isShowingFullReview = this.reviewService.seeingFullReview;
 
   sanitizedDescription(desc: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(desc);
