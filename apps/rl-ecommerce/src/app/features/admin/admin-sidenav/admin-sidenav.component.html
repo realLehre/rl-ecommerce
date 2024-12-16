@@ -28,6 +28,43 @@
 
     <div class="space-y-5 mt-12">
       <div>
+        <ul>
+          <li>
+            <a
+              class="flex items-center space-x-3 px-5 py-2 hover:bg-bg_main"
+              routerLink="/admin/dashboard"
+              routerLinkActive="active"
+              (click)="onCloseMenu()"
+            >
+              <svg
+                fill="#555555"
+                viewBox="0 0 26 26"
+                xmlns="http://www.w3.org/2000/svg"
+                id="dashboard"
+                class="icon glyph"
+                width="16"
+                height="17"
+              >
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g
+                  id="SVGRepo_tracerCarrier"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></g>
+                <g id="SVGRepo_iconCarrier">
+                  <rect x="2" y="2" width="8" height="10" rx="2"></rect>
+                  <rect x="14" y="2" width="8" height="6" rx="2"></rect>
+                  <rect x="2" y="16" width="8" height="6" rx="2"></rect>
+                  <rect x="14" y="12" width="8" height="10" rx="2"></rect>
+                </g>
+              </svg>
+              <span class="text-type_grey">Dashboard</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div>
         <h3 class="font-medium text-type_title_gray mb-2 px-5">USER</h3>
         <ul>
           <li>
