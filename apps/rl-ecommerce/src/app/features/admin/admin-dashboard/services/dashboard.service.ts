@@ -1,7 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment.development';
-import { forkJoin } from 'rxjs';
+import { forkJoin, map, Observable } from 'rxjs';
+import { IDashboardAnalytics } from '../dashboard.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -24,11 +25,19 @@ export class DashboardService {
     return this.http.get<number>(`${this.baseUrl}total-products`);
   }
 
-  getDashboardAnalytics() {
-    return forkJoin({
-      totalSales: this.getTotalSales(),
-      totalUsers: this.getTotalUsers(),
-      totalProducts: this.getTotalProducts(),
-    });
+  getDashboardAnalytics(): Observable<IDashboardAnalytics> {
+    return forkJoin([
+      this.getTotalSales(),
+      this.getTotalUsers(),
+      this.getTotalProducts(),
+    ]).pipe(
+      map((res) => {
+        return {
+          totalSales: res[0],
+          totalUsers: res[1],
+          totalProducts: res[2],
+        };
+      }),
+    );
   }
 }
