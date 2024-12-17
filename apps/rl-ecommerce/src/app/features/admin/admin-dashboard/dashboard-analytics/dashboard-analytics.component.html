@@ -1,11 +1,13 @@
 @if (analyticsData$ | async; as analyticsData) {
-  <div class="gap-4 grid grid-cols-[repeat(auto-fit,minmax(170px,1fr))]">
+  <div class="gap-4 grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))]">
     <div
       class="flex items-center justify-between space-x-3 bg-bg_subtle py-2 px-4 rounded-md"
     >
       <div>
         <h3 class="text-sm">Total Sales</h3>
-        <p class="text-lg font-bold break-all">
+        <p
+          class="text-lg mobile:text-2xl text-primary font-bold break-all mt-1"
+        >
           {{ analyticsData.totalSales | currency: '₦' : 'symbol' : '1.0-0' }}
         </p>
       </div>
@@ -44,7 +46,7 @@
     >
       <div>
         <h3 class="text-sm">Total Products</h3>
-        <p class="text-lg font-bold">
+        <p class="text-lg mobile:text-2xl text-primary font-bold mt-1">
           {{ analyticsData.totalProducts }}
         </p>
       </div>
@@ -68,7 +70,7 @@
     >
       <div>
         <h3 class="text-sm">Total Users</h3>
-        <p class="text-lg font-bold">
+        <p class="text-lg mobile:text-2xl text-primary font-bold mt-1">
           {{ analyticsData.totalUsers }}
         </p>
       </div>

@@ -9,20 +9,21 @@ import { IDashboardAnalytics } from '../dashboard.interface';
 })
 export class DashboardService {
   private http = inject(HttpClient);
-  private baseUrl = environment.apiUrl + 'dashboard-analytics/';
+  private baseUrl = environment.apiUrl + 'dashboard/';
+  private readonly currentYear = new Date().getFullYear();
 
   constructor() {}
 
   getTotalSales() {
-    return this.http.get<number>(`${this.baseUrl}total-sales`);
+    return this.http.get<number>(`${this.baseUrl}analytics/total-sales`);
   }
 
   getTotalUsers() {
-    return this.http.get<number>(`${this.baseUrl}total-users`);
+    return this.http.get<number>(`${this.baseUrl}analytics/total-users`);
   }
 
   getTotalProducts() {
-    return this.http.get<number>(`${this.baseUrl}total-products`);
+    return this.http.get<number>(`${this.baseUrl}analytics/total-products`);
   }
 
   getDashboardAnalytics(): Observable<IDashboardAnalytics> {
@@ -39,5 +40,11 @@ export class DashboardService {
         };
       }),
     );
+  }
+
+  getSalesData(
+    year: number = this.currentYear,
+  ): Observable<IDashboardAnalytics> {
+    return this.http.get<any>(`${this.baseUrl}monthly?year=${year}`);
   }
 }

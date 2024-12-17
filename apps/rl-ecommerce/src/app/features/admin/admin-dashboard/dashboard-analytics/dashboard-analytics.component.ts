@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { AsyncPipe, CurrencyPipe } from '@angular/common';
 import { DashboardService } from '../services/dashboard.service';
 import { Observable } from 'rxjs';
@@ -18,13 +13,8 @@ import { SkeletonModule } from 'primeng/skeleton';
   styleUrl: './dashboard-analytics.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DashboardAnalyticsComponent implements OnInit {
+export class DashboardAnalyticsComponent {
   private dashboardService = inject(DashboardService);
   analyticsData$: Observable<IDashboardAnalytics> =
     this.dashboardService.getDashboardAnalytics();
-  ngOnInit() {
-    this.dashboardService
-      .getDashboardAnalytics()
-      .subscribe((res) => console.log(res));
-  }
 }
