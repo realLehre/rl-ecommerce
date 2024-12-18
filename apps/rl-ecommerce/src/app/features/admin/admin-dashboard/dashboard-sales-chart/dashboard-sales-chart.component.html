@@ -1,3 +1,21 @@
 <div class="card">
   <p-chart type="line" [data]="data" [options]="options" class="h-[30rem]" />
 </div>
+
+<div class="mt-10">
+  @if (chartOptions) {
+    <apx-chart
+      [series]="chartOptions['series']"
+      [chart]="chartOptions['chart']"
+      [xaxis]="chartOptions['xaxis']"
+      [yaxis]="chartOptions['yaxis']"
+      [stroke]="chartOptions['stroke']"
+      [tooltip]="chartOptions['tooltip']"
+      [dataLabels]="chartOptions['dataLabels']"
+      [grid]="chartOptions['grid']"
+      [legend]="chartOptions['legend']"
+      [fill]="chartOptions['fill']"
+      style="overflow: hidden !important; width: 100% !important"
+    ></apx-chart>
+  }
+</div>
