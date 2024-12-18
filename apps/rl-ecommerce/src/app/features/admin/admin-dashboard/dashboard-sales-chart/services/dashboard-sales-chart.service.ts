@@ -1,14 +1,11 @@
-import { inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { Injectable } from '@angular/core';
 import {
-  ChartComponent,
   ApexAxisChartSeries,
   ApexChart,
   ApexXAxis,
   ApexDataLabels,
   ApexTooltip,
   ApexStroke,
-  NgApexchartsModule,
 } from 'ng-apexcharts';
 
 export type ChartOptions = {
@@ -24,74 +21,6 @@ export type ChartOptions = {
   providedIn: 'root',
 })
 export class DashboardSalesChartService {
-  platformId = inject(PLATFORM_ID);
-  initPrimeChart(
-    months: string[],
-    sales: number[],
-  ): { data: any; options: any } | any {
-    if (isPlatformBrowser(this.platformId)) {
-      const documentStyle = getComputedStyle(document.documentElement);
-      const textColor = documentStyle.getPropertyValue('--p-text-color');
-      const textColorSecondary = documentStyle.getPropertyValue(
-        '--p-text-muted-color',
-      );
-      const surfaceBorder = documentStyle.getPropertyValue(
-        '--p-content-border-color',
-      );
-
-      const data = {
-        labels: months,
-        datasets: [
-          {
-            label: 'First Dataset',
-            data: sales,
-            fill: false,
-            borderColor: documentStyle.getPropertyValue('--p-cyan-500'),
-            tension: 0.4,
-          },
-        ],
-      };
-
-      const options = {
-        maintainAspectRatio: false,
-        aspectRatio: 0.6,
-        plugins: {
-          legend: {
-            labels: {
-              color: textColor,
-            },
-          },
-        },
-        scales: {
-          x: {
-            ticks: {
-              color: textColorSecondary,
-            },
-            grid: {
-              color: surfaceBorder,
-              drawBorder: false,
-            },
-          },
-          y: {
-            ticks: {
-              color: textColorSecondary,
-            },
-            grid: {
-              color: surfaceBorder,
-              drawBorder: false,
-            },
-          },
-        },
-      };
-
-      return {
-        data,
-        options,
-      };
-    }
-    return;
-  }
-
   colors: string[] = ['#17ef1a'];
 
   setApexChart(sales: number[], months: string[]) {
@@ -188,6 +117,18 @@ export class DashboardSalesChartService {
         },
       },
     };
+  }
+
+  generateYears() {
+    const startYear = 2020;
+    const currentYear = new Date().getFullYear();
+    const years = [];
+    for (let y = startYear; y < currentYear + 1; y++) {
+      years.push(y);
+    }
+    return years.map((year) => {
+      return { name: year, code: year };
+    });
   }
 
   constructor() {}

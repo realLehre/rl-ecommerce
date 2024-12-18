@@ -1,22 +1,26 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   inject,
   OnInit,
+  signal,
 } from '@angular/core';
 import { DashboardService } from '../services/dashboard.service';
-import { ChartModule } from 'primeng/chart';
 import {
   ChartOptions,
   DashboardSalesChartService,
 } from './services/dashboard-sales-chart.service';
 import { ChartComponent } from 'ng-apexcharts';
+import { DropdownModule } from 'primeng/dropdown';
+import { FormsModule } from '@angular/forms';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-dashboard-sales-chart',
   standalone: true,
-  imports: [ChartModule, ChartComponent],
+  imports: [ChartComponent, DropdownModule, FormsModule, SkeletonModule],
   templateUrl: './dashboard-sales-chart.component.html',
   styleUrl: './dashboard-sales-chart.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,35 +29,43 @@ export class DashboardSalesChartComponent implements OnInit {
   private dashboardService = inject(DashboardService);
   private dashboardSalesChartService = inject(DashboardSalesChartService);
   private cd = inject(ChangeDetectorRef);
-  sales: any;
-  months: any;
-  data: any;
-  options: any;
   chartOptions!: Partial<ChartOptions | any>;
+  years: { name: number; code: number }[] = [];
+  selectedYear: { name: number; code: number } = {
+    name: new Date().getFullYear(),
+    code: new Date().getFullYear(),
+  };
+  isLoading = signal(false);
 
   ngOnInit() {
-    this.dashboardService.getSalesData().subscribe((res) => {
-      this.sales = Object.values(res);
-      this.months = Object.keys(res);
-      this.initChart();
-      this.initApexChart();
-    });
+    const years = this.dashboardSalesChartService.generateYears();
+    this.years = [...years];
+
+    this.initChartData();
   }
 
-  initChart() {
-    const { data, options } = this.dashboardSalesChartService.initPrimeChart(
-      this.months,
-      this.sales,
-    );
-    this.data = data;
-    this.options = options;
-    this.cd.markForCheck();
+  initChartData() {
+    this.isLoading.set(true);
+    this.dashboardService
+      .getSalesData(this.selectedYear.code)
+      .subscribe((res) => {
+        const sales = Object.values(res);
+        const months = Object.keys(res);
+        this.initApexChart(sales, months);
+      });
   }
 
-  initApexChart() {
+  onChangeYear(event: { name: number; code: number }) {
+    this.selectedYear = event;
+    this.initChartData();
+  }
+
+  initApexChart(sales: number[], months: string[]) {
     this.chartOptions = this.dashboardSalesChartService.setApexChart(
-      this.sales,
-      this.months,
+      sales,
+      months,
     );
+    this.isLoading.set(false);
+    // this.cd.detectChanges();
   }
 }

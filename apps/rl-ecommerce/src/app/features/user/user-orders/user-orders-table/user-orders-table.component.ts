@@ -23,13 +23,7 @@ import { SubtotalPipe } from '../../../../shared/pipes/subtotal.pipe';
 import { SkeletonModule } from 'primeng/skeleton';
 import { OrderService } from '../../../../shared/services/order.service';
 import { ToastService } from '../../../../shared/services/toast.service';
-import {
-  debounceTime,
-  distinctUntilChanged,
-  filter,
-  fromEvent,
-  map,
-} from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { Menu, MenuModule } from 'primeng/menu';
 import { PrimeTemplate } from 'primeng/api';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
@@ -46,16 +40,13 @@ import { NumberOfFiltersPipe } from '../../../../shared/pipes/number-of-filters.
     NgxPaginationModule,
     RouterLink,
     OrderStatusDirective,
-    SubtotalPipe,
     SkeletonModule,
     ReactiveFormsModule,
     MenuModule,
     PrimeTemplate,
     DropdownModule,
-    LoaderComponent,
     SliderModule,
     CalendarModule,
-    NumberOfFiltersPipe,
   ],
   templateUrl: './user-orders-table.component.html',
   styleUrl: './user-orders-table.component.scss',

@@ -120,6 +120,16 @@ body {
   background-color: theme('colors.primary');
 }
 
+.sales-dropdown .deliveryStatusDropdown {
+  & .p-dropdown-label {
+    padding-left: 6px !important;
+  }
+
+  & .p-dropdown-trigger {
+    width: 30px;
+  }
+}
+
 .deliveryStatusDropdown {
   width: 100% !important;
   padding: 2px;
