@@ -52,8 +52,8 @@ export class DashboardService {
   }
 
   getTopSellingProducts() {
-    return this.http
-      .get<ITopSellingProductResponse>(`${this.baseUrl}topSellingProducts`)
-      .subscribe();
+    return this.http.get<ITopSellingProductResponse[]>(
+      `${this.baseUrl}topSellingProducts`,
+    );
   }
 }

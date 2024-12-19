@@ -1,0 +1,16 @@
+<div class="w-full h-[400px]">
+  <apx-chart
+    [series]="chartOptions.series"
+    [chart]="chartOptions.chart"
+    [labels]="chartOptions.labels"
+    [responsive]="chartOptions.responsive"
+  ></apx-chart>
+  @if (chartOptions2) {
+    <apx-chart
+      [series]="chartOptions2.series"
+      [chart]="chartOptions2.chart"
+      [labels]="chartOptions2.labels"
+      [responsive]="chartOptions2.responsive"
+    ></apx-chart>
+  }
+</div>
