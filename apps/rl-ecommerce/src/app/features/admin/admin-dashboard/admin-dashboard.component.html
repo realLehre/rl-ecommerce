@@ -1,13 +1,13 @@
-<div>
+<div class="w-full">
   <div>
     <app-dashboard-analytics />
   </div>
 
-  <div class="mt-10 flex items-start space-x-5 w-full">
-    <div class="w-[60%]">
+  <div class="mt-10 flex flex-col min-[970px]:flex-row gap-4 w-full">
+    <div class="w-full min-[970px]:w-3/5 grow">
       <app-dashboard-sales-chart />
     </div>
-    <div class="w-[40%] h-full">
+    <div class="w-full min-[970px]:w-2/5 grow">
       <app-top-selling-products-chart />
     </div>
   </div>

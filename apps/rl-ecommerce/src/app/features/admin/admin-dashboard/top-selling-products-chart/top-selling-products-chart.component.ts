@@ -22,31 +22,17 @@ import { ITopSellingProductResponse } from '../dashboard.interface';
   styleUrl: './top-selling-products-chart.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TopSellingProductsChartComponent implements OnInit {
+export class TopSellingProductsChartComponent {
   private readonly topSellingProductsChartService = inject(
     TopSellingProductsChartService,
   );
   private readonly dashboardService = inject(DashboardService);
-  // chartData = toSignal(this.dashboardService.getTopSellingProducts(), {
-  //   initialValue: [] as ITopSellingProductResponse[],
-  // });
-  chartOptions = this.topSellingProductsChartService.test;
-  // chartOptions2 = computed(() => {
-  //   return this.chartData()
-  //     ? this.topSellingProductsChartService.chart(this.chartData())
-  //     : ({} as Partial<ChartOptions>);
-  // });
-  chartOptions2: Partial<ChartOptions> = {};
-
-  ngOnInit() {
-    this.dashboardService
-      .getTopSellingProducts()
-      .subscribe((res) => this.initChart(res));
-  }
-
-  initChart(data: ITopSellingProductResponse[]) {
-    const options = { ...this.topSellingProductsChartService.chart(data) };
-    this.chartOptions2 = options;
-    console.log(this.chartOptions2);
-  }
+  chartData = toSignal(this.dashboardService.getTopSellingProducts(), {
+    initialValue: [] as ITopSellingProductResponse[],
+  });
+  chartOptions2 = computed(() => {
+    return this.chartData()
+      ? this.topSellingProductsChartService.chart(this.chartData())
+      : ({} as Partial<ChartOptions>);
+  });
 }

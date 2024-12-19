@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { hasUnsavedChangesGuard } from '../../shared/guards/has-unsaved-changes.guard';
 
 export const adminRoutes: Routes = [
-  { path: '', redirectTo: 'users', pathMatch: 'full' },
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   {
     path: '',
     loadComponent: () =>

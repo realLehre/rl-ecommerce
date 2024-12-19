@@ -35,11 +35,16 @@ export class DashboardSalesChartService {
       legend: {
         show: false,
       },
+
       chart: {
         width: '100%',
         height: 350,
         type: 'area',
         toolbar: { show: false },
+        zoom: {
+          enabled: false,
+          allowMouseWheelZoom: false,
+        },
       },
       dataLabels: {
         enabled: false,

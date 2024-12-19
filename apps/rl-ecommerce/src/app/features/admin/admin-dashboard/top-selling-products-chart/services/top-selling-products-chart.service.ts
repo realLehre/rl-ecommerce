@@ -3,6 +3,8 @@ import {
   ApexNonAxisChartSeries,
   ApexResponsive,
   ApexChart,
+  ApexLegend,
+  ApexPlotOptions,
 } from 'ng-apexcharts';
 import { ITopSellingProductResponse } from '../../dashboard.interface';
 
@@ -11,6 +13,8 @@ export type ChartOptions = {
   chart: ApexChart;
   responsive: ApexResponsive[];
   labels: any;
+  legend: ApexLegend;
+  plotOptions: ApexPlotOptions;
 };
 
 @Injectable({
@@ -24,44 +28,31 @@ export class TopSellingProductsChartService {
       series: [...units],
       chart: {
         type: 'donut',
+        height: 430,
       },
       labels: [...productNames],
       responsive: [
         {
-          breakpoint: 480,
+          breakpoint: 2000,
           options: {
             chart: {
-              width: 200,
-              height: 500,
+              width: '100%',
+              // height: 434,
             },
             legend: {
               position: 'bottom',
+              fontFamily: 'Inter, sans-serif', // Change data label font family
+              fontSize: '12px',
+              color: '#555555',
+              // show: false,
+            },
+            style: {
+              fontFamily: 'Arial, sans-serif', // Change data label font family
+              fontSize: '10px',
             },
           },
         },
       ],
     };
   }
-
-  test: Partial<ChartOptions> = {
-    series: [100, 20, 46],
-    chart: {
-      type: 'donut',
-    },
-    labels: ['test1', 'test2', 'test3'],
-    responsive: [
-      {
-        breakpoint: 480,
-        options: {
-          chart: {
-            width: 200,
-            height: '400px',
-          },
-          legend: {
-            position: 'bottom',
-          },
-        },
-      },
-    ],
-  };
 }

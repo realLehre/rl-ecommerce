@@ -1,4 +1,4 @@
-<div class="bg-bg_subtle p-2 pt-6 rounded-md w-full">
+<div class="bg-bg_subtle p-2 pt-6 rounded-md w-full h-full">
   @if (!isLoading()) {
     <div class="flex items-center justify-between pl-3 pr-2 mb-2">
       <h3 class="text-sm font-semibold text-type_grey">Sales Overview</h3>
@@ -14,19 +14,21 @@
       </div>
     </div>
 
-    <apx-chart
-      [series]="chartOptions['series']"
-      [chart]="chartOptions['chart']"
-      [xaxis]="chartOptions['xaxis']"
-      [yaxis]="chartOptions['yaxis']"
-      [stroke]="chartOptions['stroke']"
-      [tooltip]="chartOptions['tooltip']"
-      [dataLabels]="chartOptions['dataLabels']"
-      [grid]="chartOptions['grid']"
-      [legend]="chartOptions['legend']"
-      [fill]="chartOptions['fill']"
-      style="overflow: hidden !important; width: 100% !important"
-    ></apx-chart>
+    <div class="">
+      <apx-chart
+        [series]="chartOptions['series']"
+        [chart]="chartOptions['chart']"
+        [xaxis]="chartOptions['xaxis']"
+        [yaxis]="chartOptions['yaxis']"
+        [stroke]="chartOptions['stroke']"
+        [tooltip]="chartOptions['tooltip']"
+        [dataLabels]="chartOptions['dataLabels']"
+        [grid]="chartOptions['grid']"
+        [legend]="chartOptions['legend']"
+        [fill]="chartOptions['fill']"
+        style="overflow: hidden !important; width: 100% !important"
+      ></apx-chart>
+    </div>
   } @else {
     <div>
       <p-skeleton height="30rem" width="100%" />
