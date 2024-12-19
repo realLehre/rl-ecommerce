@@ -2,7 +2,10 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment.development';
 import { forkJoin, map, Observable } from 'rxjs';
-import { IDashboardAnalytics } from '../dashboard.interface';
+import {
+  IDashboardAnalytics,
+  ITopSellingProductResponse,
+} from '../dashboard.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -46,5 +49,11 @@ export class DashboardService {
     year: number = this.currentYear,
   ): Observable<IDashboardAnalytics> {
     return this.http.get<any>(`${this.baseUrl}monthly?year=${year}`);
+  }
+
+  getTopSellingProducts() {
+    return this.http
+      .get<ITopSellingProductResponse>(`${this.baseUrl}topSellingProducts`)
+      .subscribe();
   }
 }

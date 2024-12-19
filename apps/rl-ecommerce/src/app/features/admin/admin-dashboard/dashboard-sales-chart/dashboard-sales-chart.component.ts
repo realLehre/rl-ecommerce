@@ -40,7 +40,7 @@ export class DashboardSalesChartComponent implements OnInit {
   ngOnInit() {
     const years = this.dashboardSalesChartService.generateYears();
     this.years = [...years];
-
+    this.dashboardService.getTopSellingProducts();
     this.initChartData();
   }
 

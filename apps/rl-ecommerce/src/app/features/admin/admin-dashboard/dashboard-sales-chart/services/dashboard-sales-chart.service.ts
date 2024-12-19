@@ -120,7 +120,7 @@ export class DashboardSalesChartService {
   }
 
   generateYears() {
-    const startYear = 2020;
+    const startYear = 2024;
     const currentYear = new Date().getFullYear();
     const years = [];
     for (let y = startYear; y < currentYear + 1; y++) {
