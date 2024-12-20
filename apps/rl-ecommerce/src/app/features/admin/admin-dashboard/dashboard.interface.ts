@@ -11,3 +11,7 @@ export interface ITopSellingProductResponse {
   totalUnitsSold: number;
   productDetails: IProduct;
 }
+
+export interface ISalesDataResponse {
+  [key: string]: number;
+}

@@ -1,21 +1,21 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
+  computed,
   inject,
   OnInit,
+  Signal,
   signal,
 } from '@angular/core';
 import { DashboardService } from '../services/dashboard.service';
-import {
-  ChartOptions,
-  DashboardSalesChartService,
-} from './services/dashboard-sales-chart.service';
+import { DashboardSalesChartService } from './services/dashboard-sales-chart.service';
 import { ChartComponent } from 'ng-apexcharts';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
 import { SkeletonModule } from 'primeng/skeleton';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { Observable, switchMap } from 'rxjs';
+import { ISalesDataResponse } from '../dashboard.interface';
 
 @Component({
   selector: 'app-dashboard-sales-chart',
@@ -28,44 +28,32 @@ import { SkeletonModule } from 'primeng/skeleton';
 export class DashboardSalesChartComponent implements OnInit {
   private dashboardService = inject(DashboardService);
   private dashboardSalesChartService = inject(DashboardSalesChartService);
-  private cd = inject(ChangeDetectorRef);
-  chartOptions!: Partial<ChartOptions | any>;
-  years: { name: number; code: number }[] = [];
-  selectedYear: { name: number; code: number } = {
+  years = this.dashboardSalesChartService.years;
+  selectedYear = {
     name: new Date().getFullYear(),
     code: new Date().getFullYear(),
   };
-  isLoading = signal(false);
+  activeYear = signal(this.selectedYear);
+  chartData$: Observable<ISalesDataResponse> = toObservable(
+    this.activeYear,
+  ).pipe(switchMap((year) => this.dashboardService.getSalesData(year.code)));
+  chartDataResponse: Signal<ISalesDataResponse> = toSignal(this.chartData$, {
+    initialValue: {},
+  });
+  chartOptions = computed(() => {
+    if (this.chartDataResponse().hasOwnProperty('Jan')) {
+      const sales: number[] = Object.values(this.chartDataResponse());
+      const months: string[] = Object.keys(this.chartDataResponse());
+      return this.dashboardSalesChartService.setApexChart(sales, months);
+    } else {
+      return this.dashboardSalesChartService.setApexChart([], []);
+    }
+  });
 
-  ngOnInit() {
-    const years = this.dashboardSalesChartService.generateYears();
-    this.years = [...years];
-    this.dashboardService.getTopSellingProducts();
-    this.initChartData();
-  }
-
-  initChartData() {
-    this.isLoading.set(true);
-    this.dashboardService
-      .getSalesData(this.selectedYear.code)
-      .subscribe((res) => {
-        const sales = Object.values(res);
-        const months = Object.keys(res);
-        this.initApexChart(sales, months);
-      });
-  }
+  ngOnInit() {}
 
   onChangeYear(event: { name: number; code: number }) {
     this.selectedYear = event;
-    this.initChartData();
-  }
-
-  initApexChart(sales: number[], months: string[]) {
-    this.chartOptions = this.dashboardSalesChartService.setApexChart(
-      sales,
-      months,
-    );
-    this.isLoading.set(false);
-    // this.cd.detectChanges();
+    this.activeYear.set(event);
   }
 }

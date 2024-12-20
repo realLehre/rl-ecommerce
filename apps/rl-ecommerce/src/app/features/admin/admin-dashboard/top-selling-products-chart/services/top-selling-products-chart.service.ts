@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import {
   ApexNonAxisChartSeries,
   ApexResponsive,
@@ -21,6 +21,7 @@ export type ChartOptions = {
   providedIn: 'root',
 })
 export class TopSellingProductsChartService {
+  isLoading = signal(true);
   chart(data: ITopSellingProductResponse[]): Partial<ChartOptions> {
     const productNames = data?.map((item) => item.productDetails.name);
     const units = data?.map((item) => item.totalUnitsSold);
@@ -29,6 +30,11 @@ export class TopSellingProductsChartService {
       chart: {
         type: 'donut',
         height: 430,
+        events: {
+          mounted: () => {
+            this.isLoading.set(false);
+          },
+        },
       },
       labels: [...productNames],
       responsive: [
@@ -41,13 +47,13 @@ export class TopSellingProductsChartService {
             },
             legend: {
               position: 'bottom',
-              fontFamily: 'Inter, sans-serif', // Change data label font family
+              fontFamily: 'Inter, sans-serif',
               fontSize: '12px',
               color: '#555555',
               // show: false,
             },
             style: {
-              fontFamily: 'Arial, sans-serif', // Change data label font family
+              fontFamily: 'Arial, sans-serif',
               fontSize: '10px',
             },
           },

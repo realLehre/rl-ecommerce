@@ -1,9 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment.development';
-import { forkJoin, map, Observable } from 'rxjs';
+import { forkJoin, map, Observable, retry } from 'rxjs';
 import {
   IDashboardAnalytics,
+  ISalesDataResponse,
   ITopSellingProductResponse,
 } from '../dashboard.interface';
 
@@ -35,6 +36,7 @@ export class DashboardService {
       this.getTotalUsers(),
       this.getTotalProducts(),
     ]).pipe(
+      retry(3),
       map((res) => {
         return {
           totalSales: res[0],
@@ -45,10 +47,10 @@ export class DashboardService {
     );
   }
 
-  getSalesData(
-    year: number = this.currentYear,
-  ): Observable<IDashboardAnalytics> {
-    return this.http.get<any>(`${this.baseUrl}monthly?year=${year}`);
+  getSalesData(year: number = this.currentYear): Observable<{}> {
+    return this.http.get<ISalesDataResponse>(
+      `${this.baseUrl}monthly?year=${year}`,
+    );
   }
 
   getTopSellingProducts() {

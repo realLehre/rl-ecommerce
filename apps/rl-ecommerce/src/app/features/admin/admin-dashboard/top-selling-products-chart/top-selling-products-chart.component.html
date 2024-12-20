@@ -2,14 +2,16 @@
   <h3 class="text-sm font-semibold text-type_grey mb-4">
     Top Selling Products
   </h3>
-  @if (chartOptions2()) {
+  @if (chartOptions().series?.length) {
     <div>
       <apx-chart
-        [series]="chartOptions2().series"
-        [chart]="chartOptions2().chart"
-        [labels]="chartOptions2().labels"
-        [responsive]="chartOptions2().responsive"
+        [series]="chartOptions().series"
+        [chart]="chartOptions().chart"
+        [labels]="chartOptions().labels"
+        [responsive]="chartOptions().responsive"
       ></apx-chart>
     </div>
+  } @else {
+    <p-skeleton height="20rem" width="100%" />
   }
 </div>

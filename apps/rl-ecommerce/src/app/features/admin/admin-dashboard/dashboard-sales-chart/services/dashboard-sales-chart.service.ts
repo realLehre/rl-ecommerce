@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -6,6 +6,8 @@ import {
   ApexDataLabels,
   ApexTooltip,
   ApexStroke,
+  ApexLegend,
+  ApexFill,
 } from 'ng-apexcharts';
 
 export type ChartOptions = {
@@ -15,6 +17,8 @@ export type ChartOptions = {
   stroke: ApexStroke;
   tooltip: ApexTooltip;
   dataLabels: ApexDataLabels;
+  legend: ApexLegend;
+  fill: ApexFill;
 };
 
 @Injectable({
@@ -22,8 +26,10 @@ export type ChartOptions = {
 })
 export class DashboardSalesChartService {
   colors: string[] = ['#17ef1a'];
+  isLoading = signal(true);
+  years = signal<{ name: number; code: number }[]>([]);
 
-  setApexChart(sales: number[], months: string[]) {
+  setApexChart(sales: number[], months: string[]): Partial<ChartOptions | any> {
     const chartData: { name: string; data: number[] }[] = [
       {
         name: 'Sales',
@@ -44,6 +50,11 @@ export class DashboardSalesChartService {
         zoom: {
           enabled: false,
           allowMouseWheelZoom: false,
+        },
+        events: {
+          mounted: () => {
+            if (sales.length) this.isLoading.set(false);
+          },
         },
       },
       dataLabels: {
@@ -94,7 +105,7 @@ export class DashboardSalesChartService {
             fontWeight: 500,
           },
           formatter: (value: number) => {
-            return '₦' + value.toLocaleString();
+            return '₦' + value?.toLocaleString();
           },
         },
       },
@@ -106,7 +117,7 @@ export class DashboardSalesChartService {
         },
         y: {
           formatter: (value: number) => {
-            return '₦' + value.toLocaleString();
+            return '₦' + value?.toLocaleString();
           },
         },
       },
@@ -125,16 +136,19 @@ export class DashboardSalesChartService {
   }
 
   generateYears() {
-    const startYear = 2024;
+    const startYear = 2022;
     const currentYear = new Date().getFullYear();
     const years = [];
     for (let y = startYear; y < currentYear + 1; y++) {
       years.push(y);
     }
-    return years.map((year) => {
+    const newYears = years.map((year) => {
       return { name: year, code: year };
     });
+    this.years.set(newYears);
   }
 
-  constructor() {}
+  constructor() {
+    this.generateYears();
+  }
 }

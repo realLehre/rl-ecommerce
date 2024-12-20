@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -13,16 +14,17 @@ import {
 import { DashboardService } from '../services/dashboard.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ITopSellingProductResponse } from '../dashboard.interface';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-top-selling-products-chart',
   standalone: true,
-  imports: [ChartComponent],
+  imports: [ChartComponent, SkeletonModule],
   templateUrl: './top-selling-products-chart.component.html',
   styleUrl: './top-selling-products-chart.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TopSellingProductsChartComponent {
+export class TopSellingProductsChartComponent implements AfterViewInit {
   private readonly topSellingProductsChartService = inject(
     TopSellingProductsChartService,
   );
@@ -30,9 +32,13 @@ export class TopSellingProductsChartComponent {
   chartData = toSignal(this.dashboardService.getTopSellingProducts(), {
     initialValue: [] as ITopSellingProductResponse[],
   });
-  chartOptions2 = computed(() => {
+  chartOptions = computed(() => {
     return this.chartData()
       ? this.topSellingProductsChartService.chart(this.chartData())
-      : ({} as Partial<ChartOptions>);
+      : this.topSellingProductsChartService.chart([]);
   });
+
+  ngAfterViewInit() {
+    // console.log(this.chartOptions());
+  }
 }
