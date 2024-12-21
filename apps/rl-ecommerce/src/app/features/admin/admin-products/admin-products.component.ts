@@ -87,7 +87,7 @@ export class AdminProductsComponent implements OnInit {
   rangeDates: any[] = [];
   isFetching = signal(true);
   config: PaginationInstance = {
-    id: 'userOrderPagination',
+    id: 'adminProducts',
     itemsPerPage: 10,
     currentPage: 1,
   };

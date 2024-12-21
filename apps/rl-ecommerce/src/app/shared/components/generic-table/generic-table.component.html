@@ -82,22 +82,24 @@
       <div
         class="flex flex-col min-[760px]:flex-row min-[760px]:items-center items-start justify-between gap-x-5 gap-y-4 mt-8 px-4 pb-6"
       >
-        <div class="flex items-center space-x-3 grow">
-          <h4 class="font-medium text-sm text-[#808080] whitespace-nowrap">
-            Result per page
-          </h4>
-          <select
-            [ngModel]="totalItemsToShow()"
-            (ngModelChange)="onChangeItemsToShow($event)"
-            class="text-type_title_gray bg-transparent h-[30px] px-1 pr-0 rounded-[4px] focus:outline-0 border border-border_subtle flex items-center justify-center"
-          >
-            @for (item of itemsToShow; track $index) {
-              <option [value]="item" class="bg-background">
-                {{ item }}
-              </option>
-            }
-          </select>
-        </div>
+        @if (showTotalItemFilter()) {
+          <div class="flex items-center space-x-3 grow">
+            <h4 class="font-medium text-sm text-[#808080] whitespace-nowrap">
+              Result per page
+            </h4>
+            <select
+              [ngModel]="totalItemsToShow()"
+              (ngModelChange)="onChangeItemsToShow($event)"
+              class="text-type_title_gray bg-transparent h-[30px] px-1 pr-0 rounded-[4px] focus:outline-0 border border-border_subtle flex items-center justify-center"
+            >
+              @for (item of itemsToShow; track $index) {
+                <option [value]="item" class="bg-background">
+                  {{ item }}
+                </option>
+              }
+            </select>
+          </div>
+        }
 
         <div
           class="hidden mobile:flex justify-center items-center w-full min-[760px]:justify-self-center min-[760px]:w-auto"

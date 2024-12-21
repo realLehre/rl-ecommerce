@@ -11,10 +11,10 @@ export class ProductsLowInStockService {
   private apiUrl = environment.apiUrl + 'product/';
   constructor() {}
 
-  getProductsLowInStock(page: number = 1) {
-    const params = new HttpParams();
-    params.append('page', page);
-    return this.http.get<IProductResponse[]>(this.apiUrl + 'low-in-stock', {
+  getProductsLowInStock(page: number) {
+    let params = new HttpParams();
+    params = params.set('page', page);
+    return this.http.get<IProductResponse>(this.apiUrl + 'low-in-stock', {
       params,
     });
   }

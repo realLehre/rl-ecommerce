@@ -50,6 +50,8 @@ export class GenericTableComponent implements OnInit {
   itemsToShowInput = input<number>(10);
   searchValueInput = input<string>();
   showFilters = input<boolean>(true);
+  showTotalItemFilter = input<boolean>(true);
+  scrollTop = input<boolean>(true);
   searchInput: FormControl = new FormControl(null);
   itemsToShow: number[] = [1, 5, 10, 15, 20, 25];
   totalItemsToShow = computed(() => this.itemsToShowInput());
@@ -84,10 +86,12 @@ export class GenericTableComponent implements OnInit {
   }
 
   pageChange(event: any) {
-    window.scrollTo({
-      top: 70,
-      behavior: 'smooth',
-    });
+    if (this.scrollTop()) {
+      window.scrollTo({
+        top: 70,
+        behavior: 'smooth',
+      });
+    }
     this.pageChanged.emit(event);
   }
 }
