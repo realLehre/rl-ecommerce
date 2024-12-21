@@ -30,7 +30,6 @@ export class UserAccountService {
     }
   }
 
-  testEndPoint() {}
   getUser() {
     return this.userSignal()
       ? of(this.userSignal())

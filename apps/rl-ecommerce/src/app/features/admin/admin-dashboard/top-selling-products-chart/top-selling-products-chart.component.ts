@@ -1,16 +1,11 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   computed,
   inject,
-  OnInit,
 } from '@angular/core';
 import { ChartComponent } from 'ng-apexcharts';
-import {
-  ChartOptions,
-  TopSellingProductsChartService,
-} from './services/top-selling-products-chart.service';
+import { TopSellingProductsChartService } from './services/top-selling-products-chart.service';
 import { DashboardService } from '../services/dashboard.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ITopSellingProductResponse } from '../dashboard.interface';
@@ -24,7 +19,7 @@ import { SkeletonModule } from 'primeng/skeleton';
   styleUrl: './top-selling-products-chart.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TopSellingProductsChartComponent implements AfterViewInit {
+export class TopSellingProductsChartComponent {
   private readonly topSellingProductsChartService = inject(
     TopSellingProductsChartService,
   );
@@ -37,8 +32,4 @@ export class TopSellingProductsChartComponent implements AfterViewInit {
       ? this.topSellingProductsChartService.chart(this.chartData())
       : this.topSellingProductsChartService.chart([]);
   });
-
-  ngAfterViewInit() {
-    // console.log(this.chartOptions());
-  }
 }

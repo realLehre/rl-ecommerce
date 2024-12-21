@@ -12,9 +12,10 @@ import {
 import { routes } from './app.routes';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { CookieService } from 'ngx-cookie-service';
+import { tokenInterceptor } from './shared/interceptors/token.interceptor';
 
 const scrollConfig: InMemoryScrollingOptions = {
   anchorScrolling: 'enabled',
@@ -33,7 +34,8 @@ export const appConfig: ApplicationConfig = {
     ),
     provideAnimationsAsync(),
     importProvidersFrom([BrowserAnimationsModule]),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([tokenInterceptor])),
+
     DialogService,
     DynamicDialogRef,
     CookieService,

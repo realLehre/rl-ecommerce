@@ -4,8 +4,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../../auth/services/auth.service';
+import { Router } from '@angular/router';
 import { OverviewFormComponent } from './overview-form/overview-form.component';
 import { UserAccountService } from '../services/user-account.service';
 import { of } from 'rxjs';
@@ -17,13 +16,12 @@ import { IAddress } from '../../models/address.interface';
 @Component({
   selector: 'app-account-overview',
   standalone: true,
-  imports: [RouterLink, OverviewFormComponent, AsyncPipe, SkeletonModule],
+  imports: [OverviewFormComponent, AsyncPipe, SkeletonModule],
   templateUrl: './account-overview.component.html',
   styleUrl: './account-overview.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountOverviewComponent {
-  private authService = inject(AuthService);
   isEditingProfile = signal(false);
   private userAccountService = inject(UserAccountService);
   private addressService = inject(AddressService);
@@ -41,9 +39,5 @@ export class AccountOverviewComponent {
     this.router.navigate(['/', 'user', 'address-management'], {
       queryParams: { edit: true },
     });
-  }
-
-  test() {
-    this.userAccountService.testEndPoint();
   }
 }
