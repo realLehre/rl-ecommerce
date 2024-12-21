@@ -33,7 +33,6 @@ export class AuthService {
   user = signal<IUser | null>(null);
   USER_STORAGE_KEY = 'shshyeo948dnsks7h0';
   USER_ACCOUNT_STORAGE_KEY = 'hdjeyu7830nsk083hd';
-  USER_AUTH_TOKEN_KEY = 'hDSJDjsajd89ss202ns2';
   savedReturnUrl: string = 'djdhw923jsjhak9';
   cachedAuthEvent = signal(false);
 
@@ -125,7 +124,6 @@ export class AuthService {
           fullName: session?.user.user_metadata?.['full_name'],
           token: session?.access_token,
         };
-        localStorage.setItem(this.USER_AUTH_TOKEN_KEY, session?.access_token!);
         this.user.set(data);
 
         this.cookieService.set(this.USER_STORAGE_KEY, JSON.stringify(data), {

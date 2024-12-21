@@ -1,1 +1,93 @@
-<div></div>
+<div>
+  <h2 class="text-type_grey test-sm mobile:text-base mb-3 font-semibold">
+    Recent Orders
+  </h2>
+  @if (ordersData()) {
+    <div>
+      <app-generic-table [tableData]="ordersData()!" [showFilters]="false">
+        <ng-template #headers>
+          <th
+            class="hidden mobile:table-cell px-2 mobile:px-4 py-3 text-left text-[10px] mobile:text-xs text-type_gray font-medium"
+          >
+            ORDER ID
+          </th>
+
+          <th
+            class="hidden mobile:table-cell px-2 mobile:px-4 py-3 text-left text-[10px] mobile:text-xs text-type_gray font-medium"
+          >
+            CUSTOMER NAME
+          </th>
+
+          <th
+            class="px-2 mobile:px-4 py-3 text-left cursor-pointer text-[10px] mobile:text-xs text-type_gray font-medium"
+          >
+            <div class="flex items-center space-x-1">
+              <span>TOTAL PRICE</span>
+            </div>
+          </th>
+          <th
+            class="px-2 mobile:px-4 py-3 text-left cursor-pointer text-[10px] mobile:text-xs text-type_gray font-medium"
+          >
+            <div class="flex items-center space-x-1">
+              <span>ORDER DATE</span>
+            </div>
+          </th>
+          <th
+            class="px-2 mobile:px-4 py-3 text-left text-[10px] mobile:text-xs text-type_gray font-medium"
+          >
+            STATUS
+          </th>
+          <th
+            class="px-2 mobile:px-4 py-3 text-left text-[10px] mobile:text-xs text-type_gray font-medium"
+          >
+            ACTION
+          </th>
+        </ng-template>
+
+        <ng-template #rows let-order="row">
+          <td
+            class="hidden mobile:table-cell px-2 mobile:px-4 py-5 font-semibold"
+          >
+            {{ order.id }}
+          </td>
+
+          <td class="hidden mobile:table-cell px-2 mobile:px-4 py-5">
+            {{ order.user.name }}
+          </td>
+
+          <td class="px-2 mobile:px-4 py-5">
+            {{ order.totalAmount | currency: '₦' : 'symbol' : '1.0-0' }}
+          </td>
+          <td class="px-2 mobile:px-4 py-5">
+            {{ order.createdAt | date }}
+          </td>
+          <td class="px-2 mobile:px-4 py-5">
+            <span
+              [appOrderStatus]="order.deliveryStatus"
+              class="px-2 py-1 rounded-full text-[10px] whitespace-nowrap"
+            >
+              {{ order.deliveryStatus }}
+            </span>
+          </td>
+          <td class="px-2 mobile:px-4 py-2">
+            <button
+              class="border-[1px] border-type_caption rounded-full hover:bg-bg_subtle text-type_caption py-1 px-2 mobile:px-3 whitespace-nowrap text-[10px] mobile:text-sm"
+              (click)="onViewOrder(order)"
+            >
+              <span class="block mobile:hidden">View</span>
+              <span class="hidden mobile:block">View Details</span>
+            </button>
+          </td>
+        </ng-template>
+      </app-generic-table>
+    </div>
+  } @else {
+    <div class="w-full space-y-2 mt-5">
+      @for (item of [1, 2, 3, 4, 5]; track item) {
+        <div>
+          <p-skeleton width="100%" height="4rem" />
+        </div>
+      }
+    </div>
+  }
+</div>

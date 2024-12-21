@@ -1,6 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment.development';
+import { IOrder } from '../../../../shared/models/order.interface';
+import { retry } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +13,6 @@ export class AdminOrderService {
   constructor() {}
 
   getRecentOrders() {
-    return this.http.get(this.apiUrl + '/recent');
+    return this.http.get<IOrder[]>(this.apiUrl + '/recent').pipe(retry(3));
   }
 }

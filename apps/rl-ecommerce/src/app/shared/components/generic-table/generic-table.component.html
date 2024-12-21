@@ -1,38 +1,42 @@
 <div class="w-full">
-  <div class="flex items-center justify-between mb-8">
-    <h2 class="text-type_title_gray text-base mobile:text-[20px] font-medium">
-      {{ title() }}
-    </h2>
+  @if (title()) {
+    <div class="flex items-center justify-between mb-8">
+      <h2 class="text-type_title_gray text-base mobile:text-[20px] font-medium">
+        {{ title() }}
+      </h2>
 
-    <ng-content select="add-button"> </ng-content>
-  </div>
-
-  <div class="py-6 border-[2px] border-border_subtle rounded-lg">
-    <div class="flex items-center gap-x-6 gap-y-2 mb-6 px-4">
-      <div class="max-w-[300px] min-w-[170px] grow h-8 relative">
-        <img
-          src="assets/images/icons/search.svg"
-          alt=""
-          class="absolute left-3 top-1/2 -translate-y-1/2 w-5"
-        />
-        <input
-          class="w-full focus:outline-0 rounded-full bg-bg_subtle border border-border_subtle h-full pl-10 text-type_caption font-medium placeholder:text-type_caption"
-          placeholder="Search"
-          [formControl]="searchInput"
-          id="toTop"
-        />
-        @if (searchInput.value && searchInput.value !== '') {
-          <button
-            class="text-type_caption absolute right-3 top-1/2 -translate-y-1/2 text-lg"
-            (click)="onClearSearch()"
-          >
-            <i class="fa fa-times"></i>
-          </button>
-        }
-      </div>
-
-      <ng-content select="table-filters" />
+      <ng-content select="add-button"> </ng-content>
     </div>
+  }
+
+  <div class="border-[2px] border-border_subtle rounded-lg">
+    @if (showFilters()) {
+      <div class="flex items-center gap-x-6 gap-y-2 mb-6 pt-6 px-4">
+        <div class="max-w-[300px] min-w-[170px] grow h-8 relative">
+          <img
+            src="assets/images/icons/search.svg"
+            alt=""
+            class="absolute left-3 top-1/2 -translate-y-1/2 w-5"
+          />
+          <input
+            class="w-full focus:outline-0 rounded-full bg-bg_subtle border border-border_subtle h-full pl-10 text-type_caption font-medium placeholder:text-type_caption"
+            placeholder="Search"
+            [formControl]="searchInput"
+            id="toTop"
+          />
+          @if (searchInput.value && searchInput.value !== '') {
+            <button
+              class="text-type_caption absolute right-3 top-1/2 -translate-y-1/2 text-lg"
+              (click)="onClearSearch()"
+            >
+              <i class="fa fa-times"></i>
+            </button>
+          }
+        </div>
+
+        <ng-content select="table-filters" />
+      </div>
+    }
 
     <div class="overflow-x-auto">
       <table class="min-w-full px-2">
@@ -42,154 +46,170 @@
           </tr>
         </thead>
 
-        <tbody>
-          @for (
-            item of tableData() | paginate: config()!;
-            track item.id;
-            let i = $index
-          ) {
-            <tr
-              class="border-b border-border_subtle text-type_title_gray text-xs mobile:text-sm font-medium"
-            >
-              <ng-container
-                *ngTemplateOutlet="rows; context: { row: item, index: i }"
-              />
-            </tr>
-          }
-        </tbody>
+        @if (config()) {
+          <tbody>
+            @for (
+              item of tableData() | paginate: config()!;
+              track item.id;
+              let i = $index
+            ) {
+              <tr
+                class="border-b border-border_subtle text-type_title_gray text-xs mobile:text-sm font-medium"
+              >
+                <ng-container
+                  *ngTemplateOutlet="rows; context: { row: item, index: i }"
+                />
+              </tr>
+            }
+          </tbody>
+        } @else {
+          <tbody>
+            @for (item of tableData(); track item.id; let i = $index) {
+              <tr
+                class="border-b border-border_subtle text-type_title_gray text-xs mobile:text-sm font-medium"
+              >
+                <ng-container
+                  *ngTemplateOutlet="rows; context: { row: item, index: i }"
+                />
+              </tr>
+            }
+          </tbody>
+        }
       </table>
     </div>
 
-    <div
-      class="flex flex-col min-[760px]:flex-row min-[760px]:items-center items-start justify-between gap-x-5 gap-y-4 mt-8 px-4"
-    >
-      <div class="flex items-center space-x-3 grow">
-        <h4 class="font-medium text-sm text-[#808080] whitespace-nowrap">
-          Result per page
-        </h4>
-        <select
-          [ngModel]="totalItemsToShow()"
-          (ngModelChange)="onChangeItemsToShow($event)"
-          class="text-type_title_gray bg-transparent h-[30px] px-1 pr-0 rounded-[4px] focus:outline-0 border border-border_subtle flex items-center justify-center"
-        >
-          @for (item of itemsToShow; track $index) {
-            <option [value]="item" class="bg-background">
-              {{ item }}
-            </option>
-          }
-        </select>
-      </div>
-
+    @if (config()) {
       <div
-        class="hidden mobile:flex justify-center items-center w-full min-[760px]:justify-self-center min-[760px]:w-auto"
+        class="flex flex-col min-[760px]:flex-row min-[760px]:items-center items-start justify-between gap-x-5 gap-y-4 mt-8 px-4 pb-6"
       >
-        <pagination-template
-          #p="paginationApi"
-          [id]="config()?.id!"
-          (pageChange)="pageChange($event)"
-          class="h-fit min-h-auto"
-        >
-          <div class="flex items-center text-sm">
-            <button
-              class="h-8 w-8 flex items-center border-0 outline-0 justify-center cursor-pointer disabled:opacity-30"
-              [disabled]="p.isFirstPage()"
-              (click)="p.previous()"
-              [attr.aria-label]="'Previous page'"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 448 512"
-                class="w-6"
-              >
-                <path
-                  d="M7.4 273.4C2.7 268.8 0 262.6 0 256s2.7-12.8 7.4-17.4l176-168c9.6-9.2 24.8-8.8 33.9 .8s8.8 24.8-.8 33.9L83.9 232 424 232c13.3 0 24 10.7 24 24s-10.7 24-24 24L83.9 280 216.6 406.6c9.6 9.2 9.9 24.3 .8 33.9s-24.3 9.9-33.9 .8l-176-168z"
-                />
-              </svg>
-            </button>
-
-            @for (page of p.pages; track $index) {
-              <button
-                class="flex items-center justify-center mx-2 w-9 h-9 rounded-full text-type_title_gray cursor-pointer font-bold bg-transparent"
-                [ngClass]="{
-                  'text-white !bg-primary': p.getCurrent() === page.value,
-                }"
-                (click)="p.setCurrent(page.value)"
-                [attr.aria-label]="'Page {{ page.label }}'"
-              >
-                <span>{{ page.label }}</span>
-              </button>
+        <div class="flex items-center space-x-3 grow">
+          <h4 class="font-medium text-sm text-[#808080] whitespace-nowrap">
+            Result per page
+          </h4>
+          <select
+            [ngModel]="totalItemsToShow()"
+            (ngModelChange)="onChangeItemsToShow($event)"
+            class="text-type_title_gray bg-transparent h-[30px] px-1 pr-0 rounded-[4px] focus:outline-0 border border-border_subtle flex items-center justify-center"
+          >
+            @for (item of itemsToShow; track $index) {
+              <option [value]="item" class="bg-background">
+                {{ item }}
+              </option>
             }
-
-            <button
-              class="h-8 w-8 flex items-center border-0 outline-0 justify-center cursor-pointer disabled:opacity-30"
-              [disabled]="p.isLastPage()"
-              (click)="p.next()"
-              [attr.aria-label]="'Next page'"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 448 512"
-                class="w-6 rotate-180"
-              >
-                <path
-                  d="M7.4 273.4C2.7 268.8 0 262.6 0 256s2.7-12.8 7.4-17.4l176-168c9.6-9.2 24.8-8.8 33.9 .8s8.8 24.8-.8 33.9L83.9 232 424 232c13.3 0 24 10.7 24 24s-10.7 24-24 24L83.9 280 216.6 406.6c9.6 9.2 9.9 24.3 .8 33.9s-24.3 9.9-33.9 .8l-176-168z"
-                />
-              </svg>
-            </button>
-          </div>
-        </pagination-template>
-      </div>
-
-      <div
-        class="flex mobile:hidden items-center justify-between space-x-3 max-w-[230px] mx-auto mt-10"
-      >
-        <button
-          class="h-8 w-8 flex items-center border-0 outline-0 justify-center cursor-pointer disabled:opacity-30"
-          [disabled]="config()?.currentPage! === 1"
-          (click)="pageChange(config()?.currentPage! - 1)"
-          [attr.aria-label]="'Previous page'"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 448 512"
-            class="w-6"
-          >
-            <path
-              d="M7.4 273.4C2.7 268.8 0 262.6 0 256s2.7-12.8 7.4-17.4l176-168c9.6-9.2 24.8-8.8 33.9 .8s8.8 24.8-.8 33.9L83.9 232 424 232c13.3 0 24 10.7 24 24s-10.7 24-24 24L83.9 280 216.6 406.6c9.6 9.2 9.9 24.3 .8 33.9s-24.3 9.9-33.9 .8l-176-168z"
-            />
-          </svg>
-        </button>
-
-        <div
-          class="p-2 bg-primary bg-opacity-60 h-12 rounded flex items-center justify-center space-x-2 text-white font-medium"
-        >
-          <span
-            class="h-8 flex items-center justify-center px-5 bg-primary rounded"
-            >{{ config()?.currentPage }}</span
-          >
-          <div class="space-x-1">
-            <span>of</span>
-            <span>{{ data().totalPages }}</span>
-          </div>
+          </select>
         </div>
 
-        <button
-          class="h-8 w-8 flex items-center border-0 outline-0 justify-center cursor-pointer disabled:opacity-30"
-          [disabled]="config()?.currentPage! === data().totalPages"
-          (click)="pageChange(config()?.currentPage! + 1)"
-          [attr.aria-label]="'Next page'"
+        <div
+          class="hidden mobile:flex justify-center items-center w-full min-[760px]:justify-self-center min-[760px]:w-auto"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 448 512"
-            class="w-6 rotate-180"
+          <pagination-template
+            #p="paginationApi"
+            [id]="config()?.id!"
+            (pageChange)="pageChange($event)"
+            class="h-fit min-h-auto"
           >
-            <path
-              d="M7.4 273.4C2.7 268.8 0 262.6 0 256s2.7-12.8 7.4-17.4l176-168c9.6-9.2 24.8-8.8 33.9 .8s8.8 24.8-.8 33.9L83.9 232 424 232c13.3 0 24 10.7 24 24s-10.7 24-24 24L83.9 280 216.6 406.6c9.6 9.2 9.9 24.3 .8 33.9s-24.3 9.9-33.9 .8l-176-168z"
-            />
-          </svg>
-        </button>
+            <div class="flex items-center text-sm">
+              <button
+                class="h-8 w-8 flex items-center border-0 outline-0 justify-center cursor-pointer disabled:opacity-30"
+                [disabled]="p.isFirstPage()"
+                (click)="p.previous()"
+                [attr.aria-label]="'Previous page'"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 448 512"
+                  class="w-6"
+                >
+                  <path
+                    d="M7.4 273.4C2.7 268.8 0 262.6 0 256s2.7-12.8 7.4-17.4l176-168c9.6-9.2 24.8-8.8 33.9 .8s8.8 24.8-.8 33.9L83.9 232 424 232c13.3 0 24 10.7 24 24s-10.7 24-24 24L83.9 280 216.6 406.6c9.6 9.2 9.9 24.3 .8 33.9s-24.3 9.9-33.9 .8l-176-168z"
+                  />
+                </svg>
+              </button>
+
+              @for (page of p.pages; track $index) {
+                <button
+                  class="flex items-center justify-center mx-2 w-9 h-9 rounded-full text-type_title_gray cursor-pointer font-bold bg-transparent"
+                  [ngClass]="{
+                    'text-white !bg-primary': p.getCurrent() === page.value,
+                  }"
+                  (click)="p.setCurrent(page.value)"
+                  [attr.aria-label]="'Page {{ page.label }}'"
+                >
+                  <span>{{ page.label }}</span>
+                </button>
+              }
+
+              <button
+                class="h-8 w-8 flex items-center border-0 outline-0 justify-center cursor-pointer disabled:opacity-30"
+                [disabled]="p.isLastPage()"
+                (click)="p.next()"
+                [attr.aria-label]="'Next page'"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 448 512"
+                  class="w-6 rotate-180"
+                >
+                  <path
+                    d="M7.4 273.4C2.7 268.8 0 262.6 0 256s2.7-12.8 7.4-17.4l176-168c9.6-9.2 24.8-8.8 33.9 .8s8.8 24.8-.8 33.9L83.9 232 424 232c13.3 0 24 10.7 24 24s-10.7 24-24 24L83.9 280 216.6 406.6c9.6 9.2 9.9 24.3 .8 33.9s-24.3 9.9-33.9 .8l-176-168z"
+                  />
+                </svg>
+              </button>
+            </div>
+          </pagination-template>
+        </div>
+
+        <div
+          class="flex mobile:hidden items-center justify-between space-x-3 max-w-[230px] mx-auto mt-10"
+        >
+          <button
+            class="h-8 w-8 flex items-center border-0 outline-0 justify-center cursor-pointer disabled:opacity-30"
+            [disabled]="config()?.currentPage! === 1"
+            (click)="pageChange(config()?.currentPage! - 1)"
+            [attr.aria-label]="'Previous page'"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 448 512"
+              class="w-6"
+            >
+              <path
+                d="M7.4 273.4C2.7 268.8 0 262.6 0 256s2.7-12.8 7.4-17.4l176-168c9.6-9.2 24.8-8.8 33.9 .8s8.8 24.8-.8 33.9L83.9 232 424 232c13.3 0 24 10.7 24 24s-10.7 24-24 24L83.9 280 216.6 406.6c9.6 9.2 9.9 24.3 .8 33.9s-24.3 9.9-33.9 .8l-176-168z"
+              />
+            </svg>
+          </button>
+
+          <div
+            class="p-2 bg-primary bg-opacity-60 h-12 rounded flex items-center justify-center space-x-2 text-white font-medium"
+          >
+            <span
+              class="h-8 flex items-center justify-center px-5 bg-primary rounded"
+              >{{ config()?.currentPage }}</span
+            >
+            <div class="space-x-1">
+              <span>of</span>
+              <span>{{ data().totalPages }}</span>
+            </div>
+          </div>
+
+          <button
+            class="h-8 w-8 flex items-center border-0 outline-0 justify-center cursor-pointer disabled:opacity-30"
+            [disabled]="config()?.currentPage! === data().totalPages"
+            (click)="pageChange(config()?.currentPage! + 1)"
+            [attr.aria-label]="'Next page'"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 448 512"
+              class="w-6 rotate-180"
+            >
+              <path
+                d="M7.4 273.4C2.7 268.8 0 262.6 0 256s2.7-12.8 7.4-17.4l176-168c9.6-9.2 24.8-8.8 33.9 .8s8.8 24.8-.8 33.9L83.9 232 424 232c13.3 0 24 10.7 24 24s-10.7 24-24 24L83.9 280 216.6 406.6c9.6 9.2 9.9 24.3 .8 33.9s-24.3 9.9-33.9 .8l-176-168z"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
-    </div>
+    }
   </div>
 </div>

@@ -43,12 +43,13 @@ import {
 export class GenericTableComponent implements OnInit {
   @ContentChild('headers') headers!: TemplateRef<any>;
   @ContentChild('rows') rows!: TemplateRef<any>;
-  title = input.required<string>();
-  data = input.required<any>();
+  title = input<string>();
+  data = input<any>();
   tableData = input.required<any[]>();
   config = input<PaginationInstance>();
   itemsToShowInput = input<number>(10);
   searchValueInput = input<string>();
+  showFilters = input<boolean>(true);
   searchInput: FormControl = new FormControl(null);
   itemsToShow: number[] = [1, 5, 10, 15, 20, 25];
   totalItemsToShow = computed(() => this.itemsToShowInput());

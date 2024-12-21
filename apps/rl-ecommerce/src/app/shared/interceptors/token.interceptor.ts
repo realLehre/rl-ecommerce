@@ -5,12 +5,12 @@ import { CookieService } from 'ngx-cookie-service';
 
 export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
-  const token = localStorage.getItem(authService.USER_AUTH_TOKEN_KEY);
+  const user = authService.user;
 
   let request = req;
-  if (token) {
+  if (user()) {
     request = request.clone({
-      setHeaders: { Authorization: `Bearer ${token}` },
+      setHeaders: { Authorization: `Bearer ${user()?.id}` },
     });
   }
   return next(request);
