@@ -9,10 +9,10 @@ import { AsyncPipe, CurrencyPipe, Location, NgClass } from '@angular/common';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { PricePercentageDecreasePipe } from '../../../../shared/pipes/price-percentage-decrease.pipe';
 import { ProductDetailsImagesComponent } from '../../../products/product-details/product-details-images/product-details-images.component';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { SkeletonModule } from 'primeng/skeleton';
 import { AdminProductsService } from '../services/admin-products.service';
-import { of, switchMap } from 'rxjs';
+import { switchMap } from 'rxjs';
 import { IProduct } from '../../../products/model/product.interface';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -96,6 +96,6 @@ export class AdminProductDetailsComponent {
   }
 
   onNavigateBack() {
-    this.router.navigate(['/', 'admin', 'products']);
+    this.location.back();
   }
 }

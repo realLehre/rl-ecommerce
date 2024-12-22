@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { AdminProductFormComponent } from './admin-product-form/admin-product-form.component';
 import { AdminProductImagesComponent } from './admin-product-images/admin-product-images.component';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { CanComponentDeactivate } from '../../../../shared/guards/has-unsaved-changes.guard';
@@ -25,7 +25,6 @@ import { IProduct } from '../../../products/model/product.interface';
   imports: [
     AdminProductFormComponent,
     AdminProductImagesComponent,
-    RouterLink,
     NgClass,
     LoaderComponent,
   ],
@@ -89,6 +88,7 @@ export class AdminAddProductComponent
       this.productService
         .addProduct({
           ...this.productForm.value,
+          isSoldOut: !this.productForm.value.unit,
           previousPrice: this.productForm.value.previousPrice ?? 0,
           image: this.coverImage,
           imageUrls: [this.coverImage, ...this.imageUrls],
@@ -117,6 +117,7 @@ export class AdminAddProductComponent
         .updateProduct(
           {
             ...this.productForm.value,
+            isSoldOut: !this.productForm.value.unit,
             image: this.coverImage,
             imageUrls: [this.coverImage, ...this.imageUrls],
             videoUrls: [],

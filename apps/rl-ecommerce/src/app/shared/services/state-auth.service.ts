@@ -1,5 +1,4 @@
 import { inject, Injectable } from '@angular/core';
-import { AuthService } from '../../features/auth/services/auth.service';
 import { ProductsService } from '../../features/products/services/products.service';
 import { ProductOptionsService } from '../../features/product-options/services/product-options.service';
 import { CartService } from './cart.service';

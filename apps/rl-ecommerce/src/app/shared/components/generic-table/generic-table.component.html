@@ -103,6 +103,7 @@
 
         <div
           class="hidden mobile:flex justify-center items-center w-full min-[760px]:justify-self-center min-[760px]:w-auto"
+          [ngClass]="{ '!justify-self-center': !showTotalItemFilter() }"
         >
           <pagination-template
             #p="paginationApi"
@@ -162,7 +163,7 @@
         </div>
 
         <div
-          class="flex mobile:hidden items-center justify-between space-x-3 max-w-[230px] mx-auto mt-10"
+          class="flex mobile:hidden items-center justify-between space-x-3 max-w-[230px] mx-auto mt-3"
         >
           <button
             class="h-8 w-8 flex items-center border-0 outline-0 justify-center cursor-pointer disabled:opacity-30"
