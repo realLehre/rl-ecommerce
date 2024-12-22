@@ -33,6 +33,7 @@ export class AuthService {
   user = signal<IUser | null>(null);
   USER_STORAGE_KEY = 'shshyeo948dnsks7h0';
   USER_ACCOUNT_STORAGE_KEY = 'hdjeyu7830nsk083hd';
+  NEW_SIGNUP_KEY = 'djd38sJDjd29qldds';
   savedReturnUrl: string = 'djdhw923jsjhak9';
   cachedAuthEvent = signal(false);
 

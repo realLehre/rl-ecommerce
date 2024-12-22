@@ -7,6 +7,7 @@ import { of, retry, tap } from 'rxjs';
 import { IProduct } from '../../features/products/model/product.interface';
 import { DialogService } from 'primeng/dynamicdialog';
 import { MergeCartAlertDialogComponent } from '../components/merge-cart-alert-dialog/merge-cart-alert-dialog.component';
+import { AuthService } from '../../features/auth/services/auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +16,7 @@ export class CartService {
   private apiUrl = environment.apiUrl + 'cart';
   private http = inject(HttpClient);
   private userService = inject(UserAccountService);
+  private authService = inject(AuthService);
   private dialogService = inject(DialogService);
   user = this.userService.user;
   cartSignal = signal<ICart | null>(null);
@@ -46,7 +48,16 @@ export class CartService {
             tap((res) => {
               this.cartSignal.set(res);
               this.cartTotal.set(res.cartItems.length);
-              this.onShowMergeCartDialog();
+              const newSignIn = sessionStorage.getItem(
+                this.authService.NEW_SIGNUP_KEY,
+              );
+              if (newSignIn) {
+                this.mergeCart().subscribe((res) =>
+                  sessionStorage.removeItem(this.authService.NEW_SIGNUP_KEY),
+                );
+              } else {
+                this.onShowMergeCartDialog();
+              }
               localStorage.setItem(this.CART_KEY, JSON.stringify(res));
             }),
           );

@@ -82,6 +82,7 @@ export class SignUpComponent implements OnInit {
           type: 'success',
           message: 'Sign up successfully!',
         });
+        sessionStorage.setItem(this.authService.NEW_SIGNUP_KEY, 'new');
         const returnUrl = this.route.snapshot.queryParams['returnUrl'];
         this.router.navigateByUrl(returnUrl || '/');
       } catch (error: any) {
@@ -96,6 +97,7 @@ export class SignUpComponent implements OnInit {
   }
 
   async onSignInWithGoogle() {
+    sessionStorage.setItem(this.authService.NEW_SIGNUP_KEY, 'new');
     await this.authService.continueWithGoogle();
   }
 

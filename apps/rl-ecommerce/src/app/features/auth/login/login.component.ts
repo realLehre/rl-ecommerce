@@ -93,6 +93,7 @@ export class LoginComponent implements OnInit {
   }
 
   async onSignInWithGoogle() {
+    sessionStorage.setItem(this.authService.NEW_SIGNUP_KEY, 'new');
     await this.authService.continueWithGoogle();
   }
 

@@ -20,9 +20,9 @@ import { Menu, MenuModule } from 'primeng/menu';
 import { PrimeTemplate } from 'primeng/api';
 import { ProductDeleteDialogComponent } from '../../admin-products/product-delete-dialog/product-delete-dialog.component';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AdminProductsService } from '../../admin-products/services/admin-products.service';
-import { combineLatest, switchMap, tap } from 'rxjs';
+import { switchMap, tap } from 'rxjs';
 import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
@@ -43,7 +43,6 @@ export class ProductsLowInStockComponent {
   private productLowInStockService = inject(ProductsLowInStockService);
   private productService = inject(AdminProductsService);
   private router = inject(Router);
-  private route = inject(ActivatedRoute);
   config: PaginationInstance = {
     id: 'adminLowInStockProducts',
     itemsPerPage: 5,
@@ -62,8 +61,7 @@ export class ProductsLowInStockComponent {
     ),
     tap((res) => {
       this.isLoading.set(false);
-      const totalItemsToShow = Math.max(res?.totalItemsInPage!, 5);
-      this.config.itemsPerPage = totalItemsToShow;
+      this.config.itemsPerPage = Math.max(res?.totalItemsInPage!, 5);
       this.config.currentPage = res?.currentPage!;
       this.config.totalItems = res?.totalItems;
     }),
