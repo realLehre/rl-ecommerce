@@ -39,7 +39,7 @@
 
     <tbody>
       @for (
-        orderItem of order.cartOrder.cartItems;
+        orderItem of order().cartOrder.cartItems;
         track orderItem.id;
         let i = $index
       ) {
@@ -81,14 +81,14 @@
     <div class="flex items-center justify-between">
       <h3 class="text-sm text-type_grey">Subtotal</h3>
       <p class="text-base text-type_title_gray font-semibold">
-        {{ order.orderAmount | currency: '₦' : 'symbol' : '1.0-0' }}
+        {{ order().orderAmount | currency: '₦' : 'symbol' : '1.0-0' }}
       </p>
     </div>
 
     <div class="flex items-center justify-between">
       <h3 class="text-sm text-type_grey">Delivery Fee</h3>
       <p class="text-base text-type_title_gray font-semibold">
-        {{ order.shippingCost | currency: '₦' : 'symbol' : '1.0-0' }}
+        {{ order().shippingCost | currency: '₦' : 'symbol' : '1.0-0' }}
       </p>
     </div>
 
@@ -97,7 +97,7 @@
     <div class="flex items-center justify-between">
       <h3 class="text-sm text-type_grey">Total</h3>
       <p class="text-base text-type_title_gray font-semibold">
-        {{ order.totalAmount | currency: '₦' : 'symbol' : '1.0-0' }}
+        {{ order().totalAmount | currency: '₦' : 'symbol' : '1.0-0' }}
       </p>
     </div>
   </div>

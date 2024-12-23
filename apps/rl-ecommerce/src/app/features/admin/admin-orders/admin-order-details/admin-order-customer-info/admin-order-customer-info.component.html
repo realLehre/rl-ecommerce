@@ -1,1 +1,40 @@
-<p>admin-order-customer-info works!</p>
+<div class="border border-border_subtle rounded-lg flex flex-col">
+  <h2
+    class="text-base p-4 leading-tight mobile:text-lg text-type_title_gray font-medium"
+  >
+    Customer information
+  </h2>
+
+  <div class="border-t border-border_subtle p-4 space-y-3">
+    <div class="text-sm">
+      <h5 class="text-type_caption">Name</h5>
+      <p class="text-type_title_gray font-semibold">{{ order().user.name }}</p>
+    </div>
+
+    <div class="text-sm">
+      <h5 class="text-type_caption">Email</h5>
+      <p class="text-type_title_gray font-semibold">{{ order().user.email }}</p>
+    </div>
+
+    <div class="text-sm">
+      <h5 class="text-type_caption">Phone number</h5>
+      <p class="text-type_title_gray font-semibold">
+        {{ order().user.phoneNumber }}
+      </p>
+    </div>
+
+    <div class="text-sm">
+      <h5 class="text-type_caption">Shipping address</h5>
+      <p class="text-type_title_gray font-semibold">
+        {{ order().shippingInfo.deliveryAddress }}
+      </p>
+    </div>
+
+    <div class="text-sm">
+      <h5 class="text-type_caption">Payment method</h5>
+      <p class="text-type_title_gray font-semibold">
+        {{ order().paymentMethod }}
+      </p>
+    </div>
+  </div>
+</div>

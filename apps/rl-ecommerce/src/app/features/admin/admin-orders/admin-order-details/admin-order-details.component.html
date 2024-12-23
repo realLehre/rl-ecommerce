@@ -20,5 +20,13 @@
     </button>
   </div>
 
-  <app-admin-order-summary />
+  <div class="flex flex-col min-[1000px]:flex-row gap-6 max-w-[1400px]">
+    <div class="w-full min-[970px]:w-3/5 grow">
+      <app-admin-order-summary [order]="order" />
+    </div>
+
+    <div class="w-full min-[970px]:w-2/5 grow">
+      <app-admin-order-customer-info [order]="order" />
+    </div>
+  </div>
 </div>

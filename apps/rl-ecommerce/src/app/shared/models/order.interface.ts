@@ -47,6 +47,7 @@ export interface IOrder {
   shippingInfoId: string;
   orderAmount: number;
   shippingCost: number;
+  shippingInfo: ShippingIfo;
   totalAmount: number;
   paymentMethod: string;
   orderStatus: string;
@@ -74,6 +75,22 @@ export interface User {
   email: string;
   name: string;
   phoneNumber: string;
+  createdAt: string;
+  updateAt: string;
+}
+
+export interface ShippingIfo {
+  id: string;
+  userId: string;
+  name: string;
+  phoneNumber: string;
+  additionalPhoneNumber?: any;
+  deliveryAddress: string;
+  additionalInformation?: any;
+  country: string;
+  state: string;
+  city: string;
+  isDefault: boolean;
   createdAt: string;
   updateAt: string;
 }
