@@ -53,7 +53,7 @@ export class GenericTableComponent implements OnInit {
   showTotalItemFilter = input<boolean>(true);
   scrollTop = input<boolean>(true);
   searchInput: FormControl = new FormControl(null);
-  itemsToShow: number[] = [1, 5, 10, 15, 20, 25];
+  itemsToShow: number[] = [10, 15, 20, 25];
   totalItemsToShow = computed(() => this.itemsToShowInput());
   pageChanged = output<number>();
   itemsToShowChanged = output<number>();
@@ -76,7 +76,6 @@ export class GenericTableComponent implements OnInit {
   }
 
   onChangeItemsToShow(total: number) {
-    // this.totalItemsToShow.set(total)
     this.itemsToShowChanged.emit(total);
   }
 

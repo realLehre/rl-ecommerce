@@ -30,6 +30,7 @@ import { LoaderComponent } from '../../../../shared/components/loader/loader.com
 import { SliderModule } from 'primeng/slider';
 import { CalendarModule } from 'primeng/calendar';
 import { NumberOfFiltersPipe } from '../../../../shared/pipes/number-of-filters.pipe';
+import { PrimeNgDatepickerDirective } from '../../../../shared/directives/prime-ng-datepicker.directive';
 
 @Component({
   selector: 'app-user-orders-table',
@@ -47,6 +48,7 @@ import { NumberOfFiltersPipe } from '../../../../shared/pipes/number-of-filters.
     DropdownModule,
     SliderModule,
     CalendarModule,
+    PrimeNgDatepickerDirective,
   ],
   templateUrl: './user-orders-table.component.html',
   styleUrl: './user-orders-table.component.scss',

@@ -1,1 +1,283 @@
-<p>admin-orders works!</p>
+@if (!isLoading()) {
+  @if (orderData().orders.length) {
+    <div class="w-full">
+      <app-generic-table
+        [data]="orderData()"
+        [config]="config"
+        [tableData]="orderData().orders"
+        [itemsToShowInput]="filter().itemsToShow"
+        [title]="'All Orders'"
+        [searchValueInput]="filter().search"
+        (pageChanged)="pageChange($event)"
+        (itemsToShowChanged)="itemsToShowChange($event)"
+        (searchValueEmit)="searchChanged($event)"
+      >
+        <button
+          class="h-8 border-border_subtle border-[2px] px-2 bg-transparent rounded-full text-type_caption flex items-center space-x-2 relative"
+          ngProjectAs="table-filters"
+          (click)="menu.toggle($event)"
+        >
+          @if (filterNumber) {
+            <span
+              class="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center bg-primary text-white p-2 text-xs font-medium rounded-full"
+              >{{ filterNumber }}</span
+            >
+          }
+          <i class="fa fa-filter"></i>
+          <span>Filter</span>
+        </button>
+
+        <ng-template #headers>
+          <th
+            class="hidden mobile:table-cell px-2 mobile:px-4 py-3 text-left text-[10px] mobile:text-xs text-type_gray font-medium"
+          >
+            ORDER ID
+          </th>
+
+          <th
+            (click)="sortTable('user')"
+            class="px-2 mobile:px-4 py-3 text-left cursor-pointer text-[10px] mobile:text-xs text-type_gray font-medium"
+          >
+            <div class="flex items-center space-x-1">
+              <span>CUSTOMER NAME</span>
+              <span class="flex flex-col">
+                <i
+                  class="fa fa-caret-up text-xs"
+                  [ngClass]="
+                    sortDirection === 'asc' && sortUsed
+                      ? 'opacity-100'
+                      : 'opacity-30'
+                  "
+                ></i>
+                <i
+                  class="fa fa-caret-down text-xs -mt-[10px]"
+                  [ngClass]="
+                    sortDirection === 'desc' ? 'opacity-100' : 'opacity-30'
+                  "
+                ></i>
+              </span>
+            </div>
+          </th>
+
+          <th
+            (click)="sortTable('totalAmount')"
+            class="px-2 mobile:px-4 py-3 text-left cursor-pointer text-[10px] mobile:text-xs text-type_gray font-medium"
+          >
+            <div class="flex items-center space-x-1">
+              <span>TOTAL PRICE</span>
+              <span class="flex flex-col">
+                <i
+                  class="fa fa-caret-up text-xs"
+                  [ngClass]="
+                    sortDirection === 'asc' && sortUsed
+                      ? 'opacity-100'
+                      : 'opacity-30'
+                  "
+                ></i>
+                <i
+                  class="fa fa-caret-down text-xs -mt-[10px]"
+                  [ngClass]="
+                    sortDirection === 'desc' ? 'opacity-100' : 'opacity-30'
+                  "
+                ></i>
+              </span>
+            </div>
+          </th>
+
+          <th
+            (click)="sortTable('createdAt')"
+            class="px-2 mobile:px-4 py-3 text-left cursor-pointer text-[10px] mobile:text-xs text-type_gray font-medium hidden mobile:table-cell"
+          >
+            <div class="flex items-center space-x-1">
+              <span>ORDER DATE</span>
+
+              <span class="flex flex-col">
+                <i
+                  class="fa fa-caret-up text-xs"
+                  [ngClass]="
+                    sortDirection === 'asc' && sortUsed
+                      ? 'opacity-100'
+                      : 'opacity-30'
+                  "
+                ></i>
+                <i
+                  class="fa fa-caret-down text-xs -mt-[10px]"
+                  [ngClass]="
+                    sortDirection === 'desc' ? 'opacity-100' : 'opacity-30'
+                  "
+                ></i>
+              </span>
+            </div>
+          </th>
+          <th
+            class="px-2 mobile:px-4 py-3 text-left text-[10px] mobile:text-xs text-type_gray font-medium"
+          >
+            STATUS
+          </th>
+          <th
+            class="px-2 mobile:px-4 py-3 text-left text-[10px] mobile:text-xs text-type_gray font-medium"
+          >
+            ACTION
+          </th>
+        </ng-template>
+
+        <ng-template #rows let-order="row">
+          <td
+            class="hidden mobile:table-cell px-2 mobile:px-4 py-5 font-semibold"
+          >
+            {{ order.id }}
+          </td>
+
+          <td class="px-2 mobile:px-4 py-5">
+            {{ order.user.name }}
+          </td>
+
+          <td class="px-2 mobile:px-4 py-5">
+            {{ order.totalAmount | currency: '₦' : 'symbol' : '1.0-0' }}
+          </td>
+          <td class="px-2 mobile:px-4 py-5 hidden mobile:table-cell">
+            {{ order.createdAt | date }}
+          </td>
+          <td class="px-2 mobile:px-4 py-5">
+            <span
+              [appOrderStatus]="order.deliveryStatus"
+              class="px-2 py-1 rounded-full text-[10px] font-medium whitespace-nowrap"
+            >
+              {{ order.deliveryStatus }}
+            </span>
+          </td>
+          <td class="px-2 mobile:px-4 py-2">
+            <button
+              class="border-[1px] border-type_caption rounded-full hover:bg-bg_subtle text-type_caption font-medium py-1 px-2 mobile:px-3 whitespace-nowrap text-[10px] mobile:text-sm"
+              (click)="onViewOrder(order)"
+            >
+              <span class="block mobile:hidden font-medium">View</span>
+              <span class="hidden mobile:block">View Details</span>
+            </button>
+          </td>
+        </ng-template>
+      </app-generic-table>
+
+      <p-menu #menu [popup]="true" styleClass="user-order-menu">
+        <ng-template pTemplate="start">
+          <div class="py-3 px-3 w-[250px]">
+            <div class="flex items-center justify-between space-x-3">
+              <h3 class="text-base text-type_title">Filters</h3>
+              @if (filterNumber) {
+                <button
+                  class="bg-transparent text-primary font-medium text-sm py-2"
+                  (click)="onClearFilter()"
+                >
+                  Clear
+                </button>
+              }
+            </div>
+
+            <div class="mt-2">
+              <div>
+                <p class="text-sm text-type_title mb-1">Status</p>
+                <div class="w-full">
+                  <p-dropdown
+                    [options]="deliveryStatus"
+                    [(ngModel)]="selectedStatus"
+                    (ngModelChange)="onChangeOrderStatus($event)"
+                    optionLabel="name"
+                    placeholder="Select status"
+                    styleClass="deliveryStatusDropdown"
+                  />
+                </div>
+              </div>
+
+              <div class="price-slider mt-4 mb-5">
+                <p class="text-sm text-type_title mb-1">Price</p>
+                <div class="text-type_grey text-sm mb-2">
+                  <span>₦{{ rangeValues[0] | number }}</span>
+                  <span> - </span>
+                  <span>₦{{ rangeValues[1] | number }}</span>
+                </div>
+                <div class="card flex justify-content-center"></div>
+                <p-slider
+                  [(ngModel)]="rangeValues"
+                  (ngModelChange)="onRangeValueChanged($event)"
+                  [min]="1000"
+                  [max]="10000000"
+                  [step]="5000"
+                  [range]="true"
+                  styleClass="w-10rem"
+                />
+              </div>
+
+              <div class="">
+                <p class="text-sm text-type_title mb-1">Date range</p>
+                <div class="relative">
+                  <p-calendar
+                    stop-click-propagation
+                    [(ngModel)]="rangeDates"
+                    (ngModelChange)="onDateChanged()"
+                    selectionMode="range"
+                    dateFormat="dd/mm/yy"
+                    [readonlyInput]="true"
+                    styleClass="orderDate"
+                    class="w-full"
+                    [showIcon]="true"
+                  >
+                    <ng-template
+                      pTemplate="inputicon"
+                      let-clickCallBack="clickCallBack"
+                    >
+                      <span (click)="clickCallBack($event)">
+                        <i class="fa fa-calendar"></i>
+                      </span>
+                    </ng-template>
+                  </p-calendar>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between mt-8">
+              <button
+                class="rounded-md font-medium border-primary border-[2px] text-primary py-2 h-8 w-[80px] flex items-center justify-center px-4"
+                (click)="menu.toggle($event)"
+              >
+                Cancel
+              </button>
+              <button
+                class="rounded-md text-white font-medium bg-primary py-2 px-4 h-8 w-[80px] flex items-center justify-center"
+                (click)="onApplyFilter()"
+              >
+                Apply
+              </button>
+            </div>
+          </div>
+        </ng-template>
+      </p-menu>
+    </div>
+  } @else if (orderQueried()) {
+    <div
+      class="flex flex-col items-center text-center w-full mobile:w-1/2 mx-auto space-y-1 mt-8 pb-[200px]"
+    >
+      <div>
+        <p class="text-sm mobile:text-lg text-type_caption mt-1 mb-10">
+          No orders matched your search!
+        </p>
+        <button
+          class="w-full rounded-full text-white font-medium bg-primary py-2 h-12 block"
+          (click)="onReturn()"
+        >
+          Return
+        </button>
+      </div>
+    </div>
+  }
+} @else {
+  <h2 class="text-type_title_gray text-base mobile:text-[20px] font-medium">
+    Orders
+  </h2>
+  <div class="w-full space-y-2 mt-5">
+    @for (item of [1, 2, 3, 4, 5]; track item) {
+      <div>
+        <p-skeleton width="100%" height="4rem" />
+      </div>
+    }
+  </div>
+}

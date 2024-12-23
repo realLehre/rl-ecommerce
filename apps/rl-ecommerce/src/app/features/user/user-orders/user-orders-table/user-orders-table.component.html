@@ -52,6 +52,7 @@
             <p class="text-sm text-type_title mb-1">Date range</p>
             <div class="relative">
               <p-calendar
+                stop-click-propagation
                 [(ngModel)]="rangeDates"
                 (ngModelChange)="onDateChanged()"
                 selectionMode="range"

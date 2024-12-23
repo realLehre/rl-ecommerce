@@ -52,6 +52,13 @@ export const adminRoutes: Routes = [
           ),
       },
       {
+        path: 'orders/:id',
+        loadComponent: () =>
+          import(
+            './admin-orders/admin-order-details/admin-order-details.component'
+          ).then((c) => c.AdminOrderDetailsComponent),
+      },
+      {
         path: 'orders/pending',
         loadComponent: () =>
           import('./admin-pending-orders/admin-pending-orders.component').then(
