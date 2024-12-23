@@ -9,7 +9,7 @@
     </div>
   }
 
-  <div class="border-[2px] border-border_subtle rounded-lg">
+  <div class="border-[2px] border-border_subtle rounded-lg overflow-hidden">
     @if (showFilters()) {
       <div class="flex items-center gap-x-6 gap-y-2 mb-6 pt-6 px-4">
         <div class="max-w-[300px] min-w-[170px] grow h-8 relative">
@@ -40,7 +40,7 @@
 
     <div class="overflow-x-auto">
       <table class="min-w-full px-2">
-        <thead class="bg-border_subtle border border-border_subtle">
+        <thead class="bg-bg_subtle">
           <tr class="">
             <ng-container *ngTemplateOutlet="headers"></ng-container>
           </tr>

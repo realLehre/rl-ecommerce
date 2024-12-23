@@ -1,1 +1,24 @@
-<p>admin-order-details works!</p>
+<div>
+  <div class="mb-7">
+    <div class="mobile:flex hidden items-center text-lg">
+      <div
+        class="text-type_grey cursor-pointer uppercase flex items-center"
+        routerLink="/admin/orders"
+      >
+        <span>ALL ORDERS</span>
+
+        <span class="mx-3">></span>
+      </div>
+      <div class="text-type_title font-semibold">ORDER DETAILS</div>
+    </div>
+
+    <button
+      class="mobile:hidden outline-0 flex items-center justify-center h-6 w-6 rounded-[3px] border-[1px] border-border_subtle"
+      routerLink="/admin/orders"
+    >
+      <i class="fa fa-angle-left font-bold"></i>
+    </button>
+  </div>
+
+  <app-admin-order-summary />
+</div>

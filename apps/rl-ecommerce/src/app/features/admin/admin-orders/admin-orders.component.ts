@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   inject,
   OnInit,
@@ -49,6 +50,7 @@ import { PrimeNgDatepickerDirective } from '../../../shared/directives/prime-ng-
   ],
   templateUrl: './admin-orders.component.html',
   styleUrl: './admin-orders.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminOrdersComponent implements OnInit {
   private readonly orderService = inject(AdminOrderService);
@@ -199,6 +201,7 @@ export class AdminOrdersComponent implements OnInit {
 
   onViewOrder(order: IOrder) {
     this.orderService.activeOrder.set(order);
+    localStorage.setItem('testorder', JSON.stringify(order));
     this.router.navigate(['/', 'admin', 'orders', order.id]);
   }
 
