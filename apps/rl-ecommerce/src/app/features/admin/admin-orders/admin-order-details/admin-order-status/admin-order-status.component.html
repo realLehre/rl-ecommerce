@@ -1,1 +1,25 @@
-<p>admin-order-status works!</p>
+<div class="border border-border_subtle rounded-lg flex flex-col p-4">
+  <div class="w-full max-w-[180px] self-end relative pb-2 mb-5">
+    <button
+      class="border-[1px] border-border_subtle rounded-full px-4 py-2 flex items-center font-medium text-sm w-full absolute left-0 top-0 z-[3] bg-bg_main"
+      (click)="onToggleDropDown()"
+    >
+      <span class="text-type_grey">Status:</span>
+      <span class="text-[#2E7D32] ml-1 mr-2">Confirmed</span>
+      <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="z-[2] orderStatusDropdown-main">
+      <p-dropdown
+        #dropDown
+        [options]="deliveryStatus"
+        [(ngModel)]="selectedStatus"
+        (ngModelChange)="onChangeOrderStatus($event)"
+        optionLabel="name"
+        placeholder="Select status"
+        styleClass="orderStatusDropdown"
+      />
+    </div>
+  </div>
+
+  <app-admin-order-tracking-events [trackingEvents]="order().deliveryEvents" />
+</div>

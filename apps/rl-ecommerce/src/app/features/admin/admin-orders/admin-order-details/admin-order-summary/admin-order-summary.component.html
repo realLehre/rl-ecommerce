@@ -1,81 +1,85 @@
 <div class="border border-border_subtle rounded-lg flex flex-col">
   <div class="p-4">
-    <div class="text-base mobile:text-lg text-type_grey font-medium">
+    <div
+      class="text-type_grey text-sm mobile:text-base font-medium mb-2 leading-tight"
+    >
       ORDER ID:
       <span class="text-type_title_gray"
         >41215f01-1a97-48b3-a99d-f2ce1126fa7e</span
       >
     </div>
-    <p class="text-sm mobile:text-base text-type_grey">
-      July 23, 2024 at 10:20am
+    <p class="text-xs mobile:text-sm text-type_grey">
+      {{ order().createdAt | date: "MMM dd, yyyy 'at' hh:mm a" }}
     </p>
   </div>
 
-  <table class="min-w-full px-2">
-    <thead class="bg-bg_subtle border border-border_subtle">
-      <tr class="">
-        <th
-          class="px-2 mobile:px-4 py-3 text-left text-[10px] mobile:text-xs text-type_gray font-medium"
-        >
-          PRODUCT NAME
-        </th>
-        <th
-          class="px-2 mobile:px-4 py-3 text-left text-[10px] mobile:text-xs text-type_gray font-medium"
-        >
-          QUANTITY
-        </th>
-        <th
-          class="px-2 mobile:px-4 py-3 text-left text-[10px] mobile:text-xs text-type_gray font-medium"
-        >
-          UNIT PRICE
-        </th>
-        <th
-          class="px-2 mobile:px-4 py-3 text-left text-[10px] mobile:text-xs text-type_gray font-medium"
-        >
-          TOTAL PRICE
-        </th>
-      </tr>
-    </thead>
-
-    <tbody>
-      @for (
-        orderItem of order().cartOrder.cartItems;
-        track orderItem.id;
-        let i = $index
-      ) {
-        <tr
-          class="border-b border-border_subtle text-type_title_gray text-xs mobile:text-sm font-medium"
-        >
-          <td class="px-2 mobile:px-4 py-5 font-semibold">
-            <div class="flex items-center space-x-2">
-              <div
-                class="w-8 mobile:w-10 h-8 mobile:h-10 min-w-8 mobile:min-w-10 min-h-8 mobile:min-h-10 rounded-md overflow-hidden"
-              >
-                <img
-                  [src]="orderItem.product.image"
-                  [alt]="orderItem.product.name"
-                  class="w-full"
-                />
-              </div>
-              <p>{{ orderItem.product.name }}</p>
-            </div>
-          </td>
-
-          <td class="px-2 mobile:px-4 py-5">
-            {{ orderItem.unit }}
-          </td>
-
-          <td class="px-2 mobile:px-4 py-5">
-            {{ orderItem.product.price | currency: '₦' : 'symbol' : '1.0-0' }}
-          </td>
-
-          <td class="px-2 mobile:px-4 py-5">
-            {{ orderItem.total | currency: '₦' : 'symbol' : '1.0-0' }}
-          </td>
+  <div class="w-full overflow-x-auto">
+    <table class="min-w-full px-2">
+      <thead class="bg-bg_subtle border border-border_subtle">
+        <tr class="">
+          <th
+            class="px-2 mobile:px-4 py-3 text-left text-[10px] mobile:text-xs text-type_gray font-medium"
+          >
+            PRODUCT NAME
+          </th>
+          <th
+            class="px-2 mobile:px-4 py-3 text-left text-[10px] mobile:text-xs text-type_gray font-medium"
+          >
+            QUANTITY
+          </th>
+          <th
+            class="px-2 mobile:px-4 py-3 text-left text-[10px] mobile:text-xs text-type_gray font-medium"
+          >
+            UNIT PRICE
+          </th>
+          <th
+            class="px-2 mobile:px-4 py-3 text-left text-[10px] mobile:text-xs text-type_gray font-medium"
+          >
+            TOTAL PRICE
+          </th>
         </tr>
-      }
-    </tbody>
-  </table>
+      </thead>
+
+      <tbody>
+        @for (
+          orderItem of order().cartOrder.cartItems;
+          track orderItem.id;
+          let i = $index
+        ) {
+          <tr
+            class="border-b border-border_subtle text-type_title_gray text-xs mobile:text-sm font-medium"
+          >
+            <td class="px-2 mobile:px-4 py-5 font-semibold">
+              <div class="flex items-center space-x-2">
+                <div
+                  class="w-8 mobile:w-10 h-8 mobile:h-10 min-w-8 mobile:min-w-10 min-h-8 mobile:min-h-10 rounded-md overflow-hidden"
+                >
+                  <img
+                    [src]="orderItem.product.image"
+                    [alt]="orderItem.product.name"
+                    class="w-full"
+                  />
+                </div>
+                <p>{{ orderItem.product.name }}</p>
+              </div>
+            </td>
+
+            <td class="px-2 mobile:px-4 py-5">
+              {{ orderItem.unit }}
+            </td>
+
+            <td class="px-2 mobile:px-4 py-5">
+              {{ orderItem.product.price | currency: '₦' : 'symbol' : '1.0-0' }}
+            </td>
+
+            <td class="px-2 mobile:px-4 py-5">
+              {{ orderItem.total | currency: '₦' : 'symbol' : '1.0-0' }}
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
 
   <div class="space-y-4 px-4 py-6 max-w-[320px] w-full self-end">
     <div class="flex items-center justify-between">

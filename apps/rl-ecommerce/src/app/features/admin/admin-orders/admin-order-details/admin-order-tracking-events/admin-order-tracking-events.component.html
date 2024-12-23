@@ -1,0 +1,33 @@
+<div class="flex justify-between items-start space-x-3">
+  @for (event of trackingEvents(); track event.id; let i = $index) {
+    <div
+      class="flex flex-col"
+      [ngClass]="{ 'w-full': i < trackingEvents()?.length! - 1 }"
+    >
+      <div class="flex items-center grow space-x-3">
+        <img
+          appOrderStatusIcon
+          [timeLine]="trackingEvents()!"
+          [status]="event"
+          alt=""
+          class="w-5 min-w-5"
+        />
+        @if (i < trackingEvents()?.length! - 1) {
+          <div class="bg-border_subtle h-[2px] w-full"></div>
+        }
+      </div>
+      <p class="text-type_title_gray font-medium my-2 text-sm">
+        {{ event.remark | deliveryEventRemark }}
+      </p>
+      <div class="text-type_caption font-semibold text-xs">
+        @if (event.status) {
+          <span>
+            {{ event.updatedAt | date }}
+          </span>
+        } @else {
+          <span>Waiting...</span>
+        }
+      </div>
+    </div>
+  }
+</div>

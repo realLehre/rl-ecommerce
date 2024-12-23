@@ -130,6 +130,26 @@ body {
   }
 }
 
+.orderStatusDropdown {
+  width: 100% !important;
+  padding: 2px;
+
+  & .p-dropdown-item {
+    padding: 4px 8px !important;
+  }
+}
+
+.orderStatusDropdown-main {
+  & .p-dropdown {
+    background: transparent !important;
+  }
+
+  & .p-dropdown:not(.p-disabled).p-focus {
+    box-shadow: none;
+    border: none !important;
+  }
+}
+
 .deliveryStatusDropdown {
   width: 100% !important;
   padding: 2px;
