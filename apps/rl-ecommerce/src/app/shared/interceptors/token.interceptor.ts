@@ -8,6 +8,10 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
   const user = authService.user;
 
   let request = req;
+
+  if (request.url.includes('paystack.co')) {
+    return next(request);
+  }
   if (user()) {
     request = request.clone({
       setHeaders: { Authorization: `Bearer ${user()?.id}` },

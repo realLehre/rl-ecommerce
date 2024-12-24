@@ -18,6 +18,7 @@ import { OrderService } from '../../shared/services/order.service';
 import { ToastService } from '../../shared/services/toast.service';
 import { LoaderComponent } from '../../shared/components/loader/loader.component';
 import { PaymentService } from '../../shared/services/payment.service';
+import { AuthService } from '../auth/services/auth.service';
 
 @Component({
   selector: 'app-checkout',
@@ -40,6 +41,7 @@ export class CheckoutComponent {
   private paymentService = inject(PaymentService);
   private toast = inject(ToastService);
   private router = inject(Router);
+  private user = inject(AuthService).user;
   cart = this.cartService.cartSignal as WritableSignal<ICart>;
   selectedAddress!: IAddress;
   selectPaymentMethod!: string;
@@ -73,8 +75,8 @@ export class CheckoutComponent {
             const handler = new PaystackPop();
 
             handler.newTransaction({
-              key: 'pk_test_b95a88357b0b5b7c4e20ccceb1ac928bb2f9a5bf',
-              email: 'hhh@dudd.com',
+              key: this.paymentService.publicKey,
+              email: 'beed@beed.com',
               amount: Math.min(total, 10000000),
               currency: 'NGN',
               channels: ['card'],

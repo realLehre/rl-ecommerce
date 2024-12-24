@@ -18,6 +18,7 @@ export interface IPaystackResponseData {
 export class PaymentService {
   private http = inject(HttpClient);
   paystackKey = environment.paystackKey;
+  publicKey = environment.publicPaystackKey;
   private url = 'https://api.paystack.co/transaction/initialize';
   constructor() {}
 
