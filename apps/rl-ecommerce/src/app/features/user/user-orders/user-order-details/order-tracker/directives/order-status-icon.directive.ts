@@ -89,3 +89,29 @@ export class OrderStatusLine implements OnInit {
     }
   }
 }
+
+@Directive({
+  selector: '[appOrderStatusText]',
+  standalone: true,
+})
+export class OrderStatusText implements OnInit {
+  private el = inject(ElementRef);
+  timeLine = input.required<IDeliveryEvents[]>();
+
+  ngOnInit() {
+    this.changeStatusText();
+  }
+
+  changeStatusText() {
+    const lastCompletedIndex = this.timeLine().reduceRight(
+      (acc: any, event: IDeliveryEvents, index) => {
+        return acc !== -1 ? acc : event.status ? index : -1;
+      },
+      -1,
+    );
+
+    const currentDeliveryStatus =
+      this.timeLine()[lastCompletedIndex].status.toLocaleLowerCase();
+    this.el.nativeElement.textContent = currentDeliveryStatus;
+  }
+}

@@ -5,7 +5,11 @@
       (click)="onToggleDropDown()"
     >
       <span class="text-type_grey">Status:</span>
-      <span class="text-[#2E7D32] ml-1 mr-2">Confirmed</span>
+      <span
+        class="text-[#2E7D32] ml-1 mr-2 capitalize"
+        appOrderStatusText
+        [timeLine]="order().deliveryEvents"
+      ></span>
       <i class="fa fa-caret-down"></i>
     </button>
     <div class="z-[2] orderStatusDropdown-main">

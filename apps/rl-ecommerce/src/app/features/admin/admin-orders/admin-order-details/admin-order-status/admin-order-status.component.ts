@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { Dropdown, DropdownModule } from 'primeng/dropdown';
 import { OrderTrackerComponent } from '../../../../user/user-orders/user-order-details/order-tracker/order-tracker.component';
 import { AdminOrderTrackingEventsComponent } from '../admin-order-tracking-events/admin-order-tracking-events.component';
+import { OrderStatusText } from '../../../../user/user-orders/user-order-details/order-tracker/directives/order-status-icon.directive';
 
 @Component({
   selector: 'app-admin-order-status',
@@ -19,6 +20,7 @@ import { AdminOrderTrackingEventsComponent } from '../admin-order-tracking-event
     DropdownModule,
     OrderTrackerComponent,
     AdminOrderTrackingEventsComponent,
+    OrderStatusText,
   ],
   templateUrl: './admin-order-status.component.html',
   styleUrl: './admin-order-status.component.scss',
