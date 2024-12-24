@@ -29,8 +29,9 @@ import { ProductReviewsComponent } from './product-reviews/product-reviews.compo
 import { LargeReviewsComponent } from './large-reviews/large-reviews.component';
 import { ReviewService } from '../../../shared/services/review.service';
 import { PricePercentageDecreasePipe } from '../../../shared/pipes/price-percentage-decrease.pipe';
-import { ICart } from '../../../shared/models/cart.interface';
+import { ICart, ICartItems } from '../../../shared/models/cart.interface';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { AuthService } from '../../auth/services/auth.service';
 
 @Component({
   selector: 'app-product-details',
@@ -63,6 +64,7 @@ export class ProductDetailsComponent implements OnInit {
   private reviewService = inject(ReviewService);
   private toast = inject(ToastService);
   private sanitizer = inject(DomSanitizer);
+  private authService = inject(AuthService);
   activeProduct = this.productService.activeProduct;
   product$!: Observable<IProduct>;
   quantity: number = 1;
@@ -151,6 +153,15 @@ export class ProductDetailsComponent implements OnInit {
               ? [...cart?.cartItems!, newCartItem as any]
               : [newCartItem],
           });
+
+          if (!this.authService.user()) {
+            this.cartService.guestCart.cartItems?.push(res as ICartItems);
+            localStorage.setItem(
+              this.cartService.STORAGE_KEY,
+              JSON.stringify(this.cartService.guestCart),
+            );
+            this.cartService.cartTotal.set(cartTotal()! + 1);
+          }
 
           this.toast.showToast({
             type: 'success',

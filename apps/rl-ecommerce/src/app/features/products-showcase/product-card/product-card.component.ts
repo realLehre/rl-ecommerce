@@ -6,7 +6,7 @@ import {
   input,
   signal,
 } from '@angular/core';
-import { CurrencyPipe, NgClass, NgStyle } from '@angular/common';
+import { CurrencyPipe, NgStyle } from '@angular/common';
 import { Router } from '@angular/router';
 import { IProduct } from '../../products/model/product.interface';
 import { ProductsService } from '../../products/services/products.service';
@@ -19,7 +19,6 @@ import { ReviewService } from '../../../shared/services/review.service';
 import { ProductQuantityComponent } from '../../../shared/components/product-quantity/product-quantity.component';
 import { ICart, ICartItems } from '../../../shared/models/cart.interface';
 import { PricePercentageDecreasePipe } from '../../../shared/pipes/price-percentage-decrease.pipe';
-import { ImagePreloadDirective } from '../../../shared/directives/image-preload.directive';
 
 @Component({
   selector: 'app-product-card',
@@ -28,11 +27,9 @@ import { ImagePreloadDirective } from '../../../shared/directives/image-preload.
     CurrencyPipe,
     SkeletonModule,
     LoaderComponent,
-    NgClass,
     NgStyle,
     ProductQuantityComponent,
     PricePercentageDecreasePipe,
-    ImagePreloadDirective,
   ],
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.scss',
