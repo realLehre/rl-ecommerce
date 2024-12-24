@@ -124,6 +124,8 @@ export class FiltersComponent {
       delete savedQuery.sort;
     }
 
+    this.rangeValues = [2000, 10000];
+
     sessionStorage.setItem('hshs82haa02sshs92s', JSON.stringify(savedQuery));
 
     this.router.navigate([], {
@@ -136,10 +138,6 @@ export class FiltersComponent {
       queryParamsHandling: 'merge',
       fragment: 'products',
     });
-  }
-
-  checkNumberOfFiltersApplied(): number {
-    return this.optionsService.checkNumberOfFiltersApplied();
   }
 
   onToggleFilter(index: number) {
