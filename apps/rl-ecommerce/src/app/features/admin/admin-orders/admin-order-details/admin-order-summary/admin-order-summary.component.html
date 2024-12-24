@@ -4,9 +4,7 @@
       class="text-type_grey text-sm mobile:text-base font-medium mb-2 leading-tight"
     >
       ORDER ID:
-      <span class="text-type_title_gray"
-        >41215f01-1a97-48b3-a99d-f2ce1126fa7e</span
-      >
+      <span class="text-type_title_gray">{{ order().id }}</span>
     </div>
     <p class="text-xs mobile:text-sm text-type_grey">
       {{ order().createdAt | date: "MMM dd, yyyy 'at' hh:mm a" }}

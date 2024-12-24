@@ -7,7 +7,9 @@
       <div>
         <span class="text-type_grey">Status:</span>
         <span class="text-[#2E7D32] ml-1 mr-2 capitalize">{{
-          order().deliveryStatus.toLowerCase()
+          order().deliveryStatus.toLowerCase() == 'pending'
+            ? 'confirmed'
+            : order().deliveryStatus.toLowerCase()
         }}</span>
       </div>
       <i class="fa fa-caret-down"></i>
@@ -28,3 +30,40 @@
 
   <app-admin-order-tracking-events [trackingEvents]="order().deliveryEvents" />
 </div>
+
+<p-dialog
+  [visible]="showDialog()"
+  [style]="{ width: '25rem', 'z-index': '30' }"
+  [breakpoints]="{ '450px': '90vw' }"
+>
+  <ng-template pTemplate="headless">
+    <div class="p-5 bg-white">
+      <h3 class="text-type_title font-semibold text-lg mobile:text-xl mb-5">
+        Update delivery status
+      </h3>
+
+      <p class="text-type_grey text-sm mobile:text-base mb-10">
+        Mark order as {{ selectedStatus.name }}?
+      </p>
+
+      <div class="flex items-center space-x-3 justify-between">
+        <button
+          class="px-4 py-2 bg-transparent h-11 border-[2px] border-primary rounded-md hover:border-type_grey text-primary hover:text-type_grey flex-1"
+          (click)="onCancel()"
+        >
+          Cancel</button
+        ><button
+          class="px-4 py-2 flex items-center justify-center space-x-2 bg-primary h-11 text-white rounded-md hover:bg-opacity-80 focus:outline-none disabled:bg-type_grey flex-1"
+          (click)="onUpdateDeliveryTimeline()"
+        >
+          @if (isLoading()) {
+            <app-loader
+              [customStyle]="{ width: '18px', border: '3px solid #fff' }"
+            />
+          }
+          <span>Proceed</span>
+        </button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>

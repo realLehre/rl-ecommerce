@@ -2,6 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment.development';
 import {
+  IDeliveryEvents,
   IOrder,
   IOrderResponse,
 } from '../../../../shared/models/order.interface';
@@ -71,6 +72,37 @@ export class AdminOrderService {
             this.orderSignal.set(res);
           }),
         );
+  }
+
+  updateOrder(status: string, order: IOrder) {
+    const deliveryEvents: IDeliveryEvents[] = order.deliveryEvents;
+    const updateBoth = status.toLowerCase() !== 'packed';
+
+    if (updateBoth) {
+      deliveryEvents.forEach((event) => {
+        if (event.remark == 'Order assigned for delivery') {
+          event['status'] = 'PACKED';
+          event['updatedAt'] = new Date().toISOString();
+        }
+
+        if (event.remark == 'Order delivered') {
+          event['status'] = 'DELIVERED';
+          event['updatedAt'] = new Date().toISOString();
+        }
+      });
+    } else {
+      deliveryEvents.forEach((event) => {
+        if (event.remark == 'Order assigned for delivery') {
+          event['status'] = 'PACKED';
+          event['updatedAt'] = new Date().toISOString();
+        }
+      });
+    }
+
+    return this.http.patch(this.apiUrl + 'update/' + order.id, {
+      deliveryEvents,
+      deliveryStatus: status,
+    });
   }
 
   getRecentOrders() {
