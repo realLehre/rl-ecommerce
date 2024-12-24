@@ -1,4 +1,4 @@
-<div class="flex justify-between items-start space-x-3">
+<div class="hidden min-[450px]:flex justify-between items-start space-x-3">
   @for (event of trackingEvents(); track event.id; let i = $index) {
     <div
       class="flex flex-col"
@@ -13,12 +13,55 @@
           class="w-5 min-w-5"
         />
         @if (i < trackingEvents()?.length! - 1) {
-          <div class="bg-border_subtle h-[2px] w-full"></div>
+          <div
+            class="h-[2px] w-full"
+            appOrderStatusLine
+            [timeLine]="trackingEvents()!"
+            [status]="event"
+          ></div>
         }
       </div>
       <p class="text-type_title_gray font-medium my-2 text-sm">
         {{ event.remark | deliveryEventRemark }}
       </p>
+      <div class="text-type_caption font-semibold text-xs">
+        @if (event.status) {
+          <span>
+            {{ event.updatedAt | date }}
+          </span>
+        } @else {
+          <span>Waiting...</span>
+        }
+      </div>
+    </div>
+  }
+</div>
+
+<div class="flex min-[450px]:hidden flex-col justify-between items-start">
+  @for (event of trackingEvents(); track event.id; let i = $index) {
+    <div class="flex items-start justify-between w-full">
+      <div class="flex space-x-3">
+        <div class="flex flex-col items-center">
+          <img
+            appOrderStatusIcon
+            [timeLine]="trackingEvents()!"
+            [status]="event"
+            alt=""
+            class="w-5 min-w-5"
+          />
+          @if (i < trackingEvents()?.length! - 1) {
+            <div
+              class="h-[63px] w-[2px]"
+              appOrderStatusLine
+              [timeLine]="trackingEvents()!"
+              [status]="event"
+            ></div>
+          }
+        </div>
+        <p class="text-type_title_gray font-medium text-sm">
+          {{ event.remark | deliveryEventRemark }}
+        </p>
+      </div>
       <div class="text-type_caption font-semibold text-xs">
         @if (event.status) {
           <span>

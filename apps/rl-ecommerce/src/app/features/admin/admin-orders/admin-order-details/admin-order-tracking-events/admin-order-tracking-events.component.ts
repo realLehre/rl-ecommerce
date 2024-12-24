@@ -2,7 +2,10 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { IDeliveryEvents } from '../../../../../shared/models/order.interface';
 import { DatePipe, NgClass } from '@angular/common';
 import { DeliveryEventRemarkPipe } from '../../../../user/user-orders/user-order-details/order-tracker/pipes/delivery-event-remark.pipe';
-import { OrderStatusIconDirective } from '../../../../user/user-orders/user-order-details/order-tracker/directives/order-status-icon.directive';
+import {
+  OrderStatusIconDirective,
+  OrderStatusLine,
+} from '../../../../user/user-orders/user-order-details/order-tracker/directives/order-status-icon.directive';
 
 @Component({
   selector: 'app-admin-order-tracking-events',
@@ -12,6 +15,7 @@ import { OrderStatusIconDirective } from '../../../../user/user-orders/user-orde
     DeliveryEventRemarkPipe,
     OrderStatusIconDirective,
     NgClass,
+    OrderStatusLine,
   ],
   templateUrl: './admin-order-tracking-events.component.html',
   styleUrl: './admin-order-tracking-events.component.scss',
