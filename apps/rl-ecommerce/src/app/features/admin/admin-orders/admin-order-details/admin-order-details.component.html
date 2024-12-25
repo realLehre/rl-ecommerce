@@ -19,7 +19,7 @@
       <i class="fa fa-angle-left font-bold"></i>
     </button>
   </div>
-  @if (!isLoading()) {
+  @if (!isLoading() && !isError()) {
     <div class="flex flex-col min-[1070px]:flex-row gap-6 max-w-[1400px]">
       <div class="w-full min-[1070px]:w-3/5 grow">
         <app-admin-order-summary [order]="order()!" />
@@ -37,6 +37,17 @@
           <app-admin-order-customer-info [order]="order()!" />
         </div>
       </div>
+    </div>
+  } @else if (isError()) {
+    <div class="flex items-center flex-col justify-center">
+      <h3 class="mb-5">An error occurred</h3>
+
+      <button
+        class="rounded-full text-white font-medium w-[200px] min-[450px]:w-[300px] bg-primary py-2 h-12"
+        (click)="onRetryLoad()"
+      >
+        Retry
+      </button>
     </div>
   } @else {
     <div class="flex flex-col min-[1070px]:flex-row gap-6 max-w-[1400px]">

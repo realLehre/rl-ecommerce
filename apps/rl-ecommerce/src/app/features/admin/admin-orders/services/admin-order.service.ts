@@ -6,7 +6,7 @@ import {
   IOrder,
   IOrderResponse,
 } from '../../../../shared/models/order.interface';
-import { Observable, of, retry, tap } from 'rxjs';
+import { catchError, Observable, of, retry, tap, throwError } from 'rxjs';
 
 export interface IOrderFilter {
   minPrice?: number;
@@ -71,6 +71,7 @@ export class AdminOrderService {
           tap((res) => {
             this.orderSignal.set(res);
           }),
+          catchError(this.handleError),
         );
   }
 
@@ -112,7 +113,9 @@ export class AdminOrderService {
   getOrderById(id: string) {
     return this.activeOrder()
       ? of(this.activeOrder())
-      : this.http.get<IOrder>(`${this.apiUrl}user/${id}`);
+      : this.http
+          .get<IOrder>(`${this.apiUrl}user/${id}`)
+          .pipe(catchError(this.handleError));
   }
 
   createRouteQuery(filter: IOrderFilter) {
@@ -143,5 +146,9 @@ export class AdminOrderService {
       }
     }
     return number;
+  }
+
+  private handleError(error: any) {
+    return throwError(() => new Error('An error occurred! Try again later'));
   }
 }

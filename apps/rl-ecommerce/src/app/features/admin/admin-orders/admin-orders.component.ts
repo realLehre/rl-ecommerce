@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   OnInit,
   Signal,
@@ -12,7 +13,7 @@ import {
   IOrderFilter,
 } from './services/admin-order.service';
 import { GenericTableComponent } from '../../../shared/components/generic-table/generic-table.component';
-import { Observable, switchMap, tap } from 'rxjs';
+import { catchError, Observable, of, switchMap, tap } from 'rxjs';
 import { IOrder, IOrderResponse } from '../../../shared/models/order.interface';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { PaginationInstance } from 'ngx-pagination';
@@ -28,6 +29,7 @@ import { FormsModule } from '@angular/forms';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PrimeNgDatepickerDirective } from '../../../shared/directives/prime-ng-datepicker.directive';
+import { ToastService } from '../../../shared/services/toast.service';
 
 @Component({
   selector: 'app-admin-orders',
@@ -57,6 +59,7 @@ export class AdminOrdersComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   orderQueried = this.orderService.orderQueried;
+  private toast = inject(ToastService);
   config: PaginationInstance = {
     id: 'adminOrdersPagination',
     itemsPerPage: 5,
@@ -67,10 +70,30 @@ export class AdminOrdersComponent implements OnInit {
     itemsToShow: this.totalItemsToShow(),
     page: 1,
   });
+  refresh = signal(0);
+  refreshTrigger = computed(() => ({
+    filter: this.filter(),
+    refresh: this.refresh(),
+  }));
   holdFilter = signal<IOrderFilter>(this.filter());
   isLoading = signal(true);
-  orders$: Observable<IOrderResponse | any> = toObservable(this.filter).pipe(
-    switchMap((filter) => this.orderService.getAllOrders(filter)),
+  isError = signal(false);
+  orders$: Observable<IOrderResponse | any> = toObservable(
+    this.refreshTrigger,
+  ).pipe(
+    switchMap(({ filter }) =>
+      this.orderService.getAllOrders(filter).pipe(
+        catchError((error) => {
+          this.isLoading.set(false);
+          this.toast.showToast({
+            type: 'error',
+            message: error.message || 'Failed to load order',
+          });
+          this.isError.set(true);
+          return of(null);
+        }),
+      ),
+    ),
     tap((res) => {
       this.isLoading.set(false);
       this.config.itemsPerPage = Math.max(
@@ -148,6 +171,10 @@ export class AdminOrdersComponent implements OnInit {
       queryParams: newRouteQueries,
       relativeTo: this.route,
     });
+  }
+
+  onRetryLoad() {
+    this.refresh.update((count) => count + 1);
   }
 
   pageChange(page: number) {
