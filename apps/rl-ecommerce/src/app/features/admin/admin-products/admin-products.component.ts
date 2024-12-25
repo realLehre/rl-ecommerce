@@ -37,6 +37,7 @@ import { PrimeNgDatepickerDirective } from '../../../shared/directives/prime-ng-
 import { IAdminProductFilter } from './admin-product.interface';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ProductDeleteDialogComponent } from './product-delete-dialog/product-delete-dialog.component';
+import { ToastService } from '../../../shared/services/toast.service';
 
 @Component({
   selector: 'app-admin-products',
@@ -64,6 +65,7 @@ export class AdminProductsComponent implements OnInit {
   private productService = inject(AdminProductsService);
   private optionsService = inject(ProductOptionsService);
   private router = inject(Router);
+  private toast = inject(ToastService);
   private route = inject(ActivatedRoute);
   productData!: IProductResponse;
   selectedProduct!: IProduct;
@@ -74,8 +76,6 @@ export class AdminProductsComponent implements OnInit {
   @ViewChild('menu') productActionMenu!: Menu;
   filterNumber = 0;
   rangeValues = [2000, 10000];
-  categories$: Observable<ICategory[] | null> =
-    this.optionsService.getCategories();
   categories = toSignal(this.optionsService.getCategories());
   selectedCategory!: ICategory;
   subCategories: ISubCategory[] = [];
@@ -86,6 +86,7 @@ export class AdminProductsComponent implements OnInit {
   };
   rangeDates: any[] = [];
   isFetching = signal(true);
+  isError = signal(false);
   config: PaginationInstance = {
     id: 'adminProducts',
     itemsPerPage: 10,
@@ -161,8 +162,17 @@ export class AdminProductsComponent implements OnInit {
       },
       error: (err) => {
         this.isFetching.set(false);
+        this.isError.set(true);
+        this.toast.showToast({
+          type: 'error',
+          message: err.error.message || 'Failed to load order',
+        });
       },
     });
+  }
+
+  onRetryLoad() {
+    this.getProducts();
   }
 
   onViewDetails() {

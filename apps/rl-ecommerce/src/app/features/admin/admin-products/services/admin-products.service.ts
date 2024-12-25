@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { of, retry, tap } from 'rxjs';
+import { catchError, of, retry, tap, throwError } from 'rxjs';
 import {
   ICategory,
   IProduct,
@@ -67,7 +67,7 @@ export class AdminProductsService {
 
     return this.http
       .get<IProductResponse>(`${this.apiUrl}/all`, { params })
-      .pipe(retry(3));
+      .pipe(retry(3), catchError(this.handleError));
   }
 
   addProduct(formData: IProductFormData) {
@@ -89,6 +89,7 @@ export class AdminProductsService {
     return this.http.get<IProduct>(`${this.apiUrl}/${id}`).pipe(
       retry(3),
       tap((res) => this.activeProduct.set(res)),
+      catchError(this.handleError),
     );
   }
 
@@ -113,5 +114,9 @@ export class AdminProductsService {
       (control) =>
         control.value !== null && control.value !== '' && control.value !== 0,
     );
+  }
+
+  private handleError(error: any) {
+    return throwError(() => new Error('An error occurred! Try again later'));
   }
 }

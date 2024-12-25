@@ -1,4 +1,4 @@
-@if (!isFetching()) {
+@if (!isFetching() && !isError()) {
   @if (productData.products.length) {
     <div class="w-full">
       <app-generic-table
@@ -363,6 +363,20 @@
       </div>
     </div>
   }
+} @else if (isError()) {
+  <h2 class="text-type_title_gray text-base mobile:text-[20px] font-medium">
+    Product List
+  </h2>
+  <div class="flex items-center flex-col justify-center">
+    <h3 class="mb-5">An error occurred</h3>
+
+    <button
+      class="rounded-full text-white font-medium w-[200px] min-[450px]:w-[300px] bg-primary py-2 h-12"
+      (click)="onRetryLoad()"
+    >
+      Retry
+    </button>
+  </div>
 } @else {
   <h2 class="text-type_title_gray text-base mobile:text-[20px] font-medium">
     Product List
