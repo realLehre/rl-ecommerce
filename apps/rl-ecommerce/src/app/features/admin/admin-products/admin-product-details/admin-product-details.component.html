@@ -137,6 +137,17 @@
     } @else {
       <app-large-reviews [reviews]="product.ratings" />
     }
+  } @else if (isError()) {
+    <div class="flex items-center flex-col justify-center">
+      <h3 class="mb-5">An error occurred</h3>
+
+      <button
+        class="rounded-full text-white font-medium w-[200px] min-[450px]:w-[300px] bg-primary py-2 h-12"
+        (click)="onRetryLoad()"
+      >
+        Retry
+      </button>
+    </div>
   } @else {
     <div class="flex items-start flex-col min-[700px]:flex-row gap-10 mt-8">
       <div

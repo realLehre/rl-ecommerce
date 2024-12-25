@@ -64,7 +64,7 @@ export class AdminOrderDetailsComponent {
   );
 
   onStatusUpdated($event: IOrder) {
-    this.orderService.activeOrder.set(null);
+    this.orderService.orderSignal.set(null);
     this.resetState();
     this.refreshCounter.update((count) => count + 1);
   }

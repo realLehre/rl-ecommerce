@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   input,
   signal,
@@ -12,7 +13,7 @@ import { ProductDetailsImagesComponent } from '../../../products/product-details
 import { Router } from '@angular/router';
 import { SkeletonModule } from 'primeng/skeleton';
 import { AdminProductsService } from '../services/admin-products.service';
-import { switchMap } from 'rxjs';
+import { catchError, of, switchMap } from 'rxjs';
 import { IProduct } from '../../../products/model/product.interface';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -21,6 +22,7 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ProductReviewsComponent } from '../../../products/product-details/product-reviews/product-reviews.component';
 import { ReviewService } from '../../../../shared/services/review.service';
 import { LargeReviewsComponent } from '../../../products/product-details/large-reviews/large-reviews.component';
+import { ToastService } from '../../../../shared/services/toast.service';
 
 @Component({
   selector: 'app-admin-product-details',
@@ -47,10 +49,28 @@ export class AdminProductDetailsComponent {
   private sanitizer = inject(DomSanitizer);
   private dialogService = inject(DialogService);
   private reviewService = inject(ReviewService);
+  private toast = inject(ToastService);
   ref: DynamicDialogRef | undefined;
+  isError = signal(false);
+  refresh = signal(0);
   id = input.required<string>();
-  product$ = toObservable(this.id).pipe(
-    switchMap((id) => this.productService.getProductById(id!)),
+  refreshTrigger = computed(() => ({
+    id: this.id(),
+    refresh: this.refresh(),
+  }));
+  product$ = toObservable(this.refreshTrigger).pipe(
+    switchMap(({ id }) =>
+      this.productService.getProductById(id!).pipe(
+        catchError((error) => {
+          this.toast.showToast({
+            type: 'error',
+            message: error.message || 'Failed to load order',
+          });
+          this.isError.set(true);
+          return of(null);
+        }),
+      ),
+    ),
   );
   isDeletingProduct = signal(false);
   isCollapsed = signal(true);
@@ -93,6 +113,10 @@ export class AdminProductDetailsComponent {
     this.router.navigate(['/', 'admin', 'add-product'], {
       queryParams: { edit: true },
     });
+  }
+
+  onRetryLoad() {
+    this.refresh.update((count) => count + 1);
   }
 
   onNavigateBack() {
