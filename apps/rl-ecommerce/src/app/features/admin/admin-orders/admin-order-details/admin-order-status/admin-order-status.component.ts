@@ -4,6 +4,7 @@ import {
   computed,
   inject,
   input,
+  output,
   signal,
   ViewChild,
 } from '@angular/core';
@@ -56,6 +57,7 @@ export class AdminOrderStatusComponent {
   @ViewChild('dropDown') dropDown!: Dropdown;
   showDialog = signal(false);
   isLoading = signal(false);
+  statusUpdated = output<IOrder>();
 
   onToggleDropDown() {
     this.dropDown.show();
@@ -74,11 +76,11 @@ export class AdminOrderStatusComponent {
         next: (data) => {
           this.isLoading.set(false);
           this.showDialog.set(false);
-          localStorage.setItem('testorder', JSON.stringify(data));
           this.toast.showToast({
             type: 'success',
             message: `Order marked as ${this.selectedStatus.code.toLowerCase()} successfully`,
           });
+          this.statusUpdated.emit(data);
         },
         error: (err) => {
           this.isLoading.set(false);

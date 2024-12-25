@@ -6,6 +6,7 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { OrderStatusDirective } from '../../../../shared/directives/order-status.directive';
 import { IOrder } from '../../../../shared/models/order.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-recent-orders',
@@ -22,7 +23,11 @@ import { IOrder } from '../../../../shared/models/order.interface';
 })
 export class RecentOrdersComponent {
   private readonly orderService = inject(AdminOrderService);
+  private router = inject(Router);
   ordersData = toSignal(this.orderService.getRecentOrders());
 
-  onViewOrder(order: IOrder) {}
+  onViewOrder(order: IOrder) {
+    this.orderService.activeOrder.set(order);
+    this.router.navigate(['/', 'admin', 'orders', order.id]);
+  }
 }

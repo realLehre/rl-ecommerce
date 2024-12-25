@@ -99,7 +99,7 @@ export class AdminOrderService {
       });
     }
 
-    return this.http.patch(this.apiUrl + 'update/' + order.id, {
+    return this.http.patch<IOrder>(this.apiUrl + 'update/' + order.id, {
       deliveryEvents,
       deliveryStatus: status,
     });
@@ -107,6 +107,12 @@ export class AdminOrderService {
 
   getRecentOrders() {
     return this.http.get<IOrder[]>(this.apiUrl + 'recent').pipe(retry(3));
+  }
+
+  getOrderById(id: string) {
+    return this.activeOrder()
+      ? of(this.activeOrder())
+      : this.http.get<IOrder>(`${this.apiUrl}user/${id}`);
   }
 
   createRouteQuery(filter: IOrderFilter) {

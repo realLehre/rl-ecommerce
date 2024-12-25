@@ -19,20 +19,40 @@
       <i class="fa fa-angle-left font-bold"></i>
     </button>
   </div>
-
-  <div class="flex flex-col min-[1070px]:flex-row gap-6 max-w-[1400px]">
-    <div class="w-full min-[1070px]:w-3/5 grow">
-      <app-admin-order-summary [order]="order" />
-    </div>
-
-    <div class="w-full min-[1070px]:w-2/5 grow space-y-6">
-      <div>
-        <app-admin-order-status [order]="order" />
+  @if (!isLoading()) {
+    <div class="flex flex-col min-[1070px]:flex-row gap-6 max-w-[1400px]">
+      <div class="w-full min-[1070px]:w-3/5 grow">
+        <app-admin-order-summary [order]="order()!" />
       </div>
 
-      <div>
-        <app-admin-order-customer-info [order]="order" />
+      <div class="w-full min-[1070px]:w-2/5 grow space-y-6">
+        <div>
+          <app-admin-order-status
+            [order]="order()!"
+            (statusUpdated)="onStatusUpdated($event)"
+          />
+        </div>
+
+        <div>
+          <app-admin-order-customer-info [order]="order()!" />
+        </div>
       </div>
     </div>
-  </div>
+  } @else {
+    <div class="flex flex-col min-[1070px]:flex-row gap-6 max-w-[1400px]">
+      <div class="w-full min-[1070px]:w-3/5 grow">
+        <p-skeleton width="100%" height="300px" />
+      </div>
+
+      <div class="w-full min-[1070px]:w-2/5 grow space-y-6">
+        <div>
+          <p-skeleton width="100%" height="80px" />
+        </div>
+
+        <div>
+          <p-skeleton width="100%" height="200px" />
+        </div>
+      </div>
+    </div>
+  }
 </div>
