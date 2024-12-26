@@ -7,6 +7,7 @@ import {
 } from '@angular/common/http';
 import { catchError, Observable, of, throwError } from 'rxjs';
 import { IOrderFilter } from '../admin-orders/services/admin-order.service';
+import { IOrder } from '../../../shared/models/order.interface';
 
 export interface IAdminUserFilter {
   page: number;
@@ -27,6 +28,16 @@ export interface IUserRes {
     createdAt: string;
     updateAt: string;
   }[];
+}
+
+export interface IAdminSingleUser {
+  id: string;
+  email: string;
+  name: string;
+  phoneNumber: string;
+  createdAt: string;
+  updateAt: string;
+  orders: IOrder[];
 }
 
 @Injectable({
@@ -61,7 +72,7 @@ export class AdminUserService {
   }
 
   getUserById(id: string) {
-    return this.http.get(`${this.apiUrl}/${id}`);
+    return this.http.get<IAdminSingleUser>(`${this.apiUrl}/${id}`);
   }
 
   createRouteQuery(filter: IAdminUserFilter) {
