@@ -23,6 +23,13 @@ export const adminRoutes: Routes = [
           ),
       },
       {
+        path: 'users/:id',
+        loadComponent: () =>
+          import(
+            './admin-users/admin-user-details/admin-user-details.component'
+          ).then((c) => c.AdminUserDetailsComponent),
+      },
+      {
         path: 'products',
         loadComponent: () =>
           import('./admin-products/admin-products.component').then(

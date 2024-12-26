@@ -1,1 +1,176 @@
-<p>admin-users works!</p>
+@if (!isLoading() && !isError()) {
+  @if (userData().users.length) {
+    <div class="w-full">
+      <app-generic-table
+        [data]="userData()"
+        [config]="config"
+        [tableData]="userData().users"
+        [itemsToShowInput]="filter().itemsPerPage"
+        [title]="'All Users'"
+        [searchValueInput]="filter().search"
+        (pageChanged)="pageChange($event)"
+        (itemsToShowChanged)="itemsToShowChange($event)"
+        (searchValueEmit)="searchChanged($event)"
+      >
+        <ng-template #headers>
+          <th
+            (click)="sortTable('name')"
+            class="px-2 mobile:px-4 py-3 text-left cursor-pointer text-[10px] mobile:text-xs text-type_gray font-medium"
+          >
+            <div class="flex items-center space-x-1">
+              <span>NAME</span>
+              <span class="flex flex-col">
+                <i
+                  class="fa fa-caret-up text-xs"
+                  [ngClass]="
+                    sortDirection === 'asc' && sortUsed
+                      ? 'opacity-100'
+                      : 'opacity-30'
+                  "
+                ></i>
+                <i
+                  class="fa fa-caret-down text-xs -mt-[10px]"
+                  [ngClass]="
+                    sortDirection === 'desc' ? 'opacity-100' : 'opacity-30'
+                  "
+                ></i>
+              </span>
+            </div>
+          </th>
+
+          <th
+            (click)="sortTable('email')"
+            class="px-2 mobile:px-4 py-3 text-left cursor-pointer text-[10px] mobile:text-xs text-type_gray font-medium"
+          >
+            <div class="flex items-center space-x-1">
+              <span>EMAIL</span>
+              <span class="flex flex-col">
+                <i
+                  class="fa fa-caret-up text-xs"
+                  [ngClass]="
+                    sortDirection === 'asc' && sortUsed
+                      ? 'opacity-100'
+                      : 'opacity-30'
+                  "
+                ></i>
+                <i
+                  class="fa fa-caret-down text-xs -mt-[10px]"
+                  [ngClass]="
+                    sortDirection === 'desc' ? 'opacity-100' : 'opacity-30'
+                  "
+                ></i>
+              </span>
+            </div>
+          </th>
+
+          <th
+            class="px-2 mobile:px-4 py-3 text-left cursor-pointer text-[10px] mobile:text-xs text-type_gray font-medium hidden mobile:table-cell"
+          >
+            <div class="flex items-center space-x-1">
+              <span>PHONE NUMBER</span>
+            </div>
+          </th>
+
+          <th
+            (click)="sortTable('createdAt')"
+            class="px-2 mobile:px-4 py-3 text-left cursor-pointer text-[10px] mobile:text-xs text-type_gray font-medium"
+          >
+            <div class="flex items-center space-x-1">
+              <span>DATE</span>
+              <span class="flex flex-col">
+                <i
+                  class="fa fa-caret-up text-xs"
+                  [ngClass]="
+                    sortDirection === 'asc' && sortUsed
+                      ? 'opacity-100'
+                      : 'opacity-30'
+                  "
+                ></i>
+                <i
+                  class="fa fa-caret-down text-xs -mt-[10px]"
+                  [ngClass]="
+                    sortDirection === 'desc' ? 'opacity-100' : 'opacity-30'
+                  "
+                ></i>
+              </span>
+            </div>
+          </th>
+          <th
+            class="px-2 mobile:px-4 py-3 text-left text-[10px] mobile:text-xs text-type_gray font-medium"
+          >
+            ACTION
+          </th>
+        </ng-template>
+
+        <ng-template #rows let-user="row">
+          <td class="px-2 mobile:px-4 py-5">
+            {{ user.name }}
+          </td>
+
+          <td class="px-2 mobile:px-4 py-5">
+            {{ user.email }}
+          </td>
+
+          <td class="px-2 mobile:px-4 py-5 hidden mobile:table-cell">
+            {{ user.phoneNumber ?? '-' }}
+          </td>
+
+          <td class="px-2 mobile:px-4 py-5">
+            {{ user.createdAt | date }}
+          </td>
+
+          <td class="px-2 mobile:px-4 py-2">
+            <button
+              class="border-[1px] border-type_caption rounded-full hover:bg-bg_subtle text-type_caption font-medium py-1 px-2 mobile:px-3 whitespace-nowrap text-[10px] mobile:text-sm"
+              (click)="onViewUser(user)"
+            >
+              <span class="block mobile:hidden font-medium">View</span>
+              <span class="hidden mobile:block">View Details</span>
+            </button>
+          </td>
+        </ng-template>
+      </app-generic-table>
+    </div>
+  } @else if (userDataQueried()) {
+    <div
+      class="flex flex-col items-center text-center w-full mobile:w-1/2 mx-auto space-y-1 mt-8 pb-[200px]"
+    >
+      <div>
+        <p class="text-sm mobile:text-lg text-type_caption mt-1 mb-10">
+          No users matched your search!
+        </p>
+        <button
+          class="w-full rounded-full text-white font-medium bg-primary py-2 h-12 block"
+          (click)="onReturn()"
+        >
+          Return
+        </button>
+      </div>
+    </div>
+  }
+} @else if (isError()) {
+  <h2 class="text-type_title_gray text-base mobile:text-[20px] font-medium">
+    All Orders
+  </h2>
+  <div class="flex items-center flex-col justify-center">
+    <h3 class="mb-5">An error occurred</h3>
+
+    <button
+      class="rounded-full text-white font-medium w-[200px] min-[450px]:w-[300px] bg-primary py-2 h-12"
+      (click)="updateViewState()"
+    >
+      Retry
+    </button>
+  </div>
+} @else {
+  <h2 class="text-type_title_gray text-base mobile:text-[20px] font-medium">
+    All Users
+  </h2>
+  <div class="w-full space-y-2 mt-5">
+    @for (item of [1, 2, 3, 4, 5]; track item) {
+      <div>
+        <p-skeleton width="100%" height="4rem" />
+      </div>
+    }
+  </div>
+}

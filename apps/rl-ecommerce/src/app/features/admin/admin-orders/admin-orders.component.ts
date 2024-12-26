@@ -62,7 +62,7 @@ export class AdminOrdersComponent implements OnInit {
   private toast = inject(ToastService);
   config: PaginationInstance = {
     id: 'adminOrdersPagination',
-    itemsPerPage: 5,
+    itemsPerPage: 10,
     currentPage: 1,
   };
   totalItemsToShow = signal(10);
