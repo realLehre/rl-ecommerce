@@ -20,7 +20,7 @@ export class ProductOptionsService {
   currentPage = signal<number>(1);
   currentPriceFilter = signal<{ min: any; max: any } | null>(null);
   currentSort = signal<string | null>(null);
-  url = environment.apiUrl + 'category';
+  url = environment.apiUrl + 'categories';
   constructor() {
     const savedQuery: ISavedProductOptionQueries = JSON.parse(
       sessionStorage.getItem('hshs82haa02sshs92s')!,

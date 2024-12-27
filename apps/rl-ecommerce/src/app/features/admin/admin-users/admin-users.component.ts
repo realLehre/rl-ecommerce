@@ -17,11 +17,9 @@ import { GenericTableComponent } from '../../../shared/components/generic-table/
 import { PaginationInstance } from 'ngx-pagination';
 import { catchError, Observable, of, switchMap, tap } from 'rxjs';
 import { CalendarModule } from 'primeng/calendar';
-import { CurrencyPipe, DatePipe, DecimalPipe, NgClass } from '@angular/common';
+import { DatePipe, NgClass } from '@angular/common';
 import { DropdownModule } from 'primeng/dropdown';
 import { MenuModule } from 'primeng/menu';
-import { PrimeNgDatepickerDirective } from '../../../shared/directives/prime-ng-datepicker.directive';
-import { PrimeTemplate } from 'primeng/api';
 import { SkeletonModule } from 'primeng/skeleton';
 import { SliderModule } from 'primeng/slider';
 import { ToastService } from '../../../shared/services/toast.service';
@@ -38,7 +36,6 @@ import { IUser } from '../../auth/services/auth.service';
     DatePipe,
     DropdownModule,
     MenuModule,
-
     SkeletonModule,
     SliderModule,
     NgClass,
