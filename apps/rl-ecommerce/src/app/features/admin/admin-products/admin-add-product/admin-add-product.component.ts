@@ -66,7 +66,8 @@ export class AdminAddProductComponent
     return (
       this.productForm?.invalid ||
       this.coverImage == '' ||
-      this.productForm.value.price >= this.productForm.value.previousPrice
+      (this.productForm.value.price >= this.productForm.value.previousPrice &&
+        this.productForm.value.previousPrice != 0)
     );
   }
 
