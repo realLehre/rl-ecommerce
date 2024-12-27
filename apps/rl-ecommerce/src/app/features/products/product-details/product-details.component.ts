@@ -102,6 +102,7 @@ export class ProductDetailsComponent implements OnInit {
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe(() => {
+        this.isCollapsed.set(true);
         this.productId = this.route.snapshot.queryParams['id'];
         this.product$ = this.productService.getProductById(this.productId);
 
