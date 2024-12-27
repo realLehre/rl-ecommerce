@@ -56,12 +56,15 @@ export class AdminProductImagesComponent implements OnInit {
         hasUploaded: true,
         imageUrl: this.productData()?.image!,
       });
+      this.coverImageUrl = this.productData()?.image!;
 
       this.uploadBoxes.set(
         this.photoUploadService.prefillUploadBoxes(
           this.productData()?.imageUrls as string[],
         ),
       );
+      const imageUrls = [...this.productData()?.imageUrls!];
+      this.imageUrls = imageUrls.slice(1);
     }
   }
 
@@ -153,7 +156,7 @@ export class AdminProductImagesComponent implements OnInit {
       imageUrl: '',
     };
     this.uploadBoxes.set(boxes);
-    this.imageUrls = this.imageUrls.filter((_, i) => i !== index);
+    this.imageUrls[index] = '';
     this.imageUrlsEmit.emit({
       imageUrls: this.imageUrls,
       coverImageUrl: this.coverImageUrl,

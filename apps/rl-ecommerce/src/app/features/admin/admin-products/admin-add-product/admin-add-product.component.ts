@@ -57,6 +57,8 @@ export class AdminAddProductComponent
         if (productData) {
           this.productData = productData;
           this.coverImage = productData.image;
+          const images = [...productData.imageUrls];
+          this.imageUrls = images.slice(1);
         }
       }
     });
@@ -84,6 +86,8 @@ export class AdminAddProductComponent
     if (this.isProductCreateDataInvalid()) {
       return;
     }
+    this.imageUrls = this.imageUrls.filter((url) => url != '');
+
     this.isSubmitting.set(true);
     if (!this.isEditing()) {
       this.productService
