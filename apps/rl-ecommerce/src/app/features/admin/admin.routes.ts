@@ -87,6 +87,13 @@ export const adminRoutes: Routes = [
           ),
       },
       {
+        path: 'categories/:id',
+        loadComponent: () =>
+          import(
+            './admin-categories/admin-category-details/admin-category-details.component'
+          ).then((c) => c.AdminCategoryDetailsComponent),
+      },
+      {
         path: 'add-category',
         loadComponent: () =>
           import(

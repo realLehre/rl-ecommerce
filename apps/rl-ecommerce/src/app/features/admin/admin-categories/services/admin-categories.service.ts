@@ -7,6 +7,7 @@ import {
 import { environment } from '../../../../../environments/environment.development';
 import { catchError, Observable, throwError } from 'rxjs';
 import { IAdminCategoriesResponse } from '../admin-categories.interface';
+import { IAdminUserFilter } from '../../admin-users/admin-user.service';
 
 export interface IAdminCategoryFilter {
   page: number;
@@ -21,6 +22,7 @@ export class AdminCategoriesService {
   private http = inject(HttpClient);
   private apiUrl = environment.apiUrl + 'categories';
   categoriesDataQueried = signal(false);
+  CATEGORIES_QUERY_STORE_KEY = 'D93kdk*303dJp[xse32xhi3';
 
   getCategories(filter: IAdminCategoryFilter): Observable<any> {
     let params = new HttpParams();
@@ -34,6 +36,14 @@ export class AdminCategoriesService {
     return this.http
       .get<IAdminCategoriesResponse>(this.apiUrl + '/all', { params })
       .pipe(catchError(this.handleError));
+  }
+
+  createRouteQuery(filter: IAdminUserFilter) {
+    return {
+      page: filter.page,
+      itemsPerPage: filter.itemsPerPage,
+      search: filter.search,
+    };
   }
 
   private handleError(error: any) {

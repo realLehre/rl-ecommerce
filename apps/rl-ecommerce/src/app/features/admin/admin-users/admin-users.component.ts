@@ -105,32 +105,31 @@ export class AdminUsersComponent implements OnInit {
     );
     if (savedQuery) {
       this.filter.set({ ...savedQuery });
-      this.router.navigate([], {
-        relativeTo: this.route,
-        queryParams: this.userService.createRouteQuery(savedQuery),
-        queryParamsHandling: 'merge',
-      });
     }
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: this.userService.createRouteQuery(
+        savedQuery ?? this.filter(),
+      ),
+      queryParamsHandling: 'merge',
+    });
   }
 
   itemsToShowChange($event: number) {
     this.filter.set({ ...this.filter(), itemsPerPage: $event });
     this.saveQuery();
-
     this.updateViewState();
   }
 
   pageChange($event: number) {
     this.filter.set({ ...this.filter(), page: $event });
     this.saveQuery();
-
     this.updateViewState();
   }
 
   searchChanged($event: string | null) {
     this.filter.set({ ...this.filter(), search: $event! });
     this.saveQuery();
-
     this.updateViewState();
   }
 

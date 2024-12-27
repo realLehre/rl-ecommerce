@@ -159,6 +159,13 @@ body {
   }
 }
 
+.p-tooltip-text {
+  font-size: 12px !important;
+  color: theme('colors.type_title_gray') !important;
+  background-color: theme('colors.bg_subtle') !important;
+  padding: 4px !important;
+}
+
 .orderDate {
   & input {
     width: 100% !important;

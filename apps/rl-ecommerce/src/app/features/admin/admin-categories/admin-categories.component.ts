@@ -3,8 +3,10 @@ import {
   Component,
   computed,
   inject,
+  OnInit,
   Signal,
   signal,
+  ViewChild,
 } from '@angular/core';
 import { AdminCategoriesService } from './services/admin-categories.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
@@ -16,17 +18,33 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { PaginationInstance } from 'ngx-pagination';
 import { IAdminUserFilter } from '../admin-users/admin-user.service';
 import { ICategory, IProduct } from '../../products/model/product.interface';
-import { IAdminCategoriesResponse } from './admin-categories.interface';
+import {
+  Categories,
+  IAdminCategoriesResponse,
+} from './admin-categories.interface';
+import { Menu, MenuModule } from 'primeng/menu';
+import { PrimeTemplate } from 'primeng/api';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Tooltip } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-admin-categories',
   standalone: true,
-  imports: [DatePipe, GenericTableComponent, SkeletonModule, NgClass],
+  imports: [
+    DatePipe,
+    GenericTableComponent,
+    SkeletonModule,
+    NgClass,
+    MenuModule,
+    PrimeTemplate,
+  ],
   templateUrl: './admin-categories.component.html',
   styleUrl: './admin-categories.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AdminCategoriesComponent {
+export class AdminCategoriesComponent implements OnInit {
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private categoryService = inject(AdminCategoriesService);
   private toast = inject(ToastService);
   config: PaginationInstance = {
@@ -65,16 +83,50 @@ export class AdminCategoriesComponent {
     tap(() => this.isLoading.set(false)),
   );
   categoriesData: Signal<IAdminCategoriesResponse> = toSignal(this.categories$);
+  subCategoriesToolTip = computed(() => ({
+    subCategoryNames: this.categoriesData().categories.map(
+      ({ subCategories }) => subCategories.map(({ name }) => name).join(', '),
+    ),
+  }));
+  selectedCategory = signal<Categories | undefined>(undefined);
   sortUsed: boolean = false;
   sortColumn: keyof IProduct | keyof ICategory | '' = '';
   sortDirection: 'asc' | 'desc' = 'asc';
+  @ViewChild('menu') actionMenu!: Menu;
 
-  pageChange($event: number) {}
+  ngOnInit() {
+    const savedQuery = JSON.parse(
+      sessionStorage.getItem(this.categoryService.CATEGORIES_QUERY_STORE_KEY)!,
+    );
+    if (savedQuery) {
+      this.filter.set({ ...savedQuery });
+    }
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: this.categoryService.createRouteQuery(
+        savedQuery ?? this.filter(),
+      ),
+      queryParamsHandling: 'merge',
+    });
+  }
 
-  itemsToShowChange($event: number) {}
+  itemsToShowChange($event: number) {
+    this.filter.set({ ...this.filter(), itemsPerPage: $event });
+    this.saveQuery();
+    this.updateViewState();
+  }
 
-  searchChanged($event: string | null) {}
+  pageChange($event: number) {
+    this.filter.set({ ...this.filter(), page: $event });
+    this.saveQuery();
+    this.updateViewState();
+  }
 
+  searchChanged($event: string | null) {
+    this.filter.set({ ...this.filter(), search: $event! });
+    this.saveQuery();
+    this.updateViewState();
+  }
   sortTable(column: any): void {
     if (this.sortColumn === column) {
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
@@ -103,11 +155,45 @@ export class AdminCategoriesComponent {
     });
   }
 
-  onViewUser(user: any) {}
-
-  onReturn() {}
-
   updateViewState() {
+    this.isLoading.set(true);
     this.refreshTrigger.update((count) => count + 1);
+  }
+
+  onOpenProductActionMenu(event: any, category: Categories) {
+    this.actionMenu.show(event);
+    this.selectedCategory.set(category);
+  }
+
+  onViewDetails() {
+    this.router.navigate([
+      '/',
+      'admin',
+      'categories',
+      this.selectedCategory()?.id,
+    ]);
+  }
+
+  onEdit() {}
+
+  onDelete() {}
+
+  onReturn() {
+    this.filter.set({ page: 1, itemsPerPage: 10 });
+    sessionStorage.removeItem(this.categoryService.CATEGORIES_QUERY_STORE_KEY);
+    this.saveQuery();
+    this.updateViewState();
+  }
+
+  saveQuery() {
+    sessionStorage.setItem(
+      this.categoryService.CATEGORIES_QUERY_STORE_KEY,
+      JSON.stringify(this.filter()),
+    );
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: this.categoryService.createRouteQuery(this.filter()),
+      queryParamsHandling: 'merge',
+    });
   }
 }
