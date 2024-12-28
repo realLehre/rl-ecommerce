@@ -17,6 +17,7 @@ import { ErrorMessageDirective } from '../../../user/address/address-form/direct
 import { NgClass } from '@angular/common';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { ToastService } from '../../../../shared/services/toast.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin-add-category',
@@ -35,6 +36,7 @@ export class AdminAddCategoryComponent implements OnInit {
   private readonly categoryService = inject(AdminCategoriesService);
   private toast = inject(ToastService);
   private fb = inject(FormBuilder);
+  private router = inject(Router);
   isEditing = signal(false);
   categoryForm!: FormGroup;
   isSubmitting = signal(false);
@@ -58,11 +60,10 @@ export class AdminAddCategoryComponent implements OnInit {
     console.log(this.categoryForm.value);
     const data = {
       name: this.categoryForm.value.name,
-      subCategories: this.categoryForm.value.subCategories.map(
-        ({ subCategoryName }: any) => subCategoryName,
-      ),
+      subCategories: this.categoryForm.value.subCategories
+        .filter(({ subCategoryName }: any) => subCategoryName !== null)
+        .map(({ subCategoryName }: any) => subCategoryName),
     };
-
     console.log(data);
     this.isSubmitting.set(true);
     this.categoryService.addCategory(data).subscribe({
@@ -71,6 +72,8 @@ export class AdminAddCategoryComponent implements OnInit {
           type: 'success',
           message: 'Category added successfully',
         });
+        this.categoryService.categoriesSignal.set(undefined);
+        this.router.navigate(['/', 'admin', 'categories']);
         this.isSubmitting.set(false);
       },
       error: (err) => {

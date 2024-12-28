@@ -54,6 +54,7 @@ export class AdminCategoriesComponent implements OnInit {
     itemsPerPage: 10,
     currentPage: 1,
   };
+  totalItemsToShow = signal(10);
   categoriesDataQueried = this.categoryService.categoriesDataQueried;
   refreshTrigger = signal(0);
   filter = signal<IAdminUserFilter>({
@@ -82,7 +83,16 @@ export class AdminCategoriesComponent implements OnInit {
         }),
       ),
     ),
-    tap(() => this.isLoading.set(false)),
+    tap((res) => {
+      this.config.itemsPerPage = Math.max(
+        res?.totalItemsInPage!,
+        this.totalItemsToShow(),
+      );
+      this.config.currentPage = res?.currentPage!;
+      this.config.totalItems = res?.totalItems;
+      this.saveQuery();
+      this.isLoading.set(false);
+    }),
   );
   categoriesData: Signal<IAdminCategoriesResponse> = toSignal(this.categories$);
   subCategoriesToolTip = computed(() => ({
@@ -115,18 +125,22 @@ export class AdminCategoriesComponent implements OnInit {
   }
 
   itemsToShowChange($event: number) {
+    this.categoryService.categoriesSignal.set(undefined);
+    this.totalItemsToShow.set($event);
     this.filter.set({ ...this.filter(), itemsPerPage: $event });
     this.saveQuery();
     this.updateViewState();
   }
 
   pageChange($event: number) {
+    this.categoryService.categoriesSignal.set(undefined);
     this.filter.set({ ...this.filter(), page: $event });
     this.saveQuery();
     this.updateViewState();
   }
 
   searchChanged($event: string | null) {
+    this.categoryService.categoriesSignal.set(undefined);
     this.filter.set({ ...this.filter(), search: $event! });
     this.saveQuery();
     this.updateViewState();

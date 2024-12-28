@@ -117,6 +117,7 @@ export class AdminUsersComponent implements OnInit {
 
   itemsToShowChange($event: number) {
     this.filter.set({ ...this.filter(), itemsPerPage: $event });
+    this.totalItemsToShow.set($event);
     this.saveQuery();
     this.updateViewState();
   }
