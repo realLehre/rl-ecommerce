@@ -192,7 +192,20 @@
       <app-large-reviews [reviews]="product.ratings" />
     }
   } @else if (isError()) {
-    <p class="mt-8 text-type_caption">{{ errorMessage() }}</p>
+    <div class="flex flex-col items-center justify-center">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="200"
+        height="200"
+        viewBox="-9.34232 211.563 640 448"
+      >
+        <path
+          d="M 416.4 435.6 c -16.9 0 -32.8 -9 -41.4 -23.4 l -64.3 -106.6 l -64.2 106.6 c -8.7 14.5 -24.6 23.5 -41.5 23.5 c -4.5 0 -9 -0.6 -13.3 -1.9 l -137 -39.2 v 178 c 0 14.7 10 27.5 24.2 31 l 216.2 54.1 c 10.2 2.5 20.9 2.5 31 0 l 216.4 -54.1 c 14.2 -3.6 24.2 -16.4 24.2 -31 v -178 l -137 39.1 C 425.4 435 420.9 435.6 416.4 435.6 z M 629 323.4 l -51.5 -102.8 c -3.1 -6.2 -9.8 -9.8 -16.7 -8.9 l -250.1 31.9 l 91.7 152.1 c 3.8 6.3 11.4 9.3 18.5 7.3 l 197.9 -56.5 C 628.7 343.6 633.5 332.6 629 323.4 L 629 323.4 z M 43.9 220.6 l -51.5 102.8 c -4.6 9.2 0.3 20.2 10.1 23 l 197.9 56.5 c 7.1 2 14.7 -1 18.5 -7.3 l 91.8 -152 l -250.2 -31.9 C 53.6 210.9 47 214.4 43.9 220.6 z"
+          fill="#555555"
+        />
+      </svg>
+      <p class="text-type_caption text-center">{{ errorMessage() }}</p>
+    </div>
   } @else {
     <div class="flex items-start flex-col min-[700px]:flex-row gap-10 mt-8">
       <div
