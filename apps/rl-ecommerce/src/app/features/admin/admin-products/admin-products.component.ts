@@ -4,6 +4,7 @@ import {
   inject,
   input,
   OnInit,
+  output,
   signal,
   ViewChild,
 } from '@angular/core';
@@ -283,7 +284,9 @@ export class AdminProductsComponent implements OnInit {
   }
 
   onChangeSubCategory(subCat: ISubCategory) {
-    this.selectedSubCategory = subCat;
+    if (!this.injecting()) {
+      this.selectedSubCategory = subCat;
+    }
     this.filter = { ...this.filter, page: 1, subCategory: subCat };
   }
 
@@ -327,6 +330,7 @@ export class AdminProductsComponent implements OnInit {
     this.filter = {
       itemsToShow: 10,
       page: 1,
+      category: this.category(),
     };
     this.rangeDates = [];
     this.rangeValues = [2000, 10000];
@@ -346,7 +350,7 @@ export class AdminProductsComponent implements OnInit {
     let number = 0;
     for (const key in this.filter) {
       if (
-        key == 'category' ||
+        (key == 'category' && !this.injecting) ||
         key == 'subCategory' ||
         key == 'minPrice' ||
         key == 'minDate'
@@ -369,8 +373,13 @@ export class AdminProductsComponent implements OnInit {
     this.productData.products.sort((a: any, b: any) => {
       let valueA, valueB;
       if (column == 'category') {
-        valueA = a[column].name;
-        valueB = b[column].name;
+        if (!this.injecting()) {
+          valueA = a[column].name;
+          valueB = b[column].name;
+        } else {
+          valueA = a['subCategory'].name;
+          valueB = b['subCategory'].name;
+        }
       } else {
         valueA = a[column];
         valueB = b[column];

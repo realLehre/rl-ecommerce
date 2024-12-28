@@ -1,9 +1,13 @@
 <div class="w-full">
   @if (title()) {
-    <div class="flex items-center justify-between mb-8">
+    <div
+      class="flex items-center justify-between mb-8"
+      [ngClass]="{ '!mb-3': parentInjected() }"
+    >
       <div class="flex items-center space-x-2">
         <h2
           class="text-type_title_gray text-base mobile:text-[20px] font-medium"
+          [ngClass]="{ '!text-sm mobile:!text-base': parentInjected() }"
         >
           {{ title() }}
         </h2>

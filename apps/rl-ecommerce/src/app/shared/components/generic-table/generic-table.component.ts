@@ -52,6 +52,7 @@ export class GenericTableComponent implements OnInit {
   showFilters = input<boolean>(true);
   showTotalItemFilter = input<boolean>(true);
   scrollTop = input<boolean>(true);
+  parentInjected = input(false);
   searchInput: FormControl = new FormControl(null);
   itemsToShow: number[] = [10, 15, 20, 25];
   totalItemsToShow = computed(() => this.itemsToShowInput());

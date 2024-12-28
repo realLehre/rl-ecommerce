@@ -6,8 +6,9 @@
         [config]="config"
         [tableData]="productData.products"
         [itemsToShowInput]="filter.itemsToShow"
-        [title]="'Product List'"
         [searchValueInput]="filter.name"
+        [title]="'Product List'"
+        [parentInjected]="injecting()"
         (pageChanged)="pageChange($event)"
         (itemsToShowChanged)="itemsToShowChange($event)"
         (searchValueEmit)="searchChanged($event)"
@@ -92,7 +93,7 @@
             class="px-2 mobile:px-4 py-3 text-left cursor-pointer text-[10px] mobile:text-xs text-type_gray font-medium hidden mobile:table-cell"
           >
             <div class="flex items-center space-x-1">
-              <span>CATEGORY</span>
+              <span> {{ !injecting() ? 'CATEGORY' : 'SUBCATGEORY' }}</span>
 
               <span class="flex flex-col">
                 <i
@@ -188,8 +189,11 @@
           <td class="px-2 mobile:px-4 py-5 font-semibold">
             {{ product.price | currency: '₦' : 'symbol' : '1.0-0' }}
           </td>
+
           <td class="px-2 mobile:px-4 py-5 hidden mobile:table-cell">
-            {{ product.category.name }}
+            {{
+              !injecting() ? product.category.name : product.subCategory.name
+            }}
           </td>
           <td class="px-2 mobile:px-4 py-5 hidden mobile:table-cell">
             {{ product.unit }}
@@ -351,6 +355,13 @@
       </ng-template>
     </p-menu>
   } @else if (productQueried()) {
+    @if (injecting()) {
+      <h2
+        class="text-type_title_gray text-sm mobile:text-base font-medium mb-2"
+      >
+        Product List
+      </h2>
+    }
     <div
       class="flex flex-col items-center text-center w-full mobile:w-1/2 mx-auto space-y-1 mt-8 pb-[200px]"
     >
@@ -368,7 +379,10 @@
     </div>
   }
 } @else if (isError()) {
-  <h2 class="text-type_title_gray text-base mobile:text-[20px] font-medium">
+  <h2
+    class="text-type_title_gray text-base mobile:text-[20px] font-medium"
+    [ngClass]="{ '!text-sm mobile:!text-base': injecting() }"
+  >
     Product List
   </h2>
   <div class="flex items-center flex-col justify-center">
@@ -382,10 +396,13 @@
     </button>
   </div>
 } @else {
-  <h2 class="text-type_title_gray text-base mobile:text-[20px] font-medium">
+  <h2
+    class="text-type_title_gray text-base mobile:text-[20px] font-medium"
+    [ngClass]="{ '!text-sm mobile:!text-base': injecting() }"
+  >
     Product List
   </h2>
-  <div class="w-full space-y-2 mt-5">
+  <div class="w-full space-y-2 mt-2">
     @for (item of [1, 2, 3, 4, 5]; track item) {
       <div>
         <p-skeleton width="100%" height="4rem" />
