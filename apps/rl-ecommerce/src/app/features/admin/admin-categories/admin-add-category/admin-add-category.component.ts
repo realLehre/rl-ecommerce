@@ -16,6 +16,7 @@ import {
 import { ErrorMessageDirective } from '../../../user/address/address-form/directives/error-message.directive';
 import { NgClass } from '@angular/common';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
+import { ToastService } from '../../../../shared/services/toast.service';
 
 @Component({
   selector: 'app-admin-add-category',
@@ -32,6 +33,7 @@ import { LoaderComponent } from '../../../../shared/components/loader/loader.com
 })
 export class AdminAddCategoryComponent implements OnInit {
   private readonly categoryService = inject(AdminCategoriesService);
+  private toast = inject(ToastService);
   private fb = inject(FormBuilder);
   isEditing = signal(false);
   categoryForm!: FormGroup;
@@ -39,7 +41,7 @@ export class AdminAddCategoryComponent implements OnInit {
 
   ngOnInit(): void {
     this.categoryForm = this.fb.group({
-      categoryName: [null, Validators.required],
+      name: [null, Validators.required],
       subCategories: this.fb.array([
         this.fb.group({
           subCategoryName: [null],
@@ -54,6 +56,31 @@ export class AdminAddCategoryComponent implements OnInit {
 
   onSubmit() {
     console.log(this.categoryForm.value);
+    const data = {
+      name: this.categoryForm.value.name,
+      subCategories: this.categoryForm.value.subCategories.map(
+        ({ subCategoryName }: any) => subCategoryName,
+      ),
+    };
+
+    console.log(data);
+    this.isSubmitting.set(true);
+    this.categoryService.addCategory(data).subscribe({
+      next: (res) => {
+        this.toast.showToast({
+          type: 'success',
+          message: 'Category added successfully',
+        });
+        this.isSubmitting.set(false);
+      },
+      error: (err) => {
+        this.toast.showToast({
+          type: 'error',
+          message: err.error.message || 'Failed to load order',
+        });
+        this.isSubmitting.set(false);
+      },
+    });
   }
 
   isInvalidAndTouched(control: string) {

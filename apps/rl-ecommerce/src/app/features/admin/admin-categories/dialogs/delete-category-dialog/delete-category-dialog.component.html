@@ -1,0 +1,32 @@
+<div class="p-5 bg-white">
+  <h3 class="text-type_title font-semibold text-lg mobile:text-xl mb-3">
+    Delete {{ categoryToDelete()?.name }} category?
+  </h3>
+
+  <p class="text-type_grey text-sm mobile:text-base mb-10">
+    This action will delete
+    <span class="font-bold text-primary"
+      >all corresponding products and subcategories</span
+    >
+    and can not be reversed!
+  </p>
+
+  <div class="flex items-center space-x-3 justify-between">
+    <button
+      class="px-4 py-2 bg-transparent h-11 border-[2px] border-primary rounded-md hover:border-type_grey text-primary hover:text-type_grey flex-1"
+      (click)="onCloseDialog()"
+    >
+      Cancel</button
+    ><button
+      class="px-4 py-2 flex items-center justify-center space-x-2 bg-primary h-11 text-white rounded-md hover:bg-opacity-80 focus:outline-none disabled:bg-type_grey flex-1"
+      (click)="onDelete()"
+    >
+      @if (isLoading()) {
+        <app-loader
+          [customStyle]="{ width: '18px', border: '3px solid #fff' }"
+        />
+      }
+      <span>Delete</span>
+    </button>
+  </div>
+</div>

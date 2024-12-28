@@ -26,6 +26,8 @@ import { Menu, MenuModule } from 'primeng/menu';
 import { PrimeTemplate } from 'primeng/api';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Tooltip } from 'primeng/tooltip';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DeleteCategoryDialogComponent } from './dialogs/delete-category-dialog/delete-category-dialog.component';
 
 @Component({
   selector: 'app-admin-categories',
@@ -93,6 +95,8 @@ export class AdminCategoriesComponent implements OnInit {
   sortColumn: keyof IProduct | keyof ICategory | '' = '';
   sortDirection: 'asc' | 'desc' = 'asc';
   @ViewChild('menu') actionMenu!: Menu;
+  private ref: DynamicDialogRef | undefined;
+  private dialogService = inject(DialogService);
 
   ngOnInit() {
     const savedQuery = JSON.parse(
@@ -176,7 +180,23 @@ export class AdminCategoriesComponent implements OnInit {
 
   onEdit() {}
 
-  onDelete() {}
+  onDelete() {
+    this.categoryService.categoryToDelete.set(this.selectedCategory());
+    this.ref = this.dialogService.open(DeleteCategoryDialogComponent, {
+      width: '25rem',
+      breakpoints: {
+        '450px': '90vw',
+      },
+      focusOnShow: false,
+    });
+
+    this.ref.onClose.subscribe((res) => {
+      if (res == 'deleted') {
+        this.categoryService.categoriesSignal.set(undefined);
+        this.onReturn();
+      }
+    });
+  }
 
   onReturn() {
     this.filter.set({ page: 1, itemsPerPage: 10 });

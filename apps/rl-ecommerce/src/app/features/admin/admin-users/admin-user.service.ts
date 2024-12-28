@@ -5,7 +5,7 @@ import {
   HttpErrorResponse,
   HttpParams,
 } from '@angular/common/http';
-import { catchError, Observable, of, throwError } from 'rxjs';
+import { catchError, Observable, of, tap, throwError } from 'rxjs';
 import { IOrderFilter } from '../admin-orders/services/admin-order.service';
 import { IOrder } from '../../../shared/models/order.interface';
 
@@ -47,7 +47,7 @@ export class AdminUserService {
   private http = inject(HttpClient);
   private apiUrl = environment.apiUrl + 'users';
   userDataQueried = signal(false);
-  userDataSignal = signal<IUserRes | null>(null);
+  userDataSignal = signal<IUserRes | undefined>(undefined);
   USER_QUERY_STORE_KEY = 'jdh&3dh028dn&39dkgs';
 
   getUsers(filter: IAdminUserFilter) {
@@ -66,9 +66,10 @@ export class AdminUserService {
     }
     return this.userDataSignal()
       ? of(this.userDataSignal())
-      : this.http
-          .get<IUserRes>(`${this.apiUrl}`, { params })
-          .pipe(catchError(this.handleError));
+      : this.http.get<IUserRes>(`${this.apiUrl}`, { params }).pipe(
+          catchError(this.handleError),
+          tap((res) => this.userDataSignal.set(res)),
+        );
   }
 
   getUserById(id: string) {

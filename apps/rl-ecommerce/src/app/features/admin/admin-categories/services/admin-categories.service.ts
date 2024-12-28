@@ -5,7 +5,7 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment.development';
-import { catchError, Observable, throwError } from 'rxjs';
+import { catchError, Observable, of, tap, throwError } from 'rxjs';
 import {
   Categories,
   IAdminCategoriesResponse,
@@ -26,6 +26,8 @@ export class AdminCategoriesService {
   private apiUrl = environment.apiUrl + 'categories';
   categoriesDataQueried = signal(false);
   CATEGORIES_QUERY_STORE_KEY = 'D93kdk*303dJp[xse32xhi3';
+  categoriesSignal = signal<IAdminCategoriesResponse | undefined>(undefined);
+  categoryToDelete = signal<Categories | undefined>(undefined);
 
   getCategories(filter: IAdminCategoryFilter): Observable<any> {
     let params = new HttpParams();
@@ -36,15 +38,32 @@ export class AdminCategoriesService {
     params = params.set('page', filter.page);
     params = params.set('itemsPerPage', filter.itemsPerPage);
 
-    return this.http
-      .get<IAdminCategoriesResponse>(this.apiUrl + '/all', { params })
-      .pipe(catchError(this.handleError));
+    return this.categoriesSignal()
+      ? of(this.categoriesSignal())
+      : this.http
+          .get<IAdminCategoriesResponse>(this.apiUrl + '/all', { params })
+          .pipe(
+            catchError(this.handleError),
+            tap((res) => this.categoriesSignal.set(res)),
+          );
   }
 
   getCategoryById(id: string): Observable<Categories> {
     return this.http
       .get<Categories>(this.apiUrl + '/' + id)
       .pipe(catchError(this.handleError));
+  }
+
+  addCategory(data: { name: string; subCategories: string[] }) {
+    return this.http.post(this.apiUrl + '/create', data);
+  }
+
+  deleteCategory(id: string) {
+    return this.http.delete(this.apiUrl + '/delete/' + id);
+  }
+
+  updateCategory(data: { name: string; subCategories: string[] }, id: string) {
+    return this.http.patch(this.apiUrl + '/update/' + id, data);
   }
 
   createRouteQuery(filter: IAdminUserFilter) {

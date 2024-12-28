@@ -19,7 +19,7 @@ import {
   RouterLink,
 } from '@angular/router';
 import { ProductsService } from '../services/products.service';
-import { filter, Observable, of } from 'rxjs';
+import { catchError, filter, Observable, of } from 'rxjs';
 import { IProduct } from '../model/product.interface';
 import { AsyncPipe, CurrencyPipe, NgClass, NgStyle } from '@angular/common';
 import { SkeletonModule } from 'primeng/skeleton';
@@ -66,7 +66,7 @@ export class ProductDetailsComponent implements OnInit {
   private sanitizer = inject(DomSanitizer);
   private authService = inject(AuthService);
   activeProduct = this.productService.activeProduct;
-  product$!: Observable<IProduct>;
+  product$!: Observable<IProduct | any>;
   quantity: number = 1;
   isLoading: boolean = false;
   isCollapsed = signal(true);
@@ -90,6 +90,8 @@ export class ProductDetailsComponent implements OnInit {
     return;
   });
   isUpdatingCart = signal(false);
+  isError = signal(false);
+  errorMessage = signal(undefined);
 
   ngOnInit() {
     this.productId = this.route.snapshot.queryParams['id'];
@@ -97,14 +99,29 @@ export class ProductDetailsComponent implements OnInit {
     if (isShowingReviews) {
       this.reviewService.seeingFullReview.set(true);
     }
-    this.product$ = this.productService.getProductById(this.productId);
+    this.product$ = this.productService.getProductById(this.productId).pipe(
+      catchError((err: any) => {
+        this.toast.showToast({ type: 'error', message: err.error.message });
+        this.isError.set(true);
+        this.errorMessage.set(err.error.message);
+        return of(null);
+      }),
+    );
 
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe(() => {
         this.isCollapsed.set(true);
         this.productId = this.route.snapshot.queryParams['id'];
-        this.product$ = this.productService.getProductById(this.productId);
+        this.product$ = this.productService.getProductById(this.productId).pipe(
+          catchError((err: any) => {
+            this.toast.showToast({ type: 'error', message: err.error.message });
+            this.isError.set(true);
+            this.errorMessage.set(err.error.message);
+
+            return of(null);
+          }),
+        );
 
         this.productInCart = computed(() => {
           if (this.cartService.cartSignal()) {

@@ -5,29 +5,30 @@ import {
   signal,
 } from '@angular/core';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
-import { ToastService } from '../../../../shared/services/toast.service';
-import { AdminProductsService } from '../services/admin-products.service';
-import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
+import { ToastService } from '../../../../../shared/services/toast.service';
+import { AdminProductsService } from '../../../admin-products/services/admin-products.service';
+import { AdminCategoriesService } from '../../services/admin-categories.service';
+import { LoaderComponent } from '../../../../../shared/components/loader/loader.component';
 
 @Component({
-  selector: 'app-product-delete-dialog',
+  selector: 'app-delete-category-dialog',
   standalone: true,
   imports: [LoaderComponent],
-  templateUrl: './product-delete-dialog.component.html',
-  styleUrl: './product-delete-dialog.component.scss',
+  templateUrl: './delete-category-dialog.component.html',
+  styleUrl: './delete-category-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductDeleteDialogComponent {
+export class DeleteCategoryDialogComponent {
   private ref = inject(DynamicDialogRef);
   private toast = inject(ToastService);
-  private productService = inject(AdminProductsService);
-  productToDelete = this.productService.productToDelete;
+  private categoryService = inject(AdminCategoriesService);
+  categoryToDelete = this.categoryService.categoryToDelete;
   isLoading = signal(false);
 
   onDelete() {
     this.isLoading.set(true);
-    this.productService
-      .deleteProduct(this.productToDelete()?.id as string)
+    this.categoryService
+      .deleteCategory(this.categoryToDelete()?.id as string)
       .subscribe({
         next: (res) => {
           this.isLoading.set(false);

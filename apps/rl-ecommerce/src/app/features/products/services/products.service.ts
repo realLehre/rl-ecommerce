@@ -72,7 +72,6 @@ export class ProductsService {
     return this.http.get<IProduct>(`${this.baseUrl}${id}`).pipe(
       retry(3),
       tap((res) => this.activeProduct.set(res)),
-      catchError((err) => this.handleError(err)),
     );
   }
 
