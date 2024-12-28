@@ -62,7 +62,7 @@ export class AdminProductsComponent implements OnInit {
   private router = inject(Router);
   private toast = inject(ToastService);
   private route = inject(ActivatedRoute);
-  category = input<ICategory>();
+  categoryData = input<ICategory>();
   injecting = input<boolean>(false);
   productData!: IProductResponse;
   selectedProduct!: IProduct;
@@ -80,7 +80,6 @@ export class AdminProductsComponent implements OnInit {
   filter: IAdminProductFilter = {
     itemsToShow: 10,
     page: 1,
-    category: this.category(),
   };
   rangeDates: any[] = [];
   isFetching = signal(true);
@@ -95,13 +94,13 @@ export class AdminProductsComponent implements OnInit {
   private ref: DynamicDialogRef | undefined;
 
   ngOnInit() {
-    if (this.category()) {
+    if (this.categoryData()) {
       this.filter = {
         ...this.filter,
-        category: this.category(),
+        category: this.categoryData(),
       };
 
-      this.subCategories = [...this.category()?.subCategories!];
+      this.subCategories = [...this.categoryData()?.subCategories!];
     }
     const savedFilters = JSON.parse(
       sessionStorage.getItem(this.productService.PRODUCT_QUERY_STORED_KEY)!,
@@ -131,6 +130,11 @@ export class AdminProductsComponent implements OnInit {
         ([_, value]) => value !== undefined,
       ),
     );
+    if (savedFilters.category) {
+      this.selectedCategory = savedFilters.category;
+      this.subCategories = [...savedFilters?.category.subCategories];
+    }
+    this.selectedSubCategory = savedFilters.subCategory;
     if (!this.injecting()) {
       this.router.navigate([], {
         queryParams: newRouteQueries,
@@ -330,7 +334,7 @@ export class AdminProductsComponent implements OnInit {
     this.filter = {
       itemsToShow: 10,
       page: 1,
-      category: this.category(),
+      category: this.categoryData(),
     };
     this.rangeDates = [];
     this.rangeValues = [2000, 10000];
