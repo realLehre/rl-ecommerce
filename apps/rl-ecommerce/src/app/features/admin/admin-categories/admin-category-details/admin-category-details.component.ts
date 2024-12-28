@@ -13,11 +13,13 @@ import { AdminCategoriesService } from '../services/admin-categories.service';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { Categories } from '../admin-categories.interface';
 import { CurrencyPipe } from '@angular/common';
+import { SkeletonModule } from 'primeng/skeleton';
+import { AdminProductsComponent } from '../../admin-products/admin-products.component';
 
 @Component({
   selector: 'app-admin-category-details',
   standalone: true,
-  imports: [RouterLink, CurrencyPipe],
+  imports: [RouterLink, CurrencyPipe, SkeletonModule, AdminProductsComponent],
   templateUrl: './admin-category-details.component.html',
   styleUrl: './admin-category-details.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -48,5 +50,10 @@ export class AdminCategoryDetailsComponent {
     ),
     tap(() => this.isLoading.set(false)),
   );
-  categoryData = toSignal(this.category$);
+  categoryData = toSignal<Categories>(this.category$);
+  subCategories = computed(() =>
+    this.categoryData()
+      ?.subCategories.map(({ name }) => name)
+      .join(' • '),
+  );
 }

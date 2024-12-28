@@ -12,13 +12,15 @@
         (itemsToShowChanged)="itemsToShowChange($event)"
         (searchValueEmit)="searchChanged($event)"
       >
-        <button
-          class="bg-primary rounded-full text-white hover:bg-opacity-85 font-medium py-[6px] px-7 whitespace-nowrap text-[10px] mobile:text-sm"
-          ngProjectAs="add-button"
-          routerLink="/admin/add-product"
-        >
-          Add Product
-        </button>
+        @if (!injecting()) {
+          <button
+            class="bg-primary rounded-full text-white hover:bg-opacity-85 font-medium py-[6px] px-7 whitespace-nowrap text-[10px] mobile:text-sm"
+            ngProjectAs="add-button"
+            routerLink="/admin/add-product"
+          >
+            Add Product
+          </button>
+        }
 
         <button
           class="h-8 border-border_subtle border-[2px] px-2 bg-transparent rounded-full text-type_caption flex items-center space-x-2 relative"
@@ -252,20 +254,22 @@
           </div>
 
           <div class="mt-2">
-            <div>
-              <p class="text-sm text-type_title mb-1">Category</p>
-              <div class="w-full">
-                <p-dropdown
-                  [options]="categories()!"
-                  [(ngModel)]="selectedCategory"
-                  (ngModelChange)="onChangeCategory($event)"
-                  [loading]="!categories()"
-                  optionLabel="name"
-                  placeholder="Select Category"
-                  styleClass="deliveryStatusDropdown"
-                />
+            @if (!injecting()) {
+              <div>
+                <p class="text-sm text-type_title mb-1">Category</p>
+                <div class="w-full">
+                  <p-dropdown
+                    [options]="categories()!"
+                    [(ngModel)]="selectedCategory"
+                    (ngModelChange)="onChangeCategory($event)"
+                    [loading]="!categories()"
+                    optionLabel="name"
+                    placeholder="Select Category"
+                    styleClass="deliveryStatusDropdown"
+                  />
+                </div>
               </div>
-            </div>
+            }
 
             <div class="mt-4">
               <p class="text-sm text-type_title mb-1">Subcategory</p>

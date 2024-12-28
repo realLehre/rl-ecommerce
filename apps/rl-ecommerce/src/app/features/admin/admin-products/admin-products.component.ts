@@ -2,19 +2,14 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
+  input,
   OnInit,
   signal,
   ViewChild,
 } from '@angular/core';
 import { AdminProductsService } from './services/admin-products.service';
 import { GenericTableComponent } from '../../../shared/components/generic-table/generic-table.component';
-import {
-  AsyncPipe,
-  CurrencyPipe,
-  DatePipe,
-  DecimalPipe,
-  NgClass,
-} from '@angular/common';
+import { CurrencyPipe, DatePipe, DecimalPipe, NgClass } from '@angular/common';
 import {
   IProduct,
   IProductResponse,
@@ -31,7 +26,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SkeletonModule } from 'primeng/skeleton';
 import { PaginationInstance } from 'ngx-pagination';
 import { ProductOptionsService } from '../../product-options/services/product-options.service';
-import { Observable } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { PrimeNgDatepickerDirective } from '../../../shared/directives/prime-ng-datepicker.directive';
 import { IAdminProductFilter } from './admin-product.interface';
@@ -67,6 +61,8 @@ export class AdminProductsComponent implements OnInit {
   private router = inject(Router);
   private toast = inject(ToastService);
   private route = inject(ActivatedRoute);
+  category = input<ICategory>();
+  injecting = input<boolean>(false);
   productData!: IProductResponse;
   selectedProduct!: IProduct;
   sortUsed: boolean = false;
@@ -83,6 +79,7 @@ export class AdminProductsComponent implements OnInit {
   filter: IAdminProductFilter = {
     itemsToShow: 10,
     page: 1,
+    category: this.category(),
   };
   rangeDates: any[] = [];
   isFetching = signal(true);
@@ -97,13 +94,23 @@ export class AdminProductsComponent implements OnInit {
   private ref: DynamicDialogRef | undefined;
 
   ngOnInit() {
+    if (this.category()) {
+      this.filter = {
+        ...this.filter,
+        category: this.category(),
+      };
+
+      this.subCategories = [...this.category()?.subCategories!];
+    }
     const savedFilters = JSON.parse(
       sessionStorage.getItem(this.productService.PRODUCT_QUERY_STORED_KEY)!,
     );
-    this.filter = {
-      ...savedFilters,
-      itemsToShow: savedFilters?.itemsToShow ?? 10,
-    };
+    if (savedFilters) {
+      this.filter = {
+        ...savedFilters,
+        itemsToShow: savedFilters?.itemsToShow ?? 10,
+      };
+    }
     this.filterNumber = this.findFilterNumber();
     if (this.filter.minPrice && this.filter.maxPrice) {
       this.rangeValues = [this.filter.minPrice, this.filter.maxPrice];
@@ -123,11 +130,12 @@ export class AdminProductsComponent implements OnInit {
         ([_, value]) => value !== undefined,
       ),
     );
-
-    this.router.navigate([], {
-      queryParams: newRouteQueries,
-      relativeTo: this.route,
-    });
+    if (!this.injecting()) {
+      this.router.navigate([], {
+        queryParams: newRouteQueries,
+        relativeTo: this.route,
+      });
+    }
     this.getProducts();
   }
 
@@ -208,38 +216,44 @@ export class AdminProductsComponent implements OnInit {
 
   onApplyFilter() {
     this.filterNumber = this.findFilterNumber();
-    sessionStorage.setItem(
-      this.productService.PRODUCT_QUERY_STORED_KEY,
-      JSON.stringify(this.filter),
-    );
-    this.router.navigate([], {
-      queryParams: this.createRouteQuery(),
-      relativeTo: this.route,
-    });
+    if (!this.injecting()) {
+      sessionStorage.setItem(
+        this.productService.PRODUCT_QUERY_STORED_KEY,
+        JSON.stringify(this.filter),
+      );
+      this.router.navigate([], {
+        queryParams: this.createRouteQuery(),
+        relativeTo: this.route,
+      });
+    }
     this.getProducts();
     this.menu.hide();
   }
 
   pageChange(event: any) {
     this.filter = { ...this.filter, page: event };
-    sessionStorage.setItem(
-      this.productService.PRODUCT_QUERY_STORED_KEY,
-      JSON.stringify(this.filter),
-    );
-    this.router.navigate([], {
-      queryParams: { page: event },
-      relativeTo: this.route,
-    });
+    if (!this.injecting()) {
+      sessionStorage.setItem(
+        this.productService.PRODUCT_QUERY_STORED_KEY,
+        JSON.stringify(this.filter),
+      );
+      this.router.navigate([], {
+        queryParams: { page: event },
+        relativeTo: this.route,
+      });
+    }
     this.getProducts();
   }
 
   itemsToShowChange(event: number) {
     this.config.itemsPerPage = event;
     this.filter = { ...this.filter, itemsToShow: event };
-    sessionStorage.setItem(
-      this.productService.PRODUCT_QUERY_STORED_KEY,
-      JSON.stringify(this.filter),
-    );
+    if (!this.injecting()) {
+      sessionStorage.setItem(
+        this.productService.PRODUCT_QUERY_STORED_KEY,
+        JSON.stringify(this.filter),
+      );
+    }
     this.getProducts();
   }
 
@@ -283,15 +297,16 @@ export class AdminProductsComponent implements OnInit {
 
   searchChanged(name: string | null) {
     this.filter = { ...this.filter, name: name!, page: 1 };
-
-    sessionStorage.setItem(
-      this.productService.PRODUCT_QUERY_STORED_KEY,
-      JSON.stringify(this.filter),
-    );
-    this.router.navigate([], {
-      queryParams: { name },
-      relativeTo: this.route,
-    });
+    if (!this.injecting()) {
+      sessionStorage.setItem(
+        this.productService.PRODUCT_QUERY_STORED_KEY,
+        JSON.stringify(this.filter),
+      );
+      this.router.navigate([], {
+        queryParams: { name },
+        relativeTo: this.route,
+      });
+    }
     this.getProducts();
   }
 

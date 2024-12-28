@@ -22,6 +22,7 @@ export interface ICategory {
   name: string;
   createdAt: string;
   updateAt: string;
+  subCategories?: ISubCategory[];
 }
 export interface ISubCategory {
   id: string;

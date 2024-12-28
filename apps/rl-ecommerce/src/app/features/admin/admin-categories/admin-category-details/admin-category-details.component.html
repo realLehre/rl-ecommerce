@@ -23,12 +23,14 @@
   @if (!isLoading() && !isError()) {
     <div>
       <h3
-        class="text-sm mobile:text-lg text-type_title_gray mb-6 font-semibold capitalize"
+        class="text-base mobile:text-lg text-type_title_gray mb-6 font-semibold capitalize"
       >
         {{ categoryData()?.name }}
       </h3>
 
-      <div class="gap-4 grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))]">
+      <div
+        class="gap-4 grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] mb-6"
+      >
         <div
           class="flex items-center justify-between space-x-3 bg-bg_subtle py-2 px-4 rounded-md"
         >
@@ -37,7 +39,7 @@
             <p
               class="text-lg mobile:text-2xl text-type_title font-bold break-all mt-1"
             >
-              {{ categoryData().subCategories.length }}
+              {{ categoryData()?.subCategories?.length }}
             </p>
           </div>
 
@@ -62,7 +64,7 @@
           <div>
             <h3 class="text-sm">Total Products</h3>
             <p class="text-lg mobile:text-2xl text-type_title font-bold mt-1">
-              {{ categoryData()._count.products }}
+              {{ categoryData()?._count?.products }}
             </p>
           </div>
 
@@ -80,7 +82,41 @@
           </svg>
         </div>
       </div>
+
+      <div class="mb-6">
+        <h3
+          class="text-sm mobile:text-base text-type_grey mb-1 font-semibold capitalize"
+        >
+          Subcategories
+        </h3>
+        <div class="flex items-center space-x-2 text-sm"></div>
+
+        <div class="text-sm">{{ subCategories() }}</div>
+      </div>
+
+      <div>
+        <h3
+          class="text-sm mobile:text-base text-type_grey mb-1 font-semibold capitalize"
+        >
+          Products
+        </h3>
+
+        <div>
+          <app-admin-products [category]="categoryData()" [injecting]="true" />
+        </div>
+      </div>
     </div>
   } @else if (isError()) {
-  } @else {}
+  } @else {
+    <div>
+      <div class="mb-6">
+        <p-skeleton height="28px" width="150px" />
+      </div>
+      <div class="gap-4 grid grid-cols-[repeat(auto-fit,minmax(170px,1fr))]">
+        @for (item of [1, 2]; track item) {
+          <p-skeleton height="64px" />
+        }
+      </div>
+    </div>
+  }
 </div>
