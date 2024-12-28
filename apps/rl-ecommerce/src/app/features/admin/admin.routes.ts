@@ -99,6 +99,7 @@ export const adminRoutes: Routes = [
           import(
             './admin-categories/admin-add-category/admin-add-category.component'
           ).then((c) => c.AdminAddCategoryComponent),
+        canDeactivate: [hasUnsavedChangesGuard],
       },
     ],
   },

@@ -192,10 +192,19 @@ export class AdminCategoriesComponent implements OnInit {
     ]);
   }
 
-  onEdit() {}
+  onEdit() {
+    this.categoryService.activeCategory.set(this.selectedCategory());
+    sessionStorage.setItem(
+      'ssjsiw72jsksdeisi92e',
+      JSON.stringify(this.categoryService.activeCategory()),
+    );
+    this.router.navigate(['/', 'admin', 'add-category'], {
+      queryParams: { edit: true },
+    });
+  }
 
   onDelete() {
-    this.categoryService.categoryToDelete.set(this.selectedCategory());
+    this.categoryService.activeCategory.set(this.selectedCategory());
     this.ref = this.dialogService.open(DeleteCategoryDialogComponent, {
       width: '25rem',
       breakpoints: {

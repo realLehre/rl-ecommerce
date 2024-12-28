@@ -27,7 +27,14 @@ export class AdminCategoriesService {
   categoriesDataQueried = signal(false);
   CATEGORIES_QUERY_STORE_KEY = 'D93kdk*303dJp[xse32xhi3';
   categoriesSignal = signal<IAdminCategoriesResponse | undefined>(undefined);
-  categoryToDelete = signal<Categories | undefined>(undefined);
+  activeCategory = signal<Categories | undefined>(undefined);
+
+  constructor() {
+    const category = JSON.parse(
+      sessionStorage.getItem('ssjsiw72jsksdeisi92e')!,
+    );
+    if (category) this.activeCategory.set(category);
+  }
 
   getCategories(filter: IAdminCategoryFilter): Observable<any> {
     let params = new HttpParams();
@@ -63,7 +70,7 @@ export class AdminCategoriesService {
   }
 
   updateCategory(data: { name: string; subCategories: string[] }, id: string) {
-    return this.http.patch(this.apiUrl + '/update/' + id, data);
+    return this.http.put(this.apiUrl + '/update/' + id, data);
   }
 
   createRouteQuery(filter: IAdminUserFilter) {

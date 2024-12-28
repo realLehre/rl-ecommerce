@@ -22,7 +22,7 @@ export class DeleteCategoryDialogComponent {
   private ref = inject(DynamicDialogRef);
   private toast = inject(ToastService);
   private categoryService = inject(AdminCategoriesService);
-  categoryToDelete = this.categoryService.categoryToDelete;
+  categoryToDelete = this.categoryService.activeCategory;
   isLoading = signal(false);
 
   onDelete() {
