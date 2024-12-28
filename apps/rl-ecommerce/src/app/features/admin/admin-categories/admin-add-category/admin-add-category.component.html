@@ -1,1 +1,113 @@
-<p>admin-add-category works!</p>
+<div class="max-w-[1400px]">
+  <h2
+    class="text-type_title_gray text-base mobile:text-[20px] font-medium mb-6"
+  >
+    {{ isEditing() ? 'Edit Category' : 'Add Category' }}
+  </h2>
+
+  <div class="max-w-[400px]">
+    <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+      <div class="mb-6">
+        <label
+          for="categoryName"
+          class="block font-medium text-type_title_gray mb-1"
+          [ngClass]="{ '!text-red-500': isInvalidAndTouched('categoryName') }"
+          >Category Name</label
+        >
+        <div class="flex-grow">
+          <input
+            type="text"
+            id="categoryName"
+            formControlName="categoryName"
+            class="w-full px-3 py-2 border-[2px] rounded-md focus:outline-none bg-bg_subtle"
+            [ngClass]="{
+              'border-red-500': isInvalidAndTouched('categoryName'),
+            }"
+          />
+
+          @if (isInvalidAndTouched('categoryName')) {
+            <p
+              class="mt-1 text-sm text-red-500 h-5"
+              appErrorMessage
+              [controlName]="'categoryName'"
+            ></p>
+          }
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <div class="mb-1">
+          <h3 class="font-medium text-type_title_gray mb-1">Subcategories</h3>
+          <p class="text-type_caption text-sm">Add one or more subcategories</p>
+        </div>
+
+        <div formArrayName="subCategories" class="space-y-2">
+          @for (
+            subCategory of subCategories.controls;
+            track subCategory;
+            let i = $index
+          ) {
+            <div [formGroupName]="i" class="flex items-center space-x-3">
+              <input
+                type="text"
+                formControlName="subCategoryName"
+                class="w-full px-3 py-2 border-[2px] rounded-md focus:outline-none bg-bg_subtle"
+              />
+              <button (click)="onRemoveControl(i)" type="button" class="p-2">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 12 12"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6.00011 4.82166L10.1251 0.696655L11.3034 1.87499L7.17844 5.99999L11.3034 10.125L10.1251 11.3033L6.00011 7.17832L1.87511 11.3033L0.696777 10.125L4.82178 5.99999L0.696777 1.87499L1.87511 0.696655L6.00011 4.82166Z"
+                    fill="red"
+                  />
+                </svg>
+              </button>
+            </div>
+          }
+        </div>
+
+        <button
+          class="flex items-center space-x-1 py-3 text-primary mt-2 hover:opacity-85"
+          type="button"
+          (click)="onAddNewSubCategoryInput()"
+        >
+          <span class="text-sm font-semibold">Add more</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 448 512"
+            class="fill-primary w-3 h-3"
+          >
+            <path
+              d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <button
+        class="rounded-full text-white flex items-center justify-center space-x-2 font-medium bg-primary py-2 h-12 w-full mt-10 hover:bg-opacity-80"
+        type="submit"
+        (click)="onSubmit()"
+        [ngClass]="{
+          'opacity-50 cursor-not-allowed hover:bg-opacity-80':
+            categoryForm.invalid,
+        }"
+      >
+        @if (isSubmitting()) {
+          <app-loader
+            [customStyle]="{
+              width: '24px',
+              border: '3px solid #fff',
+            }"
+          />
+        }
+        <span>Create</span>
+      </button>
+    </form>
+  </div>
+</div>
