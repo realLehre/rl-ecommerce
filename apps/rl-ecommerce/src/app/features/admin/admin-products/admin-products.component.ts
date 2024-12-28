@@ -74,9 +74,9 @@ export class AdminProductsComponent implements OnInit {
   filterNumber = 0;
   rangeValues = [2000, 10000];
   categories = toSignal(this.optionsService.getCategories());
-  selectedCategory!: ICategory;
+  selectedCategory: ICategory | undefined;
   subCategories: ISubCategory[] = [];
-  selectedSubCategory!: ICategory;
+  selectedSubCategory: ICategory | undefined;
   filter: IAdminProductFilter = {
     itemsToShow: 10,
     page: 1,
@@ -110,6 +110,11 @@ export class AdminProductsComponent implements OnInit {
         ...savedFilters,
         itemsToShow: savedFilters?.itemsToShow ?? 10,
       };
+
+      this.selectedCategory = savedFilters?.category;
+      this.subCategories = [...savedFilters?.category.subCategories];
+
+      this.selectedSubCategory = savedFilters?.subCategory;
     }
     this.filterNumber = this.findFilterNumber();
     if (this.filter.minPrice && this.filter.maxPrice) {
@@ -130,11 +135,7 @@ export class AdminProductsComponent implements OnInit {
         ([_, value]) => value !== undefined,
       ),
     );
-    if (savedFilters.category) {
-      this.selectedCategory = savedFilters.category;
-      this.subCategories = [...savedFilters?.category.subCategories];
-    }
-    this.selectedSubCategory = savedFilters.subCategory;
+
     if (!this.injecting()) {
       this.router.navigate([], {
         queryParams: newRouteQueries,
@@ -321,6 +322,8 @@ export class AdminProductsComponent implements OnInit {
     if (this.filterNumber == 0) {
       return;
     }
+    this.selectedCategory = undefined;
+    this.selectedSubCategory = undefined;
     this.router.navigate([], {
       queryParams: null,
       queryParamsHandling: 'replace',
@@ -354,7 +357,7 @@ export class AdminProductsComponent implements OnInit {
     let number = 0;
     for (const key in this.filter) {
       if (
-        (key == 'category' && !this.injecting) ||
+        (key == 'category' && !this.injecting()) ||
         key == 'subCategory' ||
         key == 'minPrice' ||
         key == 'minDate'
