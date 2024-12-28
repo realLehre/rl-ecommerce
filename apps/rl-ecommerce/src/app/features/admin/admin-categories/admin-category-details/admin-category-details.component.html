@@ -1,1 +1,86 @@
-<p>admin-category-details works!</p>
+<div class="max-w-[1400px]">
+  <div class="mb-7">
+    <div class="mobile:flex hidden items-center text-lg">
+      <div
+        class="text-type_grey cursor-pointer uppercase flex items-center"
+        routerLink="/admin/categories"
+      >
+        <span>ALL CATEGORIES</span>
+
+        <span class="mx-3">></span>
+      </div>
+      <div class="text-type_title font-semibold">CATEGORY DETAILS</div>
+    </div>
+
+    <button
+      class="mobile:hidden outline-0 flex items-center justify-center h-6 w-6 rounded-[3px] border-[1px] border-border_subtle"
+      routerLink="/admin/categories"
+    >
+      <i class="fa fa-angle-left font-bold"></i>
+    </button>
+  </div>
+
+  @if (!isLoading() && !isError()) {
+    <div>
+      <h3
+        class="text-sm mobile:text-lg text-type_title_gray mb-6 font-semibold capitalize"
+      >
+        {{ categoryData()?.name }}
+      </h3>
+
+      <div class="gap-4 grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))]">
+        <div
+          class="flex items-center justify-between space-x-3 bg-bg_subtle py-2 px-4 rounded-md"
+        >
+          <div>
+            <h3 class="text-sm">Total Subcategories</h3>
+            <p
+              class="text-lg mobile:text-2xl text-type_title font-bold break-all mt-1"
+            >
+              {{ categoryData().subCategories.length }}
+            </p>
+          </div>
+
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="min-w-[45px]"
+            width="45"
+            height="45"
+            viewBox="0 0 24 24"
+          >
+            <path fill="none" d="M0 0h24v24H0Z" />
+            <path
+              fill="#8b4f39"
+              d="M15.278 20.72a3.086 3.086 0 0 1-.621-.9H8.409a2.706 2.706 0 0 1-2.7-2.7V8.267a3 3 0 0 1 .895-5.865 3 3 0 0 1 .908 5.859v1.951h7.025a2.99 2.99 0 1 1 .006 1.8H7.512v5.106a.9.9 0 0 0 .9.9h6.047a3 3 0 1 1 .822 2.7Zm.922-2.121a1.2 1.2 0 1 0 1.2-1.2 1.2 1.2 0 0 0-1.2 1.197Zm0-7.5a1.2 1.2 0 1 0 1.2-1.2 1.2 1.2 0 0 0-1.2 1.197Zm-10.8-5.7a1.2 1.2 0 1 0 1.2-1.2 1.2 1.2 0 0 0-1.2 1.197Z"
+            />
+          </svg>
+        </div>
+
+        <div
+          class="flex items-center justify-between space-x-3 bg-bg_subtle py-2 px-4 rounded-md"
+        >
+          <div>
+            <h3 class="text-sm">Total Products</h3>
+            <p class="text-lg mobile:text-2xl text-type_title font-bold mt-1">
+              {{ categoryData()._count.products }}
+            </p>
+          </div>
+
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="min-w-[45px]"
+            width="45"
+            height="45"
+            viewBox="0 0 1024 1024"
+          >
+            <path
+              d="M505.811442 424.947623c-17.327961 0-33.830782-2.475423-46.207896-7.426269L202.159549 323.455278c-21.453666-7.426269-23.929089-18.978243-23.92909-25.579371 0-5.775987 3.300564-17.327961 23.92909-25.579372l256.618856-94.891217c12.377115-4.950846 28.879936-7.426269 46.207896-7.426269 17.327961 0 33.830782 2.475423 46.207897 7.426269L808.638195 272.296535c21.453666 7.426269 23.929089 18.978243 23.929089 25.579372 0 5.775987-3.300564 17.327961-23.929089 25.579371L552.019339 418.346495c-12.377115 4.125705-28.879936 6.601128-46.207897 6.601128z m-55.284448 428.248187c-5.775987 0-12.377115-0.825141-18.153102-3.300564L207.935536 764.08058c-26.404512-9.901692-46.207897-40.43191-46.207897-70.962127V406.794521c0-25.579371 14.027397-42.082192 35.481064-42.082192 5.775987 0 11.551974 0.825141 17.327961 3.300564L442.275584 453.827558c27.229654 9.901692 49.508461 41.257051 49.508461 70.962128v286.323932c-0.825141 24.75423-18.153102 42.082192-41.257051 42.082192z m115.519743-4.950846h0.825141c-21.453666 0-34.655923-12.377115-34.655923-37.131346V524.789686c0-30.530218 18.978243-61.060435 45.382756-70.962128l224.438356-85.814665c5.775987-2.475423 12.377115-3.300564 18.978243-3.300564 23.103948 0 40.43191 17.327961 40.43191 42.082192V693.118453c0 29.705077-23.103948 61.060435-50.333602 70.962127l-227.73892 83.339243c-4.950846 2.475423-11.551974 0.825141-17.327961 0.825141z"
+              fill="#FF9800"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+  } @else if (isError()) {
+  } @else {}
+</div>

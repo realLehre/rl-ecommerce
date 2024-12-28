@@ -6,7 +6,10 @@ import {
 } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment.development';
 import { catchError, Observable, throwError } from 'rxjs';
-import { IAdminCategoriesResponse } from '../admin-categories.interface';
+import {
+  Categories,
+  IAdminCategoriesResponse,
+} from '../admin-categories.interface';
 import { IAdminUserFilter } from '../../admin-users/admin-user.service';
 
 export interface IAdminCategoryFilter {
@@ -35,6 +38,12 @@ export class AdminCategoriesService {
 
     return this.http
       .get<IAdminCategoriesResponse>(this.apiUrl + '/all', { params })
+      .pipe(catchError(this.handleError));
+  }
+
+  getCategoryById(id: string): Observable<Categories> {
+    return this.http
+      .get<Categories>(this.apiUrl + '/' + id)
       .pipe(catchError(this.handleError));
   }
 
