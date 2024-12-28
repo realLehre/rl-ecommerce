@@ -116,6 +116,7 @@ export class AdminUsersComponent implements OnInit {
   }
 
   itemsToShowChange($event: number) {
+    this.userService.userDataSignal.set(undefined);
     this.filter.set({ ...this.filter(), itemsPerPage: $event });
     this.totalItemsToShow.set($event);
     this.saveQuery();
@@ -123,12 +124,14 @@ export class AdminUsersComponent implements OnInit {
   }
 
   pageChange($event: number) {
+    this.userService.userDataSignal.set(undefined);
     this.filter.set({ ...this.filter(), page: $event });
     this.saveQuery();
     this.updateViewState();
   }
 
   searchChanged($event: string | null) {
+    this.userService.userDataSignal.set(undefined);
     this.filter.set({ ...this.filter(), search: $event! });
     this.saveQuery();
     this.updateViewState();

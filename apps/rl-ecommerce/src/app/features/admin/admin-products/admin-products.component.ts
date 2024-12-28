@@ -110,17 +110,20 @@ export class AdminProductsComponent implements OnInit {
         ...savedFilters,
         itemsToShow: savedFilters?.itemsToShow ?? 10,
       };
-
-      this.selectedCategory = savedFilters?.category;
-      this.subCategories = [...savedFilters?.category.subCategories];
-
-      this.selectedSubCategory = savedFilters?.subCategory;
     }
     this.filterNumber = this.findFilterNumber();
     if (this.filter.minPrice && this.filter.maxPrice) {
       this.rangeValues = [this.filter.minPrice, this.filter.maxPrice];
     }
 
+    if (savedFilters.category) {
+      this.selectedCategory = savedFilters?.category;
+      this.subCategories = [...savedFilters?.category?.subCategories];
+    }
+
+    if (savedFilters.subCategory) {
+      this.selectedSubCategory = savedFilters?.subCategory;
+    }
     if (this.filter.minDate && this.filter.maxDate) {
       const minDate = this.productService.formatDateToLocale(
         this.filter.minDate,

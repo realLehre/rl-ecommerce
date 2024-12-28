@@ -40,7 +40,7 @@ export class AdminProductImagesComponent implements OnInit {
   coverImageUploadError = signal<boolean>(false);
 
   ngOnInit() {
-    const boxes = Array(4)
+    const boxes = Array(1)
       .fill(null)
       .map(() => ({
         hasUploaded: false,
