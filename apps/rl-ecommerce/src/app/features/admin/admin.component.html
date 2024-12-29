@@ -1,7 +1,24 @@
+<!--<div class="flex items-start w-full h-full">-->
+<!--  <div-->
+<!--    class="h-full hidden min-[760px]:block fixed left-0 top-[76px] min-[760px]:top-0 z-[20]"-->
+<!--  >-->
+<!--    <app-admin-sidenav />-->
+<!--  </div>-->
+<!--  <div-->
+<!--    class="h-full fixed min-[760px]:hidden left-0 transition-all 200ms top-[76px] min-[760px]:top-0 z-[20]"-->
+<!--    [ngClass]="isMenuOpened() ? 'translate-x-0' : '-translate-x-full'"-->
+<!--  >-->
+<!--    <app-mobile-admin-sidenav />-->
+<!--  </div>-->
+<!--  <div-->
+<!--    class="h-full w-full bg-bg_main z-[10] relative pl-0 min-[760px]:pl-[250px]"-->
+<!--  >-->
+<!--    <app-admin-main />-->
+<!--  </div>-->
+<!--</div>-->
+
 <div class="flex items-start w-full h-full">
-  <div
-    class="h-full hidden min-[760px]:block fixed left-0 top-[76px] min-[760px]:top-0 z-[20]"
-  >
+  <div class="h-full hidden min-[760px]:block">
     <app-admin-sidenav />
   </div>
   <div
@@ -10,9 +27,7 @@
   >
     <app-mobile-admin-sidenav />
   </div>
-  <div
-    class="h-full w-full bg-bg_main z-[10] relative pl-0 min-[760px]:pl-[250px]"
-  >
+  <div class="h-full w-full bg-bg_main">
     <app-admin-main />
   </div>
 </div>

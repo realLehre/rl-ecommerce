@@ -116,12 +116,12 @@ export class AdminProductsComponent implements OnInit {
       this.rangeValues = [this.filter.minPrice, this.filter.maxPrice];
     }
 
-    if (savedFilters.category) {
+    if (this.filter.category) {
       this.selectedCategory = savedFilters?.category;
       this.subCategories = [...savedFilters?.category?.subCategories];
     }
 
-    if (savedFilters.subCategory) {
+    if (this.filter.subCategory) {
       this.selectedSubCategory = savedFilters?.subCategory;
     }
     if (this.filter.minDate && this.filter.maxDate) {
