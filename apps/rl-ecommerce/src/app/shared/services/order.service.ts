@@ -5,9 +5,9 @@ import { ICart, ICartItems } from '../models/cart.interface';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment.development';
 import { IOrder, IOrderResponse } from '../models/order.interface';
-import { of, tap } from 'rxjs';
+import { catchError, of, tap, throwError } from 'rxjs';
 
-interface IOrderFilter {
+export interface IUserOrderFilter {
   minPrice?: number;
   maxPrice?: number;
   deliveryStatus?: string;
@@ -28,12 +28,12 @@ export class OrderService {
   user = this.userService.user;
   orderSignal = signal<IOrderResponse | null>(null);
   activeOrder = signal<IOrder | null>(null);
-
   orderQueried = signal(false);
+  ORDER_QUERY_STORED_KEY = 'sjs29shdndj20snshgff7';
 
   constructor() {}
 
-  getOrder(filters: IOrderFilter) {
+  getOrders(filters: IUserOrderFilter) {
     this.orderQueried.set(false);
     let params = new HttpParams();
     if (filters?.minPrice) {
@@ -74,6 +74,7 @@ export class OrderService {
             tap((res) => {
               this.orderSignal.set(res);
             }),
+            catchError(this.handleError),
           );
   }
 
@@ -110,7 +111,7 @@ export class OrderService {
     }, 0);
   }
 
-  createRouteQuery(filter: IOrderFilter) {
+  createRouteQuery(filter: IUserOrderFilter) {
     return {
       page: filter.page,
       minPrice: filter.minPrice,
@@ -119,6 +120,7 @@ export class OrderService {
       maxDate: filter.maxDate,
       orderId: filter.orderId,
       deliveryStatus: filter.deliveryStatus,
+      itemsPerPage: filter.itemsToShow,
     };
   }
 
@@ -126,7 +128,21 @@ export class OrderService {
     return new Date(date).toISOString();
   }
 
+  findFilterNumber(filter: IUserOrderFilter) {
+    let number = 0;
+    for (const key in filter) {
+      if (key == 'deliveryStatus' || key == 'minPrice' || key == 'minDate') {
+        number += 1;
+      }
+    }
+    return number;
+  }
+
   formatDateToLocale(date: Date) {
     return new Date(date);
+  }
+
+  private handleError(error: any) {
+    return throwError(() => new Error('An error occurred! Try again later'));
   }
 }

@@ -113,9 +113,8 @@ export class AdminOrdersComponent implements OnInit {
     { name: 'Packed', code: 'PACKED' },
     { name: 'Delivered', code: 'DELIVERED' },
   ];
-  selectedStatus!: { name: string; code: string };
+  selectedStatus: { name: string; code: string } | null = null;
   rangeValues = [2000, 10000];
-  rangeValueChanged = signal(false);
   rangeDates: any[] = [];
   @ViewChild('menu') menu!: Menu;
   filterNumber = 0;
@@ -223,12 +222,12 @@ export class AdminOrdersComponent implements OnInit {
       return;
     }
     this.menu.hide();
+    this.selectedStatus = null;
     this.onReturn();
   }
 
   onViewOrder(order: IOrder) {
     this.orderService.activeOrder.set(order);
-    localStorage.setItem('testorder', JSON.stringify(order));
     this.router.navigate(['/', 'admin', 'orders', order.id]);
   }
 
@@ -267,7 +266,7 @@ export class AdminOrdersComponent implements OnInit {
     this.filterNumber = 0;
     this.orderService.orderQueried.set(false);
     this.router.navigate([], {
-      queryParams: null,
+      queryParams: { page: 1, itemsPerPage: 10 },
       queryParamsHandling: 'replace',
       relativeTo: this.route,
     });
@@ -277,6 +276,8 @@ export class AdminOrdersComponent implements OnInit {
       itemsToShow: 10,
       page: 1,
     });
+    this.totalItemsToShow.set(10);
+    this.selectedStatus = null;
     this.holdFilter.set({ ...this.filter() });
     // this.searchInput.reset();
   }

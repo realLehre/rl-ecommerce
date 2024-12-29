@@ -6,6 +6,7 @@
         'text-type_title font-semibold':
           (getLastFragment(page.route) ||
             page.name.toLowerCase() == 'account' ||
+            page.name.toLowerCase() == 'orders' ||
             page.name.toLowerCase() == 'product details') &&
           page.name.toLowerCase() !== 'home',
       }"

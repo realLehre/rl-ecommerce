@@ -127,6 +127,7 @@ export class AdminOrderService {
       maxDate: filter.maxDate,
       search: filter.search,
       deliveryStatus: filter.deliveryStatus,
+      itemsPerPage: filter.itemsToShow,
     };
   }
 

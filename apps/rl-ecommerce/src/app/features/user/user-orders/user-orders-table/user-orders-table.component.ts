@@ -1,36 +1,39 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
-  ElementRef,
+  computed,
   inject,
-  input,
   OnInit,
+  Signal,
   signal,
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { NgxPaginationModule, PaginationInstance } from 'ngx-pagination';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { OrderStatusDirective } from '../../../../shared/directives/order-status.directive';
 import {
   IOrder,
   IOrderResponse,
 } from '../../../../shared/models/order.interface';
-import { SubtotalPipe } from '../../../../shared/pipes/subtotal.pipe';
 import { SkeletonModule } from 'primeng/skeleton';
-import { OrderService } from '../../../../shared/services/order.service';
+import {
+  IUserOrderFilter,
+  OrderService,
+} from '../../../../shared/services/order.service';
 import { ToastService } from '../../../../shared/services/toast.service';
-import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
+import { catchError, Observable, of, switchMap, tap } from 'rxjs';
 import { Menu, MenuModule } from 'primeng/menu';
 import { PrimeTemplate } from 'primeng/api';
-import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { SliderModule } from 'primeng/slider';
 import { CalendarModule } from 'primeng/calendar';
-import { NumberOfFiltersPipe } from '../../../../shared/pipes/number-of-filters.pipe';
 import { PrimeNgDatepickerDirective } from '../../../../shared/directives/prime-ng-datepicker.directive';
+import { IOrderFilter } from '../../../admin/admin-orders/services/admin-order.service';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { ICategory, IProduct } from '../../../products/model/product.interface';
+import { GenericTableComponent } from '../../../../shared/components/generic-table/generic-table.component';
 
 @Component({
   selector: 'app-user-orders-table',
@@ -49,6 +52,7 @@ import { PrimeNgDatepickerDirective } from '../../../../shared/directives/prime-
     SliderModule,
     CalendarModule,
     PrimeNgDatepickerDirective,
+    GenericTableComponent,
   ],
   templateUrl: './user-orders-table.component.html',
   styleUrl: './user-orders-table.component.scss',
@@ -57,210 +61,233 @@ import { PrimeNgDatepickerDirective } from '../../../../shared/directives/prime-
 export class UserOrdersTableComponent implements OnInit {
   private orderService = inject(OrderService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private toast = inject(ToastService);
-  orders!: IOrderResponse;
-  isLoading = signal(true);
   orderQueried = this.orderService.orderQueried;
-  sortUsed: boolean = false;
-  sortColumn: keyof IOrder | '' = '';
-  sortDirection: 'asc' | 'desc' = 'asc';
-  itemsToShow: number[] = [1, 5, 10, 15, 20, 25];
-  totalItemsToShow: number = 10;
   config: PaginationInstance = {
-    id: 'userOrderPagination',
+    id: 'userOrdersPagination',
     itemsPerPage: 10,
     currentPage: 1,
   };
-  filter: {
-    minPrice?: number;
-    maxPrice?: number;
-    deliveryStatus?: string;
-    itemsToShow: number;
-    page?: number;
-    orderId?: string;
-    minDate?: any;
-    maxDate?: any;
-  } = {
-    itemsToShow: this.totalItemsToShow,
+  totalItemsToShow = signal(10);
+  filter = signal<IUserOrderFilter>({
+    itemsToShow: this.totalItemsToShow(),
     page: 1,
-  };
-  searchInput: FormControl = new FormControl(null);
+  });
+  refresh = signal(0);
+  refreshTrigger = computed(() => ({
+    filter: this.filter(),
+    refresh: this.refresh(),
+  }));
+  holdFilter = signal<IUserOrderFilter>(this.filter());
+  isLoading = signal(true);
+  isError = signal(false);
+  orders$: Observable<IOrderResponse | any> = toObservable(
+    this.refreshTrigger,
+  ).pipe(
+    switchMap(({ filter }) =>
+      this.orderService.getOrders(filter).pipe(
+        catchError((error) => {
+          this.isLoading.set(false);
+          this.toast.showToast({
+            type: 'error',
+            message: error.message || 'Failed to load order',
+          });
+          this.isError.set(true);
+          return of(null);
+        }),
+      ),
+    ),
+    tap((res) => {
+      this.config.itemsPerPage = Math.max(
+        res?.totalItemsInPage!,
+        this.totalItemsToShow(),
+      );
+      this.config.currentPage = res?.currentPage!;
+      this.config.totalItems = res?.totalItems;
+      this.isLoading.set(false);
+    }),
+  );
+  orderData: Signal<IOrderResponse> = toSignal(this.orders$);
+  sortUsed: boolean = false;
+  sortColumn: keyof IProduct | keyof ICategory | '' = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
   deliveryStatus: { name: string; code: string }[] = [
     { name: 'Pending', code: 'PENDING' },
     { name: 'Packed', code: 'PACKED' },
     { name: 'Delivered', code: 'DELIVERED' },
   ];
-  selectedStatus!: { name: string; code: string };
+  selectedStatus: { name: string; code: string } | null = null;
   rangeValues = [2000, 10000];
   rangeValueChanged = signal(false);
   rangeDates: any[] = [];
-  FILTER_STORAGE_KEY = 'sjs29shdndj20snshgff7';
   @ViewChild('menu') menu!: Menu;
   filterNumber = 0;
 
   ngOnInit() {
-    const storedFilter = JSON.parse(
-      sessionStorage.getItem(this.FILTER_STORAGE_KEY)!,
+    const savedFilters = JSON.parse(
+      sessionStorage.getItem(this.orderService.ORDER_QUERY_STORED_KEY) || '{}',
     );
-    if (storedFilter) {
-      this.filter = { ...storedFilter };
-      if (this.filter.minPrice && this.filter.maxPrice) {
-        this.rangeValues = [this.filter.minPrice, this.filter.maxPrice];
-      }
-      if (this.filter.deliveryStatus) {
-        this.selectedStatus = this.deliveryStatus.find(
-          (status) => status.code == this.filter.deliveryStatus,
-        )!;
-      }
-      if (this.filter.minDate && this.filter.maxDate) {
-        const minDate = this.orderService.formatDateToLocale(
-          this.filter.minDate,
-        );
-        const maxDate = this.orderService.formatDateToLocale(
-          this.filter.maxDate,
-        );
-        this.rangeDates = [minDate, maxDate];
-      }
-      if (this.filter.itemsToShow) {
-        this.totalItemsToShow = this.filter.itemsToShow;
-        this.config.itemsPerPage = this.filter.itemsToShow;
-      }
-      if (this.filter.page) {
-        this.config.currentPage = this.filter.page;
-      }
+    this.holdFilter.set({
+      ...savedFilters,
+      itemsToShow: savedFilters?.itemsToShow ?? 10,
+    });
 
-      this.filterNumber = this.findFilterNumber();
+    const currentFilter = this.holdFilter();
+
+    this.filterNumber = this.orderService.findFilterNumber(currentFilter);
+
+    if (currentFilter.minPrice && currentFilter.maxPrice) {
+      this.rangeValues = [currentFilter.minPrice!, currentFilter.maxPrice!];
     }
-    this.getOrder();
-    this.searchInput.valueChanges
-      .pipe(filter(Boolean), debounceTime(500), distinctUntilChanged())
-      .subscribe((val) => {
-        this.filter = { ...this.filter, orderId: val };
-        this.reFetchOrder();
-      });
-  }
 
-  getOrder() {
-    this.isLoading.set(true);
-    sessionStorage.setItem(
-      this.FILTER_STORAGE_KEY,
-      JSON.stringify(this.filter),
+    if (currentFilter.minDate && currentFilter.maxDate) {
+      this.rangeDates = [
+        this.orderService.formatDateToLocale(currentFilter.minDate),
+        this.orderService.formatDateToLocale(currentFilter.maxDate),
+      ];
+    }
+
+    if (currentFilter.deliveryStatus) {
+      this.selectedStatus = this.deliveryStatus.find(
+        (status) => status.code == currentFilter.deliveryStatus,
+      )!;
+    }
+
+    if (currentFilter.itemsToShow) {
+      this.totalItemsToShow.set(currentFilter.itemsToShow!);
+      this.config.itemsPerPage = currentFilter.itemsToShow;
+    }
+
+    if (currentFilter.page) {
+      this.config.currentPage = currentFilter.page!;
+    }
+
+    const newRouteQueries = Object.fromEntries(
+      Object.entries(this.orderService.createRouteQuery(currentFilter)).filter(
+        ([_, value]) => value !== undefined,
+      ),
     );
 
-    this.orderService.getOrder(this.filter).subscribe({
-      next: (res) => {
-        this.orders = res!;
-        this.totalItemsToShow = Math.max(
-          res?.totalItemsInPage!,
-          this.totalItemsToShow,
-        );
-        this.config.itemsPerPage = this.totalItemsToShow;
-        this.config.currentPage = res?.currentPage!;
-        this.config.totalItems = res?.totalItems;
-        this.isLoading.set(false);
-      },
-      error: (err) => {
-        this.isLoading.set(false);
-        this.toast.showToast({
-          type: 'error',
-          message: err.error.message,
-        });
-      },
+    this.filter.set({ ...this.filter, ...currentFilter });
+
+    this.router.navigate([], {
+      queryParams: newRouteQueries,
+      relativeTo: this.route,
     });
   }
 
-  onViewOrder(order: IOrder) {
-    this.orderService.activeOrder.set(order);
-
-    this.router.navigate(['/', 'orders', order.id]);
+  onRetryLoad() {
+    this.refresh.update((count) => count + 1);
   }
 
-  onChangeItemsToShow(total: number) {
-    this.filter = { ...this.filter, page: 1, itemsToShow: total };
-    this.totalItemsToShow = total;
-    this.config.itemsPerPage = total;
-    this.reFetchOrder();
-  }
-
-  onChangeOrderStatus(status: { name: string; code: string }) {
-    this.selectedStatus = status;
-
-    this.filter = { ...this.filter, page: 1, deliveryStatus: status.code };
-  }
-
-  onRangeValueChanged(value: any[]) {
-    this.filter = {
-      ...this.filter,
-      minPrice: value[0],
-      maxPrice: value[1],
-    };
-  }
-
-  pageChange(event: any) {
-    this.filter = { ...this.filter, page: event };
-    this.reFetchOrder();
+  pageChange(page: number) {
+    this.isLoading.set(true);
+    this.filter.set({ ...this.filter(), page });
+    this.updateQueries({ page: page });
     window.scrollTo({
       top: 70,
       behavior: 'smooth',
     });
   }
 
+  itemsToShowChange(total: number) {
+    this.config.itemsPerPage = total;
+    this.totalItemsToShow.set(total);
+    this.isLoading.set(true);
+    this.filter.set({ ...this.filter(), page: 1, itemsToShow: total });
+    this.updateQueries({ itemsToShow: total });
+  }
+
+  onRangeValueChanged(value: any[]) {
+    this.updateQueries({ minPrice: value[0], maxPrice: value[1] });
+  }
+
+  searchChanged(value: any) {
+    this.isLoading.set(true);
+    this.filter.set({ ...this.filter(), orderId: value });
+    this.updateQueries({ search: value });
+  }
+
   onDateChanged() {
     if (this.rangeDates[0] && this.rangeDates[1]) {
       let dates = [...this.rangeDates];
       dates = dates.map((date) => this.orderService.formatDate(date));
-      this.filter = {
-        ...this.filter,
-        page: 1,
-        minDate: dates[0],
-        maxDate: dates[1],
-      };
+      this.updateQueries({ page: 1, minDate: dates[0], maxDate: dates[1] });
     }
   }
 
-  onApplyFilter() {
-    this.filterNumber = this.findFilterNumber();
-    this.reFetchOrder();
-    this.menu.hide();
-  }
-
-  onReturn() {
-    this.filter = {
-      itemsToShow: this.totalItemsToShow,
-      page: 1,
-    };
-    this.rangeDates = [];
-    sessionStorage.removeItem(this.FILTER_STORAGE_KEY);
-    this.filterNumber = 0;
-    this.searchInput.reset();
-    this.reFetchOrder();
+  onChangeOrderStatus(status: { name: string; code: string }) {
+    this.selectedStatus = status;
+    this.updateQueries({ page: 1, deliveryStatus: status.code });
   }
 
   onClearFilter() {
     if (this.filterNumber == 0) {
       return;
     }
-    this.onReturn();
+    this.selectedStatus = null;
     this.menu.hide();
-    this.rangeValues = [2000, 10000];
+    this.onReturn();
   }
 
-  reFetchOrder() {
+  onViewOrder(order: IOrder) {
+    this.orderService.activeOrder.set(order);
+    this.router.navigate(['/', 'orders', order.id]);
+  }
+
+  updateQueries(updates: Partial<IOrderFilter>) {
     this.orderService.orderSignal.set(null);
-    this.getOrder();
+    this.holdFilter.set({ ...this.holdFilter(), ...updates });
+    sessionStorage.setItem(
+      this.orderService.ORDER_QUERY_STORED_KEY,
+      JSON.stringify(this.holdFilter()),
+    );
+    this.router.navigate([], {
+      queryParams: this.orderService.createRouteQuery(this.filter()),
+      relativeTo: this.route,
+    });
   }
 
-  findFilterNumber() {
-    let number = 0;
-    for (const key in this.filter) {
-      if (key == 'deliveryStatus' || key == 'minDate' || key == 'minPrice') {
-        number += 1;
-      }
-    }
-    return number;
+  onApplyFilter() {
+    this.isLoading.set(true);
+    this.filter.set({ ...this.holdFilter() });
+    this.filterNumber = this.orderService.findFilterNumber(this.filter());
+    sessionStorage.setItem(
+      this.orderService.ORDER_QUERY_STORED_KEY,
+      JSON.stringify(this.filter()),
+    );
+    this.router.navigate([], {
+      queryParams: this.orderService.createRouteQuery(this.filter()),
+      relativeTo: this.route,
+    });
+    this.menu.hide();
   }
 
-  sortTable(column: keyof IOrder): void {
+  onReturn() {
+    this.rangeDates = [];
+    this.rangeValues = [2000, 10000];
+    sessionStorage.removeItem(this.orderService.ORDER_QUERY_STORED_KEY);
+    this.filterNumber = 0;
+    this.orderService.orderQueried.set(false);
+    this.router.navigate([], {
+      queryParams: { page: 1, itemsPerPage: 10 },
+      queryParamsHandling: 'replace',
+      relativeTo: this.route,
+    });
+    this.isLoading.set(true);
+    this.orderService.orderSignal.set(null);
+    this.filter.set({
+      itemsToShow: 10,
+      page: 1,
+    });
+    this.totalItemsToShow.set(10);
+    this.selectedStatus = null;
+    this.holdFilter.set({ ...this.filter() });
+    // this.searchInput.reset();
+  }
+
+  sortTable(column: any): void {
     if (this.sortColumn === column) {
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     } else {
@@ -269,7 +296,7 @@ export class UserOrdersTableComponent implements OnInit {
     }
     this.sortUsed = true;
 
-    this.orders?.orders?.sort((a, b) => {
+    this.orderData()?.orders?.sort((a: any, b: any) => {
       const valueA = a[column];
       const valueB = b[column];
 
