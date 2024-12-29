@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   OnInit,
   signal,
@@ -39,18 +40,23 @@ export class FiltersComponent {
   private layoutService = inject(LayoutService);
   private productService = inject(ProductsService);
   isShowing = signal<boolean[]>([true, true]);
-  // rangeValues = new FormControl([20, 30]);
-  rangeValues = [2000, 10000];
+  currentPriceFilter = this.optionsService.currentPriceFilter;
+  rangeValues = computed(() => {
+    if (this.currentPriceFilter()) {
+      return [this.currentPriceFilter()?.min, this.currentPriceFilter()?.max];
+    } else {
+      return [2000, 10000];
+    }
+  });
   value: number = 50;
   currentSort = this.optionsService.currentSort;
-  currentPriceFilter = this.optionsService.currentPriceFilter;
 
   onApplyPriceFilter() {
     this.productService.productSignal.set(null);
     this.optionsService.currentPage.set(1);
     this.optionsService.currentPriceFilter.set({
-      min: this.rangeValues[0],
-      max: this.rangeValues[1],
+      min: this.rangeValues()[0],
+      max: this.rangeValues()[1],
     });
     this.layoutService.mobileFilterOpened.set(false);
 
@@ -62,20 +68,25 @@ export class FiltersComponent {
       'hshs82haa02sshs92s',
       JSON.stringify({
         ...savedQuery,
-        price: { min: this.rangeValues[0], max: this.rangeValues[1] },
+        price: { min: this.rangeValues()[0], max: this.rangeValues()[1] },
       }),
     );
 
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
-        minPrice: this.rangeValues[0],
-        maxPrice: this.rangeValues[1],
+        minPrice: this.rangeValues()[0],
+        maxPrice: this.rangeValues()[1],
         page: null,
       },
       queryParamsHandling: 'merge',
       fragment: 'products',
     });
+  }
+
+  onRangeValuesChange(event: any) {
+    console.log(1);
+    this.currentPriceFilter.set(null);
   }
 
   onSetOrder(sort: string) {
@@ -124,7 +135,7 @@ export class FiltersComponent {
       delete savedQuery.sort;
     }
 
-    this.rangeValues = [2000, 10000];
+    this.currentPriceFilter.set(null);
 
     sessionStorage.setItem('hshs82haa02sshs92s', JSON.stringify(savedQuery));
 
