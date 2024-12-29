@@ -18,6 +18,8 @@ export class AdminHeaderComponent {
   private readonly layoutService = inject(LayoutService);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  isMenuOpened = this.layoutService.adminMenuOpened;
+
   onOpenMenu() {
     this.layoutService.adminMenuOpened.set(
       !this.layoutService.adminMenuOpened(),
