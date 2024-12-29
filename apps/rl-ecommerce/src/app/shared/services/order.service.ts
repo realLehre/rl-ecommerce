@@ -6,7 +6,17 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment.development';
 import { IOrder, IOrderResponse } from '../models/order.interface';
 import { of, tap } from 'rxjs';
-import { PaginationInstance } from 'ngx-pagination';
+
+interface IOrderFilter {
+  minPrice?: number;
+  maxPrice?: number;
+  deliveryStatus?: string;
+  itemsToShow: number;
+  page?: number;
+  orderId?: string;
+  minDate?: any;
+  maxDate?: any;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -23,16 +33,7 @@ export class OrderService {
 
   constructor() {}
 
-  getOrder(filters: {
-    minPrice?: number;
-    maxPrice?: number;
-    deliveryStatus?: string;
-    itemsToShow: number;
-    page?: number;
-    orderId?: string;
-    minDate?: any;
-    maxDate?: any;
-  }) {
+  getOrder(filters: IOrderFilter) {
     this.orderQueried.set(false);
     let params = new HttpParams();
     if (filters?.minPrice) {
@@ -107,6 +108,18 @@ export class OrderService {
     return cart.cartItems.reduce((acc: number, item: ICartItems) => {
       return (acc += item.shippingCost);
     }, 0);
+  }
+
+  createRouteQuery(filter: IOrderFilter) {
+    return {
+      page: filter.page,
+      minPrice: filter.minPrice,
+      maxPrice: filter.maxPrice,
+      minDate: filter.minDate,
+      maxDate: filter.maxDate,
+      orderId: filter.orderId,
+      deliveryStatus: filter.deliveryStatus,
+    };
   }
 
   formatDate(date: Date) {

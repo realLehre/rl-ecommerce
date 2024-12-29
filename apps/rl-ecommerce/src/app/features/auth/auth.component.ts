@@ -5,11 +5,12 @@ import {
   RouterOutlet,
 } from '@angular/router';
 import { slideInAnimation } from '../../route-animations';
+import { NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [RouterOutlet, RouterLink],
+  imports: [RouterOutlet, RouterLink, NgOptimizedImage],
   animations: [slideInAnimation],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.scss',
