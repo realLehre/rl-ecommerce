@@ -61,29 +61,37 @@ export class AdminAddCategoryComponent
     });
 
     this.route.queryParams.subscribe((param) => {
-      if (param['edit']) this.isEditing.set(true);
+      if (param['edit']) {
+        const category: Categories = this.categoryService.activeCategory()!;
+
+        if (category) {
+          this.hasUnsavedChanges.set(true);
+          this.isEditing.set(true);
+          this.categoryForm.patchValue({
+            name: category?.name,
+          });
+          this.subCategories.clear();
+          const subs = category.subCategories.map(
+            (subCategory: any) => subCategory,
+          );
+
+          subs.forEach((subCategory) => {
+            this.subCategories.push(
+              this.fb.group({
+                id: [subCategory.id],
+                subCategoryName: [subCategory.name],
+              }),
+            );
+          });
+        } else {
+          this.router.navigate([], {
+            queryParams: null,
+            queryParamsHandling: 'replace',
+            relativeTo: this.route,
+          });
+        }
+      }
     });
-
-    if (this.isEditing()) {
-      const category: Categories = this.categoryService.activeCategory()!;
-      this.hasUnsavedChanges.set(true);
-      this.categoryForm.patchValue({
-        name: category?.name,
-      });
-      this.subCategories.clear();
-      const subs = category.subCategories.map(
-        (subCategory: any) => subCategory,
-      );
-
-      subs.forEach((subCategory) => {
-        this.subCategories.push(
-          this.fb.group({
-            id: [subCategory.id],
-            subCategoryName: [subCategory.name],
-          }),
-        );
-      });
-    }
 
     this.categoryForm.valueChanges.subscribe((value) => {
       if (

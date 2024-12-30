@@ -29,12 +29,7 @@ export class AdminCategoriesService {
   categoriesSignal = signal<IAdminCategoriesResponse | undefined>(undefined);
   activeCategory = signal<Categories | undefined>(undefined);
 
-  constructor() {
-    const category = JSON.parse(
-      sessionStorage.getItem('ssjsiw72jsksdeisi92e')!,
-    );
-    if (category) this.activeCategory.set(category);
-  }
+  constructor() {}
 
   getCategories(filter: IAdminCategoryFilter): Observable<any> {
     let params = new HttpParams();

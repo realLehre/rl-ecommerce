@@ -80,10 +80,7 @@ export class ProductsLowInStockComponent {
   }
 
   onEdit() {
-    localStorage.setItem(
-      'selectedProduct',
-      JSON.stringify(this.selectedProduct),
-    );
+    this.productService.activeProduct.set(this.selectedProduct);
     this.router.navigate(['/', 'admin', 'add-product'], {
       queryParams: { edit: true },
     });

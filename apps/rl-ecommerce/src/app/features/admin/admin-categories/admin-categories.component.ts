@@ -194,10 +194,6 @@ export class AdminCategoriesComponent implements OnInit {
 
   onEdit() {
     this.categoryService.activeCategory.set(this.selectedCategory());
-    sessionStorage.setItem(
-      'ssjsiw72jsksdeisi92e',
-      JSON.stringify(this.categoryService.activeCategory()),
-    );
     this.router.navigate(['/', 'admin', 'add-category'], {
       queryParams: { edit: true },
     });

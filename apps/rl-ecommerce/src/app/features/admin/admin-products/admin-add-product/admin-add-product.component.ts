@@ -52,9 +52,7 @@ export class AdminAddProductComponent
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
       if (params['edit']) {
-        const productData: IProduct = JSON.parse(
-          localStorage.getItem('selectedProduct')!,
-        );
+        const productData: IProduct = this.productService.activeProduct()!;
         if (productData) {
           this.isEditing.set(true);
           this.productData = productData;
@@ -169,18 +167,10 @@ export class AdminAddProductComponent
   }
 
   canDeactivate(): boolean {
-    console.log(
-      this.productService.getFormControlStatus(this.productForm),
-      this.coverImage,
-      this.imageUrls.length,
-      this.productAdded(),
-      this.editCanceled(),
-    );
     if (
       (this.productService.getFormControlStatus(this.productForm) ||
         this.coverImage !== '' ||
         this.imageUrls.length !== 0) &&
-      this.productAdded() &&
       !this.editCanceled()
     ) {
       return confirm(
@@ -196,10 +186,6 @@ export class AdminAddProductComponent
     if (!this.canDeactivate()) {
       $event.returnValue = true;
     }
-  }
-
-  @HostListener('window:unload', ['$event']) unLoad($event: any) {
-    localStorage.removeItem('selectedProduct');
   }
 
   ngOnDestroy() {}
