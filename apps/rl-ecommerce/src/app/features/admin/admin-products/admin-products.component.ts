@@ -252,7 +252,7 @@ export class AdminProductsComponent implements OnInit {
     this.getProducts();
   }
 
-  itemsToShowChange(event: number) {
+  pageSizeChange(event: number) {
     this.config.itemsPerPage = event;
     this.filter = { ...this.filter, pageSize: event };
     if (!this.injecting()) {

@@ -32,24 +32,19 @@ export class ProductsService {
   getProducts(filters?: IProductFilter) {
     let params = new HttpParams();
 
-    if (filters?.categoryId) {
-      params = params.set('categoryId', filters.categoryId);
-    }
-    if (filters?.subCategoryId) {
-      params = params.set('subCategoryId', filters.subCategoryId);
-    }
-    if (filters?.minPrice) {
-      params = params.set('minPrice', filters.minPrice.toString());
-    }
-    if (filters?.maxPrice) {
-      params = params.set('maxPrice', filters.maxPrice.toString());
-    }
-    if (filters?.sortBy) {
-      params = params.set('sortBy', filters.sortBy);
-    }
-    if (filters?.page) {
-      params = params.set('page', filters.page);
-    }
+    Object.entries(filters!)
+      .filter(([_, value]) => value != undefined || value != null)
+      .forEach(([key, value]) => {
+        if (key == 'category') {
+          params = params.set('categoryId', value.id);
+        } else if (key == 'subCategory') {
+          {
+            params = params.set('subCategoryId', value.id);
+          }
+        } else {
+          params = params.set(key, value);
+        }
+      });
 
     return this.productSignal()
       ? of(this.productSignal())

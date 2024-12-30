@@ -51,7 +51,6 @@ export class AddressCardComponent {
       },
       error: (err) => {
         this.isLoading.set(false);
-        console.log(err);
         this.toast.showToast({
           type: 'error',
           message: err.error.message,

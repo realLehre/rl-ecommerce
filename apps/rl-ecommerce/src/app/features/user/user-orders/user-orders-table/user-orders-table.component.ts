@@ -189,7 +189,7 @@ export class UserOrdersTableComponent implements OnInit {
     });
   }
 
-  itemsToShowChange(total: number) {
+  pageSizeChange(total: number) {
     this.config.itemsPerPage = total;
     this.pageSize.set(total);
     this.isLoading.set(true);

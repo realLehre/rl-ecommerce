@@ -13,7 +13,7 @@ import {
 
 export interface IAdminCategoryFilter {
   page: number;
-  itemsPerPage: number;
+  pageSize: number;
   search?: string;
 }
 
@@ -32,13 +32,15 @@ export class AdminCategoriesService {
 
   getCategories(filter: IAdminCategoryFilter): Observable<any> {
     let params = new HttpParams();
-    if (filter.search) {
-      params = params.set('search', filter.search);
-      this.categoriesDataQueried.set(true);
-    }
-    params = params.set('page', filter.page);
-    params = params.set('itemsPerPage', filter.itemsPerPage);
+    Object.entries(filter)
+      .filter(([_, value]) => value != undefined || value != null)
+      .forEach(([key, value]) => {
+        params = params.set(key, value);
 
+        if (key == 'search') {
+          this.categoriesDataQueried.set(true);
+        }
+      });
     return this.categoriesSignal()
       ? of(this.categoriesSignal())
       : this.http
@@ -70,7 +72,7 @@ export class AdminCategoriesService {
   createRouteQuery(filter: IAdminCategoryFilter) {
     return {
       page: filter.page,
-      itemsPerPage: filter.itemsPerPage,
+      pageSize: filter.pageSize,
       search: filter.search,
     };
   }

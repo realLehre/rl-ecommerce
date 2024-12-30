@@ -55,12 +55,12 @@ export class AdminCategoriesComponent implements OnInit {
     itemsPerPage: 10,
     currentPage: 1,
   };
-  totalItemsToShow = signal(10);
+  pageSize = signal(10);
   categoriesDataQueried = this.categoryService.categoriesDataQueried;
   refreshTrigger = signal(0);
   filter = signal<IAdminCategoryFilter>({
     page: 1,
-    itemsPerPage: 10,
+    pageSize: 10,
   });
   refresh = computed(() => ({
     searchValue: this.filter(),
@@ -87,7 +87,7 @@ export class AdminCategoriesComponent implements OnInit {
     tap((res) => {
       this.config.itemsPerPage = Math.max(
         res?.totalItemsInPage!,
-        this.totalItemsToShow(),
+        this.pageSize(),
       );
       this.config.currentPage = res?.currentPage!;
       this.config.totalItems = res?.totalItems;
@@ -125,10 +125,10 @@ export class AdminCategoriesComponent implements OnInit {
     });
   }
 
-  itemsToShowChange($event: number) {
+  pageSizeChange($event: number) {
     this.categoryService.categoriesSignal.set(undefined);
-    this.totalItemsToShow.set($event);
-    this.filter.set({ ...this.filter(), itemsPerPage: $event });
+    this.pageSize.set($event);
+    this.filter.set({ ...this.filter(), pageSize: $event });
     this.saveQuery();
     this.updateViewState();
   }
@@ -219,7 +219,7 @@ export class AdminCategoriesComponent implements OnInit {
   }
 
   onReturn() {
-    this.filter.set({ page: 1, itemsPerPage: 10 });
+    this.filter.set({ page: 1, pageSize: 10 });
     sessionStorage.removeItem(this.categoryService.CATEGORIES_QUERY_STORE_KEY);
     this.saveQuery();
     this.updateViewState();

@@ -29,7 +29,6 @@ import { NumberOfFiltersPipe } from '../../shared/pipes/number-of-filters.pipe';
     MobileFiltersComponent,
     NgClass,
     AsyncPipe,
-    CurrencyPipe,
     SkeletonModule,
     NgxPaginationModule,
     ItemsShowingPipe,

@@ -85,7 +85,6 @@ export class FiltersComponent {
   }
 
   onRangeValuesChange(event: any) {
-    console.log(1);
     this.currentPriceFilter.set(null);
   }
 

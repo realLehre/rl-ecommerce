@@ -115,7 +115,7 @@ export class AdminUsersComponent implements OnInit {
     });
   }
 
-  itemsToShowChange($event: number) {
+  pageSizeChange($event: number) {
     this.userService.userDataSignal.set(undefined);
     this.filter.set({ ...this.filter(), pageSize: $event });
     this.pageSize.set($event);

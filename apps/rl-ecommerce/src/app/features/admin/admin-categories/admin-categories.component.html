@@ -5,11 +5,11 @@
         [data]="categoriesData()"
         [config]="config"
         [tableData]="categoriesData().categories"
-        [itemsToShowInput]="filter().itemsPerPage"
+        [itemsToShowInput]="filter().pageSize"
         [title]="'All Categories'"
         [searchValueInput]="filter().search"
         (pageChanged)="pageChange($event)"
-        (itemsToShowChanged)="itemsToShowChange($event)"
+        (itemsToShowChanged)="pageSizeChange($event)"
         (searchValueEmit)="searchChanged($event)"
       >
         <button
