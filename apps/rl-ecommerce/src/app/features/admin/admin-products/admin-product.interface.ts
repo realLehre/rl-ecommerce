@@ -6,7 +6,7 @@ import {
 export interface IAdminProductFilter {
   minPrice?: number;
   maxPrice?: number;
-  itemsToShow: number;
+  pageSize: number;
   page?: number;
   productId?: string;
   productName?: string;

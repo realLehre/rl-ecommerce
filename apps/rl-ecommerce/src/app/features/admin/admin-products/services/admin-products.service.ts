@@ -30,40 +30,19 @@ export class AdminProductsService {
   getProducts(filters: IAdminProductFilter) {
     let params = new HttpParams();
 
-    if (filters?.minPrice) {
-      params = params.set('minPrice', filters.minPrice.toString());
-      this.productQueried.set(true);
-    }
-    if (filters?.maxPrice) {
-      params = params.set('maxPrice', filters.maxPrice.toString());
-      this.productQueried.set(true);
-    }
-    if (filters?.category) {
-      params = params.set('categoryId', filters.category.id);
-      this.productQueried.set(true);
-    }
-    if (filters?.page) {
-      params = params.set('page', filters.page);
-    }
-    if (filters?.itemsToShow) {
-      params = params.set('pageSize', filters.itemsToShow);
-    }
-    if (filters?.subCategory) {
-      params = params.set('subCategoryId', filters.subCategory.id);
-      this.productQueried.set(true);
-    }
-    if (filters?.minDate) {
-      params = params.set('minDate', filters.minDate);
-      this.productQueried.set(true);
-    }
-    if (filters?.maxDate) {
-      params = params.set('maxDate', filters.maxDate);
-      this.productQueried.set(true);
-    }
-    if (filters?.name) {
-      params = params.set('name', filters.name);
-      this.productQueried.set(true);
-    }
+    Object.entries(filters)
+      .filter(([_, value]) => value != undefined || value != null)
+      .forEach(([key, value]) => {
+        if (key == 'category') {
+          params = params.set('categoryId', value.id);
+        } else if (key == 'subCategory') {
+          {
+            params = params.set('subCategoryId', value.id);
+          }
+        } else {
+          params = params.set(key, value);
+        }
+      });
 
     return this.http
       .get<IProductResponse>(`${this.apiUrl}/all`, { params })

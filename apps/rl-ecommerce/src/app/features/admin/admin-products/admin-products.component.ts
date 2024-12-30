@@ -78,7 +78,7 @@ export class AdminProductsComponent implements OnInit {
   subCategories: ISubCategory[] = [];
   selectedSubCategory: ICategory | undefined;
   filter: IAdminProductFilter = {
-    itemsToShow: 10,
+    pageSize: 10,
     page: 1,
   };
   rangeDates: any[] = [];
@@ -108,7 +108,7 @@ export class AdminProductsComponent implements OnInit {
     if (savedFilters) {
       this.filter = {
         ...savedFilters,
-        itemsToShow: savedFilters?.itemsToShow ?? 10,
+        pageSize: savedFilters?.itemsToShow ?? 10,
       };
     }
     this.filterNumber = this.findFilterNumber();
@@ -171,7 +171,7 @@ export class AdminProductsComponent implements OnInit {
         this.productData = res;
         const totalItemsToShow = Math.max(
           res?.totalItemsInPage!,
-          this.filter.itemsToShow,
+          this.filter.pageSize,
         );
         this.config.itemsPerPage = totalItemsToShow;
         this.config.currentPage = res?.currentPage!;
@@ -253,7 +253,7 @@ export class AdminProductsComponent implements OnInit {
 
   itemsToShowChange(event: number) {
     this.config.itemsPerPage = event;
-    this.filter = { ...this.filter, itemsToShow: event };
+    this.filter = { ...this.filter, pageSize: event };
     if (!this.injecting()) {
       sessionStorage.setItem(
         this.productService.PRODUCT_QUERY_STORED_KEY,
@@ -335,7 +335,7 @@ export class AdminProductsComponent implements OnInit {
 
   onReturn() {
     this.filter = {
-      itemsToShow: 10,
+      pageSize: 10,
       page: 1,
       category: this.categoryData(),
     };
