@@ -269,7 +269,6 @@ export class AdminOrdersComponent implements OnInit {
       queryParamsHandling: 'replace',
       relativeTo: this.route,
     });
-    this.isLoading.set(true);
     this.orderService.orderSignal.set(null);
     this.filter.set({
       pageSize: 10,
@@ -278,34 +277,41 @@ export class AdminOrdersComponent implements OnInit {
     this.pageSize.set(10);
     this.selectedStatus = null;
     this.holdFilter.set({ ...this.filter() });
-    // this.searchInput.reset();
+    this.isLoading.set(true);
   }
 
   sortTable(column: any): void {
-    if (this.sortColumn === column) {
-      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-    } else {
-      this.sortColumn = column;
-      this.sortDirection = 'asc';
-    }
-    this.sortUsed = true;
-
-    this.orderData().orders.sort((a: any, b: any) => {
-      let valueA, valueB;
-      if (column == 'user') {
-        valueA = a[column].name;
-        valueB = b[column].name;
-      } else {
-        valueA = a[column];
-        valueB = b[column];
-      }
-
-      if (valueA && valueB) {
-        if (valueA < valueB) return this.sortDirection === 'asc' ? -1 : 1;
-        if (valueA > valueB) return this.sortDirection === 'asc' ? 1 : -1;
-      }
-
-      return 0;
-    });
+    const { sortedData, sortDirection, sortUsed } = this.orderService.sortTable(
+      column,
+      this.orderData(),
+    );
+    this.orders$ = of(sortedData);
+    this.sortDirection = sortDirection;
+    this.sortUsed = sortUsed;
+    // if (this.sortColumn === column) {
+    //   this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    // } else {
+    //   this.sortColumn = column;
+    //   this.sortDirection = 'asc';
+    // }
+    // this.sortUsed = true;
+    //
+    // this.orderData().orders.sort((a: any, b: any) => {
+    //   let valueA, valueB;
+    //   if (column == 'user') {
+    //     valueA = a[column].name;
+    //     valueB = b[column].name;
+    //   } else {
+    //     valueA = a[column];
+    //     valueB = b[column];
+    //   }
+    //
+    //   if (valueA && valueB) {
+    //     if (valueA < valueB) return this.sortDirection === 'asc' ? -1 : 1;
+    //     if (valueA > valueB) return this.sortDirection === 'asc' ? 1 : -1;
+    //   }
+    //
+    //   return 0;
+    // });
   }
 }

@@ -7,6 +7,7 @@ import {
   IOrderResponse,
 } from '../../../../shared/models/order.interface';
 import { catchError, Observable, of, retry, tap, throwError } from 'rxjs';
+import { IUserRes } from '../../admin-users/admin-user.service';
 
 export interface IOrderFilter {
   minPrice?: number;
@@ -28,6 +29,9 @@ export class AdminOrderService {
   orderSignal = signal<IOrderResponse | null>(null);
   activeOrder = signal<IOrder | null>(null);
   ORDER_QUERY_STORED_KEY = 'sjei383dJDsdf3-dks-34';
+  sortColumn: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
+  sortUsed: boolean = false;
 
   orderQueried = signal(false);
   constructor() {}
@@ -136,6 +140,47 @@ export class AdminOrderService {
       }
     }
     return number;
+  }
+
+  sortTable(
+    column: any,
+    data: IOrderResponse,
+  ): {
+    sortedData: IOrderResponse;
+    sortDirection: 'asc' | 'desc';
+    sortUsed: boolean;
+  } {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+    this.sortUsed = true;
+
+    const sortedData = data.orders.sort((a: any, b: any) => {
+      let valueA, valueB;
+      if (column == 'user') {
+        valueA = a[column].name;
+        valueB = b[column].name;
+      } else {
+        valueA = a[column];
+        valueB = b[column];
+      }
+
+      if (valueA && valueB) {
+        if (valueA < valueB) return this.sortDirection === 'asc' ? -1 : 1;
+        if (valueA > valueB) return this.sortDirection === 'asc' ? 1 : -1;
+      }
+
+      return 0;
+    });
+
+    return {
+      sortedData: { ...data, orders: sortedData },
+      sortDirection: this.sortDirection,
+      sortUsed: this.sortUsed,
+    };
   }
 
   private handleError(error: any) {

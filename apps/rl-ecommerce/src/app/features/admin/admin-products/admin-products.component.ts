@@ -68,7 +68,6 @@ export class AdminProductsComponent implements OnInit {
   productData!: IProductResponse;
   selectedProduct!: IProduct;
   sortUsed: boolean = false;
-  sortColumn: keyof IProduct | keyof ICategory | '' = '';
   sortDirection: 'asc' | 'desc' = 'asc';
   @ViewChild('filterMenu') menu!: Menu;
   @ViewChild('menu') productActionMenu!: Menu;
@@ -380,35 +379,5 @@ export class AdminProductsComponent implements OnInit {
     this.productData = sortedData;
     this.sortDirection = sortDirection;
     this.sortUsed = sortUsed;
-    // if (this.sortColumn === column) {
-    //   this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-    // } else {
-    //   this.sortColumn = column;
-    //   this.sortDirection = 'asc';
-    // }
-    // this.sortUsed = true;
-    //
-    // this.productData.products.sort((a: any, b: any) => {
-    //   let valueA, valueB;
-    //   if (column == 'category') {
-    //     if (!this.injecting()) {
-    //       valueA = a[column].name;
-    //       valueB = b[column].name;
-    //     } else {
-    //       valueA = a['subCategory'].name;
-    //       valueB = b['subCategory'].name;
-    //     }
-    //   } else {
-    //     valueA = a[column];
-    //     valueB = b[column];
-    //   }
-    //
-    //   if (valueA && valueB) {
-    //     if (valueA < valueB) return this.sortDirection === 'asc' ? -1 : 1;
-    //     if (valueA > valueB) return this.sortDirection === 'asc' ? 1 : -1;
-    //   }
-    //
-    //   return 0;
-    // });
   }
 }
