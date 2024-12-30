@@ -54,7 +54,7 @@
 
     <div
       #carouselContainer
-      class="overflow-x-auto space-x-4 scrollbar-hide scroll-smooth grid grid-flow-col auto-cols-[minmax(220px,1fr)] gap-x-3 mt-6 hide-scrollbar w-full"
+      class="overflow-x-auto space-x-4 scrollbar-hide scroll-smooth grid grid-flow-col auto-cols-[minmax(220px,1fr)] gap-x-3 mt-3 hide-scrollbar w-full py-6 px-0 mobile:px-4"
     >
       @for (product of products; track product.id) {
         <app-product-card [product]="product" />
@@ -69,45 +69,49 @@
       You May Also Like
     </h3>
   </div>
-  @for (t of [1, 2, 3, 4]; track t) {
-    <div class="flex flex-col space-y-1 mobile:space-y-3">
-      <div class="relative w-full h-[180px] mobile:h-[230px]">
-        <div
-          class="absolute top-0 left-0 w-full h-full clip-polygon z-[100]"
-          style="
-            clip-path: polygon(
-              0 18%,
-              25% 0,
-              100% 0,
-              100% 82%,
-              75% 100%,
-              0% 100%
-            );
-          "
-        >
-          <p-skeleton width="100%" height="100%" />
-        </div>
-      </div>
-
-      <div class="w-full">
-        <div class="w-full mb-2">
-          <p-skeleton width="100%" height="2rem" />
+  <div
+    class="overflow-x-auto space-x-4 scrollbar-hide scroll-smooth grid grid-flow-col auto-cols-[minmax(220px,1fr)] gap-x-3 mt-3 hide-scrollbar w-full py-6"
+  >
+    @for (t of [1, 2, 3, 4]; track t) {
+      <div class="flex flex-col space-y-1 mobile:space-y-3">
+        <div class="relative w-full h-[180px] mobile:h-[230px]">
+          <div
+            class="absolute top-0 left-0 w-full h-full clip-polygon z-[100]"
+            style="
+              clip-path: polygon(
+                0 18%,
+                25% 0,
+                100% 0,
+                100% 82%,
+                75% 100%,
+                0% 100%
+              );
+            "
+          >
+            <p-skeleton width="100%" height="100%" />
+          </div>
         </div>
 
-        <div class="mb-4">
-          <p-skeleton width="70%" height="1rem" />
-        </div>
-
-        <div class="flex items-center justify-between gap-x-2 gap-y-4">
-          <div class="flex-1">
+        <div class="w-full">
+          <div class="w-full mb-2">
             <p-skeleton width="100%" height="2rem" />
           </div>
 
-          <div class="flex-1">
-            <p-skeleton width="100%" height="3rem" />
+          <div class="mb-4">
+            <p-skeleton width="70%" height="1rem" />
+          </div>
+
+          <div class="flex items-center justify-between gap-x-2 gap-y-4">
+            <div class="flex-1">
+              <p-skeleton width="100%" height="2rem" />
+            </div>
+
+            <div class="flex-1">
+              <p-skeleton width="100%" height="3rem" />
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  }
+    }
+  </div>
 }

@@ -1,4 +1,6 @@
-<div class="flex flex-col space-y-1 mobile:space-y-3">
+<div
+  class="flex flex-col space-y-1 mobile:space-y-3 transition-transform transform hover:scale-105 hover:shadow-none hover:rotate-3"
+>
   <div
     class="relative w-full h-[180px] mobile:h-[230px] group"
     (click)="onViewDetails(product())"
@@ -33,18 +35,15 @@
           }}%
         </div>
       }
-      <img
-        [src]="product().imageUrls[1]"
-        [alt]="product().name"
-        class="hidden group-hover:inline w-full h-full object-cover"
-        alt=""
-        loading="lazy"
-      />
-      <img
-        [src]="product().image"
-        [alt]="product().name"
-        class="inline group-hover:hidden w-full h-full object-cover"
-      />
+
+      <div class="relative w-full h-full">
+        <img
+          [ngSrc]="product().image"
+          [alt]="product().name"
+          fill
+          class="w-full h-full object-cover"
+        />
+      </div>
     </div>
   </div>
 

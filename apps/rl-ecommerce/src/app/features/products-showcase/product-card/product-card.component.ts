@@ -6,7 +6,7 @@ import {
   input,
   signal,
 } from '@angular/core';
-import { CurrencyPipe, NgStyle } from '@angular/common';
+import { CurrencyPipe, NgOptimizedImage, NgStyle } from '@angular/common';
 import { Router } from '@angular/router';
 import { IProduct } from '../../products/model/product.interface';
 import { ProductsService } from '../../products/services/products.service';
@@ -30,6 +30,7 @@ import { PricePercentageDecreasePipe } from '../../../shared/pipes/price-percent
     NgStyle,
     ProductQuantityComponent,
     PricePercentageDecreasePipe,
+    NgOptimizedImage,
   ],
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.scss',
