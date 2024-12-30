@@ -5,7 +5,7 @@
         [data]="userData()"
         [config]="config"
         [tableData]="userData().users"
-        [itemsToShowInput]="filter().itemsPerPage"
+        [itemsToShowInput]="filter().pageSize"
         [title]="'All Users'"
         [searchValueInput]="filter().search"
         (pageChanged)="pageChange($event)"

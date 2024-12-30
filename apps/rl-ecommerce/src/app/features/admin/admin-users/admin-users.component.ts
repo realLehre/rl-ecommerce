@@ -60,9 +60,9 @@ export class AdminUsersComponent implements OnInit {
   isError = signal(false);
   filter = signal<IAdminUserFilter>({
     page: 1,
-    itemsPerPage: 10,
+    pageSize: 10,
   });
-  totalItemsToShow = signal(10);
+  pageSize = signal(10);
   refreshTrigger = computed(() => ({
     filter: this.filter(),
     refresh: this.refresh(),
@@ -86,7 +86,7 @@ export class AdminUsersComponent implements OnInit {
     tap((res) => {
       this.config.itemsPerPage = Math.max(
         res?.totalItemsInPage!,
-        this.totalItemsToShow(),
+        this.pageSize(),
       );
       this.config.currentPage = res?.currentPage!;
       this.config.totalItems = res?.totalItems;
@@ -117,8 +117,8 @@ export class AdminUsersComponent implements OnInit {
 
   itemsToShowChange($event: number) {
     this.userService.userDataSignal.set(undefined);
-    this.filter.set({ ...this.filter(), itemsPerPage: $event });
-    this.totalItemsToShow.set($event);
+    this.filter.set({ ...this.filter(), pageSize: $event });
+    this.pageSize.set($event);
     this.saveQuery();
     this.updateViewState();
   }
@@ -138,7 +138,8 @@ export class AdminUsersComponent implements OnInit {
   }
 
   onReturn() {
-    this.filter.set({ page: 1, itemsPerPage: 10 });
+    this.filter.set({ page: 1, pageSize: 10 });
+    this.userService.userDataSignal.set(undefined);
     sessionStorage.removeItem(this.userService.USER_QUERY_STORE_KEY);
     this.saveQuery();
     this.updateViewState();

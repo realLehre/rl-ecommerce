@@ -11,7 +11,7 @@ import { IOrder } from '../../../shared/models/order.interface';
 
 export interface IAdminUserFilter {
   page: number;
-  itemsPerPage: number;
+  pageSize: number;
   search?: string;
 }
 
@@ -52,18 +52,17 @@ export class AdminUserService {
 
   getUsers(filter: IAdminUserFilter) {
     let params = new HttpParams();
-    if (filter.page) {
-      params = params.set('page', filter.page);
-      this.userDataQueried.set(true);
-    }
-    if (filter.itemsPerPage) {
-      params = params.set('itemsPerPage', filter.itemsPerPage);
-      this.userDataQueried.set(true);
-    }
-    if (filter.search) {
-      params = params.set('search', filter.search);
-      this.userDataQueried.set(true);
-    }
+
+    Object.entries(filter)
+      .filter(([_, value]) => value != undefined || value != null)
+      .forEach(([key, value]) => {
+        params = params.set(key, value);
+
+        if (key == 'search') {
+          this.userDataQueried.set(true);
+        }
+      });
+
     return this.userDataSignal()
       ? of(this.userDataSignal())
       : this.http.get<IUserRes>(`${this.apiUrl}`, { params }).pipe(
@@ -79,7 +78,7 @@ export class AdminUserService {
   createRouteQuery(filter: IAdminUserFilter) {
     return {
       page: filter.page,
-      itemsPerPage: filter.itemsPerPage,
+      pageSize: filter.pageSize,
       search: filter.search,
     };
   }

@@ -8,7 +8,10 @@ import {
   signal,
   ViewChild,
 } from '@angular/core';
-import { AdminCategoriesService } from './services/admin-categories.service';
+import {
+  AdminCategoriesService,
+  IAdminCategoryFilter,
+} from './services/admin-categories.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { catchError, Observable, of, switchMap, tap } from 'rxjs';
 import { ToastService } from '../../../shared/services/toast.service';
@@ -16,7 +19,6 @@ import { DatePipe, NgClass } from '@angular/common';
 import { GenericTableComponent } from '../../../shared/components/generic-table/generic-table.component';
 import { SkeletonModule } from 'primeng/skeleton';
 import { PaginationInstance } from 'ngx-pagination';
-import { IAdminUserFilter } from '../admin-users/admin-user.service';
 import { ICategory, IProduct } from '../../products/model/product.interface';
 import {
   Categories,
@@ -25,7 +27,6 @@ import {
 import { Menu, MenuModule } from 'primeng/menu';
 import { PrimeTemplate } from 'primeng/api';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Tooltip } from 'primeng/tooltip';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { DeleteCategoryDialogComponent } from './dialogs/delete-category-dialog/delete-category-dialog.component';
 
@@ -57,7 +58,7 @@ export class AdminCategoriesComponent implements OnInit {
   totalItemsToShow = signal(10);
   categoriesDataQueried = this.categoryService.categoriesDataQueried;
   refreshTrigger = signal(0);
-  filter = signal<IAdminUserFilter>({
+  filter = signal<IAdminCategoryFilter>({
     page: 1,
     itemsPerPage: 10,
   });

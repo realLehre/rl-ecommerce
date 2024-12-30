@@ -10,7 +10,6 @@ import {
   Categories,
   IAdminCategoriesResponse,
 } from '../admin-categories.interface';
-import { IAdminUserFilter } from '../../admin-users/admin-user.service';
 
 export interface IAdminCategoryFilter {
   page: number;
@@ -68,7 +67,7 @@ export class AdminCategoriesService {
     return this.http.put(this.apiUrl + '/update/' + id, data);
   }
 
-  createRouteQuery(filter: IAdminUserFilter) {
+  createRouteQuery(filter: IAdminCategoryFilter) {
     return {
       page: filter.page,
       itemsPerPage: filter.itemsPerPage,
