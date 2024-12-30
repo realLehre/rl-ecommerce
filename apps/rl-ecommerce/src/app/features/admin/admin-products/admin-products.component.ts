@@ -153,6 +153,7 @@ export class AdminProductsComponent implements OnInit {
       page: this.filter.page,
       category: this.productService.createSlug(this.filter.category?.name!),
       minPrice: this.filter.minPrice,
+      pageSize: this.filter.pageSize,
       maxPrice: this.filter.maxPrice,
       minDate: this.filter.minDate,
       maxDate: this.filter.maxDate,
@@ -259,6 +260,10 @@ export class AdminProductsComponent implements OnInit {
         this.productService.PRODUCT_QUERY_STORED_KEY,
         JSON.stringify(this.filter),
       );
+      this.router.navigate([], {
+        queryParams: { pageSize: event },
+        relativeTo: this.route,
+      });
     }
     this.getProducts();
   }

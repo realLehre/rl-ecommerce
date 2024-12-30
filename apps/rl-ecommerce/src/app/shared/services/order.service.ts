@@ -11,7 +11,7 @@ export interface IUserOrderFilter {
   minPrice?: number;
   maxPrice?: number;
   deliveryStatus?: string;
-  itemsToShow: number;
+  pageSize: number;
   page?: number;
   orderId?: string;
   minDate?: any;
@@ -36,36 +36,25 @@ export class OrderService {
   getOrders(filters: IUserOrderFilter) {
     this.orderQueried.set(false);
     let params = new HttpParams();
-    if (filters?.minPrice) {
-      params = params.set('minPrice', filters.minPrice.toString());
-      this.orderQueried.set(true);
-    }
-    if (filters?.maxPrice) {
-      params = params.set('maxPrice', filters.maxPrice.toString());
-      this.orderQueried.set(true);
-    }
-    if (filters?.deliveryStatus) {
-      params = params.set('deliveryStatus', filters.deliveryStatus);
-      this.orderQueried.set(true);
-    }
-    if (filters?.page) {
-      params = params.set('page', filters.page);
-    }
-    if (filters?.itemsToShow) {
-      params = params.set('pageSize', filters.itemsToShow);
-    }
-    if (filters?.orderId) {
-      params = params.set('orderId', filters.orderId);
-      this.orderQueried.set(true);
-    }
-    if (filters?.minDate) {
-      params = params.set('minDate', filters.minDate);
-      this.orderQueried.set(true);
-    }
-    if (filters?.maxDate) {
-      params = params.set('maxDate', filters.maxDate);
-      this.orderQueried.set(true);
-    }
+
+    Object.entries(filters)
+      .filter(([_, value]) => value != undefined || value != null)
+      .forEach(([key, value]) => {
+        if (key == 'category') {
+          params = params.set('categoryId', value.id);
+        } else if (key == 'subCategory') {
+          {
+            params = params.set('subCategoryId', value.id);
+          }
+        } else {
+          params = params.set(key, value);
+        }
+
+        if (key != 'page' && key != 'pageSize') {
+          this.orderQueried.set(true);
+        }
+      });
+
     return this.orderSignal()
       ? of(this.orderSignal())
       : this.http
@@ -114,13 +103,13 @@ export class OrderService {
   createRouteQuery(filter: IUserOrderFilter) {
     return {
       page: filter.page,
+      pageSize: filter.pageSize,
       minPrice: filter.minPrice,
       maxPrice: filter.maxPrice,
       minDate: filter.minDate,
       maxDate: filter.maxDate,
       orderId: filter.orderId,
       deliveryStatus: filter.deliveryStatus,
-      itemsPerPage: filter.itemsToShow,
     };
   }
 

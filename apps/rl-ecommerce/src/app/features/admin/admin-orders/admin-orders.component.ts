@@ -65,9 +65,9 @@ export class AdminOrdersComponent implements OnInit {
     itemsPerPage: 10,
     currentPage: 1,
   };
-  totalItemsToShow = signal(10);
+  pageSize = signal(10);
   filter = signal<IOrderFilter>({
-    itemsToShow: this.totalItemsToShow(),
+    pageSize: this.pageSize(),
     page: 1,
   });
   refresh = signal(0);
@@ -95,13 +95,13 @@ export class AdminOrdersComponent implements OnInit {
       ),
     ),
     tap((res) => {
-      this.isLoading.set(false);
       this.config.itemsPerPage = Math.max(
         res?.totalItemsInPage!,
-        this.totalItemsToShow(),
+        this.pageSize(),
       );
       this.config.currentPage = res?.currentPage!;
       this.config.totalItems = res?.totalItems;
+      this.isLoading.set(false);
     }),
   );
   orderData: Signal<IOrderResponse> = toSignal(this.orders$);
@@ -125,7 +125,7 @@ export class AdminOrdersComponent implements OnInit {
     );
     this.holdFilter.set({
       ...savedFilters,
-      itemsToShow: savedFilters?.itemsToShow ?? 10,
+      pageSize: savedFilters?.pageSize ?? 10,
     });
 
     const currentFilter = this.holdFilter();
@@ -149,9 +149,9 @@ export class AdminOrdersComponent implements OnInit {
       )!;
     }
 
-    if (currentFilter.itemsToShow) {
-      this.totalItemsToShow.set(currentFilter.itemsToShow!);
-      this.config.itemsPerPage = currentFilter.itemsToShow;
+    if (currentFilter.pageSize) {
+      this.pageSize.set(currentFilter.pageSize!);
+      this.config.itemsPerPage = currentFilter.pageSize;
     }
 
     if (currentFilter.page) {
@@ -164,8 +164,7 @@ export class AdminOrdersComponent implements OnInit {
       ),
     );
 
-    this.filter.set({ ...this.filter, ...currentFilter });
-
+    this.filter.set({ ...this.filter(), ...currentFilter });
     this.router.navigate([], {
       queryParams: newRouteQueries,
       relativeTo: this.route,
@@ -188,10 +187,10 @@ export class AdminOrdersComponent implements OnInit {
 
   itemsToShowChange(total: number) {
     this.config.itemsPerPage = total;
-    this.totalItemsToShow.set(total);
+    this.pageSize.set(total);
     this.isLoading.set(true);
-    this.filter.set({ ...this.filter(), page: 1, itemsToShow: total });
-    this.updateQueries({ itemsToShow: total });
+    this.filter.set({ ...this.filter(), page: 1, pageSize: total });
+    this.updateQueries({ pageSize: total });
   }
 
   onRangeValueChanged(value: any[]) {
@@ -266,17 +265,17 @@ export class AdminOrdersComponent implements OnInit {
     this.filterNumber = 0;
     this.orderService.orderQueried.set(false);
     this.router.navigate([], {
-      queryParams: { page: 1, itemsPerPage: 10 },
+      queryParams: { page: 1, pageSize: 10 },
       queryParamsHandling: 'replace',
       relativeTo: this.route,
     });
     this.isLoading.set(true);
     this.orderService.orderSignal.set(null);
     this.filter.set({
-      itemsToShow: 10,
+      pageSize: 10,
       page: 1,
     });
-    this.totalItemsToShow.set(10);
+    this.pageSize.set(10);
     this.selectedStatus = null;
     this.holdFilter.set({ ...this.filter() });
     // this.searchInput.reset();

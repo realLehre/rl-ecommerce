@@ -42,6 +42,10 @@ export class AdminProductsService {
         } else {
           params = params.set(key, value);
         }
+
+        if (key != 'page' && key != 'pageSize') {
+          this.productQueried.set(true);
+        }
       });
 
     return this.http

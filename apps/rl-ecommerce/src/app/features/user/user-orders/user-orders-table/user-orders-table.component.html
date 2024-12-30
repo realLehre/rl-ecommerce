@@ -5,7 +5,7 @@
         [data]="orderData()"
         [config]="config"
         [tableData]="orderData().orders"
-        [itemsToShowInput]="filter().itemsToShow"
+        [itemsToShowInput]="filter().pageSize"
         [searchValueInput]="filter().orderId"
         (pageChanged)="pageChange($event)"
         (itemsToShowChanged)="itemsToShowChange($event)"
