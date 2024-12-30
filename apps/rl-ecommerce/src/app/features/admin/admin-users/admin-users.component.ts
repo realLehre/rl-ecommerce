@@ -48,11 +48,6 @@ export class AdminUsersComponent implements OnInit {
   private toast = inject(ToastService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
-  config: PaginationInstance = {
-    id: 'adminUsersPagination',
-    itemsPerPage: 10,
-    currentPage: 1,
-  };
   userDataQueried = this.userService.userDataQueried;
   refresh = signal(0);
   isLoading = signal(true);
@@ -82,13 +77,7 @@ export class AdminUsersComponent implements OnInit {
         }),
       ),
     ),
-    tap((res) => {
-      this.config.itemsPerPage = Math.max(
-        res?.totalItemsInPage!,
-        this.pageSize(),
-      );
-      this.config.currentPage = res?.currentPage!;
-      this.config.totalItems = res?.totalItems;
+    tap(() => {
       this.saveQuery();
       this.isLoading.set(false);
     }),

@@ -62,11 +62,6 @@ export class UserOrdersTableComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private toast = inject(ToastService);
   orderQueried = this.orderService.orderQueried;
-  config: PaginationInstance = {
-    id: 'userOrdersPagination',
-    itemsPerPage: 10,
-    currentPage: 1,
-  };
   pageSize = signal(10);
   filter = signal<IUserOrderFilter>({
     pageSize: this.pageSize(),
@@ -96,13 +91,7 @@ export class UserOrdersTableComponent implements OnInit {
         }),
       ),
     ),
-    tap((res) => {
-      this.config.itemsPerPage = Math.max(
-        res?.totalItemsInPage!,
-        this.pageSize(),
-      );
-      this.config.currentPage = res?.currentPage!;
-      this.config.totalItems = res?.totalItems;
+    tap(() => {
       this.isLoading.set(false);
     }),
   );
@@ -152,11 +141,9 @@ export class UserOrdersTableComponent implements OnInit {
 
     if (currentFilter.pageSize) {
       this.pageSize.set(currentFilter.pageSize!);
-      this.config.itemsPerPage = currentFilter.pageSize;
     }
 
     if (currentFilter.page) {
-      this.config.currentPage = currentFilter.page!;
     }
 
     const newRouteQueries = Object.fromEntries(
@@ -188,7 +175,6 @@ export class UserOrdersTableComponent implements OnInit {
   }
 
   pageSizeChange(total: number) {
-    this.config.itemsPerPage = total;
     this.pageSize.set(total);
     this.isLoading.set(true);
     this.filter.set({ ...this.filter(), page: 1, pageSize: total });

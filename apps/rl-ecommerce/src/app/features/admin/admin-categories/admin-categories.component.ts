@@ -18,8 +18,6 @@ import { ToastService } from '../../../shared/services/toast.service';
 import { DatePipe, NgClass } from '@angular/common';
 import { GenericTableComponent } from '../../../shared/components/generic-table/generic-table.component';
 import { SkeletonModule } from 'primeng/skeleton';
-import { PaginationInstance } from 'ngx-pagination';
-import { ICategory, IProduct } from '../../products/model/product.interface';
 import {
   Categories,
   IAdminCategoriesResponse,
@@ -50,11 +48,6 @@ export class AdminCategoriesComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private categoryService = inject(AdminCategoriesService);
   private toast = inject(ToastService);
-  config: PaginationInstance = {
-    id: 'adminUsersPagination',
-    itemsPerPage: 10,
-    currentPage: 1,
-  };
   pageSize = signal(10);
   categoriesDataQueried = this.categoryService.categoriesDataQueried;
   refreshTrigger = signal(0);
@@ -84,13 +77,7 @@ export class AdminCategoriesComponent implements OnInit {
         }),
       ),
     ),
-    tap((res) => {
-      this.config.itemsPerPage = Math.max(
-        res?.totalItemsInPage!,
-        this.pageSize(),
-      );
-      this.config.currentPage = res?.currentPage!;
-      this.config.totalItems = res?.totalItems;
+    tap(() => {
       this.saveQuery();
       this.isLoading.set(false);
     }),

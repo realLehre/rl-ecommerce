@@ -24,7 +24,6 @@ import { SliderModule } from 'primeng/slider';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SkeletonModule } from 'primeng/skeleton';
-import { PaginationInstance } from 'ngx-pagination';
 import { ProductOptionsService } from '../../product-options/services/product-options.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { PrimeNgDatepickerDirective } from '../../../shared/directives/prime-ng-datepicker.directive';
@@ -82,11 +81,6 @@ export class AdminProductsComponent implements OnInit {
   rangeDates: any[] = [];
   isFetching = signal(true);
   isError = signal(false);
-  config: PaginationInstance = {
-    id: 'adminProducts',
-    itemsPerPage: 10,
-    currentPage: 1,
-  };
   productQueried = this.productService.productQueried;
   private dialogService = inject(DialogService);
   private ref: DynamicDialogRef | undefined;
@@ -168,12 +162,6 @@ export class AdminProductsComponent implements OnInit {
       next: (res) => {
         this.isFetching.set(false);
         this.productData = res;
-        this.config.itemsPerPage = Math.max(
-          res?.totalItemsInPage!,
-          this.filter.pageSize,
-        );
-        this.config.currentPage = res?.currentPage!;
-        this.config.totalItems = res?.totalItems;
       },
       error: (err) => {
         this.isFetching.set(false);
@@ -250,7 +238,6 @@ export class AdminProductsComponent implements OnInit {
   }
 
   pageSizeChange(event: number) {
-    this.config.itemsPerPage = event;
     this.filter = { ...this.filter, pageSize: event };
     if (!this.injecting()) {
       sessionStorage.setItem(

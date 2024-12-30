@@ -46,7 +46,6 @@ export class GenericTableComponent implements OnInit {
   title = input<string>();
   data = input<any>();
   tableData = input.required<any[]>();
-  config = input<PaginationInstance>();
   itemsToShowInput = input<number>(10);
   searchValueInput = input<string>();
   showFilters = input<boolean>(true);
@@ -59,6 +58,15 @@ export class GenericTableComponent implements OnInit {
   pageChanged = output<number>();
   itemsToShowChanged = output<number>();
   searchValueEmit = output<string | null>();
+  config = computed(() => ({
+    id: 'adminPagination',
+    itemsPerPage: Math.max(
+      this.data()?.totalItemsInPage!,
+      this.totalItemsToShow(),
+    ),
+    currentPage: this.data()?.currentPage!,
+    totalItems: this.data()?.totalItems,
+  }));
 
   ngOnInit() {
     if (this.searchValueInput()) {

@@ -18,7 +18,6 @@ import { IOrder, IOrderResponse } from '../../../shared/models/order.interface';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { PaginationInstance } from 'ngx-pagination';
 import { CurrencyPipe, DatePipe, DecimalPipe, NgClass } from '@angular/common';
-import { ICategory, IProduct } from '../../products/model/product.interface';
 import { OrderStatusDirective } from '../../../shared/directives/order-status.directive';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
@@ -60,11 +59,6 @@ export class AdminOrdersComponent implements OnInit {
   private route = inject(ActivatedRoute);
   orderQueried = this.orderService.orderQueried;
   private toast = inject(ToastService);
-  config: PaginationInstance = {
-    id: 'adminOrdersPagination',
-    itemsPerPage: 10,
-    currentPage: 1,
-  };
   pageSize = signal(10);
   filter = signal<IOrderFilter>({
     pageSize: this.pageSize(),
@@ -94,13 +88,7 @@ export class AdminOrdersComponent implements OnInit {
         }),
       ),
     ),
-    tap((res) => {
-      this.config.itemsPerPage = Math.max(
-        res?.totalItemsInPage!,
-        this.pageSize(),
-      );
-      this.config.currentPage = res?.currentPage!;
-      this.config.totalItems = res?.totalItems;
+    tap(() => {
       this.isLoading.set(false);
     }),
   );
@@ -150,11 +138,6 @@ export class AdminOrdersComponent implements OnInit {
 
     if (currentFilter.pageSize) {
       this.pageSize.set(currentFilter.pageSize!);
-      this.config.itemsPerPage = currentFilter.pageSize;
-    }
-
-    if (currentFilter.page) {
-      this.config.currentPage = currentFilter.page!;
     }
 
     const newRouteQueries = Object.fromEntries(
@@ -185,7 +168,6 @@ export class AdminOrdersComponent implements OnInit {
   }
 
   pageSizeChange(total: number) {
-    this.config.itemsPerPage = total;
     this.pageSize.set(total);
     this.isLoading.set(true);
     this.filter.set({ ...this.filter(), page: 1, pageSize: total });

@@ -92,7 +92,7 @@
       </table>
     </div>
 
-    @if (config()) {
+    @if (data()) {
       <div
         class="flex flex-col min-[760px]:flex-row min-[760px]:items-center items-start justify-between gap-x-5 gap-y-4 mt-8 px-4 pb-6"
       >
@@ -121,7 +121,7 @@
         >
           <pagination-template
             #p="paginationApi"
-            [id]="config()?.id!"
+            [id]="config().id!"
             (pageChange)="pageChange($event)"
             class="h-fit min-h-auto"
           >
@@ -181,8 +181,8 @@
         >
           <button
             class="h-8 w-8 flex items-center border-0 outline-0 justify-center cursor-pointer disabled:opacity-30"
-            [disabled]="config()?.currentPage! === 1"
-            (click)="pageChange(config()?.currentPage! - 1)"
+            [disabled]="config().currentPage! === 1"
+            (click)="pageChange(config().currentPage! - 1)"
             [attr.aria-label]="'Previous page'"
           >
             <svg
@@ -201,7 +201,7 @@
           >
             <span
               class="h-8 flex items-center justify-center px-5 bg-primary rounded"
-              >{{ config()?.currentPage }}</span
+              >{{ config().currentPage }}</span
             >
             <div class="space-x-1">
               <span>of</span>
@@ -211,8 +211,8 @@
 
           <button
             class="h-8 w-8 flex items-center border-0 outline-0 justify-center cursor-pointer disabled:opacity-30"
-            [disabled]="config()?.currentPage! === data().totalPages"
-            (click)="pageChange(config()?.currentPage! + 1)"
+            [disabled]="config().currentPage! === data().totalPages"
+            (click)="pageChange(config().currentPage! + 1)"
             [attr.aria-label]="'Next page'"
           >
             <svg
