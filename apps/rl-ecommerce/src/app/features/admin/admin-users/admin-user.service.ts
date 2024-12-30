@@ -49,6 +49,9 @@ export class AdminUserService {
   userDataQueried = signal(false);
   userDataSignal = signal<IUserRes | undefined>(undefined);
   USER_QUERY_STORE_KEY = 'jdh&3dh028dn&39dkgs';
+  sortColumn: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
+  sortUsed: boolean = false;
 
   getUsers(filter: IAdminUserFilter) {
     let params = new HttpParams();
@@ -80,6 +83,43 @@ export class AdminUserService {
       page: filter.page,
       pageSize: filter.pageSize,
       search: filter.search,
+    };
+  }
+
+  sortTable(
+    column: any,
+    data: IUserRes,
+  ): {
+    sortedData: IUserRes;
+    sortDirection: 'asc' | 'desc';
+    sortUsed: boolean;
+  } {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+    this.sortUsed = true;
+
+    const sortedData = data.users.sort((a: any, b: any) => {
+      let valueA, valueB;
+
+      valueA = a[column];
+      valueB = b[column];
+
+      if (valueA && valueB) {
+        if (valueA < valueB) return this.sortDirection === 'asc' ? -1 : 1;
+        if (valueA > valueB) return this.sortDirection === 'asc' ? 1 : -1;
+      }
+
+      return 0;
+    });
+
+    return {
+      sortedData: { ...data, users: sortedData },
+      sortDirection: this.sortDirection,
+      sortUsed: this.sortUsed,
     };
   }
 

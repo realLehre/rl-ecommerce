@@ -96,7 +96,7 @@ export class AdminUsersComponent implements OnInit {
   );
   userData: Signal<IUserRes> = toSignal(this.users$);
   sortUsed: boolean = false;
-  sortColumn: keyof IProduct | keyof ICategory | '' = '';
+  sortColumn: string = '';
   sortDirection: 'asc' | 'desc' = 'asc';
 
   ngOnInit() {
@@ -163,31 +163,13 @@ export class AdminUsersComponent implements OnInit {
   }
 
   sortTable(column: any): void {
-    if (this.sortColumn === column) {
-      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-    } else {
-      this.sortColumn = column;
-      this.sortDirection = 'asc';
-    }
-    this.sortUsed = true;
-
-    this.userData().users.sort((a: any, b: any) => {
-      let valueA, valueB;
-      if (column == 'user') {
-        valueA = a[column].name;
-        valueB = b[column].name;
-      } else {
-        valueA = a[column];
-        valueB = b[column];
-      }
-
-      if (valueA && valueB) {
-        if (valueA < valueB) return this.sortDirection === 'asc' ? -1 : 1;
-        if (valueA > valueB) return this.sortDirection === 'asc' ? 1 : -1;
-      }
-
-      return 0;
-    });
+    const { sortedData, sortDirection, sortUsed } = this.userService.sortTable(
+      column,
+      this.userData(),
+    );
+    this.users$ = of(sortedData);
+    this.sortDirection = sortDirection;
+    this.sortUsed = sortUsed;
   }
 
   onViewUser(user: IUser) {
