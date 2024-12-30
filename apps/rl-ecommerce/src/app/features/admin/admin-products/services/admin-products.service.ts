@@ -24,6 +24,9 @@ export class AdminProductsService {
   productToDelete = signal<IProduct | undefined>(undefined);
   productQueried = signal(false);
   PRODUCT_QUERY_STORED_KEY = 'D82jxf927jks20jds';
+  sortColumn: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
+  sortUsed: boolean = false;
 
   constructor() {}
 
@@ -97,6 +100,53 @@ export class AdminProductsService {
       (control) =>
         control.value !== null && control.value !== '' && control.value !== 0,
     );
+  }
+
+  sortTable(
+    column: any,
+    data: IProductResponse,
+    injecting: boolean,
+  ): {
+    sortedData: IProductResponse;
+    sortDirection: 'asc' | 'desc';
+    sortUsed: boolean;
+  } {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+    this.sortUsed = true;
+
+    const sortedData = data.products.sort((a: any, b: any) => {
+      let valueA, valueB;
+      if (column == 'category') {
+        if (injecting) {
+          valueA = a[column].name;
+          valueB = b[column].name;
+        } else {
+          valueA = a['subCategory'].name;
+          valueB = b['subCategory'].name;
+        }
+      } else {
+        valueA = a[column];
+        valueB = b[column];
+      }
+
+      if (valueA && valueB) {
+        if (valueA < valueB) return this.sortDirection === 'asc' ? -1 : 1;
+        if (valueA > valueB) return this.sortDirection === 'asc' ? 1 : -1;
+      }
+
+      return 0;
+    });
+
+    return {
+      sortedData: { ...data, products: sortedData },
+      sortDirection: this.sortDirection,
+      sortUsed: this.sortUsed,
+    };
   }
 
   private handleError(error: any) {
