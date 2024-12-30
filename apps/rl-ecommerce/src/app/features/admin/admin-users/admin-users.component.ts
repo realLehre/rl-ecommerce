@@ -23,7 +23,6 @@ import { MenuModule } from 'primeng/menu';
 import { SkeletonModule } from 'primeng/skeleton';
 import { SliderModule } from 'primeng/slider';
 import { ToastService } from '../../../shared/services/toast.service';
-import { ICategory, IProduct } from '../../products/model/product.interface';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IUser } from '../../auth/services/auth.service';
 
@@ -96,7 +95,6 @@ export class AdminUsersComponent implements OnInit {
   );
   userData: Signal<IUserRes> = toSignal(this.users$);
   sortUsed: boolean = false;
-  sortColumn: string = '';
   sortDirection: 'asc' | 'desc' = 'asc';
 
   ngOnInit() {

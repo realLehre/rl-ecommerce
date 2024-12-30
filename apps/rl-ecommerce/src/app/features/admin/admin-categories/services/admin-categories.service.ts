@@ -1,9 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpParams,
-} from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment.development';
 import { catchError, Observable, of, tap, throwError } from 'rxjs';
 import {
@@ -27,6 +23,9 @@ export class AdminCategoriesService {
   CATEGORIES_QUERY_STORE_KEY = 'D93kdk*303dJp[xse32xhi3';
   categoriesSignal = signal<IAdminCategoriesResponse | undefined>(undefined);
   activeCategory = signal<Categories | undefined>(undefined);
+  sortColumn: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
+  sortUsed: boolean = false;
 
   constructor() {}
 
@@ -74,6 +73,47 @@ export class AdminCategoriesService {
       page: filter.page,
       pageSize: filter.pageSize,
       search: filter.search,
+    };
+  }
+
+  sortTable(
+    column: any,
+    data: IAdminCategoriesResponse,
+  ): {
+    sortedData: IAdminCategoriesResponse;
+    sortDirection: 'asc' | 'desc';
+    sortUsed: boolean;
+  } {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+    this.sortUsed = true;
+
+    const sortedData = data.categories.sort((a: any, b: any) => {
+      let valueA, valueB;
+      if (column == '_count') {
+        valueA = a[column].products.toString();
+        valueB = b[column].products.toString();
+      } else {
+        valueA = a[column];
+        valueB = b[column];
+      }
+
+      if (valueA && valueB) {
+        if (valueA < valueB) return this.sortDirection === 'asc' ? -1 : 1;
+        if (valueA > valueB) return this.sortDirection === 'asc' ? 1 : -1;
+      }
+
+      return 0;
+    });
+
+    return {
+      sortedData: { ...data, categories: sortedData },
+      sortDirection: this.sortDirection,
+      sortUsed: this.sortUsed,
     };
   }
 

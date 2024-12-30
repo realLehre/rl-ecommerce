@@ -30,6 +30,9 @@ export class OrderService {
   activeOrder = signal<IOrder | null>(null);
   orderQueried = signal(false);
   ORDER_QUERY_STORED_KEY = 'sjs29shdndj20snshgff7';
+  sortColumn: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
+  sortUsed: boolean = false;
 
   constructor() {}
 
@@ -129,6 +132,39 @@ export class OrderService {
 
   formatDateToLocale(date: Date) {
     return new Date(date);
+  }
+
+  sortTable(
+    column: any,
+    data: IOrderResponse,
+  ): {
+    sortedData: IOrderResponse;
+    sortDirection: 'asc' | 'desc';
+    sortUsed: boolean;
+  } {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+    this.sortUsed = true;
+
+    const sortedData = data.orders.sort((a: any, b: any) => {
+      const valueA = a[column];
+      const valueB = b[column];
+
+      if (valueA < valueB) return this.sortDirection === 'asc' ? -1 : 1;
+      if (valueA > valueB) return this.sortDirection === 'asc' ? 1 : -1;
+
+      return 0;
+    });
+
+    return {
+      sortedData: { ...data, orders: sortedData },
+      sortDirection: this.sortDirection,
+      sortUsed: this.sortUsed,
+    };
   }
 
   private handleError(error: any) {

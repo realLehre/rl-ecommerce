@@ -4,7 +4,6 @@ import {
   inject,
   input,
   OnInit,
-  output,
   signal,
   ViewChild,
 } from '@angular/core';
@@ -12,9 +11,9 @@ import { AdminProductsService } from './services/admin-products.service';
 import { GenericTableComponent } from '../../../shared/components/generic-table/generic-table.component';
 import { CurrencyPipe, DatePipe, DecimalPipe, NgClass } from '@angular/common';
 import {
+  ICategory,
   IProduct,
   IProductResponse,
-  ICategory,
   ISubCategory,
 } from '../../products/model/product.interface';
 import { Menu, MenuModule } from 'primeng/menu';
@@ -33,7 +32,6 @@ import { IAdminProductFilter } from './admin-product.interface';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ProductDeleteDialogComponent } from './product-delete-dialog/product-delete-dialog.component';
 import { ToastService } from '../../../shared/services/toast.service';
-import { of } from 'rxjs';
 
 @Component({
   selector: 'app-admin-products',
@@ -170,11 +168,10 @@ export class AdminProductsComponent implements OnInit {
       next: (res) => {
         this.isFetching.set(false);
         this.productData = res;
-        const totalItemsToShow = Math.max(
+        this.config.itemsPerPage = Math.max(
           res?.totalItemsInPage!,
           this.filter.pageSize,
         );
-        this.config.itemsPerPage = totalItemsToShow;
         this.config.currentPage = res?.currentPage!;
         this.config.totalItems = res?.totalItems;
       },

@@ -1,12 +1,7 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../../environments/environment.development';
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpParams,
-} from '@angular/common/http';
-import { catchError, Observable, of, tap, throwError } from 'rxjs';
-import { IOrderFilter } from '../admin-orders/services/admin-order.service';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { catchError, of, tap, throwError } from 'rxjs';
 import { IOrder } from '../../../shared/models/order.interface';
 
 export interface IAdminUserFilter {

@@ -103,7 +103,6 @@ export class AdminCategoriesComponent implements OnInit {
   }));
   selectedCategory = signal<Categories | undefined>(undefined);
   sortUsed: boolean = false;
-  sortColumn: keyof IProduct | keyof ICategory | '' = '';
   sortDirection: 'asc' | 'desc' = 'asc';
   @ViewChild('menu') actionMenu!: Menu;
   private ref: DynamicDialogRef | undefined;
@@ -146,32 +145,13 @@ export class AdminCategoriesComponent implements OnInit {
     this.saveQuery();
     this.updateViewState();
   }
+
   sortTable(column: any): void {
-    if (this.sortColumn === column) {
-      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-    } else {
-      this.sortColumn = column;
-      this.sortDirection = 'asc';
-    }
-    this.sortUsed = true;
-
-    this.categoriesData()?.categories.sort((a: any, b: any) => {
-      let valueA, valueB;
-      if (column == '_count') {
-        valueA = a[column].products.toString();
-        valueB = b[column].products.toString();
-      } else {
-        valueA = a[column];
-        valueB = b[column];
-      }
-
-      if (valueA && valueB) {
-        if (valueA < valueB) return this.sortDirection === 'asc' ? -1 : 1;
-        if (valueA > valueB) return this.sortDirection === 'asc' ? 1 : -1;
-      }
-
-      return 0;
-    });
+    const { sortedData, sortDirection, sortUsed } =
+      this.categoryService.sortTable(column, this.categoriesData());
+    this.categories$ = of(sortedData);
+    this.sortDirection = sortDirection;
+    this.sortUsed = sortUsed;
   }
 
   updateViewState() {

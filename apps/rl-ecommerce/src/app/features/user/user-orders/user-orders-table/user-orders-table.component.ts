@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { NgxPaginationModule, PaginationInstance } from 'ngx-pagination';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { OrderStatusDirective } from '../../../../shared/directives/order-status.directive';
 import {
   IOrder,
@@ -32,7 +32,6 @@ import { CalendarModule } from 'primeng/calendar';
 import { PrimeNgDatepickerDirective } from '../../../../shared/directives/prime-ng-datepicker.directive';
 import { IOrderFilter } from '../../../admin/admin-orders/services/admin-order.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { ICategory, IProduct } from '../../../products/model/product.interface';
 import { GenericTableComponent } from '../../../../shared/components/generic-table/generic-table.component';
 
 @Component({
@@ -109,7 +108,6 @@ export class UserOrdersTableComponent implements OnInit {
   );
   orderData: Signal<IOrderResponse> = toSignal(this.orders$);
   sortUsed: boolean = false;
-  sortColumn: keyof IProduct | keyof ICategory | '' = '';
   sortDirection: 'asc' | 'desc' = 'asc';
   deliveryStatus: { name: string; code: string }[] = [
     { name: 'Pending', code: 'PENDING' },
@@ -282,26 +280,15 @@ export class UserOrdersTableComponent implements OnInit {
     this.pageSize.set(10);
     this.selectedStatus = null;
     this.holdFilter.set({ ...this.filter() });
-    // this.searchInput.reset();
   }
 
   sortTable(column: any): void {
-    if (this.sortColumn === column) {
-      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-    } else {
-      this.sortColumn = column;
-      this.sortDirection = 'asc';
-    }
-    this.sortUsed = true;
-
-    this.orderData()?.orders?.sort((a: any, b: any) => {
-      const valueA = a[column];
-      const valueB = b[column];
-
-      if (valueA < valueB) return this.sortDirection === 'asc' ? -1 : 1;
-      if (valueA > valueB) return this.sortDirection === 'asc' ? 1 : -1;
-
-      return 0;
-    });
+    const { sortedData, sortDirection, sortUsed } = this.orderService.sortTable(
+      column,
+      this.orderData(),
+    );
+    this.orders$ = of(sortedData);
+    this.sortDirection = sortDirection;
+    this.sortUsed = sortUsed;
   }
 }

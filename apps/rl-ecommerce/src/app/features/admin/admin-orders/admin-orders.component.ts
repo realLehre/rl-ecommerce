@@ -106,7 +106,6 @@ export class AdminOrdersComponent implements OnInit {
   );
   orderData: Signal<IOrderResponse> = toSignal(this.orders$);
   sortUsed: boolean = false;
-  sortColumn: keyof IProduct | keyof ICategory | '' = '';
   sortDirection: 'asc' | 'desc' = 'asc';
   deliveryStatus: { name: string; code: string }[] = [
     { name: 'Pending', code: 'PENDING' },
@@ -288,30 +287,5 @@ export class AdminOrdersComponent implements OnInit {
     this.orders$ = of(sortedData);
     this.sortDirection = sortDirection;
     this.sortUsed = sortUsed;
-    // if (this.sortColumn === column) {
-    //   this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-    // } else {
-    //   this.sortColumn = column;
-    //   this.sortDirection = 'asc';
-    // }
-    // this.sortUsed = true;
-    //
-    // this.orderData().orders.sort((a: any, b: any) => {
-    //   let valueA, valueB;
-    //   if (column == 'user') {
-    //     valueA = a[column].name;
-    //     valueB = b[column].name;
-    //   } else {
-    //     valueA = a[column];
-    //     valueB = b[column];
-    //   }
-    //
-    //   if (valueA && valueB) {
-    //     if (valueA < valueB) return this.sortDirection === 'asc' ? -1 : 1;
-    //     if (valueA > valueB) return this.sortDirection === 'asc' ? 1 : -1;
-    //   }
-    //
-    //   return 0;
-    // });
   }
 }
