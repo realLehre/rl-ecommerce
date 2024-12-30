@@ -73,7 +73,7 @@
 
           <th
             (click)="sortTable('createdAt')"
-            class="px-2 mobile:px-4 py-3 text-left cursor-pointer text-[10px] mobile:text-xs text-type_gray font-medium"
+            class="px-2 mobile:px-4 py-3 text-left cursor-pointer text-[10px] mobile:text-xs text-type_gray font-medium hidden mobile:table-cell"
           >
             <div class="flex items-center space-x-1">
               <span>DATE REGISTERED</span>
@@ -115,7 +115,7 @@
             {{ user.phoneNumber ?? '-' }}
           </td>
 
-          <td class="px-2 mobile:px-4 py-5">
+          <td class="px-2 mobile:px-4 py-5 hidden mobile:table-cell">
             {{ user.createdAt | date }}
           </td>
 
