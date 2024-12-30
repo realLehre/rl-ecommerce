@@ -12,7 +12,7 @@ import { AdminProductFormComponent } from './admin-product-form/admin-product-fo
 import { AdminProductImagesComponent } from './admin-product-images/admin-product-images.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
-import { NgClass } from '@angular/common';
+import { Location, NgClass } from '@angular/common';
 import { CanComponentDeactivate } from '../../../../shared/guards/has-unsaved-changes.guard';
 import { AdminProductsService } from '../services/admin-products.service';
 import { ToastService } from '../../../../shared/services/toast.service';
@@ -39,6 +39,7 @@ export class AdminAddProductComponent
   private toastService = inject(ToastService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private location = inject(Location);
   productForm!: FormGroup;
   coverImage: string = '';
   imageUrls: string[] = [];
@@ -46,19 +47,27 @@ export class AdminAddProductComponent
   isEditing = signal(false);
   isSubmitting = signal(false);
   productAdded = signal(false);
+  editCanceled = signal(false);
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
       if (params['edit']) {
-        this.isEditing.set(true);
         const productData: IProduct = JSON.parse(
           localStorage.getItem('selectedProduct')!,
         );
         if (productData) {
+          this.isEditing.set(true);
           this.productData = productData;
           this.coverImage = productData.image;
           const images = [...productData.imageUrls];
-          this.imageUrls = images.slice(1);
+          this.imageUrls = images?.slice(1);
+          this.productAdded.set(true);
+        } else {
+          this.router.navigate([], {
+            queryParams: null,
+            queryParamsHandling: 'replace',
+            relativeTo: this.route,
+          });
         }
       }
     });
@@ -102,13 +111,13 @@ export class AdminAddProductComponent
         })
         .subscribe({
           next: () => {
-            this.isSubmitting.set(false);
             this.toastService.showToast({
               message: 'Product added successfully!',
               type: 'success',
             });
-            this.productAdded.set(true);
+            this.productAdded.set(false);
             this.router.navigate(['/', 'admin', 'products']);
+            this.isSubmitting.set(false);
           },
           error: (error) => {
             this.isSubmitting.set(false);
@@ -132,14 +141,15 @@ export class AdminAddProductComponent
         )
         .subscribe({
           next: (res) => {
-            this.isSubmitting.set(false);
             this.toastService.showToast({
               message: 'Product updated successfully!',
               type: 'success',
             });
+            this.productAdded.set(false);
             this.isEditing.set(false);
-            this.productAdded.set(true);
             this.router.navigate(['/', 'admin', 'products', res.id]);
+            localStorage.removeItem('selectedProduct');
+            this.isSubmitting.set(false);
           },
           error: (error) => {
             this.isSubmitting.set(false);
@@ -151,12 +161,27 @@ export class AdminAddProductComponent
         });
   }
 
+  onCancelEdit() {
+    this.editCanceled.set(true);
+    this.isEditing.set(false);
+    localStorage.removeItem('selectedProduct');
+    this.location.back();
+  }
+
   canDeactivate(): boolean {
+    console.log(
+      this.productService.getFormControlStatus(this.productForm),
+      this.coverImage,
+      this.imageUrls.length,
+      this.productAdded(),
+      this.editCanceled(),
+    );
     if (
       (this.productService.getFormControlStatus(this.productForm) ||
         this.coverImage !== '' ||
         this.imageUrls.length !== 0) &&
-      !this.productAdded()
+      this.productAdded() &&
+      !this.editCanceled()
     ) {
       return confirm(
         'You have unsaved changes, are you sure you want to quit?',
@@ -167,13 +192,15 @@ export class AdminAddProductComponent
   }
 
   @HostListener('window:beforeunload', ['$event'])
-  unloadNotification($event: any) {
+  beforeUnloadNotification($event: any) {
     if (!this.canDeactivate()) {
       $event.returnValue = true;
     }
   }
 
-  ngOnDestroy() {
-    // this.canDeactivate();
+  @HostListener('window:unload', ['$event']) unLoad($event: any) {
+    localStorage.removeItem('selectedProduct');
   }
+
+  ngOnDestroy() {}
 }
