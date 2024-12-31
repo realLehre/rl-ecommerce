@@ -31,6 +31,48 @@
     </div>
   </div>
 
+  <div class="space-y-1 my-6 rating-filter">
+    <div class="flex items-center justify-between">
+      <h4 class="text-type_title_gray font-semibold">Rating</h4>
+      <button
+        class="py-2 text-primary font-semibold text-sm"
+        type="button"
+        (click)="onResetRatingFilter()"
+      >
+        Reset
+      </button>
+    </div>
+    <div class="space-y-3">
+      @for (
+        rating of [5, 4, 3, 2, 1, 0];
+        track rating;
+        let mainIndex = $index
+      ) {
+        <div class="flex items-center">
+          <p-radioButton
+            [name]="mainIndex + '-stars'"
+            [value]="rating"
+            [ngModel]="ratingFilter"
+            (ngModelChange)="onSelectRatingFilter($event)"
+            [inputId]="mainIndex + '-stars'"
+          />
+          <label [for]="mainIndex + '-stars'" class="ml-2">
+            <div class="flex items-center space-x-[2px]">
+              @for (item of stars(); track item.star; let i = $index) {
+                <i
+                  class="fa fa-star h-full text-[18px] text-yellow-400"
+                  [ngClass]="{
+                    '!text-gray-300': item.star > rating,
+                  }"
+                ></i>
+              }
+            </div>
+          </label>
+        </div>
+      }
+    </div>
+  </div>
+
   <div>
     <div
       class="flex items-center justify-between cursor-pointer"
@@ -50,7 +92,7 @@
     >
       <li
         class="text-type_grey cursor-pointer flex items-center leading-tight group break-words"
-        (click)="onSetOrder('old')"
+        (click)="onSortOrder('old')"
       >
         <span
           class="text-primary text-[25px] -translate-y-[1px] mr-2 opacity-0 transition-all duration-300 tablet:group-hover:inline-block tablet:group-hover:opacity-100 tablet:group-hover:translate-x-0"
@@ -84,7 +126,7 @@
 
       <li
         class="text-type_grey cursor-pointer flex items-center leading-tight group break-words"
-        (click)="onSetOrder('new')"
+        (click)="onSortOrder('new')"
       >
         <span
           class="text-primary text-[25px] -translate-y-[1px] mr-2 opacity-0 transition-all duration-300 tablet:group-hover:inline-block tablet:group-hover:opacity-100 tablet:group-hover:translate-x-0"

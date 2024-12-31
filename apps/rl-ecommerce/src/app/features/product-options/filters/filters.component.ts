@@ -3,13 +3,13 @@ import {
   Component,
   computed,
   inject,
-  OnInit,
   signal,
 } from '@angular/core';
-import { DecimalPipe, NgClass } from '@angular/common';
+import { DecimalPipe, NgClass, NgStyle } from '@angular/common';
 import { SliderModule } from 'primeng/slider';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
+import { RadioButtonModule } from 'primeng/radiobutton';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductOptionsService } from '../services/product-options.service';
 import { ProductsService } from '../../products/services/products.service';
@@ -28,6 +28,8 @@ import { NumberOfFiltersPipe } from '../../../shared/pipes/number-of-filters.pip
     FormsModule,
     DecimalPipe,
     NumberOfFiltersPipe,
+    RadioButtonModule,
+    NgStyle,
   ],
   templateUrl: './filters.component.html',
   styleUrl: './filters.component.scss',
@@ -50,6 +52,10 @@ export class FiltersComponent {
   });
   value: number = 50;
   currentSort = this.optionsService.currentSort;
+  ratingFilter: any;
+  stars = signal(
+    Array.from({ length: 6 }, (_, i) => ({ star: i + 1, active: false })),
+  );
 
   onApplyPriceFilter() {
     this.productService.productSignal.set(null);
@@ -88,7 +94,7 @@ export class FiltersComponent {
     this.currentPriceFilter.set(null);
   }
 
-  onSetOrder(sort: string) {
+  onSortOrder(sort: string) {
     this.layoutService.mobileFilterOpened.set(false);
     if (
       this.currentSort() === sort ||
@@ -155,5 +161,12 @@ export class FiltersComponent {
     newArray[index] = !newArray[index];
 
     this.isShowing.set(newArray);
+  }
+
+  onResetRatingFilter() {}
+
+  onSelectRatingFilter(rating: number) {
+    this.ratingFilter = rating;
+    console.log(rating);
   }
 }

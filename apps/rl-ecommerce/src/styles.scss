@@ -120,6 +120,28 @@ body {
   background-color: theme('colors.primary');
 }
 
+.rating-filter {
+  & .p-radiobutton {
+    width: 18px !important;
+    height: 18px !important;
+    &.p-radiobutton-checked {
+      width: 18px !important;
+      height: 18px !important;
+      & .p-radiobutton-box {
+        background: theme('colors.primary') !important;
+        border: 1px solid theme('colors.primary') !important;
+        box-shadow: none !important;
+      }
+    }
+    & .p-radiobutton-box {
+      width: 18px !important;
+      height: 18px !important;
+      background: transparent;
+      border: 1px solid theme('colors.primary') !important;
+    }
+  }
+}
+
 .sales-dropdown .deliveryStatusDropdown {
   & .p-dropdown-label {
     padding-left: 6px !important;
