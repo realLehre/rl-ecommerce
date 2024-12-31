@@ -1,9 +1,11 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   input,
   OnInit,
+  Signal,
   signal,
   ViewChild,
 } from '@angular/core';
@@ -25,12 +27,15 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ProductOptionsService } from '../../product-options/services/product-options.service';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { PrimeNgDatepickerDirective } from '../../../shared/directives/prime-ng-datepicker.directive';
 import { IAdminProductFilter } from './admin-product.interface';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ProductDeleteDialogComponent } from './product-delete-dialog/product-delete-dialog.component';
 import { ToastService } from '../../../shared/services/toast.service';
+import { IOrderFilter } from '../admin-orders/services/admin-order.service';
+import { catchError, map, Observable, of, switchMap, tap } from 'rxjs';
+import { IOrderResponse } from '../../../shared/models/order.interface';
 
 @Component({
   selector: 'app-admin-products',
@@ -62,7 +67,6 @@ export class AdminProductsComponent implements OnInit {
   private route = inject(ActivatedRoute);
   categoryData = input<ICategory>();
   injecting = input<boolean>(false);
-  productData!: IProductResponse;
   selectedProduct!: IProduct;
   sortUsed: boolean = false;
   sortDirection: 'asc' | 'desc' = 'asc';
@@ -74,61 +78,90 @@ export class AdminProductsComponent implements OnInit {
   selectedCategory: ICategory | undefined;
   subCategories: ISubCategory[] = [];
   selectedSubCategory: ICategory | undefined;
-  filter: IAdminProductFilter = {
-    pageSize: 10,
-    page: 1,
-  };
   rangeDates: any[] = [];
-  isFetching = signal(true);
   isError = signal(false);
+  isLoading = signal(true);
   productQueried = this.productService.productQueried;
   private dialogService = inject(DialogService);
   private ref: DynamicDialogRef | undefined;
+  pageSize = signal(10);
+  filter = signal<IAdminProductFilter>({
+    pageSize: this.pageSize(),
+    page: 1,
+  });
+  refresh = signal(0);
+  refreshTrigger = computed(() => ({
+    filter: this.filter(),
+    refresh: this.refresh(),
+  }));
+  holdFilter = signal<IOrderFilter>(this.filter());
+  products$: Observable<IProductResponse | any> = toObservable(
+    this.refreshTrigger,
+  ).pipe(
+    switchMap(({ filter }) =>
+      this.productService.getProducts(filter).pipe(
+        catchError((error) => {
+          this.isLoading.set(false);
+          this.toast.showToast({
+            type: 'error',
+            message: error.message || 'Failed to load products',
+          });
+          this.isError.set(true);
+          return of(null);
+        }),
+      ),
+    ),
+    tap(() => {
+      this.isLoading.set(false);
+    }),
+  );
+  productsData: Signal<IProductResponse> = toSignal(this.products$);
 
   ngOnInit() {
     if (this.categoryData()) {
-      this.filter = {
-        ...this.filter,
+      this.filter.set({
+        ...this.filter(),
         category: this.categoryData(),
-      };
+      });
 
       this.subCategories = [...this.categoryData()?.subCategories!];
     }
     const savedFilters = JSON.parse(
       sessionStorage.getItem(this.productService.PRODUCT_QUERY_STORED_KEY)!,
     );
-    if (savedFilters) {
-      this.filter = {
-        ...savedFilters,
-        pageSize: savedFilters?.itemsToShow ?? 10,
-      };
-    }
-    this.filterNumber = this.findFilterNumber();
-    if (this.filter.minPrice && this.filter.maxPrice) {
-      this.rangeValues = [this.filter.minPrice, this.filter.maxPrice];
+
+    this.filter.set({ ...this.filter(), ...savedFilters });
+    this.holdFilter.set({
+      ...this.holdFilter(),
+      ...this.filter(),
+    });
+
+    this.filterNumber = this.productService.findFilterNumber(savedFilters);
+    if (savedFilters.minPrice && savedFilters.maxPrice) {
+      this.rangeValues = [savedFilters?.minPrice!, savedFilters?.maxPrice!];
     }
 
-    if (this.filter.category) {
+    if (savedFilters.category) {
       this.selectedCategory = savedFilters?.category;
       this.subCategories = [...savedFilters?.category?.subCategories];
     }
 
-    if (this.filter.subCategory) {
+    if (savedFilters.subCategory) {
       this.selectedSubCategory = savedFilters?.subCategory;
     }
-    if (this.filter.minDate && this.filter.maxDate) {
+    if (savedFilters.minDate && savedFilters.maxDate) {
       const minDate = this.productService.formatDateToLocale(
-        this.filter.minDate,
+        savedFilters.minDate,
       );
       const maxDate = this.productService.formatDateToLocale(
-        this.filter.maxDate,
+        savedFilters.maxDate,
       );
       this.rangeDates = [minDate, maxDate];
     }
     const newRouteQueries = Object.fromEntries(
-      Object.entries(this.createRouteQuery()).filter(
-        ([_, value]) => value !== undefined,
-      ),
+      Object.entries(
+        this.productService.createRouteQuery(this.filter()),
+      ).filter(([_, value]) => value !== undefined),
     );
 
     if (!this.injecting()) {
@@ -137,45 +170,10 @@ export class AdminProductsComponent implements OnInit {
         relativeTo: this.route,
       });
     }
-    this.getProducts();
-  }
-
-  createRouteQuery() {
-    return {
-      page: this.filter.page,
-      category: this.productService.createSlug(this.filter.category?.name!),
-      minPrice: this.filter.minPrice,
-      pageSize: this.filter.pageSize,
-      maxPrice: this.filter.maxPrice,
-      minDate: this.filter.minDate,
-      maxDate: this.filter.maxDate,
-      subCategory: this.productService.createSlug(
-        this.filter.subCategory?.name!,
-      ),
-      name: this.filter.name,
-    };
-  }
-
-  getProducts() {
-    this.isFetching.set(true);
-    this.productService.getProducts(this.filter).subscribe({
-      next: (res) => {
-        this.isFetching.set(false);
-        this.productData = res;
-      },
-      error: (err) => {
-        this.isFetching.set(false);
-        this.isError.set(true);
-        this.toast.showToast({
-          type: 'error',
-          message: err.error.message || 'Failed to load order',
-        });
-      },
-    });
   }
 
   onRetryLoad() {
-    this.getProducts();
+    this.refresh.update((count) => count + 1);
   }
 
   onViewDetails() {
@@ -206,105 +204,83 @@ export class AdminProductsComponent implements OnInit {
     });
   }
 
-  onApplyFilter() {
-    this.filterNumber = this.findFilterNumber();
-    if (!this.injecting()) {
-      sessionStorage.setItem(
-        this.productService.PRODUCT_QUERY_STORED_KEY,
-        JSON.stringify(this.filter),
-      );
-      this.router.navigate([], {
-        queryParams: this.createRouteQuery(),
-        relativeTo: this.route,
-      });
-    }
-    this.getProducts();
-    this.menu.hide();
+  pageChange(page: number) {
+    this.isLoading.set(true);
+    this.filter.set({ ...this.filter(), page });
+    this.updateQueries({ page: page });
+    window.scrollTo({
+      top: 70,
+      behavior: 'smooth',
+    });
   }
 
-  pageChange(event: any) {
-    this.filter = { ...this.filter, page: event };
-    if (!this.injecting()) {
-      sessionStorage.setItem(
-        this.productService.PRODUCT_QUERY_STORED_KEY,
-        JSON.stringify(this.filter),
-      );
-      this.router.navigate([], {
-        queryParams: { page: event },
-        relativeTo: this.route,
-      });
-    }
-    this.getProducts();
+  pageSizeChange(total: number) {
+    this.pageSize.set(total);
+    this.isLoading.set(true);
+    this.filter.set({ ...this.filter(), page: 1, pageSize: total });
+    this.updateQueries({ pageSize: total });
   }
 
-  pageSizeChange(event: number) {
-    this.filter = { ...this.filter, pageSize: event };
-    if (!this.injecting()) {
-      sessionStorage.setItem(
-        this.productService.PRODUCT_QUERY_STORED_KEY,
-        JSON.stringify(this.filter),
-      );
-      this.router.navigate([], {
-        queryParams: { pageSize: event },
-        relativeTo: this.route,
-      });
-    }
-    this.getProducts();
+  onRangeValueChanged(value: any[]) {
+    this.updateQueries({ minPrice: value[0], maxPrice: value[1] });
   }
 
-  onOpenProductActionMenu(event: Event, product: IProduct) {
-    this.productActionMenu.show(event);
-    this.selectedProduct = product;
-    this.productService.activeProduct.set(product);
+  searchChanged(value: any) {
+    this.isLoading.set(true);
+    this.filter.set({ ...this.filter(), name: value });
+    this.updateQueries({ name: value });
   }
 
   onDateChanged() {
     if (this.rangeDates[0] && this.rangeDates[1]) {
       let dates = [...this.rangeDates];
       dates = dates.map((date) => this.productService.formatDate(date));
-      this.filter = {
-        ...this.filter,
-        page: 1,
-        minDate: dates[0],
-        maxDate: dates[1],
-      };
+      this.updateQueries({ page: 1, minDate: dates[0], maxDate: dates[1] });
     }
   }
 
   onChangeCategory(cat: ICategory | any) {
     this.selectedCategory = cat;
-    this.filter = { ...this.filter, page: 1, category: cat };
     this.subCategories = cat?.subCategories!;
+    this.updateQueries({ page: 1, category: cat });
   }
 
   onChangeSubCategory(subCat: ISubCategory) {
     if (!this.injecting()) {
       this.selectedSubCategory = subCat;
     }
-    this.filter = { ...this.filter, page: 1, subCategory: subCat };
+    this.updateQueries({ page: 1, subCategory: subCat });
   }
 
-  onRangeValueChanged(value: any[]) {
-    this.filter = {
-      ...this.filter,
-      minPrice: value[0],
-      maxPrice: value[1],
-    };
+  onApplyFilter() {
+    this.isLoading.set(true);
+    this.filter.set({ ...this.holdFilter() });
+    this.filterNumber = this.productService.findFilterNumber(
+      this.filter(),
+      this.injecting(),
+    );
+    sessionStorage.setItem(
+      this.productService.PRODUCT_QUERY_STORED_KEY,
+      JSON.stringify(this.filter()),
+    );
+    this.router.navigate([], {
+      queryParams: this.productService.createRouteQuery(this.filter()),
+      relativeTo: this.route,
+    });
+    this.menu.hide();
   }
 
-  searchChanged(name: string | null) {
-    this.filter = { ...this.filter, name: name!, page: 1 };
-    if (!this.injecting()) {
-      sessionStorage.setItem(
-        this.productService.PRODUCT_QUERY_STORED_KEY,
-        JSON.stringify(this.filter),
-      );
-      this.router.navigate([], {
-        queryParams: { name },
-        relativeTo: this.route,
-      });
-    }
-    this.getProducts();
+  updateQueries(updates: Partial<IAdminProductFilter>) {
+    this.productService.productSignal.set(null);
+    this.holdFilter.set({ ...this.holdFilter(), ...updates });
+    sessionStorage.setItem(
+      this.productService.PRODUCT_QUERY_STORED_KEY,
+      JSON.stringify(this.holdFilter()),
+    );
+    this.router.navigate([], {
+      queryParams: this.productService.createRouteQuery(this.filter()),
+      relativeTo: this.route,
+    });
   }
 
   onClearFilter() {
@@ -323,44 +299,42 @@ export class AdminProductsComponent implements OnInit {
   }
 
   onReturn() {
-    this.filter = {
-      pageSize: 10,
-      page: 1,
-      category: this.categoryData(),
-    };
     this.rangeDates = [];
     this.rangeValues = [2000, 10000];
     sessionStorage.removeItem(this.productService.PRODUCT_QUERY_STORED_KEY);
     this.filterNumber = 0;
     this.productService.productQueried.set(false);
     this.router.navigate([], {
-      queryParams: null,
+      queryParams: { page: 1, pageSize: 10 },
       queryParamsHandling: 'replace',
       relativeTo: this.route,
     });
-    // this.searchInput.reset();
-    this.getProducts();
+    this.productService.productSignal.set(null);
+    this.filter.set({
+      pageSize: 10,
+      page: 1,
+    });
+    this.pageSize.set(10);
+    this.selectedCategory = undefined;
+    this.selectedSubCategory = undefined;
+    this.holdFilter.set({ ...this.filter() });
+    this.isLoading.set(true);
   }
 
-  findFilterNumber() {
-    let number = 0;
-    for (const key in this.filter) {
-      if (
-        (key == 'category' && !this.injecting()) ||
-        key == 'subCategory' ||
-        key == 'minPrice' ||
-        key == 'minDate'
-      ) {
-        number += 1;
-      }
-    }
-    return number;
+  onOpenProductActionMenu(event: Event, product: IProduct) {
+    this.productActionMenu.show(event);
+    this.selectedProduct = product;
+    this.productService.activeProduct.set(product);
   }
 
   sortTable(column: any): void {
     const { sortedData, sortDirection, sortUsed } =
-      this.productService.sortTable(column, this.productData, this.injecting());
-    this.productData = sortedData;
+      this.productService.sortTable(
+        column,
+        this.productsData()!,
+        this.injecting(),
+      );
+    this.products$ = of(sortedData);
     this.sortDirection = sortDirection;
     this.sortUsed = sortUsed;
   }

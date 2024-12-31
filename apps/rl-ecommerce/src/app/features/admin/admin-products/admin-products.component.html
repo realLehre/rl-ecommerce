@@ -1,11 +1,11 @@
-@if (!isFetching() && !isError()) {
-  @if (productData.products.length) {
+@if (!isLoading() && !isError()) {
+  @if (productsData().products.length) {
     <div class="w-full">
       <app-generic-table
-        [data]="productData"
-        [tableData]="productData.products"
-        [itemsToShowInput]="filter.pageSize"
-        [searchValueInput]="filter.name"
+        [data]="productsData()"
+        [tableData]="productsData().products"
+        [itemsToShowInput]="filter().pageSize"
+        [searchValueInput]="filter().name"
         [title]="'Product List'"
         [parentInjected]="injecting()"
         (pageChanged)="pageChange($event)"

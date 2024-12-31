@@ -70,7 +70,7 @@ export class AdminUsersComponent implements OnInit {
           this.isLoading.set(false);
           this.toast.showToast({
             type: 'error',
-            message: error.message || 'Failed to load order',
+            message: error.message || 'Failed to load users',
           });
           this.isError.set(true);
           return of(null);

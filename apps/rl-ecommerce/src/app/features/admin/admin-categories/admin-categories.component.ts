@@ -70,7 +70,7 @@ export class AdminCategoriesComponent implements OnInit {
           this.isLoading.set(false);
           this.toast.showToast({
             type: 'error',
-            message: error.message || 'Failed to load order',
+            message: error.message || 'Failed to load categories',
           });
           this.isError.set(true);
           return of(null);
@@ -131,14 +131,6 @@ export class AdminCategoriesComponent implements OnInit {
     this.filter.set({ ...this.filter(), search: $event! });
     this.saveQuery();
     this.updateViewState();
-  }
-
-  sortTable(column: any): void {
-    const { sortedData, sortDirection, sortUsed } =
-      this.categoryService.sortTable(column, this.categoriesData());
-    this.categories$ = of(sortedData);
-    this.sortDirection = sortDirection;
-    this.sortUsed = sortUsed;
   }
 
   updateViewState() {
@@ -202,5 +194,13 @@ export class AdminCategoriesComponent implements OnInit {
       queryParams: this.categoryService.createRouteQuery(this.filter()),
       queryParamsHandling: 'merge',
     });
+  }
+
+  sortTable(column: any): void {
+    const { sortedData, sortDirection, sortUsed } =
+      this.categoryService.sortTable(column, this.categoriesData());
+    this.categories$ = of(sortedData);
+    this.sortDirection = sortDirection;
+    this.sortUsed = sortUsed;
   }
 }

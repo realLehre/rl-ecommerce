@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { catchError, of, retry, tap, throwError } from 'rxjs';
+import { catchError, Observable, of, retry, tap, throwError } from 'rxjs';
 import {
   ICategory,
   IProduct,
@@ -23,6 +23,7 @@ export class AdminProductsService {
   activeProduct = signal<IProduct | null>(null);
   productToDelete = signal<IProduct | undefined>(undefined);
   productQueried = signal(false);
+  productSignal = signal<IProductResponse | null>(null);
   PRODUCT_QUERY_STORED_KEY = 'D82jxf927jks20jds';
   sortColumn: string = '';
   sortDirection: 'asc' | 'desc' = 'asc';
@@ -50,10 +51,13 @@ export class AdminProductsService {
           this.productQueried.set(true);
         }
       });
-
-    return this.http
-      .get<IProductResponse>(`${this.apiUrl}/all`, { params })
-      .pipe(retry(3), catchError(this.handleError));
+    return this.productSignal()
+      ? of(this.productSignal())
+      : this.http.get<IProductResponse>(`${this.apiUrl}/all`, { params }).pipe(
+          retry(3),
+          catchError(this.handleError),
+          tap((res) => this.productSignal.set(res)),
+        );
   }
 
   addProduct(formData: IProductFormData) {
@@ -93,6 +97,20 @@ export class AdminProductsService {
 
   formatDateToLocale(date: Date) {
     return new Date(date);
+  }
+
+  createRouteQuery(filter: IAdminProductFilter) {
+    return {
+      page: filter.page,
+      minPrice: filter.minPrice,
+      maxPrice: filter.maxPrice,
+      minDate: filter.minDate,
+      maxDate: filter.maxDate,
+      search: filter.productId || filter.name,
+      pageSize: filter.pageSize,
+      category: this.createSlug(filter.category?.name!),
+      subCategory: this.createSlug(filter.subCategory?.name!),
+    };
   }
 
   getFormControlStatus(form: FormGroup): boolean {
@@ -147,6 +165,21 @@ export class AdminProductsService {
       sortDirection: this.sortDirection,
       sortUsed: this.sortUsed,
     };
+  }
+
+  findFilterNumber(filter: IAdminProductFilter, injecting?: boolean) {
+    let number = 0;
+    for (const key in filter) {
+      if (
+        (key == 'category' && !injecting) ||
+        key == 'subCategory' ||
+        key == 'minPrice' ||
+        key == 'minDate'
+      ) {
+        number += 1;
+      }
+    }
+    return number;
   }
 
   private handleError(error: any) {
