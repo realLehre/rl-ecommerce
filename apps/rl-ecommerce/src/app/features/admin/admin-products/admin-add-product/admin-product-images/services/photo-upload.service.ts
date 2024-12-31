@@ -13,11 +13,7 @@ export class PhotoUploadService {
   private supabase = this.authService.supabase;
   BUCKET_NAME = 'just-product-images';
 
-  constructor() {
-    // this.removeImage(
-    //   'https://tentdyesixetvyacewwr.supabase.co/storage/v1/object/sign/just-product-images/b0338a0f-40d0-4111-b67a-9c7fe6ab809c-FCjk6_XXMA0i6fi.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJqdXN0LXByb2R1Y3QtaW1hZ2VzL2IwMzM4YTBmLTQwZDAtNDExMS1iNjdhLTljN2ZlNmFiODA5Yy1GQ2prNl9YWE1BMGk2ZmkuanBnIiwiaWF0IjoxNzMzOTc5MzM5LCJleHAiOjIwNDk1NTUzMzl9.fKMka4EX8WWf2RfYf6_meIFrzGHgfQCdPqKCEYaQDD0',
-    // ).subscribe((res) => {});
-  }
+  constructor() {}
 
   upLoadImage(
     filePath: string,
@@ -47,7 +43,6 @@ export class PhotoUploadService {
 
   removeImage(imageUrl: string): Observable<any> {
     const imagePath = this.getImagePath(imageUrl);
-    console.log(imagePath);
     return defer(() =>
       from(this.supabase.storage.from(this.BUCKET_NAME).remove([imagePath])),
     );

@@ -30,11 +30,11 @@ export class ProductDeleteDialogComponent {
       .deleteProduct(this.productToDelete()?.id as string)
       .subscribe({
         next: (res) => {
-          this.isLoading.set(false);
           this.toast.showToast({
             type: 'success',
             message: 'Product deleted successfully',
           });
+          this.isLoading.set(false);
           this.ref.close('deleted');
         },
         error: (err) => {

@@ -173,8 +173,7 @@ export class AdminAddProductComponent
     if (
       this.productService.getFormControlStatus(this.productForm) ||
       this.coverImage !== '' ||
-      this.imageUrls.length !== 0 ||
-      !this.editCanceled()
+      (this.imageUrls.length !== 0 && !this.editCanceled())
     ) {
       return confirm(
         'You have unsaved changes, are you sure you want to quit?',
