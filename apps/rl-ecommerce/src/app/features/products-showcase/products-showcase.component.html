@@ -23,7 +23,7 @@
           @if (currentPriceFilter() || currentSort()) {
             <span
               class="absolute -top-2 -right-2 h-4 w-4 flex items-center justify-center bg-primary text-white p-2 text-[10px] font-medium rounded-full"
-              >{{ 0 | numberOfFilters }}</span
+              >{{ numberOfFilters() }}</span
             >
           }
         </button>

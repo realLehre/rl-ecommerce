@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment.development';
 import {
@@ -20,7 +20,21 @@ export class ProductOptionsService {
   currentPage = signal<number>(1);
   currentPriceFilter = signal<{ min: any; max: any } | null>(null);
   currentSort = signal<string | null>(null);
+  currentRating = signal<number | null>(null);
   url = environment.apiUrl + 'categories';
+  numberOfFilters = computed(() => {
+    const priceFilter = this.currentPriceFilter();
+    const sortFilter = this.currentSort();
+    const ratingFilter = this.currentRating();
+    return (
+      Object.keys({
+        ...(priceFilter && { priceFilter }),
+        ...(sortFilter && { sortFilter }),
+        ...(ratingFilter && { ratingFilter }),
+      }).length ?? 0
+    );
+  });
+
   constructor() {
     const savedQuery: ISavedProductOptionQueries = JSON.parse(
       sessionStorage.getItem('hshs82haa02sshs92s')!,
@@ -44,6 +58,10 @@ export class ProductOptionsService {
     if (savedQuery?.sort) {
       this.currentSort.set(savedQuery?.sort);
     }
+
+    if (savedQuery?.rating) {
+      this.currentRating.set(savedQuery?.rating);
+    }
   }
 
   getCategories() {
@@ -60,18 +78,5 @@ export class ProductOptionsService {
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-') // Replace spaces and special characters with hyphen
       .replace(/^-+|-+$/g, ''); // Trim leading or trailing hyphens
-  }
-
-  checkNumberOfFiltersApplied(): number {
-    const priceFilter = this.currentPriceFilter();
-    const sortFilter = this.currentSort();
-
-    if (priceFilter && sortFilter) {
-      return 2;
-    }
-    if (priceFilter || sortFilter) {
-      return 1;
-    }
-    return 0;
   }
 }

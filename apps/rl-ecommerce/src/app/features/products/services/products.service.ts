@@ -12,6 +12,7 @@ interface IProductFilter {
   maxPrice?: number;
   sortBy?: string;
   page?: number;
+  rating?: number;
 }
 
 @Injectable({

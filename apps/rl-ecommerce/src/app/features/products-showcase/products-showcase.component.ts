@@ -8,18 +8,16 @@ import {
 import { ProductCardComponent } from './product-card/product-card.component';
 import { MobileFiltersComponent } from '../product-options/mobile-filters/mobile-filters.component';
 import { LayoutService } from '../../shared/services/layout.service';
-import { AsyncPipe, CurrencyPipe, NgClass } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { ProductsService } from '../products/services/products.service';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { filter, Observable, of } from 'rxjs';
-import * as events from 'events';
+import { filter, Observable } from 'rxjs';
 import { ProductOptionsService } from '../product-options/services/product-options.service';
 import { ISavedProductOptionQueries } from '../product-options/models/product-options.interface';
 import { IProductResponse } from '../products/model/product.interface';
 import { NgxPaginationModule, PaginationInstance } from 'ngx-pagination';
 import { ItemsShowingPipe } from '../../shared/pipes/items-showing.pipe';
-import { NumberOfFiltersPipe } from '../../shared/pipes/number-of-filters.pipe';
 
 @Component({
   selector: 'app-products-showcase',
@@ -32,7 +30,6 @@ import { NumberOfFiltersPipe } from '../../shared/pipes/number-of-filters.pipe';
     SkeletonModule,
     NgxPaginationModule,
     ItemsShowingPipe,
-    NumberOfFiltersPipe,
   ],
   templateUrl: './products-showcase.component.html',
   styleUrl: './products-showcase.component.scss',
@@ -50,6 +47,8 @@ export class ProductsShowcaseComponent implements OnInit {
   config = this.productService.paginationConfig;
   currentPriceFilter = this.optionsService.currentPriceFilter;
   currentSort = this.optionsService.currentSort;
+  numberOfFilters = this.optionsService.numberOfFilters;
+
   ngOnInit() {
     const savedQuery: ISavedProductOptionQueries = JSON.parse(
       sessionStorage.getItem('hshs82haa02sshs92s')!,
@@ -62,6 +61,7 @@ export class ProductsShowcaseComponent implements OnInit {
       minPrice: savedQuery?.price?.min,
       maxPrice: savedQuery?.price?.max,
       sortBy: savedQuery?.sort,
+      rating: savedQuery?.rating,
     };
 
     const routeQuery = {
@@ -73,6 +73,7 @@ export class ProductsShowcaseComponent implements OnInit {
       minPrice: savedQuery?.price?.min,
       maxPrice: savedQuery?.price?.max,
       sortBy: savedQuery?.sort,
+      rating: savedQuery?.rating,
     };
 
     const filteredQuery = Object.fromEntries(
@@ -83,6 +84,7 @@ export class ProductsShowcaseComponent implements OnInit {
       relativeTo: this.route,
       queryParams: {
         ...filteredQuery,
+        rating: routeQuery.rating ? routeQuery.rating + '-' + 5 : null,
       },
       queryParamsHandling: 'merge',
       fragment: 'products',
@@ -97,6 +99,7 @@ export class ProductsShowcaseComponent implements OnInit {
         const priceFilter = this.optionsService.currentPriceFilter();
         const page = this.optionsService.currentPage();
         const sort = this.optionsService.currentSort();
+        const rating = this.optionsService.currentRating();
         this.products$ = this.productService.getProducts({
           categoryId: category?.id,
           subCategoryId: subCategory?.id,
@@ -104,6 +107,7 @@ export class ProductsShowcaseComponent implements OnInit {
           minPrice: priceFilter?.min,
           maxPrice: priceFilter?.max,
           sortBy: sort!,
+          rating: rating!,
         });
         this.cdr.detectChanges();
       });

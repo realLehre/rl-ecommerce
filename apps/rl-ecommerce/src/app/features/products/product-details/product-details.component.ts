@@ -201,6 +201,7 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   onAdjustQuantity(qty: number, product: IProduct) {
+    this.quantity = qty;
     if (this.productInCart()) {
       this.isUpdatingCart.set(true);
 
@@ -237,6 +238,7 @@ export class ProductDetailsComponent implements OnInit {
               );
             }
 
+            console.log(this.quantity);
             this.toast.showToast({
               type: 'success',
               message: product.name + ' ' + 'quantity adjusted!',

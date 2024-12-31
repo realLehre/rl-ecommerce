@@ -15,7 +15,6 @@ import { ProductOptionsService } from '../services/product-options.service';
 import { ProductsService } from '../../products/services/products.service';
 import { ISavedProductOptionQueries } from '../models/product-options.interface';
 import { LayoutService } from '../../../shared/services/layout.service';
-import { NumberOfFiltersPipe } from '../../../shared/pipes/number-of-filters.pipe';
 
 @Component({
   selector: 'app-filters',
@@ -27,9 +26,7 @@ import { NumberOfFiltersPipe } from '../../../shared/pipes/number-of-filters.pip
     CheckboxModule,
     FormsModule,
     DecimalPipe,
-    NumberOfFiltersPipe,
     RadioButtonModule,
-    NgStyle,
   ],
   templateUrl: './filters.component.html',
   styleUrl: './filters.component.scss',
@@ -53,9 +50,11 @@ export class FiltersComponent {
   value: number = 50;
   currentSort = this.optionsService.currentSort;
   ratingFilter: any;
+  currentRatingFilter = this.optionsService.currentRating;
   stars = signal(
-    Array.from({ length: 6 }, (_, i) => ({ star: i + 1, active: false })),
+    Array.from({ length: 5 }, (_, i) => ({ star: i + 1, active: false })),
   );
+  numberOfFilters = this.optionsService.numberOfFilters;
 
   onApplyPriceFilter() {
     this.productService.productSignal.set(null);
@@ -94,6 +93,29 @@ export class FiltersComponent {
     this.currentPriceFilter.set(null);
   }
 
+  onSelectRatingFilter(rating: number) {
+    this.ratingFilter = rating;
+    this.currentRatingFilter.set(rating);
+    this.productService.productSignal.set(null);
+    this.optionsService.currentRating.set(rating);
+    const savedQuery: ISavedProductOptionQueries = JSON.parse(
+      sessionStorage.getItem('hshs82haa02sshs92s')!,
+    );
+
+    sessionStorage.setItem(
+      'hshs82haa02sshs92s',
+      JSON.stringify({ ...savedQuery, rating }),
+    );
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        rating: rating + '-' + 5,
+      },
+      queryParamsHandling: 'merge',
+      fragment: 'products',
+    });
+  }
+
   onSortOrder(sort: string) {
     this.layoutService.mobileFilterOpened.set(false);
     if (
@@ -127,6 +149,7 @@ export class FiltersComponent {
   onClearFilter() {
     this.productService.productSignal.set(null);
     this.optionsService.currentSort.set(null);
+    this.optionsService.currentRating.set(null);
     this.optionsService.currentPriceFilter.set(null);
     this.layoutService.mobileFilterOpened.set(false);
 
@@ -139,6 +162,9 @@ export class FiltersComponent {
     if (savedQuery?.sort) {
       delete savedQuery.sort;
     }
+    if (savedQuery?.rating) {
+      delete savedQuery.rating;
+    }
 
     this.currentPriceFilter.set(null);
 
@@ -150,6 +176,7 @@ export class FiltersComponent {
         minPrice: null,
         maxPrice: null,
         sort: null,
+        rating: null,
       },
       queryParamsHandling: 'merge',
       fragment: 'products',
@@ -163,10 +190,21 @@ export class FiltersComponent {
     this.isShowing.set(newArray);
   }
 
-  onResetRatingFilter() {}
-
-  onSelectRatingFilter(rating: number) {
-    this.ratingFilter = rating;
-    console.log(rating);
+  onResetRatingFilter() {
+    this.optionsService.currentRating.set(null);
+    this.productService.productSignal.set(null);
+    const savedQuery: ISavedProductOptionQueries = JSON.parse(
+      sessionStorage.getItem('hshs82haa02sshs92s')!,
+    );
+    delete savedQuery.rating;
+    sessionStorage.setItem('hshs82haa02sshs92s', JSON.stringify(savedQuery));
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        rating: null,
+      },
+      queryParamsHandling: 'merge',
+      fragment: 'products',
+    });
   }
 }

@@ -20,4 +20,5 @@ export interface ISavedProductOptionQueries {
   page?: number;
   price?: { min: any; max: any };
   sort?: string;
+  rating?: number;
 }
