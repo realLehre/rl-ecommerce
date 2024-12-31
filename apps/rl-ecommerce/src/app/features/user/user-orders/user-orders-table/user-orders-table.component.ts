@@ -95,7 +95,7 @@ export class UserOrdersTableComponent implements OnInit {
       this.isLoading.set(false);
     }),
   );
-  orderData: Signal<IOrderResponse> = toSignal(this.orders$);
+  ordersData: Signal<IOrderResponse> = toSignal(this.orders$);
   sortUsed: boolean = false;
   sortDirection: 'asc' | 'desc' = 'asc';
   deliveryStatus: { name: string; code: string }[] = [
@@ -271,7 +271,7 @@ export class UserOrdersTableComponent implements OnInit {
   sortTable(column: any): void {
     const { sortedData, sortDirection, sortUsed } = this.orderService.sortTable(
       column,
-      this.orderData(),
+      this.ordersData(),
     );
     this.orders$ = of(sortedData);
     this.sortDirection = sortDirection;

@@ -1,9 +1,9 @@
 @if (!isLoading() && !isError()) {
-  @if (userData().users.length) {
+  @if (usersData().users.length) {
     <div class="w-full">
       <app-generic-table
-        [data]="userData()"
-        [tableData]="userData().users"
+        [data]="usersData()"
+        [tableData]="usersData().users"
         [itemsToShowInput]="filter().pageSize"
         [title]="'All Users'"
         [searchValueInput]="filter().search"

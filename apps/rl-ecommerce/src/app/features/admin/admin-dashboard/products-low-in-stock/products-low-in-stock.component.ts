@@ -43,11 +43,6 @@ export class ProductsLowInStockComponent {
   private productLowInStockService = inject(ProductsLowInStockService);
   private productService = inject(AdminProductsService);
   private router = inject(Router);
-  config: PaginationInstance = {
-    id: 'adminLowInStockProducts',
-    itemsPerPage: 5,
-    currentPage: 1,
-  };
   private dialogService = inject(DialogService);
   private ref: DynamicDialogRef | undefined;
   @ViewChild('filterMenu') menu!: Menu;
@@ -59,11 +54,8 @@ export class ProductsLowInStockComponent {
     switchMap((page) =>
       this.productLowInStockService.getProductsLowInStock(page),
     ),
-    tap((res) => {
+    tap(() => {
       this.isLoading.set(false);
-      this.config.itemsPerPage = Math.max(res?.totalItemsInPage!, 5);
-      this.config.currentPage = res?.currentPage!;
-      this.config.totalItems = res?.totalItems;
     }),
   );
   productData: Signal<Partial<IProductResponse> | undefined> = toSignal(

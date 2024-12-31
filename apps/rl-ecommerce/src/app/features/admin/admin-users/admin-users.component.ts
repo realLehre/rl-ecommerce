@@ -82,7 +82,7 @@ export class AdminUsersComponent implements OnInit {
       this.isLoading.set(false);
     }),
   );
-  userData: Signal<IUserRes> = toSignal(this.users$);
+  usersData: Signal<IUserRes> = toSignal(this.users$);
   sortUsed: boolean = false;
   sortDirection: 'asc' | 'desc' = 'asc';
 
@@ -152,7 +152,7 @@ export class AdminUsersComponent implements OnInit {
   sortTable(column: any): void {
     const { sortedData, sortDirection, sortUsed } = this.userService.sortTable(
       column,
-      this.userData(),
+      this.usersData(),
     );
     this.users$ = of(sortedData);
     this.sortDirection = sortDirection;

@@ -1,9 +1,9 @@
 @if (!isLoading() && !isError()) {
-  @if (orderData().orders.length) {
+  @if (ordersData().orders.length) {
     <div class="w-full">
       <app-generic-table
-        [data]="orderData()"
-        [tableData]="orderData().orders"
+        [data]="ordersData()"
+        [tableData]="ordersData().orders"
         [itemsToShowInput]="filter().pageSize"
         [title]="'All Orders'"
         [searchValueInput]="filter().search"

@@ -118,6 +118,9 @@ export class AdminProductsComponent implements OnInit {
   productsData: Signal<IProductResponse> = toSignal(this.products$);
 
   ngOnInit() {
+    this.productService.productSignal.set(null);
+    this.productService.productQueried.set(false);
+
     if (this.categoryData()) {
       this.filter.set({
         ...this.filter(),
@@ -126,6 +129,7 @@ export class AdminProductsComponent implements OnInit {
 
       this.subCategories = [...this.categoryData()?.subCategories!];
     }
+
     const savedFilters = JSON.parse(
       sessionStorage.getItem(this.productService.PRODUCT_QUERY_STORED_KEY)!,
     );
@@ -137,19 +141,19 @@ export class AdminProductsComponent implements OnInit {
     });
 
     this.filterNumber = this.productService.findFilterNumber(savedFilters);
-    if (savedFilters.minPrice && savedFilters.maxPrice) {
+    if (savedFilters?.minPrice && savedFilters?.maxPrice) {
       this.rangeValues = [savedFilters?.minPrice!, savedFilters?.maxPrice!];
     }
 
-    if (savedFilters.category) {
+    if (savedFilters?.category) {
       this.selectedCategory = savedFilters?.category;
       this.subCategories = [...savedFilters?.category?.subCategories];
     }
 
-    if (savedFilters.subCategory) {
+    if (savedFilters?.subCategory) {
       this.selectedSubCategory = savedFilters?.subCategory;
     }
-    if (savedFilters.minDate && savedFilters.maxDate) {
+    if (savedFilters?.minDate && savedFilters?.maxDate) {
       const minDate = this.productService.formatDateToLocale(
         savedFilters.minDate,
       );
@@ -259,33 +263,40 @@ export class AdminProductsComponent implements OnInit {
       this.filter(),
       this.injecting(),
     );
-    sessionStorage.setItem(
-      this.productService.PRODUCT_QUERY_STORED_KEY,
-      JSON.stringify(this.filter()),
-    );
-    this.router.navigate([], {
-      queryParams: this.productService.createRouteQuery(this.filter()),
-      relativeTo: this.route,
-    });
+    if (!this.injecting()) {
+      sessionStorage.setItem(
+        this.productService.PRODUCT_QUERY_STORED_KEY,
+        JSON.stringify(this.filter()),
+      );
+      this.router.navigate([], {
+        queryParams: this.productService.createRouteQuery(this.filter()),
+        relativeTo: this.route,
+      });
+    }
     this.menu.hide();
   }
 
   updateQueries(updates: Partial<IAdminProductFilter>) {
     this.productService.productSignal.set(null);
     this.holdFilter.set({ ...this.holdFilter(), ...updates });
-    sessionStorage.setItem(
-      this.productService.PRODUCT_QUERY_STORED_KEY,
-      JSON.stringify(this.holdFilter()),
-    );
-    this.router.navigate([], {
-      queryParams: this.productService.createRouteQuery(this.filter()),
-      relativeTo: this.route,
-    });
+    if (!this.injecting()) {
+      sessionStorage.setItem(
+        this.productService.PRODUCT_QUERY_STORED_KEY,
+        JSON.stringify(this.holdFilter()),
+      );
+      this.router.navigate([], {
+        queryParams: this.productService.createRouteQuery(this.filter()),
+        relativeTo: this.route,
+      });
+    }
   }
 
   onClearFilter() {
     if (this.filterNumber == 0) {
       return;
+    }
+    if (this.injecting()) {
+      this.subCategories = [...this.categoryData()?.subCategories!];
     }
     this.selectedCategory = undefined;
     this.selectedSubCategory = undefined;
@@ -314,6 +325,12 @@ export class AdminProductsComponent implements OnInit {
       pageSize: 10,
       page: 1,
     });
+    if (this.injecting()) {
+      this.filter.set({
+        ...this.filter(),
+        category: this.categoryData(),
+      });
+    }
     this.pageSize.set(10);
     this.selectedCategory = undefined;
     this.selectedSubCategory = undefined;
