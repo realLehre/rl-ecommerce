@@ -46,7 +46,7 @@ export class AdminAddProductComponent
   productData!: IProduct;
   isEditing = signal(false);
   isSubmitting = signal(false);
-  productAdded = signal(false);
+  ignoreCanDeactivate = signal(false);
   editCanceled = signal(false);
 
   ngOnInit() {
@@ -59,7 +59,6 @@ export class AdminAddProductComponent
           this.coverImage = productData.image;
           const images = [...productData.imageUrls];
           this.imageUrls = images?.slice(1);
-          this.productAdded.set(true);
         } else {
           this.router.navigate([], {
             queryParams: null,
@@ -113,7 +112,7 @@ export class AdminAddProductComponent
               message: 'Product added successfully!',
               type: 'success',
             });
-            this.productAdded.set(false);
+            this.ignoreCanDeactivate.set(true);
             this.router.navigate(['/', 'admin', 'products']);
             this.isSubmitting.set(false);
           },
@@ -143,10 +142,10 @@ export class AdminAddProductComponent
               message: 'Product updated successfully!',
               type: 'success',
             });
-            this.productAdded.set(false);
+            this.ignoreCanDeactivate.set(true);
             this.isEditing.set(false);
-            this.router.navigate(['/', 'admin', 'products', res.id]);
             localStorage.removeItem('selectedProduct');
+            this.router.navigate(['/', 'admin', 'products', res.id]);
             this.isSubmitting.set(false);
           },
           error: (error) => {
@@ -161,16 +160,20 @@ export class AdminAddProductComponent
 
   onCancelEdit() {
     this.editCanceled.set(true);
+    this.ignoreCanDeactivate.set(false);
     this.isEditing.set(false);
     localStorage.removeItem('selectedProduct');
     this.location.back();
   }
 
   canDeactivate(): boolean {
+    if (this.ignoreCanDeactivate()) {
+      return true;
+    }
     if (
-      (this.productService.getFormControlStatus(this.productForm) ||
-        this.coverImage !== '' ||
-        this.imageUrls.length !== 0) &&
+      this.productService.getFormControlStatus(this.productForm) ||
+      this.coverImage !== '' ||
+      this.imageUrls.length !== 0 ||
       !this.editCanceled()
     ) {
       return confirm(
@@ -183,7 +186,7 @@ export class AdminAddProductComponent
 
   @HostListener('window:beforeunload', ['$event'])
   beforeUnloadNotification($event: any) {
-    if (!this.canDeactivate()) {
+    if (!this.ignoreCanDeactivate() && !this.canDeactivate()) {
       $event.returnValue = true;
     }
   }
