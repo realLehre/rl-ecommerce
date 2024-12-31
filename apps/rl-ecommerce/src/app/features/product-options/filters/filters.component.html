@@ -52,7 +52,7 @@
             (ngModelChange)="onSelectRatingFilter($event)"
             [inputId]="mainIndex + '-stars'"
           />
-          <label [for]="mainIndex + '-stars'" class="ml-2">
+          <label [for]="mainIndex + '-stars'" class="ml-2 flex items-center">
             <div class="flex items-center space-x-[2px]">
               @for (item of stars(); track item.star; let i = $index) {
                 <i
@@ -63,6 +63,7 @@
                 ></i>
               }
             </div>
+            <span class="text-sm text-type_grey ml-2">& up</span>
           </label>
         </div>
       }

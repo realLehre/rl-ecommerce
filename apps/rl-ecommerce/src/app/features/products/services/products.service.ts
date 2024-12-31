@@ -4,16 +4,7 @@ import { environment } from '../../../../environments/environment.development';
 import { IProduct, IProductResponse } from '../model/product.interface';
 import { catchError, of, retry, tap, throwError } from 'rxjs';
 import { PaginationInstance } from 'ngx-pagination';
-
-interface IProductFilter {
-  categoryId?: string;
-  subCategoryId?: string;
-  minPrice?: number;
-  maxPrice?: number;
-  sortBy?: string;
-  page?: number;
-  rating?: number;
-}
+import { IProductFilter } from '../../product-options/models/product-options.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -32,7 +23,6 @@ export class ProductsService {
 
   getProducts(filters?: IProductFilter) {
     let params = new HttpParams();
-
     Object.entries(filters!)
       .filter(([_, value]) => value != undefined || value != null)
       .forEach(([key, value]) => {
@@ -46,7 +36,6 @@ export class ProductsService {
           params = params.set(key, value);
         }
       });
-
     return this.productSignal()
       ? of(this.productSignal())
       : this.http.get<IProductResponse>(`${this.baseUrl}all`, { params }).pipe(
@@ -54,7 +43,7 @@ export class ProductsService {
           tap((res) => {
             this.paginationConfig.set({
               currentPage: res.currentPage,
-              itemsPerPage: this.pageSize(),
+              itemsPerPage: Math.max(res.totalItemsInPage, this.pageSize()),
               totalItems: res.totalItems,
               id: 'productPagination',
             });

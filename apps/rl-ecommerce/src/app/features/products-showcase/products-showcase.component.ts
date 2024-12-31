@@ -11,12 +11,11 @@ import { LayoutService } from '../../shared/services/layout.service';
 import { AsyncPipe, NgClass } from '@angular/common';
 import { ProductsService } from '../products/services/products.service';
 import { SkeletonModule } from 'primeng/skeleton';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { filter, Observable } from 'rxjs';
 import { ProductOptionsService } from '../product-options/services/product-options.service';
-import { ISavedProductOptionQueries } from '../product-options/models/product-options.interface';
 import { IProductResponse } from '../products/model/product.interface';
-import { NgxPaginationModule, PaginationInstance } from 'ngx-pagination';
+import { NgxPaginationModule } from 'ngx-pagination';
 import { ItemsShowingPipe } from '../../shared/pipes/items-showing.pipe';
 
 @Component({
@@ -38,104 +37,32 @@ import { ItemsShowingPipe } from '../../shared/pipes/items-showing.pipe';
 export class ProductsShowcaseComponent implements OnInit {
   private layoutService = inject(LayoutService);
   private router = inject(Router);
-  private route = inject(ActivatedRoute);
   private productService = inject(ProductsService);
   private optionsService = inject(ProductOptionsService);
   private cdr = inject(ChangeDetectorRef);
   isMobileFilterOpened = this.layoutService.mobileFilterOpened;
   products$!: Observable<IProductResponse | null>;
   config = this.productService.paginationConfig;
-  currentPriceFilter = this.optionsService.currentPriceFilter;
-  currentSort = this.optionsService.currentSort;
   numberOfFilters = this.optionsService.numberOfFilters;
 
   ngOnInit() {
-    const savedQuery: ISavedProductOptionQueries = JSON.parse(
-      sessionStorage.getItem('hshs82haa02sshs92s')!,
+    this.products$ = this.productService.getProducts(
+      this.optionsService.filter(),
     );
-
-    const newQuery = {
-      categoryId: savedQuery?.category?.id,
-      subCategoryId: savedQuery?.subCategory?.id,
-      page: savedQuery?.page,
-      minPrice: savedQuery?.price?.min,
-      maxPrice: savedQuery?.price?.max,
-      sortBy: savedQuery?.sort,
-      rating: savedQuery?.rating,
-    };
-
-    const routeQuery = {
-      category: this.productService.createSlug(savedQuery?.category?.name!),
-      subCategory: this.productService.createSlug(
-        savedQuery?.subCategory?.name!,
-      ),
-      page: savedQuery?.page,
-      minPrice: savedQuery?.price?.min,
-      maxPrice: savedQuery?.price?.max,
-      sortBy: savedQuery?.sort,
-      rating: savedQuery?.rating,
-    };
-
-    const filteredQuery = Object.fromEntries(
-      Object.entries(routeQuery).filter(([_, value]) => value !== undefined),
-    );
-
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {
-        ...filteredQuery,
-        rating: routeQuery.rating ? routeQuery.rating + '-' + 5 : null,
-      },
-      queryParamsHandling: 'merge',
-      fragment: 'products',
-    });
-
-    this.products$ = this.productService.getProducts(newQuery);
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe(() => {
-        const category = this.optionsService.currentCategory();
-        const subCategory = this.optionsService.currentSubCategory();
-        const priceFilter = this.optionsService.currentPriceFilter();
-        const page = this.optionsService.currentPage();
-        const sort = this.optionsService.currentSort();
-        const rating = this.optionsService.currentRating();
-        this.products$ = this.productService.getProducts({
-          categoryId: category?.id,
-          subCategoryId: subCategory?.id,
-          page,
-          minPrice: priceFilter?.min,
-          maxPrice: priceFilter?.max,
-          sortBy: sort!,
-          rating: rating!,
-        });
+        this.products$ = this.productService.getProducts(
+          this.optionsService.filter(),
+        );
         this.cdr.detectChanges();
       });
   }
 
   pageChange(event: any) {
-    const paginationConfig = this.productService.paginationConfig;
-    const newPaginationConfig = { ...paginationConfig(), currentPage: event };
-    this.productService.paginationConfig.set(
-      newPaginationConfig as PaginationInstance,
-    );
     this.optionsService.currentPage.set(event);
-    const savedQuery: ISavedProductOptionQueries = JSON.parse(
-      sessionStorage.getItem('hshs82haa02sshs92s')!,
-    );
-    sessionStorage.setItem(
-      'hshs82haa02sshs92s',
-      JSON.stringify({ ...savedQuery, page: event }),
-    );
+    this.optionsService.setDataAndRoute();
     this.productService.productSignal.set(null);
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {
-        page: event,
-      },
-      queryParamsHandling: 'merge',
-      fragment: 'products',
-    });
     setTimeout(() => {
       window.scrollTo({
         top: 470,

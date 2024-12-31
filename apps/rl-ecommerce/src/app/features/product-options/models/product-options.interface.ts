@@ -18,7 +18,18 @@ export interface ISavedProductOptionQueries {
   category?: ICategory;
   subCategory?: ISubCategory;
   page?: number;
-  price?: { min: any; max: any };
+  maxPrice?: number;
+  minPrice?: number;
   sort?: string;
+  rating?: number;
+}
+
+export interface IProductFilter {
+  category?: ICategory;
+  subCategory?: ISubCategory;
+  minPrice?: number;
+  maxPrice?: number;
+  sortBy?: string;
+  page?: number;
   rating?: number;
 }
