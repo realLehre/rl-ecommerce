@@ -48,6 +48,7 @@ export class AdminAddProductComponent
   isSubmitting = signal(false);
   ignoreCanDeactivate = signal(false);
   editCanceled = signal(false);
+  imageUploaded = signal(false);
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
@@ -78,6 +79,10 @@ export class AdminAddProductComponent
         this.productForm.value.previousPrice != 0 &&
         this.productForm.value.previousPrice != null)
     );
+  }
+
+  onGetImageUploadStatus(event: boolean) {
+    this.imageUploaded.set(event);
   }
 
   onGetFormValue(event: any) {

@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   input,
   OnInit,
@@ -38,6 +39,13 @@ export class AdminProductImagesComponent implements OnInit {
   productData = input<IProduct | undefined>(undefined);
   uploadError = signal<boolean[]>([]);
   coverImageUploadError = signal<boolean>(false);
+  imageUploading = computed(() => {
+    return (
+      this.coverImage().isUploading ||
+      this.uploadBoxes().some((box) => box.isUploading)
+    );
+  });
+  imageUploadStatus = output<boolean>();
 
   ngOnInit() {
     const boxes = Array(1)
@@ -126,6 +134,7 @@ export class AdminProductImagesComponent implements OnInit {
           this.coverImageUploadError.set(false);
         }
       };
+      this.imageUploadStatus.emit(this.imageUploading());
       this.uploadFile(file, type, index);
       reader.readAsDataURL(file);
     }
@@ -185,7 +194,6 @@ export class AdminProductImagesComponent implements OnInit {
         switchMap((res) => this.photoUploadService.getImageUrl(res.data.path)),
         catchError((err: any) => {
           this.setBoxesOnError(type, index);
-
           return throwError(() => err);
         }),
       )
@@ -210,7 +218,7 @@ export class AdminProductImagesComponent implements OnInit {
             imageUrls: this.imageUrls,
             coverImageUrl: this.coverImageUrl,
           });
-
+          this.imageUploadStatus.emit(this.imageUploading());
           if (this.previousImageUrl) {
             this.photoUploadService
               .removeImage(this.previousImageUrl)
@@ -258,5 +266,6 @@ export class AdminProductImagesComponent implements OnInit {
       this.coverImageUrl = '';
       this.coverImageUploadError.set(true);
     }
+    this.imageUploadStatus.emit(this.imageUploading());
   }
 }
