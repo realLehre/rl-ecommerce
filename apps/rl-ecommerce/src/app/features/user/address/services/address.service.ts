@@ -4,7 +4,7 @@ import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { environment } from '../../../../../environments/environment.development';
 import { AuthService } from '../../../auth/services/auth.service';
 import { HttpClient } from '@angular/common/http';
-import { CreateAddressDto } from '../../../../../../../api/src/app/api-address/create-address.dto';
+
 import { Observable, of, retry, tap } from 'rxjs';
 
 @Injectable({
@@ -34,13 +34,13 @@ export class AddressService {
           );
   }
 
-  addAddress(data: CreateAddressDto) {
+  addAddress(data: any) {
     return this.http
       .post(`${this.baseUrl}/${this.authService.user()?.id}/address`, data)
       .pipe(tap(() => this.addressSignal.set(null)));
   }
 
-  editAddress(data: CreateAddressDto, id: string) {
+  editAddress(data: any, id: string) {
     return this.http
       .patch(`${this.baseUrl}/address/edit/${id}`, data)
       .pipe(tap(() => this.addressSignal.set(null)));

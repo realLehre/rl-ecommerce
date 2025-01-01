@@ -238,7 +238,6 @@ export class ProductDetailsComponent implements OnInit {
               );
             }
 
-            console.log(this.quantity);
             this.toast.showToast({
               type: 'success',
               message: product.name + ' ' + 'quantity adjusted!',
