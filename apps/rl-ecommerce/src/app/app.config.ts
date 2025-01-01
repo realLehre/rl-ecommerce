@@ -25,6 +25,7 @@ import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { cartReducer } from './state/cart/cart.reducer';
 import { CartEffects } from './state/cart/cart.effects';
+import { appReducer } from './state/state';
 
 const scrollConfig: InMemoryScrollingOptions = {
   anchorScrolling: 'enabled',
@@ -47,7 +48,7 @@ export const appConfig: ApplicationConfig = {
     DialogService,
     DynamicDialogRef,
     CookieService,
-    provideStore({ cart: cartReducer }),
+    provideStore(appReducer),
     provideEffects(CartEffects),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
   ],

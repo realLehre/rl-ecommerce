@@ -30,7 +30,7 @@ export const updateCartItem = createAction(
 );
 
 export const cartItemUpdated = createAction(
-  '[Cart] Item Added To Cart',
+  '[Cart] Cart Item Updated',
   props<{ item: ICartItems | any }>(),
 );
 

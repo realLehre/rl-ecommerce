@@ -1,7 +1,22 @@
-import { CartState } from './cart/cart.reducer';
+import { cartReducer, CartState } from './cart/cart.reducer';
+import { ActionReducerMap, createSelector } from '@ngrx/store';
 
 export interface State {
   cart: CartState;
 }
 
-export const selectCart = (state: State) => state.cart;
+export const appReducer: ActionReducerMap<State> = {
+  cart: cartReducer,
+};
+
+export const selectCartState = (state: State) => state.cart;
+
+export const selectCart = createSelector(
+  selectCartState,
+  (state: CartState) => state.cart,
+);
+
+export const selectCartLoading = createSelector(
+  selectCartState,
+  (state: CartState) => state.status,
+);

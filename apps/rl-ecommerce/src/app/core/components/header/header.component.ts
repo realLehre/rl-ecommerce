@@ -29,7 +29,7 @@ import { StateAuthService } from '../../../shared/services/state-auth.service';
 import { Store } from '@ngrx/store';
 import { loadCart } from '../../../state/cart/cart.actions';
 import { cartReducer } from '../../../state/cart/cart.reducer';
-import { selectCart } from '../../../state/state';
+import { selectCart, selectCartState } from '../../../state/state';
 
 @Component({
   selector: 'app-header',
@@ -61,7 +61,7 @@ export class HeaderComponent implements AfterViewInit, OnInit {
     this.cartService.cartSignal.set(null);
     this.cartService.getCart().subscribe();
     this.store.dispatch(loadCart());
-    this.store.select(selectCart).subscribe((res) => console.log(res));
+    this.store.select(selectCartState).subscribe((res) => console.log(res));
   }
 
   ngAfterViewInit() {
