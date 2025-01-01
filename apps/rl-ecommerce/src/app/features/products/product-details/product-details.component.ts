@@ -58,7 +58,6 @@ export class ProductDetailsComponent implements OnInit {
   private toast = inject(ToastService);
   private sanitizer = inject(DomSanitizer);
   private authService = inject(AuthService);
-
   activeProduct = this.productService.activeProduct;
   quantity: number = 1;
   isCollapsed = signal(true);
@@ -88,21 +87,21 @@ export class ProductDetailsComponent implements OnInit {
     refresh: this.refreshTrigger(),
   }));
   productDetails$: Observable<IProduct | any> = toObservable(this.refresh).pipe(
-    tap(() => {
-      this.isLoading.set(true);
-    }),
+    tap(() => this.isLoading.set(true)),
     switchMap(({ id }) =>
       this.productService.getProductById(id).pipe(
         catchError((err: any) => {
           this.toast.showToast({ type: 'error', message: err.error.message });
           this.isError.set(true);
           this.errorMessage.set(err.error.message);
-
           return of(null);
         }),
       ),
     ),
-    tap(() => this.isLoading.set(false)),
+    tap((res) => {
+      this.isLoading.set(false);
+      this.productService.activeProduct.set(res);
+    }),
   );
   productDetailsData = toSignal(this.productDetails$);
 
@@ -243,28 +242,7 @@ export class ProductDetailsComponent implements OnInit {
     return tempDiv.textContent || tempDiv.innerText || '';
   }
 
-  averageRating(): number {
-    if (this.activeProduct()?.ratings) {
-      const totalRating = this.activeProduct()?.ratings.reduce(
-        (acc: number, rating: any) => acc + rating.rating,
-        0,
-      );
-      return totalRating! / this.activeProduct()?.ratings.length! || 0;
-    } else {
-      return 0;
-    }
-  }
-
   getStarWidth(starIndex: number): string {
-    const fullStars = Math.floor(this.averageRating());
-    const partialFill = (this.averageRating() % 1) * 100;
-
-    if (starIndex < fullStars) {
-      return '100%';
-    } else if (starIndex === fullStars) {
-      return `${partialFill}%`;
-    } else {
-      return '0%';
-    }
+    return this.productService.getStarWidth(starIndex);
   }
 }

@@ -18,6 +18,17 @@ export class ProductsService {
   pageSize = signal(10);
   searchedProductsSignal = signal<IProduct[] | null>(null);
   isSearchingProducts = signal(false);
+  averageRating = computed(() => {
+    if (this.activeProduct()?.ratings) {
+      const totalRating = this.activeProduct()?.ratings.reduce(
+        (acc: number, rating: any) => acc + rating.rating,
+        0,
+      );
+      return totalRating! / this.activeProduct()?.ratings.length! || 0;
+    } else {
+      return 0;
+    }
+  });
 
   constructor() {}
 
@@ -87,6 +98,19 @@ export class ProductsService {
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-') // Replace spaces and special characters with hyphen
       .replace(/^-+|-+$/g, ''); // Trim leading or trailing hyphens
+  }
+
+  getStarWidth(starIndex: number): string {
+    const fullStars = Math.floor(this.averageRating());
+    const partialFill = (this.averageRating() % 1) * 100;
+
+    if (starIndex < fullStars) {
+      return '100%';
+    } else if (starIndex === fullStars) {
+      return `${partialFill}%`;
+    } else {
+      return '0%';
+    }
   }
 
   private handleError(error: any) {
