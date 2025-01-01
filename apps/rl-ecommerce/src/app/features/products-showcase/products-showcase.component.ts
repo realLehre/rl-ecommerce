@@ -1,22 +1,24 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
+  computed,
   inject,
-  OnInit,
+  Signal,
+  signal,
 } from '@angular/core';
 import { ProductCardComponent } from './product-card/product-card.component';
 import { MobileFiltersComponent } from '../product-options/mobile-filters/mobile-filters.component';
 import { LayoutService } from '../../shared/services/layout.service';
-import { AsyncPipe, NgClass } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { ProductsService } from '../products/services/products.service';
 import { SkeletonModule } from 'primeng/skeleton';
-import { NavigationEnd, Router } from '@angular/router';
-import { filter, Observable } from 'rxjs';
+import { catchError, Observable, of, switchMap, tap } from 'rxjs';
 import { ProductOptionsService } from '../product-options/services/product-options.service';
 import { IProductResponse } from '../products/model/product.interface';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ItemsShowingPipe } from '../../shared/pipes/items-showing.pipe';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { ToastService } from '../../shared/services/toast.service';
 
 @Component({
   selector: 'app-products-showcase',
@@ -25,7 +27,6 @@ import { ItemsShowingPipe } from '../../shared/pipes/items-showing.pipe';
     ProductCardComponent,
     MobileFiltersComponent,
     NgClass,
-    AsyncPipe,
     SkeletonModule,
     NgxPaginationModule,
     ItemsShowingPipe,
@@ -34,41 +35,57 @@ import { ItemsShowingPipe } from '../../shared/pipes/items-showing.pipe';
   styleUrl: './products-showcase.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductsShowcaseComponent implements OnInit {
+export class ProductsShowcaseComponent {
   private layoutService = inject(LayoutService);
-  private router = inject(Router);
   private productService = inject(ProductsService);
   private optionsService = inject(ProductOptionsService);
-  private cdr = inject(ChangeDetectorRef);
+  private toast = inject(ToastService);
   isMobileFilterOpened = this.layoutService.mobileFilterOpened;
-  products$!: Observable<IProductResponse | null>;
   config = this.productService.paginationConfig;
   numberOfFilters = this.optionsService.numberOfFilters;
+  isLoading = signal(true);
+  isError = signal(false);
+  refreshTrigger = signal(0);
+  refresh = computed(() => ({
+    filter: this.optionsService.filter(),
+    refresh: this.refreshTrigger(),
+  }));
+  products$: Observable<IProductResponse | any> = toObservable(
+    this.refresh,
+  ).pipe(
+    tap(() => this.isLoading.set(true)),
+    switchMap(({ filter }) =>
+      this.productService.getProducts(filter).pipe(
+        catchError((err) => {
+          this.toast.showToast({
+            type: 'error',
+            message: err.error.message,
+          });
+          this.isError.set(true);
+          this.isLoading.set(false);
+          return of(null);
+        }),
+      ),
+    ),
+    tap(() => this.isLoading.set(false)),
+  );
+  productsData: Signal<IProductResponse> = toSignal(this.products$);
+  loaders = Array.from({ length: 15 });
 
-  ngOnInit() {
-    this.products$ = this.productService.getProducts(
-      this.optionsService.filter(),
-    );
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe(() => {
-        this.products$ = this.productService.getProducts(
-          this.optionsService.filter(),
-        );
-        this.cdr.detectChanges();
-      });
+  onRetryLoad() {
+    this.refreshTrigger.update((count) => count + 1);
   }
 
   pageChange(event: any) {
     this.optionsService.currentPage.set(event);
     this.optionsService.setDataAndRoute();
     this.productService.productSignal.set(null);
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       window.scrollTo({
         top: 470,
         behavior: 'smooth',
       });
-    }, 100);
+    });
   }
 
   onOpenMobileFilter() {

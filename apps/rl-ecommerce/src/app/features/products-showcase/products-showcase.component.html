@@ -1,6 +1,6 @@
 <div class="relative w-full">
-  @if (products$ | async; as productArray) {
-    @if (productArray.products.length) {
+  @if (!isLoading() && !isError()) {
+    @if (productsData().products.length) {
       <header class="flex items-center mb-7">
         <button
           class="flex min-[760px]:hidden items-center space-x-1 cursor-pointer text-type_grey relative"
@@ -40,14 +40,14 @@
     <div>
       <div class="grid grid-cols-2 min-[1050px]:grid-cols-3 gap-x-6 gap-y-10">
         @for (
-          product of productArray.products | paginate: config()!;
+          product of productsData().products | paginate: config()!;
           track product.id
         ) {
           <app-product-card [product]="product" />
         }
       </div>
 
-      @if (!productArray.products.length) {
+      @if (!productsData().products.length) {
         <div class="text-center w-full">
           <h3 class="text-base mobile:text-lg font-medium">
             No products are available
@@ -56,7 +56,7 @@
       }
     </div>
 
-    @if (productArray.products.length) {
+    @if (productsData().products.length) {
       <div class="hidden mobile:flex justify-center items-center w-full mt-12">
         <pagination-template
           #p="paginationApi"
@@ -144,13 +144,13 @@
           >
           <div class="space-x-1">
             <span>of</span>
-            <span>{{ productArray.totalPages }}</span>
+            <span>{{ productsData().totalPages }}</span>
           </div>
         </div>
 
         <button
           class="h-8 w-8 flex items-center border-0 outline-0 justify-center cursor-pointer disabled:opacity-30"
-          [disabled]="config()?.currentPage! === productArray.totalPages"
+          [disabled]="config()?.currentPage! === productsData().totalPages"
           (click)="pageChange(config()?.currentPage! + 1)"
           [attr.aria-label]="'Next page'"
         >
@@ -166,6 +166,17 @@
         </button>
       </div>
     }
+  } @else if (isError()) {
+    <div class="flex items-center flex-col justify-center">
+      <h3 class="mb-5">An error occurred</h3>
+
+      <button
+        class="rounded-full text-white font-medium w-[200px] min-[450px]:w-[300px] bg-primary py-2 h-12"
+        (click)="onRetryLoad()"
+      >
+        Retry
+      </button>
+    </div>
   } @else {
     <header class="flex items-center mb-7">
       <div
@@ -178,7 +189,7 @@
       </div>
     </header>
     <div class="grid grid-cols-2 min-[1050px]:grid-cols-3 gap-x-6 gap-y-10">
-      @for (t of [1, 2, 3, 4, 5, 6]; track t) {
+      @for (t of loaders; track t) {
         <div class="flex flex-col space-y-1 mobile:space-y-3">
           <div class="relative w-full h-[180px] mobile:h-[230px]">
             <div
