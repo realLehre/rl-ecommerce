@@ -57,7 +57,10 @@
       class="overflow-x-auto space-x-4 scrollbar-hide scroll-smooth grid grid-flow-col auto-cols-[minmax(220px,1fr)] gap-x-3 mt-3 hide-scrollbar w-full py-6 px-0 mobile:px-4"
     >
       @for (product of products; track product.id) {
-        <app-product-card [product]="product" />
+        <app-product-card
+          [product]="product"
+          (seeDetails)="loadProductDetails.emit()"
+        />
       } @empty {
         <p>No similar products available</p>
       }

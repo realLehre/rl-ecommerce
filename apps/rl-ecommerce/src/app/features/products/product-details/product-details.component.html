@@ -10,13 +10,15 @@
     </h3>
   }
 
-  @if (product$ | async; as product) {
+  @if (!isLoading() && !isError()) {
     @if (!isShowingFullReview()) {
       <div class="flex items-start flex-col min-[700px]:flex-row gap-10 mt-8">
         <div
           class="min-[850px]:w-[500px] min-[450px]:w-[400px] w-full max-[450px]:h-[300px] max-[700px]:self-center"
         >
-          <app-product-details-images [images]="product.imageUrls" />
+          <app-product-details-images
+            [images]="productDetailsData().imageUrls"
+          />
         </div>
 
         <div class="w-full">
@@ -24,23 +26,27 @@
             <h1
               class="text-2xl mobile:text-[40px] text-type_caption leading-10 break-all"
             >
-              {{ product.name || activeProduct()?.name }}
+              {{ productDetailsData().name || activeProduct()?.name }}
             </h1>
 
             <div class="flex items-center gap-x-2 flex-wrap">
               <p
                 class="text-[20px] mobile:text-3xl text-type_title font-semibold"
               >
-                {{ product.price | currency: '₦' : 'symbol' : '1.0-0' }}
+                {{
+                  productDetailsData().price
+                    | currency: '₦' : 'symbol' : '1.0-0'
+                }}
               </p>
 
-              @if (product.previousPrice) {
+              @if (productDetailsData().previousPrice) {
                 <div class="flex items-center space-x-1">
                   <p
                     class="text-type_grey mobile:text-lg text-sm font-medium line-through"
                   >
                     {{
-                      product.previousPrice | currency: '₦' : 'symbol' : '1.0-0'
+                      productDetailsData().previousPrice
+                        | currency: '₦' : 'symbol' : '1.0-0'
                     }}
                   </p>
 
@@ -48,23 +54,26 @@
                     class="p-[2px] rounded-sm bg-primary text-white text-xs mobile:text-sm bg-opacity-70"
                   >
                     -{{
-                      product.price
-                        | pricePercentageDecrease: product.previousPrice
+                      productDetailsData().price
+                        | pricePercentageDecrease
+                          : productDetailsData().previousPrice
                     }}%
                   </div>
                 </div>
               }
             </div>
 
-            @if (!product.isSoldOut) {
+            @if (!productDetailsData().isSoldOut) {
               <div
                 class="text-xs mobile:text-sm font-semibold"
                 [ngClass]="
-                  product.unit < 5 ? 'text-red-600' : 'text-type_title_gray'
+                  productDetailsData().unit < 5
+                    ? 'text-red-600'
+                    : 'text-type_title_gray'
                 "
               >
-                <span>{{ product.unit }}</span> <span> item</span>
-                @if (product.unit > 1) {
+                <span>{{ productDetailsData().unit }}</span> <span> item</span>
+                @if (productDetailsData().unit > 1) {
                   <span>s</span>
                 }
                 left
@@ -76,11 +85,16 @@
             }
 
             <div
-              [innerHTML]="sanitizedDescription(product.description)"
+              [innerHTML]="
+                sanitizedDescription(productDetailsData().description)
+              "
               [ngClass]="{ 'line-clamp-[8]': isCollapsed() }"
               class="prose desc text-sm mobile:text-base text-type_grey leading-tight"
             ></div>
-            @if (stripedDescription(product.description).length > limit) {
+            @if (
+              stripedDescription(productDetailsData().description).length >
+              limit
+            ) {
               <a
                 href="javascript:void(0)"
                 (click)="toggleCollapse()"
@@ -109,14 +123,14 @@
                   ></i>
                 </div>
               }
-              @if (product.ratings.length) {
+              @if (productDetailsData().ratings.length) {
                 <p class="text-sm text-type_caption">
-                  ({{ product.ratings.length }} verified ratings)
+                  ({{ productDetailsData().ratings.length }} verified ratings)
                 </p>
               }
             </div>
 
-            @if (!product.ratings.length) {
+            @if (!productDetailsData().ratings.length) {
               <p class="text-sm text-type_caption ml-2">
                 (No ratings available)
               </p>
@@ -125,17 +139,21 @@
 
           <div class="mt-5">
             <h3 class="text-xs text-type_title font-semibold">CATEGORY</h3>
-            <p class="text-type_caption">{{ product.category.name }}</p>
+            <p class="text-type_caption">
+              {{ productDetailsData().category.name }}
+            </p>
           </div>
-          @if (!product.isSoldOut) {
+          @if (!productDetailsData().isSoldOut) {
             <div class="space-y-2 mt-5">
               <h3 class="text-xs text-type_title font-semibold">QUANTITY</h3>
               <div>
                 <app-product-quantity
-                  [quantity]="productInCart()?.unit || quantity"
+                  [quantity]="productInCart()?.unit || 1"
                   [isLoading]="isUpdatingCart()"
-                  [productUnitsLeft]="product.unit"
-                  (quantityChanged)="onAdjustQuantity($event, product)"
+                  [productUnitsLeft]="productDetailsData().unit"
+                  (quantityChanged)="
+                    onAdjustQuantity($event, productDetailsData())
+                  "
                 />
               </div>
             </div>
@@ -150,7 +168,7 @@
             >
               Proceed to Checkout
             </button>
-            @if (!product.isSoldOut) {
+            @if (!productDetailsData().isSoldOut) {
               <button
                 class="min-w-[120px] rounded-full text-white font-medium bg-primary py-2 flex-1 h-12 block mobile:hidden"
                 routerLink="/checkout"
@@ -161,7 +179,7 @@
                 <button
                   class="min-w-[120px] flex items-center justify-center space-x-3 mobile:min-w-[190px] rounded-full font-medium border-primary border-[2px] text-type_title_gray py-2 flex-1 h-12 hover:bg-primary hover:text-white"
                   [disabled]="isAddingToCart()"
-                  (click)="onAddToCart(product)"
+                  (click)="onAddToCart(productDetailsData())"
                 >
                   @if (isAddingToCart()) {
                     <app-loader
@@ -180,16 +198,20 @@
       </div>
 
       <div class="mt-[50px]">
-        <app-product-reviews [reviews]="product.ratings" />
+        <app-product-reviews [reviews]="productDetailsData().ratings" />
       </div>
 
       <div class="mt-[80px]">
         <app-recommended-products
-          [query]="{ productId: product.id, categoryId: product.categoryId }"
+          [query]="{
+            productId: productDetailsData().id,
+            categoryId: productDetailsData().categoryId,
+          }"
+          (loadProductDetails)="onViewDetails()"
         />
       </div>
     } @else {
-      <app-large-reviews [reviews]="product.ratings" />
+      <app-large-reviews [reviews]="productDetailsData().ratings" />
     }
   } @else if (isError()) {
     <div class="flex flex-col items-center justify-center">

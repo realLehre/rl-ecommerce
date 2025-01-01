@@ -7,6 +7,7 @@ import {
   inject,
   input,
   OnInit,
+  output,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductsService } from '../services/products.service';
@@ -28,6 +29,7 @@ export class RecommendedProductsComponent implements OnInit, AfterViewInit {
   carouselContainer!: ElementRef;
   query = input<{ productId: string; categoryId: string }>();
   products$!: Observable<IProduct[]>;
+  loadProductDetails = output();
 
   ngOnInit() {
     if (this.query()) {

@@ -1,6 +1,5 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   computed,
   inject,
@@ -12,16 +11,11 @@ import { ProductDetailsImagesComponent } from './product-details-images/product-
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 import { RecommendedProductsComponent } from '../recommended-products/recommended-products.component';
 import { ProductQuantityComponent } from '../../../shared/components/product-quantity/product-quantity.component';
-import {
-  ActivatedRoute,
-  NavigationEnd,
-  Router,
-  RouterLink,
-} from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProductsService } from '../services/products.service';
-import { catchError, filter, Observable, of } from 'rxjs';
+import { catchError, Observable, of, switchMap, tap } from 'rxjs';
 import { IProduct } from '../model/product.interface';
-import { AsyncPipe, CurrencyPipe, NgClass, NgStyle } from '@angular/common';
+import { CurrencyPipe, NgClass, NgStyle } from '@angular/common';
 import { SkeletonModule } from 'primeng/skeleton';
 import { CartService } from '../../../shared/services/cart.service';
 import { ToastService } from '../../../shared/services/toast.service';
@@ -32,6 +26,7 @@ import { PricePercentageDecreasePipe } from '../../../shared/pipes/price-percent
 import { ICart, ICartItems } from '../../../shared/models/cart.interface';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AuthService } from '../../auth/services/auth.service';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-product-details',
@@ -43,7 +38,6 @@ import { AuthService } from '../../auth/services/auth.service';
     RecommendedProductsComponent,
     ProductQuantityComponent,
     RouterLink,
-    AsyncPipe,
     SkeletonModule,
     CurrencyPipe,
     NgClass,
@@ -57,7 +51,6 @@ import { AuthService } from '../../auth/services/auth.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductDetailsComponent implements OnInit {
-  private router = inject(Router);
   private route = inject(ActivatedRoute);
   private productService = inject(ProductsService);
   private cartService = inject(CartService);
@@ -65,13 +58,11 @@ export class ProductDetailsComponent implements OnInit {
   private toast = inject(ToastService);
   private sanitizer = inject(DomSanitizer);
   private authService = inject(AuthService);
+
   activeProduct = this.productService.activeProduct;
-  product$!: Observable<IProduct | any>;
   quantity: number = 1;
-  isLoading: boolean = false;
   isCollapsed = signal(true);
   limit = 200;
-  cdr = inject(ChangeDetectorRef);
   isAddingToCart = signal(false);
   productId!: string;
   isShowingFullReview = this.reviewService.seeingFullReview;
@@ -82,61 +73,48 @@ export class ProductDetailsComponent implements OnInit {
     if (this.cartService.cartSignal()) {
       return this.cartService
         .cartSignal()
-        ?.cartItems?.find(
-          (cartItem) =>
-            cartItem.productId === this.route.snapshot.queryParams['id'],
-        );
+        ?.cartItems?.find((cartItem) => cartItem.productId === this.id());
     }
     return;
   });
+  id = signal(this.route.snapshot.queryParams['id']);
   isUpdatingCart = signal(false);
+  isLoading = signal(true);
   isError = signal(false);
   errorMessage = signal(undefined);
+  refreshTrigger = signal(0);
+  refresh = computed(() => ({
+    id: this.id(),
+    refresh: this.refreshTrigger(),
+  }));
+  productDetails$: Observable<IProduct | any> = toObservable(this.refresh).pipe(
+    tap(() => {
+      this.isLoading.set(true);
+    }),
+    switchMap(({ id }) =>
+      this.productService.getProductById(id).pipe(
+        catchError((err: any) => {
+          this.toast.showToast({ type: 'error', message: err.error.message });
+          this.isError.set(true);
+          this.errorMessage.set(err.error.message);
 
+          return of(null);
+        }),
+      ),
+    ),
+    tap(() => this.isLoading.set(false)),
+  );
+  productDetailsData = toSignal(this.productDetails$);
   ngOnInit() {
-    this.productId = this.route.snapshot.queryParams['id'];
     const isShowingReviews = this.route.snapshot.queryParams['reviews'];
     if (isShowingReviews) {
       this.reviewService.seeingFullReview.set(true);
     }
-    this.product$ = this.productService.getProductById(this.productId).pipe(
-      catchError((err: any) => {
-        this.toast.showToast({ type: 'error', message: err.error.message });
-        this.isError.set(true);
-        this.errorMessage.set(err.error.message);
-        return of(null);
-      }),
-    );
+  }
 
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe(() => {
-        this.isCollapsed.set(true);
-        this.productId = this.route.snapshot.queryParams['id'];
-        this.product$ = this.productService.getProductById(this.productId).pipe(
-          catchError((err: any) => {
-            this.toast.showToast({ type: 'error', message: err.error.message });
-            this.isError.set(true);
-            this.errorMessage.set(err.error.message);
-
-            return of(null);
-          }),
-        );
-
-        this.productInCart = computed(() => {
-          if (this.cartService.cartSignal()) {
-            return this.cartService
-              .cartSignal()
-              ?.cartItems?.find(
-                (cartItem) =>
-                  cartItem.productId === this.route.snapshot.queryParams['id'],
-              );
-          }
-          return;
-        });
-      });
-
-    this.cdr.detectChanges();
+  onViewDetails() {
+    this.refreshTrigger.update((count) => count + 1);
+    this.id.set(this.productService.activeProduct()?.id);
   }
 
   onAddToCart(product: IProduct) {

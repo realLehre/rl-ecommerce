@@ -4,6 +4,7 @@ import {
   computed,
   inject,
   input,
+  output,
   signal,
 } from '@angular/core';
 import { CurrencyPipe, NgOptimizedImage, NgStyle } from '@angular/common';
@@ -62,10 +63,12 @@ export class ProductCardComponent {
     }
     return;
   });
+  seeDetails = output();
 
   onViewDetails(product: IProduct) {
     this.productService.activeProduct.set(product);
     this.reviewService.seeingFullReview.set(false);
+    this.seeDetails.emit();
     this.router.navigate(
       ['/product/' + this.productService.createSlug(product.name)],
       {
