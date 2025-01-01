@@ -76,15 +76,6 @@ export class ProductOptionsService {
     if (savedQuery?.rating) {
       this.currentRating.set(savedQuery?.rating);
     }
-
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {
-        ...this.createRouteQuery(),
-      },
-      queryParamsHandling: 'merge',
-      fragment: 'products',
-    });
   }
 
   getCategories() {

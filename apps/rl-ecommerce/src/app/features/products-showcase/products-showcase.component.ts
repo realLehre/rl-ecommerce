@@ -3,6 +3,7 @@ import {
   Component,
   computed,
   inject,
+  OnInit,
   Signal,
   signal,
 } from '@angular/core';
@@ -19,6 +20,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { ItemsShowingPipe } from '../../shared/pipes/items-showing.pipe';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ToastService } from '../../shared/services/toast.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-products-showcase',
@@ -35,11 +37,13 @@ import { ToastService } from '../../shared/services/toast.service';
   styleUrl: './products-showcase.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductsShowcaseComponent {
+export class ProductsShowcaseComponent implements OnInit {
   private layoutService = inject(LayoutService);
   private productService = inject(ProductsService);
   private optionsService = inject(ProductOptionsService);
   private toast = inject(ToastService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
   isMobileFilterOpened = this.layoutService.mobileFilterOpened;
   config = this.productService.paginationConfig;
   numberOfFilters = this.optionsService.numberOfFilters;
@@ -71,6 +75,17 @@ export class ProductsShowcaseComponent {
   );
   productsData: Signal<IProductResponse> = toSignal(this.products$);
   loaders = Array.from({ length: 15 });
+
+  ngOnInit() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        ...this.optionsService.createRouteQuery(),
+      },
+      queryParamsHandling: 'merge',
+      fragment: 'products',
+    });
+  }
 
   onRetryLoad() {
     this.refreshTrigger.update((count) => count + 1);

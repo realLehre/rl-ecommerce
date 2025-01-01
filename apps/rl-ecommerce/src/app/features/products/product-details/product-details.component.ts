@@ -105,6 +105,7 @@ export class ProductDetailsComponent implements OnInit {
     tap(() => this.isLoading.set(false)),
   );
   productDetailsData = toSignal(this.productDetails$);
+
   ngOnInit() {
     const isShowingReviews = this.route.snapshot.queryParams['reviews'];
     if (isShowingReviews) {
