@@ -34,8 +34,7 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ProductDeleteDialogComponent } from './product-delete-dialog/product-delete-dialog.component';
 import { ToastService } from '../../../shared/services/toast.service';
 import { IOrderFilter } from '../admin-orders/services/admin-order.service';
-import { catchError, map, Observable, of, switchMap, tap } from 'rxjs';
-import { IOrderResponse } from '../../../shared/models/order.interface';
+import { catchError, Observable, of, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-admin-products',

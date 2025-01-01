@@ -137,7 +137,7 @@ export class ProductCardComponent {
         productPrice: this.product()?.price!,
       })
       .subscribe({
-        next: (res) => {
+        next: () => {
           this.isUpdatingCart.set(false);
           const currentCart = this.cartService.cartSignal();
           if (currentCart) {

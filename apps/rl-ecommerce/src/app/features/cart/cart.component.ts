@@ -10,7 +10,7 @@ import { BreadcrumbComponent } from '../../shared/components/breadcrumb/breadcru
 import { Router, RouterLink } from '@angular/router';
 import { EmptyCartComponent } from './empty-cart/empty-cart.component';
 import { SkeletonModule } from 'primeng/skeleton';
-import { AsyncPipe, CurrencyPipe } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
 import { ProductQuantityComponent } from '../../shared/components/product-quantity/product-quantity.component';
 import { CartService } from '../../shared/services/cart.service';
 import {
@@ -18,7 +18,6 @@ import {
   ICartItemProduct,
   ICartItems,
 } from '../../shared/models/cart.interface';
-import { Observable, of } from 'rxjs';
 import { SubtotalPipe } from '../../shared/pipes/subtotal.pipe';
 import { DialogModule } from 'primeng/dialog';
 import { LoaderComponent } from '../../shared/components/loader/loader.component';
@@ -37,7 +36,6 @@ import { ToastService } from '../../shared/services/toast.service';
     SkeletonModule,
     CurrencyPipe,
     ProductQuantityComponent,
-    AsyncPipe,
     SubtotalPipe,
     DialogModule,
     LoaderComponent,
