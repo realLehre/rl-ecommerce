@@ -1,4 +1,8 @@
-import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import {
+  ApplicationConfig,
+  importProvidersFrom,
+  isDevMode,
+} from '@angular/core';
 import {
   InMemoryScrollingFeature,
   InMemoryScrollingOptions,
@@ -18,6 +22,9 @@ import { CookieService } from 'ngx-cookie-service';
 import { tokenInterceptor } from './shared/interceptors/token.interceptor';
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { cartReducer } from './state/cart/cart.reduce';
+import { CartEffects } from './state/cart/cart.effects';
 
 const scrollConfig: InMemoryScrollingOptions = {
   anchorScrolling: 'enabled',
@@ -28,14 +35,20 @@ const inMemoryScrollingFeature: InMemoryScrollingFeature =
   withInMemoryScrolling(scrollConfig);
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes, inMemoryScrollingFeature, withPreloading(PreloadAllModules), withComponentInputBinding()),
+    provideRouter(
+      routes,
+      inMemoryScrollingFeature,
+      withPreloading(PreloadAllModules),
+      withComponentInputBinding(),
+    ),
     provideAnimationsAsync(),
     importProvidersFrom([BrowserAnimationsModule]),
     provideHttpClient(withInterceptors([tokenInterceptor])),
     DialogService,
     DynamicDialogRef,
     CookieService,
-    provideStore(),
-    provideEffects()
-],
+    provideStore({ cart: cartReducer }),
+    provideEffects(CartEffects),
+    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
+  ],
 };

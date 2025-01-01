@@ -26,6 +26,10 @@ import { IProduct } from '../../../features/products/model/product.interface';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 import { CartService } from '../../../shared/services/cart.service';
 import { StateAuthService } from '../../../shared/services/state-auth.service';
+import { Store } from '@ngrx/store';
+import { loadCart } from '../../../state/cart/cart.actions';
+import { cartReducer, selectCart } from '../../../state/cart/cart.reduce';
+import { log } from '@angular-devkit/build-angular/src/builders/ssr-dev-server';
 
 @Component({
   selector: 'app-header',
@@ -40,6 +44,7 @@ export class HeaderComponent implements AfterViewInit, OnInit {
   private productService = inject(ProductsService);
   private cartService = inject(CartService);
   private stateAuthService = inject(StateAuthService);
+  private store = inject(Store);
   user = this.authService.user;
   userName = computed(() => {
     return this.user()?.fullName.split(' ')[0]!;
@@ -51,9 +56,12 @@ export class HeaderComponent implements AfterViewInit, OnInit {
   isSearching = this.productService.isSearchingProducts;
   cartItems = this.cartService.cartTotal;
   products = this.productService.searchedProductsSignal;
+
   ngOnInit() {
     this.cartService.cartSignal.set(null);
     this.cartService.getCart().subscribe();
+    this.store.dispatch(loadCart());
+    this.store.select(selectCart).subscribe((res) => console.log(res));
   }
 
   ngAfterViewInit() {

@@ -9,7 +9,10 @@ export const loadCartSuccess = createAction(
   props<{ cart: ICart }>(),
 );
 
-export const loadCartFailure = createAction('[Cart] Load Cart Failure');
+export const loadCartFailure = createAction(
+  '[Cart] Load Cart Failure',
+  props<{ error: string }>(),
+);
 
 export const addToCart = createAction(
   '[Cart] Add To Cart',
