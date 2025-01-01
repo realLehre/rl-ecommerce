@@ -121,16 +121,16 @@ export class CartService {
   }
 
   deleteCartItem(id: string) {
-    if (this.user()) {
-      return this.http.delete(`${this.apiUrl}/${id}/delete`);
-    } else {
-      this.guestCart.cartItems = this.guestCart.cartItems?.filter(
-        (item) => item.id !== id,
-      );
-      this.cartSignal.set(this.guestCart as ICart);
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.guestCart));
-      return of(this.guestCart);
-    }
+    return this.http.delete<ICartItems>(`${this.apiUrl}/${id}/delete`);
+    // if (this.user()) {
+    // } else {
+    //   this.guestCart.cartItems = this.guestCart.cartItems?.filter(
+    //     (item) => item.id !== id,
+    //   );
+    //   this.cartSignal.set(this.guestCart as ICart);
+    //   localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.guestCart));
+    //   return of(this.guestCart);
+    // }
   }
 
   onShowMergeCartDialog() {

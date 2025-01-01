@@ -4,10 +4,12 @@ import { CartService } from '../../shared/services/cart.service';
 import { Store } from '@ngrx/store';
 import {
   addToCart,
-  itemAddedToCart,
+  cartItemRemoved,
+  cartItemUpdated,
   loadCart,
   loadCartFailure,
   loadCartSuccess,
+  removeItemFromCart,
 } from './cart.actions';
 import { catchError, from, map, of, switchMap } from 'rxjs';
 
@@ -36,7 +38,21 @@ export class CartEffects {
       ofType(addToCart),
       switchMap((res) =>
         this.cartService.addToCart(res).pipe(
-          map((res) => itemAddedToCart({ item: res })),
+          map((res) => cartItemUpdated({ item: res })),
+          catchError((err) =>
+            of(loadCartFailure({ error: err.error.message })),
+          ),
+        ),
+      ),
+    );
+  });
+
+  removeItemFromCart$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(removeItemFromCart),
+      switchMap(({ id }) =>
+        this.cartService.deleteCartItem(id).pipe(
+          map((res) => cartItemRemoved({ item: res })),
           catchError((err) =>
             of(loadCartFailure({ error: err.error.message })),
           ),

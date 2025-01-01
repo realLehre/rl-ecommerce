@@ -23,7 +23,7 @@ import { tokenInterceptor } from './shared/interceptors/token.interceptor';
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
-import { cartReducer } from './state/cart/cart.reduce';
+import { cartReducer } from './state/cart/cart.reducer';
 import { CartEffects } from './state/cart/cart.effects';
 
 const scrollConfig: InMemoryScrollingOptions = {

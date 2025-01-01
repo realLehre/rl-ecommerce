@@ -1,8 +1,9 @@
 import { ICart } from '../../shared/models/cart.interface';
-import { createReducer, on } from '@ngrx/store';
+import { createAction, createReducer, on } from '@ngrx/store';
 import {
   addToCart,
-  itemAddedToCart,
+  cartItemRemoved,
+  cartItemUpdated,
   loadCart,
   loadCartFailure,
   loadCartSuccess,
@@ -20,6 +21,10 @@ const totalShippingCost = (cart: ICart) => {
 
 const subTotal = (cart: ICart) => {
   return cart.cartItems.reduce((acc, item) => acc + item.total, 0);
+};
+
+const removeItemFromCart = (cart: ICart, id: string) => {
+  return cart.cartItems.filter((items) => items.id !== id);
 };
 
 export const initialState: CartState = {
@@ -45,21 +50,43 @@ export const cartReducer = createReducer(
     error,
   })),
 
-  on(itemAddedToCart, (state, { item }) => {
-    const newCartItems = {
+  on(cartItemUpdated, (state, { item }) => {
+    const newCart = {
       ...state.cart!,
       cartItems: [...state.cart!.cartItems, item],
     };
-    const newShippingCost = totalShippingCost(newCartItems);
-    const newSubTotal = subTotal(newCartItems);
+    const newShippingCost = totalShippingCost(newCart);
+    const newSubTotal = subTotal(newCart);
     return {
       ...state,
       cart: {
         ...state.cart!,
-        cartItems: [...state.cart!.cartItems, item],
+        cartItems: newCart.cartItems,
         shippingCost: newShippingCost,
         subTotal: newSubTotal,
       },
+      status: 'success',
+      error: null,
+    };
+  }),
+
+  on(cartItemRemoved, (state, { item }) => {
+    const newCart = {
+      ...state.cart!,
+      cartItems: [...removeItemFromCart(state.cart!, item.id)],
+    };
+    const newShippingCost = totalShippingCost(newCart);
+    const newSubTotal = subTotal(newCart);
+    return {
+      ...state,
+      cart: {
+        ...state.cart!,
+        cartItems: newCart.cartItems,
+        shippingCost: newShippingCost,
+        subTotal: newSubTotal,
+      },
+      status: 'success',
+      error: null,
     };
   }),
 );

@@ -28,7 +28,7 @@ import { CartService } from '../../../shared/services/cart.service';
 import { StateAuthService } from '../../../shared/services/state-auth.service';
 import { Store } from '@ngrx/store';
 import { loadCart } from '../../../state/cart/cart.actions';
-import { cartReducer, selectCart } from '../../../state/cart/cart.reduce';
+import { cartReducer, selectCart } from '../../../state/cart/cart.reducer';
 import { log } from '@angular-devkit/build-angular/src/builders/ssr-dev-server';
 
 @Component({
