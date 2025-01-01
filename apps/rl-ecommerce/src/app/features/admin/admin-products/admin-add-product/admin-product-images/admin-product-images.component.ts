@@ -133,8 +133,8 @@ export class AdminProductImagesComponent implements OnInit {
           this.previousImageUrl = this.coverImageUrl;
           this.coverImageUploadError.set(false);
         }
+        this.imageUploadStatus.emit(this.imageUploading());
       };
-      this.imageUploadStatus.emit(this.imageUploading());
       this.uploadFile(file, type, index);
       reader.readAsDataURL(file);
     }

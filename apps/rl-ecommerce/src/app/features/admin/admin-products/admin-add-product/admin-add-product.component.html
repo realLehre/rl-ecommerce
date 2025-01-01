@@ -17,11 +17,13 @@
           class="rounded-full text-white items-center justify-center space-x-2 font-medium bg-primary py-2 h-12 w-full flex-1 hover:bg-opacity-80 flex hover:text-type_title_gray hover:border-primary hover:border-[2px] hover:bg-transparent"
           (click)="onSubmit()"
           [disabled]="
-            isProductCreateDataInvalid() || isSubmitting() || !imageUploaded()
+            isProductCreateDataInvalid() || isSubmitting() || imageUploading()
           "
           [ngClass]="{
             'opacity-50 cursor-not-allowed hover:bg-opacity-80':
-              isProductCreateDataInvalid(),
+              isProductCreateDataInvalid() ||
+              isSubmitting() ||
+              imageUploading(),
           }"
         >
           @if (isSubmitting()) {
@@ -60,11 +62,11 @@
       class="rounded-full text-white items-center justify-center space-x-2 font-medium bg-primary py-2 h-12 w-full flex-1 hover:bg-opacity-80 flex hover:text-type_title_gray hover:border-primary hover:border-[2px] hover:bg-transparent"
       (click)="onSubmit()"
       [disabled]="
-        isProductCreateDataInvalid() || isSubmitting() || !imageUploaded()
+        isProductCreateDataInvalid() || isSubmitting() || imageUploading()
       "
       [ngClass]="{
         'opacity-50 cursor-not-allowed hover:bg-opacity-80':
-          isProductCreateDataInvalid(),
+          isProductCreateDataInvalid() || isSubmitting() || imageUploading(),
       }"
     >
       @if (isSubmitting()) {

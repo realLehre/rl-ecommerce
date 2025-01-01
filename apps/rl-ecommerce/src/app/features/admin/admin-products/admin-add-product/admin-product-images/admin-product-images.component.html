@@ -78,7 +78,7 @@
       <div
         class="grid grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-4 w-full"
       >
-        @for (box of uploadBoxes(); track box; let i = $index) {
+        @for (box of uploadBoxes(); track box.imageUrl; let i = $index) {
           <div
             class="rounded-lg border-[2px] border-border_subtle border-dashed h-[190px] flex flex-col text-center items-center justify-center relative"
             appDragAndDrop
