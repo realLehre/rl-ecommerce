@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { ICart } from '../../shared/models/cart.interface';
+import { ICart, ICartItems } from '../../shared/models/cart.interface';
 import { IProduct } from '../../features/products/model/product.interface';
 
 export const loadCart = createAction('[Cart] Load Cart');
@@ -17,6 +17,11 @@ export const loadCartFailure = createAction(
 export const addToCart = createAction(
   '[Cart] Add To Cart',
   props<{ unit: number; product: IProduct }>(),
+);
+
+export const itemAddedToCart = createAction(
+  '[Cart] Item Added To Cart',
+  props<{ item: ICartItems | any }>(),
 );
 
 export const updateCartItem = createAction(

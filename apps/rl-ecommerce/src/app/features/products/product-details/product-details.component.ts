@@ -27,6 +27,8 @@ import { ICart, ICartItems } from '../../../shared/models/cart.interface';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AuthService } from '../../auth/services/auth.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { Store } from '@ngrx/store';
+import { addToCart } from '../../../state/cart/cart.actions';
 
 @Component({
   selector: 'app-product-details',
@@ -58,6 +60,7 @@ export class ProductDetailsComponent implements OnInit {
   private toast = inject(ToastService);
   private sanitizer = inject(DomSanitizer);
   private authService = inject(AuthService);
+  private store = inject(Store);
   activeProduct = this.productService.activeProduct;
   quantity: number = 1;
   isCollapsed = signal(true);
@@ -119,59 +122,59 @@ export class ProductDetailsComponent implements OnInit {
 
   onAddToCart(product: IProduct) {
     this.isAddingToCart.set(true);
-
-    this.cartService
-      .addToCart({
-        product: product,
-        unit: this.quantity,
-      })!
-      .subscribe({
-        next: (res) => {
-          this.isAddingToCart.set(false);
-          const cartTotal = this.cartService.cartTotal;
-
-          this.cartService.cartTotal.set(cartTotal()! + 1);
-
-          //   this.cartService.cartSignal.set(null);
-          //
-          // this.cartService.getCart().subscribe();
-
-          const cart = this.cartService.cartSignal() || ({} as ICart);
-          this.cartService.cartSignal.set(null);
-          this.cartService.getCart().subscribe();
-          const newCartItem = {
-            ...res,
-            product: this.activeProduct() as IProduct,
-          };
-          this.cartService.cartSignal.set({
-            ...this.cartService.cartSignal()!,
-            cartItems: Array.isArray(cart?.cartItems!)
-              ? [...cart?.cartItems!, newCartItem as any]
-              : [newCartItem],
-          });
-
-          if (!this.authService.user()) {
-            this.cartService.guestCart.cartItems?.push(res as ICartItems);
-            localStorage.setItem(
-              this.cartService.STORAGE_KEY,
-              JSON.stringify(this.cartService.guestCart),
-            );
-            this.cartService.cartTotal.set(cartTotal()! + 1);
-          }
-
-          this.toast.showToast({
-            type: 'success',
-            message: `${product.name} added to cart!`,
-          });
-        },
-        error: (err) => {
-          this.isAddingToCart.set(false);
-          this.toast.showToast({
-            type: 'error',
-            message: err.error.message,
-          });
-        },
-      });
+    this.store.dispatch(addToCart({ product: product, unit: this.quantity }));
+    // this.cartService
+    //   .addToCart({
+    //     product: product,
+    //     unit: this.quantity,
+    //   })!
+    //   .subscribe({
+    //     next: (res) => {
+    //       this.isAddingToCart.set(false);
+    //       const cartTotal = this.cartService.cartTotal;
+    //
+    //       this.cartService.cartTotal.set(cartTotal()! + 1);
+    //
+    //       //   this.cartService.cartSignal.set(null);
+    //       //
+    //       // this.cartService.getCart().subscribe();
+    //
+    //       const cart = this.cartService.cartSignal() || ({} as ICart);
+    //       this.cartService.cartSignal.set(null);
+    //       this.cartService.getCart().subscribe();
+    //       const newCartItem = {
+    //         ...res,
+    //         product: this.activeProduct() as IProduct,
+    //       };
+    //       this.cartService.cartSignal.set({
+    //         ...this.cartService.cartSignal()!,
+    //         cartItems: Array.isArray(cart?.cartItems!)
+    //           ? [...cart?.cartItems!, newCartItem as any]
+    //           : [newCartItem],
+    //       });
+    //
+    //       if (!this.authService.user()) {
+    //         this.cartService.guestCart.cartItems?.push(res as ICartItems);
+    //         localStorage.setItem(
+    //           this.cartService.STORAGE_KEY,
+    //           JSON.stringify(this.cartService.guestCart),
+    //         );
+    //         this.cartService.cartTotal.set(cartTotal()! + 1);
+    //       }
+    //
+    //       this.toast.showToast({
+    //         type: 'success',
+    //         message: `${product.name} added to cart!`,
+    //       });
+    //     },
+    //     error: (err) => {
+    //       this.isAddingToCart.set(false);
+    //       this.toast.showToast({
+    //         type: 'error',
+    //         message: err.error.message,
+    //       });
+    //     },
+    //   });
   }
 
   toggleCollapse() {

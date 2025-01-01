@@ -3,7 +3,7 @@ import { environment } from '../../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
 import { UserAccountService } from '../../features/user/user-account/services/user-account.service';
 import { ICart, ICartItems } from '../models/cart.interface';
-import { of, retry, tap } from 'rxjs';
+import { Observable, of, retry, tap } from 'rxjs';
 import { IProduct } from '../../features/products/model/product.interface';
 import { DialogService } from 'primeng/dynamicdialog';
 import { MergeCartAlertDialogComponent } from '../components/merge-cart-alert-dialog/merge-cart-alert-dialog.component';
@@ -68,10 +68,16 @@ export class CartService {
     }
   }
 
-  addToCart(data: { unit: number; product: IProduct }) {
+  addToCart(data: { unit: number; product: IProduct }): Observable<ICartItems> {
     const old = this.cartSignal();
+    return this.http.post<ICartItems>(`${this.apiUrl}/add`, {
+      userId: this.user()?.id,
+      unit: data.unit,
+      productId: data.product.id,
+      productPrice: data.product.price,
+    });
     if (this.user()) {
-      return this.http.post(`${this.apiUrl}/add`, {
+      return this.http.post<ICartItems>(`${this.apiUrl}/add`, {
         userId: this.user()?.id,
         unit: data.unit,
         productId: data.product.id,
@@ -90,7 +96,7 @@ export class CartService {
       // this.guestCart.cartItems?.push(guestCartItem as ICartItems);
       // localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.guestCart));
       // this.cartSignal.set(old);
-      return of(guestCartItem);
+      // return of(guestCartItem);
     }
   }
 
