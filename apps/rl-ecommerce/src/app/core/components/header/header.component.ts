@@ -28,8 +28,8 @@ import { CartService } from '../../../shared/services/cart.service';
 import { StateAuthService } from '../../../shared/services/state-auth.service';
 import { Store } from '@ngrx/store';
 import { loadCart } from '../../../state/cart/cart.actions';
-import { cartReducer, selectCart } from '../../../state/cart/cart.reducer';
-import { log } from '@angular-devkit/build-angular/src/builders/ssr-dev-server';
+import { cartReducer } from '../../../state/cart/cart.reducer';
+import { selectCart } from '../../../state/state';
 
 @Component({
   selector: 'app-header',

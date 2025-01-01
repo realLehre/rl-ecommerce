@@ -26,7 +26,10 @@ import { ProductsService } from '../products/services/products.service';
 import { IProduct } from '../products/model/product.interface';
 import { ToastService } from '../../shared/services/toast.service';
 import { Store } from '@ngrx/store';
-import { removeItemFromCart } from '../../state/cart/cart.actions';
+import {
+  removeItemFromCart,
+  updateCartItem,
+} from '../../state/cart/cart.actions';
 
 @Component({
   selector: 'app-cart',
@@ -74,54 +77,60 @@ export class CartComponent implements OnInit {
     loadings[idx] = true;
     this.isUpdating.set(loadings);
     this.quantity = qty;
-
-    this.cartService
-      .updateCartItem({
+    this.store.dispatch(
+      updateCartItem({
         itemId: item.id,
         unit: this.quantity,
         productPrice: item.product.price,
-      })
-      .subscribe({
-        next: (res) => {
-          loadings[idx] = false;
-          this.isUpdating.set([...loadings]);
-          const currentCart = this.cartService.cartSignal();
-          if (currentCart) {
-            const updatedItems = currentCart.cartItems.map((cartItem) => {
-              if (cartItem.id === item.id) {
-                return {
-                  ...cartItem,
-                  unit: qty,
-                  total: qty * cartItem.product.price,
-                };
-              }
-              return cartItem;
-            });
-
-            const newCart = { ...currentCart, cartItems: updatedItems };
-
-            // this.cart$ = of(newCart);
-            this.cart.set(newCart);
-            this.cartService.cartSignal.set(newCart);
-            localStorage.setItem(
-              this.cartService.CART_KEY,
-              JSON.stringify(newCart),
-            );
-          }
-          this.toast.showToast({
-            type: 'success',
-            message: item.product.name + ' ' + 'quantity adjusted!',
-          });
-        },
-        error: (err) => {
-          loadings[idx] = false;
-          this.isUpdating.set([...loadings]);
-          this.toast.showToast({
-            type: 'error',
-            message: err.error.message,
-          });
-        },
-      });
+      }),
+    );
+    // this.cartService
+    //   .updateCartItem({
+    //     itemId: item.id,
+    //     unit: this.quantity,
+    //     productPrice: item.product.price,
+    //   })
+    //   .subscribe({
+    //     next: (res) => {
+    //       loadings[idx] = false;
+    //       this.isUpdating.set([...loadings]);
+    //       const currentCart = this.cartService.cartSignal();
+    //       if (currentCart) {
+    //         const updatedItems = currentCart.cartItems.map((cartItem) => {
+    //           if (cartItem.id === item.id) {
+    //             return {
+    //               ...cartItem,
+    //               unit: qty,
+    //               total: qty * cartItem.product.price,
+    //             };
+    //           }
+    //           return cartItem;
+    //         });
+    //
+    //         const newCart = { ...currentCart, cartItems: updatedItems };
+    //
+    //         // this.cart$ = of(newCart);
+    //         this.cart.set(newCart);
+    //         this.cartService.cartSignal.set(newCart);
+    //         localStorage.setItem(
+    //           this.cartService.CART_KEY,
+    //           JSON.stringify(newCart),
+    //         );
+    //       }
+    //       this.toast.showToast({
+    //         type: 'success',
+    //         message: item.product.name + ' ' + 'quantity adjusted!',
+    //       });
+    //     },
+    //     error: (err) => {
+    //       loadings[idx] = false;
+    //       this.isUpdating.set([...loadings]);
+    //       this.toast.showToast({
+    //         type: 'error',
+    //         message: err.error.message,
+    //       });
+    //     },
+    //   });
   }
 
   onDeleteDialogAction(action: string, item?: ICartItems) {

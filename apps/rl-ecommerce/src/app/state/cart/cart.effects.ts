@@ -4,14 +4,16 @@ import { CartService } from '../../shared/services/cart.service';
 import { Store } from '@ngrx/store';
 import {
   addToCart,
+  cartItemAdded,
   cartItemRemoved,
   cartItemUpdated,
   loadCart,
   loadCartFailure,
   loadCartSuccess,
   removeItemFromCart,
+  updateCartItem,
 } from './cart.actions';
-import { catchError, from, map, of, switchMap } from 'rxjs';
+import { catchError, concatMap, from, map, of, switchMap } from 'rxjs';
 
 @Injectable()
 export class CartEffects {
@@ -38,7 +40,7 @@ export class CartEffects {
       ofType(addToCart),
       switchMap((res) =>
         this.cartService.addToCart(res).pipe(
-          map((res) => cartItemUpdated({ item: res })),
+          map((res) => cartItemAdded({ item: res })),
           catchError((err) =>
             of(loadCartFailure({ error: err.error.message })),
           ),
@@ -53,6 +55,20 @@ export class CartEffects {
       switchMap(({ id }) =>
         this.cartService.deleteCartItem(id).pipe(
           map((res) => cartItemRemoved({ item: res })),
+          catchError((err) =>
+            of(loadCartFailure({ error: err.error.message })),
+          ),
+        ),
+      ),
+    );
+  });
+
+  updateCartItem$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(updateCartItem),
+      concatMap((res) =>
+        this.cartService.updateCartItem(res).pipe(
+          map((res) => cartItemUpdated({ item: res })),
           catchError((err) =>
             of(loadCartFailure({ error: err.error.message })),
           ),

@@ -1,7 +1,7 @@
-import { ICart } from '../../shared/models/cart.interface';
+import { ICart, ICartItems } from '../../shared/models/cart.interface';
 import { createAction, createReducer, on } from '@ngrx/store';
 import {
-  addToCart,
+  cartItemAdded,
   cartItemRemoved,
   cartItemUpdated,
   loadCart,
@@ -23,8 +23,14 @@ const subTotal = (cart: ICart) => {
   return cart.cartItems.reduce((acc, item) => acc + item.total, 0);
 };
 
-const removeItemFromCart = (cart: ICart, id: string) => {
-  return cart.cartItems.filter((items) => items.id !== id);
+const removeItemFromCart = (cart: ICart, changes: ICartItems) => {
+  return cart.cartItems.filter((items) => items.id !== changes.id);
+};
+
+const updateCartItem = (cart: ICart, updated: ICartItems) => {
+  return cart.cartItems
+    .filter((item) => item.product)
+    .map((item) => (item.id === updated.id ? { ...item, ...updated } : item));
 };
 
 export const initialState: CartState = {
@@ -50,7 +56,7 @@ export const cartReducer = createReducer(
     error,
   })),
 
-  on(cartItemUpdated, (state, { item }) => {
+  on(cartItemAdded, (state, { item }) => {
     const newCart = {
       ...state.cart!,
       cartItems: [...state.cart!.cartItems, item],
@@ -73,7 +79,27 @@ export const cartReducer = createReducer(
   on(cartItemRemoved, (state, { item }) => {
     const newCart = {
       ...state.cart!,
-      cartItems: [...removeItemFromCart(state.cart!, item.id)],
+      cartItems: [...removeItemFromCart(state.cart!, item)],
+    };
+    const newShippingCost = totalShippingCost(newCart);
+    const newSubTotal = subTotal(newCart);
+    return {
+      ...state,
+      cart: {
+        ...state.cart!,
+        cartItems: newCart.cartItems,
+        shippingCost: newShippingCost,
+        subTotal: newSubTotal,
+      },
+      status: 'success',
+      error: null,
+    };
+  }),
+
+  on(cartItemUpdated, (state, { item }) => {
+    const newCart = {
+      ...state.cart!,
+      cartItems: updateCartItem(state.cart!, item),
     };
     const newShippingCost = totalShippingCost(newCart);
     const newSubTotal = subTotal(newCart);
@@ -90,5 +116,3 @@ export const cartReducer = createReducer(
     };
   }),
 );
-
-export const selectCart = (state: CartState) => state.cart;

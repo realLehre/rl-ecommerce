@@ -19,9 +19,19 @@ export const addToCart = createAction(
   props<{ unit: number; product: IProduct }>(),
 );
 
+export const cartItemAdded = createAction(
+  '[Cart] Item Added To Cart',
+  props<{ item: ICartItems | any }>(),
+);
+
 export const updateCartItem = createAction(
   '[Cart] Update Cart',
   props<{ itemId: string; unit: number; productPrice: number }>(),
+);
+
+export const cartItemUpdated = createAction(
+  '[Cart] Item Added To Cart',
+  props<{ item: ICartItems | any }>(),
 );
 
 export const removeItemFromCart = createAction(
@@ -32,9 +42,4 @@ export const removeItemFromCart = createAction(
 export const cartItemRemoved = createAction(
   '[Cart] Item Removed From Cart',
   props<{ item: ICartItems }>(),
-);
-
-export const cartItemUpdated = createAction(
-  '[Cart] Item Added To Cart',
-  props<{ item: ICartItems | any }>(),
 );

@@ -101,23 +101,27 @@ export class CartService {
   }
 
   updateCartItem(data: { itemId: string; unit: number; productPrice: number }) {
-    if (this.user()) {
-      return this.http.patch(`${this.apiUrl}/${data.itemId}/update`, {
-        unit: data.unit,
-        productPrice: data.productPrice,
-      });
-    } else {
-      this.guestCart.cartItems = this.guestCart.cartItems?.map((item) => {
-        if (item.id == data.itemId) {
-          item.unit = data.unit;
-          item.total = data.unit * item.product.price;
-        }
-        return item as ICartItems;
-      });
-      this.cartSignal.set(this.guestCart as ICart);
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.guestCart));
-      return of(this.guestCart);
-    }
+    return this.http.patch(`${this.apiUrl}/${data.itemId}/update`, {
+      unit: data.unit,
+      productPrice: data.productPrice,
+    });
+    // if (this.user()) {
+    //   return this.http.patch(`${this.apiUrl}/${data.itemId}/update`, {
+    //     unit: data.unit,
+    //     productPrice: data.productPrice,
+    //   });
+    // } else {
+    //   this.guestCart.cartItems = this.guestCart.cartItems?.map((item) => {
+    //     if (item.id == data.itemId) {
+    //       item.unit = data.unit;
+    //       item.total = data.unit * item.product.price;
+    //     }
+    //     return item as ICartItems;
+    //   });
+    //   this.cartSignal.set(this.guestCart as ICart);
+    //   localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.guestCart));
+    //   return of(this.guestCart);
+    // }
   }
 
   deleteCartItem(id: string) {
