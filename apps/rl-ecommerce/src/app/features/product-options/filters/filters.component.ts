@@ -68,6 +68,7 @@ export class FiltersComponent {
 
   onSelectRatingFilter(rating: number) {
     this.currentRatingFilter.set(rating);
+    this.layoutService.mobileFilterOpened.set(false);
     this.productService.productSignal.set(null);
     this.optionsService.currentRating.set(rating);
     this.optionsService.setDataAndRoute();

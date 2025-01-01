@@ -1,10 +1,11 @@
 <div
-  class="bg-bg_main rounded-t-[30px] shadow-2xl shadow-inner h-full p-8 w-full relative pt-12"
+  class="bg-bg_main rounded-t-[30px] h-full p-8 w-full relative pt-12 overflow-y-auto"
+  style="box-shadow: 0 0 20px rgba(0, 0, 0, 0.3)"
 >
   <img
     src="assets/images/icons/close.svg"
     alt=""
-    class="w-4 min-w-4 h-4 min-h-4 absolute top-6 right-4"
+    class="w-4 min-w-4 h-4 min-h-4 fixed top-6 right-4"
     (click)="onCloseMenu()"
   />
   <app-filters />
