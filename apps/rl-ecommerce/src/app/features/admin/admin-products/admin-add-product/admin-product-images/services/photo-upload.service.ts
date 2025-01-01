@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { defer, from, map, Observable, of } from 'rxjs';
+import { defer, from, map, mergeMap, Observable, of } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 import { AuthService } from '../../../../../auth/services/auth.service';
 import { IProductImages } from '../../../admin-product.interface';
@@ -9,7 +9,6 @@ import { IProductImages } from '../../../admin-product.interface';
 })
 export class PhotoUploadService {
   private readonly authService = inject(AuthService);
-  isChangingImage = signal(false);
   private supabase = this.authService.supabase;
   BUCKET_NAME = 'just-product-images';
 
@@ -46,6 +45,15 @@ export class PhotoUploadService {
     return defer(() =>
       from(this.supabase.storage.from(this.BUCKET_NAME).remove([imagePath])),
     );
+  }
+
+  deleteAllImagesFromBucket(imageUrls: string[]): void {
+    from(imageUrls)
+      .pipe(mergeMap((url) => this.removeImage(this.getImagePath(url))))
+      .subscribe({
+        next: (res) => {},
+        error: (err) => {},
+      });
   }
 
   getImagePath(url: string): string {

@@ -1,12 +1,33 @@
+<!--<div-->
+<!--  class="bg-bg_main rounded-t-[20px] h-full p-8 w-full relative overflow-y-auto overflow-hidden"-->
+<!--  style="box-shadow: 0 0 20px rgba(0, 0, 0, 0.3)"-->
+<!--&gt;-->
+<!--  <img-->
+<!--    src="assets/images/icons/close.svg"-->
+<!--    alt=""-->
+<!--    class="w-4 min-w-4 h-4 min-h-4 sticky top-6 right-4"-->
+<!--    (click)="onCloseMenu()"-->
+<!--  />-->
+<!--  <div class="pt-12">-->
+<!--    <app-filters />-->
+<!--  </div>-->
+<!--</div>-->
+
 <div
-  class="bg-bg_main rounded-t-[30px] h-full p-8 w-full relative pt-12 overflow-y-auto"
+  class="bg-bg_main rounded-t-[20px] h-full w-full relative overflow-hidden"
   style="box-shadow: 0 0 20px rgba(0, 0, 0, 0.3)"
 >
   <img
     src="assets/images/icons/close.svg"
     alt=""
-    class="w-4 min-w-4 h-4 min-h-4 fixed top-6 right-4"
+    class="w-4 min-w-4 h-4 min-h-4 absolute top-6 right-4"
     (click)="onCloseMenu()"
   />
-  <app-filters />
+
+  <!-- Add a spacer div for consistent padding -->
+  <div class="h-12"></div>
+
+  <div class="p-8 overflow-y-auto h-[calc(100%-48px)]">
+    <app-filters />
+  </div>
 </div>

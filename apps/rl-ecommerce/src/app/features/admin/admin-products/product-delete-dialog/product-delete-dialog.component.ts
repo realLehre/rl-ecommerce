@@ -8,6 +8,7 @@ import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { AdminProductsService } from '../services/admin-products.service';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
+import { PhotoUploadService } from '../admin-add-product/admin-product-images/services/photo-upload.service';
 
 @Component({
   selector: 'app-product-delete-dialog',
@@ -21,6 +22,7 @@ export class ProductDeleteDialogComponent {
   private ref = inject(DynamicDialogRef);
   private toast = inject(ToastService);
   private productService = inject(AdminProductsService);
+  private photoService = inject(PhotoUploadService);
   productToDelete = this.productService.productToDelete;
   isLoading = signal(false);
 
@@ -34,6 +36,9 @@ export class ProductDeleteDialogComponent {
             type: 'success',
             message: 'Product deleted successfully',
           });
+          this.photoService.deleteAllImagesFromBucket(
+            this.productToDelete()?.imageUrls!,
+          );
           this.isLoading.set(false);
           this.ref.close('deleted');
         },

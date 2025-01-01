@@ -3,10 +3,10 @@
     @if (productArray.products.length) {
       <header class="flex items-center mb-7">
         <button
-          class="flex tablet:hidden items-center space-x-1 cursor-pointer text-type_grey relative"
+          class="flex min-[760px]:hidden items-center space-x-1 cursor-pointer text-type_grey relative"
           (click)="onOpenMobileFilter()"
         >
-          <span class="text-sm">Sort by</span>
+          <span class="text-sm">Filter by</span>
           <svg
             width="16"
             height="17"
@@ -33,7 +33,7 @@
       </header>
     }
     <app-mobile-filters
-      class="fixed tablet:hidden w-full left-0 bottom-0 h-1/2 translate-y-[100%] z-[110] transition-all ease-in-out"
+      class="fixed min-[760px]:hidden w-full left-0 bottom-0 h-1/2 translate-y-[100%] z-[110] transition-all ease-in-out"
       [ngClass]="{ '!translate-y-0': isMobileFilterOpened() }"
     />
 
@@ -169,8 +169,7 @@
   } @else {
     <header class="flex items-center mb-7">
       <div
-        class="flex tablet:hidden items-center space-x-1 cursor-pointer text-type_grey relative"
-        (click)="onOpenMobileFilter()"
+        class="flex min-[760px]:hidden items-center space-x-1 cursor-pointer text-type_grey relative"
       >
         <p-skeleton width="68px" height="2rem" />
       </div>
