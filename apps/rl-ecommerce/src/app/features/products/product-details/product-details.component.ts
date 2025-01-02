@@ -108,11 +108,10 @@ export class ProductDetailsComponent implements OnInit {
   isAddingToCart = toSignal(
     this.store.select(selectCartLoadingOperations).pipe(
       tap((res) => {
-        console.log(res);
-        if (res.add?.error) {
+        if (res.error) {
           this.toast.showToast({
             type: 'error',
-            message: res.add?.error,
+            message: res.error,
           });
         } else if (res.add?.status === 'success') {
           this.toast.showToast({
@@ -121,7 +120,7 @@ export class ProductDetailsComponent implements OnInit {
           });
         }
       }),
-      map((operation) => operation.add?.loading),
+      map((operation) => (operation.error ? false : operation.add?.loading)),
     ),
   );
 

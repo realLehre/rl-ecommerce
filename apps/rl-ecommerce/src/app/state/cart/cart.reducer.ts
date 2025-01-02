@@ -5,6 +5,7 @@ import {
   cartItemAdded,
   cartItemRemoved,
   cartItemUpdated,
+  cartOperationError,
   loadCart,
   loadCartFailure,
   loadCartSuccess,
@@ -25,6 +26,7 @@ export interface CartState {
     add: LoadingOperation | null;
     update: LoadingOperation | null;
     delete: LoadingOperation | null;
+    error: string | null;
   };
 }
 
@@ -55,6 +57,7 @@ export const initialState: CartState = {
     add: null,
     update: null,
     delete: null,
+    error: null,
   },
 };
 
@@ -107,6 +110,7 @@ export const cartReducer = createReducer(
       error: null,
       loadingOperations: {
         ...state.loadingOperations,
+        error: null,
         add: {
           ...state.loadingOperations.add,
           loading: false,
@@ -156,4 +160,12 @@ export const cartReducer = createReducer(
       error: null,
     };
   }),
+
+  on(cartOperationError, (state, { error }) => ({
+    ...state,
+    loadingOperations: {
+      ...state.loadingOperations,
+      error,
+    },
+  })),
 );
