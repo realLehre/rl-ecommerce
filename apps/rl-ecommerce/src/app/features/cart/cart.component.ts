@@ -30,6 +30,13 @@ import {
   removeItemFromCart,
   updateCartItem,
 } from '../../state/cart/cart.actions';
+import { toSignal } from '@angular/core/rxjs-interop';
+import {
+  selectCart,
+  selectCartLoadingOperations,
+  selectCartState,
+} from '../../state/state';
+import { map, tap } from 'rxjs';
 
 @Component({
   selector: 'app-cart',
@@ -56,20 +63,40 @@ export class CartComponent implements OnInit {
   private router = inject(Router);
   private toast = inject(ToastService);
   private store = inject(Store);
-  cart = this.cartService.cartSignal as WritableSignal<ICart>;
+  cartState = toSignal(this.store.select(selectCartState));
   quantity: number = 1;
   isUpdating = signal<boolean[]>([false]);
   showDeleteDialog = signal(false);
   activeCartItem!: ICartItems;
-  isLoading = signal(false);
-  ngOnInit() {
-    if (!this.cart()) {
-      const cartData: Partial<ICart> = {
-        cartItems: [],
-      };
 
-      this.cart.set(cartData as ICart);
-    }
+  isLoading = toSignal(
+    this.store.select(selectCartLoadingOperations).pipe(
+      tap((res) => {
+        if (res.error) {
+          this.toast.showToast({
+            type: 'error',
+            message: res.error,
+          });
+        } else if (res.delete?.status === 'success') {
+          this.toast.showToast({
+            type: 'success',
+            message:
+              this.activeCartItem.product.name + ' ' + 'deleted from cart!',
+          });
+          this.showDeleteDialog.set(false);
+        }
+      }),
+      map((operation) => (operation.error ? false : operation.delete?.loading)),
+    ),
+  );
+  ngOnInit() {
+    // if (!this.cart()) {
+    //   const cartData: Partial<ICart> = {
+    //     cartItems: [],
+    //   };
+    //
+    //   this.cart.set(cartData as ICart);
+    // }
   }
 
   onAdjustQuantity(qty: number, item: ICartItems, idx: number) {
@@ -141,7 +168,7 @@ export class CartComponent implements OnInit {
   }
 
   onDeleteCartItem() {
-    this.isLoading.set(true);
+    // this.isLoading.set(true);
     this.store.dispatch(removeItemFromCart({ id: this.activeCartItem?.id }));
     // this.cartService.deleteCartItem(this.activeCartItem?.id).subscribe({
     //   next: (res) => {
