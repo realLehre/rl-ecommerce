@@ -39,9 +39,11 @@ export class CartEffects {
   addItemToCart$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(addToCart),
-      switchMap((res) =>
-        this.cartService.addToCart(res).pipe(
-          map((res) => cartItemAdded({ item: res })),
+      switchMap((actionRes) =>
+        this.cartService.addToCart(actionRes).pipe(
+          map((res) =>
+            cartItemAdded({ item: res, product: actionRes.product }),
+          ),
           catchError((err) =>
             of(cartOperationError({ error: err.error.message })),
           ),

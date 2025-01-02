@@ -93,10 +93,13 @@ export const cartReducer = createReducer(
     },
   })),
 
-  on(cartItemAdded, (state, { item }) => {
+  on(cartItemAdded, (state, action) => {
     const newCart = {
       ...state.cart!,
-      cartItems: [...state.cart!.cartItems, item],
+      cartItems: [
+        ...state.cart!.cartItems,
+        { ...action.item, product: action.product },
+      ],
     };
     const newShippingCost = totalShippingCost(newCart);
     const newSubTotal = subTotal(newCart);

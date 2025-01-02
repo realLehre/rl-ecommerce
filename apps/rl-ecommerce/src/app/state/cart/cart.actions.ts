@@ -21,7 +21,7 @@ export const addToCart = createAction(
 
 export const cartItemAdded = createAction(
   '[Cart] Item Added To Cart',
-  props<{ item: ICartItems | any }>(),
+  props<{ item: ICartItems | any; product: IProduct }>(),
 );
 
 export const updateCartItem = createAction(
