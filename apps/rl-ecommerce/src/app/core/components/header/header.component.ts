@@ -30,6 +30,7 @@ import { Store } from '@ngrx/store';
 import { loadCart } from '../../../state/cart/cart.actions';
 import { cartReducer } from '../../../state/cart/cart.reducer';
 import { selectCart, selectCartState } from '../../../state/state';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-header',
@@ -55,13 +56,15 @@ export class HeaderComponent implements AfterViewInit, OnInit {
   searchShown = signal(false);
   isSearching = this.productService.isSearchingProducts;
   cartItems = this.cartService.cartTotal;
+  cart$ = this.store.select(selectCartState);
+  cartData = toSignal(this.cart$);
   products = this.productService.searchedProductsSignal;
 
   ngOnInit() {
     this.cartService.cartSignal.set(null);
-    this.cartService.getCart().subscribe();
+    // this.cartService.getCart().subscribe();
     this.store.dispatch(loadCart());
-    this.store.select(selectCartState).subscribe((res) => console.log(res));
+    // this.store.select(selectCartState).subscribe((res) => console.log(res));
   }
 
   ngAfterViewInit() {

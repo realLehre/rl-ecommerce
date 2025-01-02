@@ -13,7 +13,7 @@ import { RecommendedProductsComponent } from '../recommended-products/recommende
 import { ProductQuantityComponent } from '../../../shared/components/product-quantity/product-quantity.component';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProductsService } from '../services/products.service';
-import { catchError, Observable, of, switchMap, tap } from 'rxjs';
+import { catchError, map, Observable, of, switchMap, tap } from 'rxjs';
 import { IProduct } from '../model/product.interface';
 import { CurrencyPipe, NgClass, NgStyle } from '@angular/common';
 import { SkeletonModule } from 'primeng/skeleton';
@@ -29,6 +29,7 @@ import { AuthService } from '../../auth/services/auth.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
 import { addToCart } from '../../../state/cart/cart.actions';
+import { selectCart, selectCartLoadingOperations } from '../../../state/state';
 
 @Component({
   selector: 'app-product-details',
@@ -65,19 +66,16 @@ export class ProductDetailsComponent implements OnInit {
   quantity: number = 1;
   isCollapsed = signal(true);
   limit = 200;
-  isAddingToCart = signal(false);
   productId!: string;
   isShowingFullReview = this.reviewService.seeingFullReview;
   stars = signal(
     Array.from({ length: 5 }, (_, i) => ({ star: i + 1, active: false })),
   );
+  cart = toSignal(this.store.select(selectCart));
   productInCart = computed(() => {
-    if (this.cartService.cartSignal()) {
-      return this.cartService
-        .cartSignal()
-        ?.cartItems?.find((cartItem) => cartItem.productId === this.id());
-    }
-    return;
+    return this.cart()?.cartItems?.find(
+      (cartItem) => cartItem.productId === this.id(),
+    );
   });
   id = signal(this.route.snapshot.queryParams['id']);
   isUpdatingCart = signal(false);
@@ -107,6 +105,25 @@ export class ProductDetailsComponent implements OnInit {
     }),
   );
   productDetailsData = toSignal(this.productDetails$);
+  isAddingToCart = toSignal(
+    this.store.select(selectCartLoadingOperations).pipe(
+      tap((res) => {
+        console.log(res);
+        if (res.add?.error) {
+          this.toast.showToast({
+            type: 'error',
+            message: res.add?.error,
+          });
+        } else if (res.add?.status === 'success') {
+          this.toast.showToast({
+            type: 'success',
+            message: `${this.productDetailsData()?.name} added to cart!`,
+          });
+        }
+      }),
+      map((operation) => operation.add?.loading),
+    ),
+  );
 
   ngOnInit() {
     const isShowingReviews = this.route.snapshot.queryParams['reviews'];
@@ -121,7 +138,7 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   onAddToCart(product: IProduct) {
-    this.isAddingToCart.set(true);
+    // this.isAddingToCart.set(true);
     this.store.dispatch(addToCart({ product: product, unit: this.quantity }));
     // this.cartService
     //   .addToCart({

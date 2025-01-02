@@ -7,6 +7,7 @@ import {
   cartItemAdded,
   cartItemRemoved,
   cartItemUpdated,
+  cartOperationError,
   loadCart,
   loadCartFailure,
   loadCartSuccess,
@@ -42,7 +43,7 @@ export class CartEffects {
         this.cartService.addToCart(res).pipe(
           map((res) => cartItemAdded({ item: res })),
           catchError((err) =>
-            of(loadCartFailure({ error: err.error.message })),
+            of(cartOperationError({ error: err.error.message })),
           ),
         ),
       ),
@@ -56,7 +57,7 @@ export class CartEffects {
         this.cartService.deleteCartItem(id).pipe(
           map((res) => cartItemRemoved({ item: res })),
           catchError((err) =>
-            of(loadCartFailure({ error: err.error.message })),
+            of(cartOperationError({ error: err.error.message })),
           ),
         ),
       ),
@@ -70,7 +71,7 @@ export class CartEffects {
         this.cartService.updateCartItem(res).pipe(
           map((res) => cartItemUpdated({ item: res })),
           catchError((err) =>
-            of(loadCartFailure({ error: err.error.message })),
+            of(cartOperationError({ error: err.error.message })),
           ),
         ),
       ),

@@ -1,6 +1,7 @@
 import { ICart, ICartItems } from '../../shared/models/cart.interface';
 import { createAction, createReducer, on } from '@ngrx/store';
 import {
+  addToCart,
   cartItemAdded,
   cartItemRemoved,
   cartItemUpdated,
@@ -9,10 +10,22 @@ import {
   loadCartSuccess,
 } from './cart.actions';
 
+export interface LoadingOperation {
+  error: string | null;
+  loading: boolean;
+  status: string | null;
+}
+
 export interface CartState {
   cart: ICart | null;
   error: string | null;
   status: string;
+  loadingOperations: {
+    fetch: LoadingOperation | null;
+    add: LoadingOperation | null;
+    update: LoadingOperation | null;
+    delete: LoadingOperation | null;
+  };
 }
 
 const totalShippingCost = (cart: ICart) => {
@@ -37,6 +50,12 @@ export const initialState: CartState = {
   cart: null,
   error: null,
   status: 'pending',
+  loadingOperations: {
+    fetch: null,
+    add: null,
+    update: null,
+    delete: null,
+  },
 };
 
 export const cartReducer = createReducer(
@@ -56,6 +75,19 @@ export const cartReducer = createReducer(
     error,
   })),
 
+  on(addToCart, (state) => ({
+    ...state,
+    loadingOperations: {
+      ...state.loadingOperations,
+      add: {
+        ...state.loadingOperations.add,
+        loading: true,
+        error: null,
+        status: 'pending',
+      },
+    },
+  })),
+
   on(cartItemAdded, (state, { item }) => {
     const newCart = {
       ...state.cart!,
@@ -73,6 +105,15 @@ export const cartReducer = createReducer(
       },
       status: 'success',
       error: null,
+      loadingOperations: {
+        ...state.loadingOperations,
+        add: {
+          ...state.loadingOperations.add,
+          loading: false,
+          error: null,
+          status: 'success',
+        },
+      },
     };
   }),
 

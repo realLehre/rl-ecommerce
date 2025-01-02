@@ -40,32 +40,50 @@ export class CartService {
   }
 
   getCart() {
-    if (this.user()) {
-      return this.cartSignal()
-        ? of(this.cartSignal())
-        : this.http.get<ICart>(`${this.apiUrl}/${this.user()?.id}`).pipe(
-            retry(3),
-            tap((res) => {
-              this.cartSignal.set(res);
-              this.cartTotal.set(res.cartItems.length);
-              const newSignIn = sessionStorage.getItem(
-                this.authService.NEW_SIGNUP_KEY,
-              );
-              if (newSignIn) {
-                this.mergeCart().subscribe((res) =>
-                  sessionStorage.removeItem(this.authService.NEW_SIGNUP_KEY),
-                );
-              } else {
-                this.onShowMergeCartDialog();
-              }
-              localStorage.setItem(this.CART_KEY, JSON.stringify(res));
-            }),
+    return this.http.get<ICart>(`${this.apiUrl}/${this.user()?.id}`).pipe(
+      retry(3),
+      tap((res) => {
+        this.cartSignal.set(res);
+        this.cartTotal.set(res.cartItems.length);
+        const newSignIn = sessionStorage.getItem(
+          this.authService.NEW_SIGNUP_KEY,
+        );
+        if (newSignIn) {
+          this.mergeCart().subscribe((res) =>
+            sessionStorage.removeItem(this.authService.NEW_SIGNUP_KEY),
           );
-    } else {
-      this.cartTotal.set(this.guestCart.cartItems!.length);
-      this.cartSignal.set(this.guestCart as ICart);
-      return of(this.guestCart as ICart);
-    }
+        } else {
+          this.onShowMergeCartDialog();
+        }
+        localStorage.setItem(this.CART_KEY, JSON.stringify(res));
+      }),
+    );
+    // if (this.user()) {
+    //   return this.cartSignal()
+    //     ? of(this.cartSignal())
+    //     : this.http.get<ICart>(`${this.apiUrl}/${this.user()?.id}`).pipe(
+    //         retry(3),
+    //         tap((res) => {
+    //           this.cartSignal.set(res);
+    //           this.cartTotal.set(res.cartItems.length);
+    //           const newSignIn = sessionStorage.getItem(
+    //             this.authService.NEW_SIGNUP_KEY,
+    //           );
+    //           if (newSignIn) {
+    //             this.mergeCart().subscribe((res) =>
+    //               sessionStorage.removeItem(this.authService.NEW_SIGNUP_KEY),
+    //             );
+    //           } else {
+    //             this.onShowMergeCartDialog();
+    //           }
+    //           localStorage.setItem(this.CART_KEY, JSON.stringify(res));
+    //         }),
+    //       );
+    // } else {
+    //   this.cartTotal.set(this.guestCart.cartItems!.length);
+    //   this.cartSignal.set(this.guestCart as ICart);
+    //   return of(this.guestCart as ICart);
+    // }
   }
 
   addToCart(data: { unit: number; product: IProduct }): Observable<ICartItems> {
