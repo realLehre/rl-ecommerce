@@ -10,6 +10,7 @@ import {
   loadCartFailure,
   loadCartSuccess,
   removeItemFromCart,
+  resetOperations,
   updateCartItem,
 } from './cart.actions';
 
@@ -19,15 +20,22 @@ export interface LoadingOperation {
   status: string | null;
 }
 
+const createInitialOperationState = (): LoadingOperation => {
+  return {
+    loading: false,
+    error: null,
+    status: null,
+  };
+};
+
 export interface CartState {
   cart: ICart | null;
   error: string | null;
   status: string;
   loadingOperations: {
-    fetch: LoadingOperation | null;
-    add: LoadingOperation | null;
-    update: LoadingOperation | null;
-    delete: LoadingOperation | null;
+    add: LoadingOperation;
+    update: LoadingOperation;
+    delete: LoadingOperation;
     error: string | null;
   };
 }
@@ -55,10 +63,9 @@ export const initialState: CartState = {
   error: null,
   status: 'pending',
   loadingOperations: {
-    fetch: null,
-    add: null,
-    update: null,
-    delete: null,
+    add: createInitialOperationState(),
+    update: createInitialOperationState(),
+    delete: createInitialOperationState(),
     error: null,
   },
 };
@@ -219,4 +226,18 @@ export const cartReducer = createReducer(
       error,
     },
   })),
+
+  on(resetOperations, (state) => {
+    const resetOperationsState = { ...state.loadingOperations };
+    for (const key of ['add', 'update', 'delete'] as const) {
+      resetOperationsState[key] = createInitialOperationState();
+    }
+    return {
+      ...state,
+      loadingOperations: {
+        ...resetOperationsState,
+        error: null,
+      },
+    };
+  }),
 );

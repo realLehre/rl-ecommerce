@@ -12,9 +12,10 @@ import {
   loadCartFailure,
   loadCartSuccess,
   removeItemFromCart,
+  resetOperations,
   updateCartItem,
 } from './cart.actions';
-import { catchError, concatMap, from, map, of, switchMap } from 'rxjs';
+import { catchError, concatMap, delay, from, map, of, switchMap } from 'rxjs';
 
 @Injectable()
 export class CartEffects {
@@ -77,6 +78,14 @@ export class CartEffects {
           ),
         ),
       ),
+    );
+  });
+
+  resetOperations$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(cartItemAdded, cartItemRemoved, cartItemUpdated), // React to any operation's completion
+      delay(500), // Optional: Delay reset for toast display
+      map(() => resetOperations()), // Reset all operations
     );
   });
 }

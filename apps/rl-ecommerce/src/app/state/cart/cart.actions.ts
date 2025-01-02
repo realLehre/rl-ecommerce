@@ -48,3 +48,5 @@ export const cartOperationError = createAction(
   '[Cart] Cart Operation Error',
   props<{ error: string }>(),
 );
+
+export const resetOperations = createAction('[Cart] Reset Operations');
