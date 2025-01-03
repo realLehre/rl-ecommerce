@@ -9,6 +9,9 @@ import {
   loadCart,
   loadCartFailure,
   loadCartSuccess,
+  mergeCart,
+  mergeCartFailure,
+  mergeCartSuccess,
   removeItemFromCart,
   resetOperations,
   updateCartItem,
@@ -36,6 +39,10 @@ export interface CartState {
     delete: LoadingOperation;
     error: string | null;
     productId: string | null;
+  };
+  merge: {
+    error: string | null;
+    status: string;
   };
 }
 
@@ -68,6 +75,10 @@ export const initialState: CartState = {
     error: null,
     productId: null,
   },
+  merge: {
+    error: null,
+    status: 'pending',
+  },
 };
 
 export const cartReducer = createReducer(
@@ -85,6 +96,22 @@ export const cartReducer = createReducer(
     ...state,
     status: 'failure',
     error,
+  })),
+
+  on(mergeCart, (state) => ({
+    ...state,
+    merge: { ...state.merge, status: 'loading' },
+  })),
+
+  on(mergeCartSuccess, (state, { cart }) => ({
+    ...state,
+    cart: cart!,
+    merge: { ...state.merge, status: 'success', error: null },
+  })),
+
+  on(mergeCartFailure, (state, { error }) => ({
+    ...state,
+    merge: { ...state.merge, status: 'error', error },
   })),
 
   on(addToCart, (state, { product }) => ({

@@ -3,6 +3,11 @@ import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { CartService } from '../../services/cart.service';
 import { LoaderComponent } from '../loader/loader.component';
 import { ToastService } from '../../services/toast.service';
+import { Store } from '@ngrx/store';
+import { mergeCart } from '../../../state/cart/cart.actions';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { selectCartState } from '../../../state/state';
+import { map, tap } from 'rxjs';
 
 @Component({
   selector: 'app-merge-cart-alert-dialog',
@@ -15,27 +20,47 @@ export class MergeCartAlertDialogComponent {
   private ref = inject(DynamicDialogRef);
   private cartService = inject(CartService);
   private toast = inject(ToastService);
-  isMerging = signal(false);
+  private store = inject(Store);
+  isMerging = toSignal(
+    this.store.select(selectCartState).pipe(
+      tap((res) => {
+        if (res.merge.error) {
+          this.toast.showToast({
+            type: 'error',
+            message: res.merge.error,
+          });
+        } else if (res.merge.status == 'success') {
+          this.toast.showToast({
+            type: 'success',
+            message: 'Carts merged successfully!',
+          });
+          this.ref.close();
+        }
+      }),
+      map((res) => (res.merge.error ? false : res.merge.status == 'loading')),
+    ),
+  );
 
   onMergeCarts() {
-    this.isMerging.set(true);
-    this.cartService.mergeCart().subscribe({
-      next: (res) => {
-        this.isMerging.set(false);
-        this.toast.showToast({
-          type: 'success',
-          message: 'Carts merged successfully!',
-        });
-        this.ref.close();
-      },
-      error: (err) => {
-        this.isMerging.set(false);
-        this.toast.showToast({
-          type: 'error',
-          message: err.error.message,
-        });
-      },
-    });
+    // this.isMerging.set(true);
+    this.store.dispatch(mergeCart());
+    // this.cartService.mergeCart().subscribe({
+    //   next: (res) => {
+    //     // this.isMerging.set(false);
+    //     this.toast.showToast({
+    //       type: 'success',
+    //       message: 'Carts merged successfully!',
+    //     });
+    //     this.ref.close();
+    //   },
+    //   error: (err) => {
+    //     // this.isMerging.set(false);
+    //     this.toast.showToast({
+    //       type: 'error',
+    //       message: err.error.message,
+    //     });
+    //   },
+    // });
   }
   onCloseDialog() {
     localStorage.removeItem(this.cartService.GUEST_CART_KEY);

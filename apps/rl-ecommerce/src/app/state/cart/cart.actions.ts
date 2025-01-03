@@ -50,4 +50,16 @@ export const cartOperationError = createAction(
   props<{ error: string; operation: keyof CartState['loadingOperations'] }>(),
 );
 
+export const mergeCart = createAction('[Cart] Merge Cart');
+
+export const mergeCartSuccess = createAction(
+  '[Cart] Merge CartSuccess',
+  props<{ cart: ICart }>(),
+);
+
+export const mergeCartFailure = createAction(
+  '[Cart] Merge CartFailure',
+  props<{ error: string }>(),
+);
+
 export const resetOperations = createAction('[Cart] Reset Operations');

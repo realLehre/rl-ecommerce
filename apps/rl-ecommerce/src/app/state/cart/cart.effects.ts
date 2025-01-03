@@ -11,6 +11,9 @@ import {
   loadCart,
   loadCartFailure,
   loadCartSuccess,
+  mergeCart,
+  mergeCartFailure,
+  mergeCartSuccess,
   removeItemFromCart,
   resetOperations,
   updateCartItem,
@@ -45,6 +48,20 @@ export class CartEffects {
           map((res) => loadCartSuccess({ cart: res! })),
           catchError((err) =>
             of(loadCartFailure({ error: err.error.message })),
+          ),
+        ),
+      ),
+    );
+  });
+
+  mergeCart$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(mergeCart),
+      concatMap(() =>
+        this.cartService.mergeCart().pipe(
+          map((res) => mergeCartSuccess({ cart: res })),
+          catchError((err) =>
+            of(mergeCartFailure({ error: err.error.message })),
           ),
         ),
       ),
@@ -118,6 +135,7 @@ export class CartEffects {
           cartItemAdded,
           cartItemRemoved,
           cartItemUpdated,
+          mergeCartSuccess,
         ),
         withLatestFrom(this.store.select(selectCartState)),
         tap(([action, state]) => {
@@ -129,7 +147,10 @@ export class CartEffects {
           } else {
             localStorage.setItem(
               this.cartService.GUEST_CART_KEY,
-              JSON.stringify(state.cart),
+              JSON.stringify({
+                ...state.cart,
+                createdAt: new Date().toISOString(),
+              }),
             );
           }
         }),

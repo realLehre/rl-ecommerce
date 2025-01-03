@@ -8,6 +8,7 @@ import { IProduct } from '../../features/products/model/product.interface';
 import { DialogService } from 'primeng/dynamicdialog';
 import { MergeCartAlertDialogComponent } from '../components/merge-cart-alert-dialog/merge-cart-alert-dialog.component';
 import { AuthService } from '../../features/auth/services/auth.service';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
   providedIn: 'root',
@@ -21,16 +22,26 @@ export class CartService {
   user = this.userService.user;
   cartSignal = signal<ICart | null>(null);
   cartTotal = signal<number | null>(null);
-  guestCart: Partial<ICart> = {
-    cartItems: [],
-  };
+  guestCart!: ICart;
   GUEST_CART_KEY = 'hd30jlsncjefysakhs';
   CART_KEY = 'sjshdy382nsj02shk02s';
   cart = signal<ICart | null>(null);
   constructor() {
     const guestCart = JSON.parse(localStorage.getItem(this.GUEST_CART_KEY)!);
 
-    if (guestCart) this.guestCart = guestCart;
+    if (guestCart) {
+      this.guestCart = guestCart;
+    } else {
+      this.guestCart = {
+        id: uuidv4(),
+        cartItems: [],
+        createdAt: new Date().toString(),
+        subTotal: 0,
+        shippingCost: 0,
+        updatedAt: new Date().toString(),
+        userId: uuidv4(),
+      };
+    }
 
     const cart = JSON.parse(localStorage.getItem(this.CART_KEY)!);
 
@@ -45,7 +56,7 @@ export class CartService {
         ? of(this.cart()!)
         : this.http.get<ICart>(`${this.apiUrl}/${this.user()?.id}`).pipe(
             retry(3),
-            tap((res) => {
+            tap(() => {
               const newSignIn = sessionStorage.getItem(
                 this.authService.NEW_SIGNUP_KEY,
               );
@@ -90,13 +101,6 @@ export class CartService {
   }
 
   addToCart(data: { unit: number; product: IProduct }): Observable<ICartItems> {
-    const old = this.cartSignal();
-    return this.http.post<ICartItems>(`${this.apiUrl}/add`, {
-      userId: this.user()?.id,
-      unit: data.unit,
-      productId: data.product.id,
-      productPrice: data.product.price,
-    });
     if (this.user()) {
       return this.http.post<ICartItems>(`${this.apiUrl}/add`, {
         userId: this.user()?.id,
@@ -105,27 +109,63 @@ export class CartService {
         productPrice: data.product.price,
       });
     } else {
-      const guestCartItem: Partial<ICartItems> = {
+      return of({
         total: data.product.price * data.unit,
         unit: data.unit,
+        cartId: this.guestCart.id,
         shippingCost: 100,
         product: data.product,
-        id: this.generateRandomId(),
+        id: uuidv4(),
         productId: data.product.id,
-      };
-
-      // this.guestCart.cartItems?.push(guestCartItem as ICartItems);
-      // localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.guestCart));
-      // this.cartSignal.set(old);
-      // return of(guestCartItem);
+        updatedAt: new Date().toString(),
+        createdAt: new Date().toString(),
+      });
     }
+    // if (this.user()) {
+    //   return this.http.post<ICartItems>(`${this.apiUrl}/add`, {
+    //     userId: this.user()?.id,
+    //     unit: data.unit,
+    //     productId: data.product.id,
+    //     productPrice: data.product.price,
+    //   });
+    // } else {
+    //   const guestCartItem: Partial<ICartItems> = {
+    //     total: data.product.price * data.unit,
+    //     unit: data.unit,
+    //     shippingCost: 100,
+    //     product: data.product,
+    //     id: this.generateRandomId(),
+    //     productId: data.product.id,
+    //   };
+
+    // this.guestCart.cartItems?.push(guestCartItem as ICartItems);
+    // localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.guestCart));
+    // this.cartSignal.set(old);
+    // return of(guestCartItem);
   }
 
   updateCartItem(data: { itemId: string; unit: number; product: IProduct }) {
-    return this.http.patch(`${this.apiUrl}/${data.itemId}/update`, {
-      unit: data.unit,
-      productPrice: data.product.price,
-    });
+    if (this.user()) {
+      return this.http.patch<ICartItems>(
+        `${this.apiUrl}/${data.itemId}/update`,
+        {
+          unit: data.unit,
+          productPrice: data.product.price,
+        },
+      );
+    } else {
+      const updatedItem: ICartItems = this.guestCart.cartItems?.find(
+        (item) => item.id === data.itemId,
+      )!;
+
+      if (updatedItem) {
+        updatedItem.unit = data.unit;
+        updatedItem.total = data.unit * updatedItem.product.price;
+        updatedItem.updatedAt = new Date().toString();
+      }
+
+      return of(updatedItem);
+    }
     // if (this.user()) {
     //   return this.http.patch(`${this.apiUrl}/${data.itemId}/update`, {
     //     unit: data.unit,
@@ -146,7 +186,14 @@ export class CartService {
   }
 
   deleteCartItem(id: string) {
-    return this.http.delete<ICartItems>(`${this.apiUrl}/${id}/delete`);
+    if (this.user()) {
+      return this.http.delete<ICartItems>(`${this.apiUrl}/${id}/delete`);
+    } else {
+      const cartItem: ICartItems = this.guestCart.cartItems?.find(
+        (item) => item.id === id,
+      )!;
+      return of(cartItem);
+    }
     // if (this.user()) {
     // } else {
     //   this.guestCart.cartItems = this.guestCart.cartItems?.filter(
