@@ -12,7 +12,6 @@ import { OrderSummaryComponent } from './order-summary/order-summary.component';
 import { PaymentOptionsComponent } from './payment-options/payment-options.component';
 import { IAddress } from '../user/models/address.interface';
 import { CartService } from '../../shared/services/cart.service';
-import { ICart } from '../../shared/models/cart.interface';
 import { Router } from '@angular/router';
 import { OrderService } from '../../shared/services/order.service';
 import { ToastService } from '../../shared/services/toast.service';
@@ -47,7 +46,6 @@ export class CheckoutComponent {
   private router = inject(Router);
   private store = inject(Store);
   cartState = toSignal(this.store.select(selectCartState));
-  cart = this.cartService.cartSignal as WritableSignal<ICart>;
   selectedAddress!: IAddress;
   selectPaymentMethod!: string;
   isLoading = signal(false);
@@ -73,8 +71,8 @@ export class CheckoutComponent {
             this.isInitiatingPayment.set(false);
 
             const total = Math.round(
-              (this.orderService.getTotalItemAmount(this.cart()) +
-                this.orderService.getShippingCost(this.cart())) *
+              (this.orderService.getTotalItemAmount(this.cartState()?.cart!) +
+                this.orderService.getShippingCost(this.cartState()?.cart!)) *
                 100,
             );
             const handler = new PaystackPop();
