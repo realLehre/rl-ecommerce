@@ -149,7 +149,7 @@ export class CartEffects {
               this.cartService.GUEST_CART_KEY,
               JSON.stringify({
                 ...state.cart,
-                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toString(),
               }),
             );
           }

@@ -22,7 +22,11 @@ import { ReviewService } from '../../../shared/services/review.service';
 import { ProductQuantityComponent } from '../../../shared/components/product-quantity/product-quantity.component';
 import { ICart, ICartItems } from '../../../shared/models/cart.interface';
 import { PricePercentageDecreasePipe } from '../../../shared/pipes/price-percentage-decrease.pipe';
-import { addToCart, updateCartItem } from '../../../state/cart/cart.actions';
+import {
+  addToCart,
+  loadCart,
+  updateCartItem,
+} from '../../../state/cart/cart.actions';
 import { Store } from '@ngrx/store';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { selectCart, selectCartLoadingOperations } from '../../../state/state';
@@ -141,6 +145,13 @@ export class ProductCardComponent implements OnInit {
   }
 
   onAddToCart() {
+    if (
+      !this.cartService.user() &&
+      !this.cartService.guestCart.hasOwnProperty('id')
+    ) {
+      this.cartService.createGuestCart();
+      this.store.dispatch(loadCart());
+    }
     this.store.dispatch(
       addToCart({ product: this.product(), unit: this.quantity }),
     );
@@ -148,6 +159,7 @@ export class ProductCardComponent implements OnInit {
 
   onAdjustQuantity(qty: number) {
     this.quantity = qty;
+
     this.store.dispatch(
       updateCartItem({
         itemId: this.productInCart()?.id!,

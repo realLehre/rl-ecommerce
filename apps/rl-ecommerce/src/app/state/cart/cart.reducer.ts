@@ -9,6 +9,7 @@ import {
   loadCart,
   loadCartFailure,
   loadCartSuccess,
+  logout_clearCart,
   mergeCart,
   mergeCartFailure,
   mergeCartSuccess,
@@ -279,6 +280,13 @@ export const cartReducer = createReducer(
         ...resetOperationsState,
         error: null,
       },
+    };
+  }),
+
+  on(logout_clearCart, (state) => {
+    return {
+      ...state,
+      ...initialState,
     };
   }),
 );

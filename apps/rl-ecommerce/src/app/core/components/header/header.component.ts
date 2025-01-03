@@ -27,7 +27,7 @@ import { LoaderComponent } from '../../../shared/components/loader/loader.compon
 import { CartService } from '../../../shared/services/cart.service';
 import { StateAuthService } from '../../../shared/services/state-auth.service';
 import { Store } from '@ngrx/store';
-import { loadCart } from '../../../state/cart/cart.actions';
+import { loadCart, logout_clearCart } from '../../../state/cart/cart.actions';
 import { cartReducer } from '../../../state/cart/cart.reducer';
 import { selectCart, selectCartState } from '../../../state/state';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -102,6 +102,7 @@ export class HeaderComponent implements AfterViewInit, OnInit {
 
   onSignOut() {
     this.authService.signOut();
+    this.store.dispatch(logout_clearCart());
     this.router.navigate(['/']).then(() => {
       this.stateAuthService.resetState();
     });

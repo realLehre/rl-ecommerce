@@ -29,7 +29,11 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AuthService } from '../../auth/services/auth.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
-import { addToCart, updateCartItem } from '../../../state/cart/cart.actions';
+import {
+  addToCart,
+  loadCart,
+  updateCartItem,
+} from '../../../state/cart/cart.actions';
 import { selectCart, selectCartLoadingOperations } from '../../../state/state';
 
 @Component({
@@ -173,6 +177,13 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   onAddToCart(product: IProduct) {
+    if (
+      !this.cartService.user() &&
+      !this.cartService.guestCart.hasOwnProperty('id')
+    ) {
+      this.cartService.createGuestCart();
+      this.store.dispatch(loadCart());
+    }
     this.store.dispatch(addToCart({ product: product, unit: this.quantity }));
   }
 

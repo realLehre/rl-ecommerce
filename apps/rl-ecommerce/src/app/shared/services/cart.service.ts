@@ -28,23 +28,13 @@ export class CartService {
   cart = signal<ICart | null>(null);
   constructor() {
     const guestCart = JSON.parse(localStorage.getItem(this.GUEST_CART_KEY)!);
-
     if (guestCart) {
       this.guestCart = guestCart;
     } else {
-      this.guestCart = {
-        id: uuidv4(),
-        cartItems: [],
-        createdAt: new Date().toString(),
-        subTotal: 0,
-        shippingCost: 0,
-        updatedAt: new Date().toString(),
-        userId: uuidv4(),
-      };
+      this.createGuestCart();
     }
 
     const cart = JSON.parse(localStorage.getItem(this.CART_KEY)!);
-
     if (cart && this.user()) {
       this.cart.set(cart);
     }
@@ -60,6 +50,7 @@ export class CartService {
               const newSignIn = sessionStorage.getItem(
                 this.authService.NEW_SIGNUP_KEY,
               );
+              console.log(2);
               if (newSignIn) {
                 this.mergeCart().subscribe((res) =>
                   sessionStorage.removeItem(this.authService.NEW_SIGNUP_KEY),
@@ -70,7 +61,7 @@ export class CartService {
             }),
           );
     } else {
-      return of(JSON.parse(localStorage.getItem(this.GUEST_CART_KEY)!));
+      return of(this.guestCart);
     }
     // if (this.user()) {
     //   return this.cartSignal()
@@ -100,6 +91,18 @@ export class CartService {
     // }
   }
 
+  createGuestCart() {
+    this.guestCart = {
+      id: uuidv4(),
+      cartItems: [],
+      createdAt: new Date().toString(),
+      subTotal: 0,
+      shippingCost: 0,
+      updatedAt: new Date().toString(),
+      userId: uuidv4(),
+    };
+  }
+
   addToCart(data: { unit: number; product: IProduct }): Observable<ICartItems> {
     if (this.user()) {
       return this.http.post<ICartItems>(`${this.apiUrl}/add`, {
@@ -109,6 +112,8 @@ export class CartService {
         productPrice: data.product.price,
       });
     } else {
+      console.log(this.guestCart);
+
       return of({
         total: data.product.price * data.unit,
         unit: data.unit,
@@ -154,16 +159,15 @@ export class CartService {
         },
       );
     } else {
-      const updatedItem: ICartItems = this.guestCart.cartItems?.find(
-        (item) => item.id === data.itemId,
-      )!;
+      const updatedItem: ICartItems = {
+        ...this.guestCart?.cartItems?.find((item) => item.id === data.itemId)!,
+      };
 
       if (updatedItem) {
         updatedItem.unit = data.unit;
-        updatedItem.total = data.unit * updatedItem.product.price;
+        updatedItem.total = data.unit * data.product.price;
         updatedItem.updatedAt = new Date().toString();
       }
-
       return of(updatedItem);
     }
     // if (this.user()) {
@@ -189,9 +193,9 @@ export class CartService {
     if (this.user()) {
       return this.http.delete<ICartItems>(`${this.apiUrl}/${id}/delete`);
     } else {
-      const cartItem: ICartItems = this.guestCart.cartItems?.find(
-        (item) => item.id === id,
-      )!;
+      const cartItem: ICartItems = {
+        ...this.guestCart.cartItems?.find((item) => item.id === id)!,
+      };
       return of(cartItem);
     }
     // if (this.user()) {
