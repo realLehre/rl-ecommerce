@@ -143,13 +143,14 @@
               {{ productDetailsData().category.name }}
             </p>
           </div>
-          @if (!productDetailsData().isSoldOut) {
+          @if (!productDetailsData().isSoldOut && cart()) {
             <div class="space-y-2 mt-5">
               <h3 class="text-xs text-type_title font-semibold">QUANTITY</h3>
               <div>
                 <app-product-quantity
-                  [quantity]="productInCart()?.unit || 1"
+                  [quantity]="productInCart()?.unit ?? 1"
                   [isLoading]="isUpdatingCart()"
+                  [updateError]="updateError()"
                   [productUnitsLeft]="productDetailsData().unit"
                   (quantityChanged)="
                     onAdjustQuantity($event, productDetailsData())
@@ -157,43 +158,58 @@
                 />
               </div>
             </div>
-          }
 
-          <div
-            class="flex items-center justify-between mt-8 flex-wrap gap-x-3 gap-y-3 text-sm mobile:text-base"
-          >
-            <button
-              class="min-w-[190px] rounded-full text-white font-medium bg-primary py-2 flex-1 h-12 hidden mobile:block hover:text-type_title_gray hover:border-primary hover:border-[2px] hover:bg-transparent"
-              routerLink="/checkout"
+            <div
+              class="flex items-center justify-between mt-8 flex-wrap gap-x-3 gap-y-3 text-sm mobile:text-base"
             >
-              Proceed to Checkout
-            </button>
-            @if (!productDetailsData().isSoldOut) {
               <button
-                class="min-w-[120px] rounded-full text-white font-medium bg-primary py-2 flex-1 h-12 block mobile:hidden"
+                class="min-w-[190px] rounded-full text-white font-medium bg-primary py-2 flex-1 h-12 hidden mobile:block hover:text-type_title_gray hover:border-primary hover:border-[2px] hover:bg-transparent"
                 routerLink="/checkout"
               >
-                Buy Now
+                Proceed to Checkout
               </button>
-              @if (!productInCart()) {
+              @if (!productDetailsData().isSoldOut) {
                 <button
-                  class="min-w-[120px] flex items-center justify-center space-x-3 mobile:min-w-[190px] rounded-full font-medium border-primary border-[2px] text-type_title_gray py-2 flex-1 h-12 hover:bg-primary hover:text-white"
-                  [disabled]="isAddingToCart()"
-                  (click)="onAddToCart(productDetailsData())"
+                  class="min-w-[120px] rounded-full text-white font-medium bg-primary py-2 flex-1 h-12 block mobile:hidden"
+                  routerLink="/checkout"
                 >
-                  @if (isAddingToCart()) {
-                    <app-loader
-                      [customStyle]="{
-                        width: '24px',
-                        border: '3px solid #000',
-                      }"
-                    />
-                  }
-                  <span> Add to Cart </span>
+                  Buy Now
                 </button>
+                @if (!productInCart()) {
+                  <button
+                    class="min-w-[120px] flex items-center justify-center space-x-3 mobile:min-w-[190px] rounded-full font-medium border-primary border-[2px] text-type_title_gray py-2 flex-1 h-12 hover:bg-primary hover:text-white"
+                    [disabled]="isAddingToCart()"
+                    (click)="onAddToCart(productDetailsData())"
+                  >
+                    @if (isAddingToCart()) {
+                      <app-loader
+                        [customStyle]="{
+                          width: '24px',
+                          border: '3px solid #000',
+                        }"
+                      />
+                    }
+                    <span> Add to Cart </span>
+                  </button>
+                }
               }
-            }
-          </div>
+            </div>
+          } @else {
+            <div class="mt-5">
+              <p-skeleton width="10rem" height="2rem" />
+            </div>
+
+            <div
+              class="flex items-center justify-between mt-8 flex-wrap gap-x-3 gap-y-2 text-sm mobile:text-base"
+            >
+              <div class="flex-1">
+                <p-skeleton width="100%" height="3rem" borderRadius="50px" />
+              </div>
+              <div class="flex-1">
+                <p-skeleton width="100%" height="3rem" borderRadius="50px" />
+              </div>
+            </div>
+          }
         </div>
       </div>
 

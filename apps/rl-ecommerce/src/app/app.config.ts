@@ -1,4 +1,8 @@
-import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import {
+  ApplicationConfig,
+  importProvidersFrom,
+  isDevMode,
+} from '@angular/core';
 import {
   InMemoryScrollingFeature,
   InMemoryScrollingOptions,
@@ -16,8 +20,21 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { CookieService } from 'ngx-cookie-service';
 import { tokenInterceptor } from './shared/interceptors/token.interceptor';
-import { provideStore } from '@ngrx/store';
+import { createReducer, on, provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { cartReducer } from './state/cart/cart.reducer';
+import { CartEffects } from './state/cart/cart.effects';
+import { appReducer } from './state/state';
+import { ICart, ICartItems } from './shared/models/cart.interface';
+import {
+  cartItemAdded,
+  cartItemRemoved,
+  cartItemUpdated,
+  loadCart,
+  loadCartFailure,
+  loadCartSuccess,
+} from './state/cart/cart.actions';
 
 const scrollConfig: InMemoryScrollingOptions = {
   anchorScrolling: 'enabled',
@@ -28,14 +45,20 @@ const inMemoryScrollingFeature: InMemoryScrollingFeature =
   withInMemoryScrolling(scrollConfig);
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes, inMemoryScrollingFeature, withPreloading(PreloadAllModules), withComponentInputBinding()),
+    provideRouter(
+      routes,
+      inMemoryScrollingFeature,
+      withPreloading(PreloadAllModules),
+      withComponentInputBinding(),
+    ),
     provideAnimationsAsync(),
     importProvidersFrom([BrowserAnimationsModule]),
     provideHttpClient(withInterceptors([tokenInterceptor])),
     DialogService,
     DynamicDialogRef,
     CookieService,
-    provideStore(),
-    provideEffects()
-],
+    provideStore(appReducer),
+    provideEffects(CartEffects),
+    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
+  ],
 };

@@ -43,7 +43,7 @@ snippets.txt
 .DS_Store
 Thumbs.db
 
-
+/apps/rl-ecommerce/src/environments
 
 .nx/cache
 .nx/workspace-data

@@ -4,6 +4,7 @@ import {
   computed,
   inject,
   OnInit,
+  Signal,
   signal,
 } from '@angular/core';
 import { BreadcrumbComponent } from '../../../shared/components/breadcrumb/breadcrumb.component';
@@ -13,7 +14,7 @@ import { RecommendedProductsComponent } from '../recommended-products/recommende
 import { ProductQuantityComponent } from '../../../shared/components/product-quantity/product-quantity.component';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProductsService } from '../services/products.service';
-import { catchError, Observable, of, switchMap, tap } from 'rxjs';
+import { catchError, map, Observable, of, switchMap, tap } from 'rxjs';
 import { IProduct } from '../model/product.interface';
 import { CurrencyPipe, NgClass, NgStyle } from '@angular/common';
 import { SkeletonModule } from 'primeng/skeleton';
@@ -23,10 +24,15 @@ import { ProductReviewsComponent } from './product-reviews/product-reviews.compo
 import { LargeReviewsComponent } from './large-reviews/large-reviews.component';
 import { ReviewService } from '../../../shared/services/review.service';
 import { PricePercentageDecreasePipe } from '../../../shared/pipes/price-percentage-decrease.pipe';
-import { ICart, ICartItems } from '../../../shared/models/cart.interface';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { AuthService } from '../../auth/services/auth.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { Store } from '@ngrx/store';
+import {
+  addToCart,
+  loadCart,
+  updateCartItem,
+} from '../../../state/cart/cart.actions';
+import { selectCart, selectCartLoadingOperations } from '../../../state/state';
 
 @Component({
   selector: 'app-product-details',
@@ -57,27 +63,23 @@ export class ProductDetailsComponent implements OnInit {
   private reviewService = inject(ReviewService);
   private toast = inject(ToastService);
   private sanitizer = inject(DomSanitizer);
-  private authService = inject(AuthService);
+  private store = inject(Store);
   activeProduct = this.productService.activeProduct;
   quantity: number = 1;
   isCollapsed = signal(true);
   limit = 200;
-  isAddingToCart = signal(false);
   productId!: string;
   isShowingFullReview = this.reviewService.seeingFullReview;
   stars = signal(
     Array.from({ length: 5 }, (_, i) => ({ star: i + 1, active: false })),
   );
+  cart = toSignal(this.store.select(selectCart));
   productInCart = computed(() => {
-    if (this.cartService.cartSignal()) {
-      return this.cartService
-        .cartSignal()
-        ?.cartItems?.find((cartItem) => cartItem.productId === this.id());
-    }
-    return;
+    return this.cart()?.cartItems?.find(
+      (cartItem) => cartItem.productId === this.id(),
+    );
   });
   id = signal(this.route.snapshot.queryParams['id']);
-  isUpdatingCart = signal(false);
   isLoading = signal(true);
   isError = signal(false);
   errorMessage = signal(undefined);
@@ -104,6 +106,60 @@ export class ProductDetailsComponent implements OnInit {
     }),
   );
   productDetailsData = toSignal(this.productDetails$);
+  isAddingToCart = toSignal(
+    this.store.select(selectCartLoadingOperations).pipe(
+      tap((res) => {
+        if (res.error) {
+          this.toast.showToast({
+            type: 'error',
+            message: res.error,
+          });
+        } else if (res.add?.status === 'success') {
+          this.toast.showToast({
+            type: 'success',
+            message: `${this.productDetailsData()?.name} added to cart!`,
+          });
+        }
+      }),
+      map((operation) =>
+        this.id() == operation.productId
+          ? operation.error
+            ? false
+            : operation.add?.loading
+          : null,
+      ),
+    ),
+  );
+  updateError = signal(false);
+  isUpdatingCart: Signal<boolean | any> = toSignal(
+    this.store.select(selectCartLoadingOperations).pipe(
+      tap((res) => {
+        if (res.error && res.update.status == 'error') {
+          this.toast.showToast({
+            type: 'error',
+            message: res.error,
+          });
+        } else if (res.update?.status === 'success') {
+          this.toast.showToast({
+            type: 'success',
+            message: 'Quantity adjusted',
+          });
+        }
+      }),
+      map((operation) => {
+        if (this.id() == operation.productId) {
+          if (operation.error) {
+            this.updateError.set(true);
+          } else {
+            this.updateError.set(false);
+          }
+
+          return operation.error ? false : operation.update?.loading;
+        }
+        return;
+      }),
+    ),
+  );
 
   ngOnInit() {
     const isShowingReviews = this.route.snapshot.queryParams['reviews'];
@@ -118,60 +174,14 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   onAddToCart(product: IProduct) {
-    this.isAddingToCart.set(true);
-
-    this.cartService
-      .addToCart({
-        product: product,
-        unit: this.quantity,
-      })!
-      .subscribe({
-        next: (res) => {
-          this.isAddingToCart.set(false);
-          const cartTotal = this.cartService.cartTotal;
-
-          this.cartService.cartTotal.set(cartTotal()! + 1);
-
-          //   this.cartService.cartSignal.set(null);
-          //
-          // this.cartService.getCart().subscribe();
-
-          const cart = this.cartService.cartSignal() || ({} as ICart);
-          this.cartService.cartSignal.set(null);
-          this.cartService.getCart().subscribe();
-          const newCartItem = {
-            ...res,
-            product: this.activeProduct() as IProduct,
-          };
-          this.cartService.cartSignal.set({
-            ...this.cartService.cartSignal()!,
-            cartItems: Array.isArray(cart?.cartItems!)
-              ? [...cart?.cartItems!, newCartItem as any]
-              : [newCartItem],
-          });
-
-          if (!this.authService.user()) {
-            this.cartService.guestCart.cartItems?.push(res as ICartItems);
-            localStorage.setItem(
-              this.cartService.STORAGE_KEY,
-              JSON.stringify(this.cartService.guestCart),
-            );
-            this.cartService.cartTotal.set(cartTotal()! + 1);
-          }
-
-          this.toast.showToast({
-            type: 'success',
-            message: `${product.name} added to cart!`,
-          });
-        },
-        error: (err) => {
-          this.isAddingToCart.set(false);
-          this.toast.showToast({
-            type: 'error',
-            message: err.error.message,
-          });
-        },
-      });
+    if (
+      !this.cartService.user() &&
+      !this.cartService.guestCart.hasOwnProperty('id')
+    ) {
+      this.cartService.createGuestCart();
+      this.store.dispatch(loadCart());
+    }
+    this.store.dispatch(addToCart({ product: product, unit: this.quantity }));
   }
 
   toggleCollapse() {
@@ -181,54 +191,13 @@ export class ProductDetailsComponent implements OnInit {
   onAdjustQuantity(qty: number, product: IProduct) {
     this.quantity = qty;
     if (this.productInCart()) {
-      this.isUpdatingCart.set(true);
-
-      this.cartService
-        .updateCartItem({
+      this.store.dispatch(
+        updateCartItem({
           itemId: this.productInCart()?.id!,
-          unit: qty,
-          productPrice: product.price!,
-        })
-        .subscribe({
-          next: (res) => {
-            this.isUpdatingCart.set(false);
-            const currentCart = this.cartService.cartSignal();
-            if (currentCart) {
-              const updatedItems = currentCart.cartItems.map((cartItem) => {
-                if (cartItem.id === this.productInCart()?.id!) {
-                  return {
-                    ...cartItem,
-                    unit: qty,
-                    total: qty * cartItem.product.price,
-                  };
-                }
-                return cartItem;
-              });
-
-              const newCart = { ...currentCart, cartItems: updatedItems };
-
-              // this.cart$ = of(newCart);
-              // this.cart.set(newCart);
-              this.cartService.cartSignal.set(newCart);
-              localStorage.setItem(
-                this.cartService.CART_KEY,
-                JSON.stringify(newCart),
-              );
-            }
-
-            this.toast.showToast({
-              type: 'success',
-              message: product.name + ' ' + 'quantity adjusted!',
-            });
-          },
-          error: (err) => {
-            this.isUpdatingCart.set(false);
-            this.toast.showToast({
-              type: 'error',
-              message: err.error.message,
-            });
-          },
-        });
+          unit: this.quantity,
+          product: product,
+        }),
+      );
     }
   }
 

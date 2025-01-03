@@ -116,10 +116,10 @@
         class="cursor-pointer relative group w-8 h-8 flex items-center justify-center"
         routerLink="/cart"
       >
-        @if (cartItems()) {
+        @if (cartData()?.status == 'success') {
           <span
             class="absolute -top-1 -right-1 h-4 w-4 flex items-center justify-center bg-primary text-white p-[10px] text-[10px] font-medium rounded-full"
-            >{{ cartItems() }}</span
+            >{{ cartData()?.cart?.cartItems?.length }}</span
           >
         }
         <svg

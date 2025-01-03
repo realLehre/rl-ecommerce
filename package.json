@@ -25,6 +25,7 @@
     "@nestjs/platform-express": "^10.0.2",
     "@ngrx/effects": "^18.1.1",
     "@ngrx/store": "^18.1.1",
+    "@ngrx/store-devtools": "^18.1.1",
     "@nx/workspace": "20.0.1",
     "@paystack/inline-js": "^2.22.1",
     "@prisma/client": "^5.21.0",

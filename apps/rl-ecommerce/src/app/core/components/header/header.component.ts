@@ -26,6 +26,10 @@ import { IProduct } from '../../../features/products/model/product.interface';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 import { CartService } from '../../../shared/services/cart.service';
 import { StateAuthService } from '../../../shared/services/state-auth.service';
+import { Store } from '@ngrx/store';
+import { loadCart, logout_clearCart } from '../../../state/cart/cart.actions';
+import { selectCartState } from '../../../state/state';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-header',
@@ -40,6 +44,7 @@ export class HeaderComponent implements AfterViewInit, OnInit {
   private productService = inject(ProductsService);
   private cartService = inject(CartService);
   private stateAuthService = inject(StateAuthService);
+  private store = inject(Store);
   user = this.authService.user;
   userName = computed(() => {
     return this.user()?.fullName.split(' ')[0]!;
@@ -50,10 +55,13 @@ export class HeaderComponent implements AfterViewInit, OnInit {
   searchShown = signal(false);
   isSearching = this.productService.isSearchingProducts;
   cartItems = this.cartService.cartTotal;
+  cart$ = this.store.select(selectCartState);
+  cartData = toSignal(this.cart$);
   products = this.productService.searchedProductsSignal;
+
   ngOnInit() {
     this.cartService.cartSignal.set(null);
-    this.cartService.getCart().subscribe();
+    this.store.dispatch(loadCart());
   }
 
   ngAfterViewInit() {
@@ -66,7 +74,7 @@ export class HeaderComponent implements AfterViewInit, OnInit {
         filter(Boolean),
         debounceTime(500),
         distinctUntilChanged(),
-        map((data) => this.searchInput.nativeElement.value.toLowerCase()),
+        map(() => this.searchInput.nativeElement.value.toLowerCase()),
       )
       .subscribe((val) => {
         this.productService.searchedProductsSignal.set(null);
@@ -91,6 +99,7 @@ export class HeaderComponent implements AfterViewInit, OnInit {
 
   onSignOut() {
     this.authService.signOut();
+    this.store.dispatch(logout_clearCart());
     this.router.navigate(['/']).then(() => {
       this.stateAuthService.resetState();
     });

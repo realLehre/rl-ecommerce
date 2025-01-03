@@ -13,12 +13,16 @@ import { PaymentOptionsComponent } from './payment-options/payment-options.compo
 import { IAddress } from '../user/models/address.interface';
 import { CartService } from '../../shared/services/cart.service';
 import { ICart } from '../../shared/models/cart.interface';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { OrderService } from '../../shared/services/order.service';
 import { ToastService } from '../../shared/services/toast.service';
 import { LoaderComponent } from '../../shared/components/loader/loader.component';
 import { PaymentService } from '../../shared/services/payment.service';
-import { AuthService } from '../auth/services/auth.service';
+import { Store } from '@ngrx/store';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { selectCartState } from '../../state/state';
+import { SkeletonModule } from 'primeng/skeleton';
+import { clearCartItems } from '../../state/cart/cart.actions';
 
 @Component({
   selector: 'app-checkout',
@@ -28,8 +32,8 @@ import { AuthService } from '../auth/services/auth.service';
     CheckoutAddressComponent,
     OrderSummaryComponent,
     PaymentOptionsComponent,
-    RouterLink,
     LoaderComponent,
+    SkeletonModule,
   ],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss',
@@ -41,7 +45,8 @@ export class CheckoutComponent {
   private paymentService = inject(PaymentService);
   private toast = inject(ToastService);
   private router = inject(Router);
-  private user = inject(AuthService).user;
+  private store = inject(Store);
+  cartState = toSignal(this.store.select(selectCartState));
   cart = this.cartService.cartSignal as WritableSignal<ICart>;
   selectedAddress!: IAddress;
   selectPaymentMethod!: string;
@@ -64,7 +69,7 @@ export class CheckoutComponent {
       this.paymentService
         .initiatePayment({ amount: 100000, email: 'beed@beed.com' })
         .subscribe({
-          next: (res) => {
+          next: () => {
             this.isInitiatingPayment.set(false);
 
             const total = Math.round(
@@ -80,7 +85,7 @@ export class CheckoutComponent {
               amount: Math.min(total, 10000000),
               currency: 'NGN',
               channels: ['card'],
-              callback: (response) => {
+              callback: () => {
                 this.onPlaceOrder();
               },
               onClose: () => {},
@@ -103,18 +108,13 @@ export class CheckoutComponent {
     this.orderService
       .placeOrder({
         address: this.selectedAddress,
-        cart: this.cart(),
+        cart: this.cartState()?.cart!,
         paymentMethod: this.selectPaymentMethod,
       })
       .subscribe({
-        next: (res) => {
-          this.router.navigate(['/', 'orders']).then(() => {
-            setTimeout(() => {
-              this.cartService.cartSignal.set(null);
-            }, 300);
-            this.cartService.cartTotal.set(null);
-          });
-          localStorage.removeItem(this.cartService.CART_KEY);
+        next: () => {
+          this.store.dispatch(clearCartItems());
+          this.router.navigate(['/', 'orders']);
           this.cartService.getCart().subscribe();
           this.orderService.orderSignal.set(null);
           this.toast.showToast({
