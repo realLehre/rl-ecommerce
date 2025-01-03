@@ -118,10 +118,10 @@ export class CartService {
     }
   }
 
-  updateCartItem(data: { itemId: string; unit: number; productPrice: number }) {
+  updateCartItem(data: { itemId: string; unit: number; product: IProduct }) {
     return this.http.patch(`${this.apiUrl}/${data.itemId}/update`, {
       unit: data.unit,
-      productPrice: data.productPrice,
+      productPrice: data.product.price,
     });
     // if (this.user()) {
     //   return this.http.patch(`${this.apiUrl}/${data.itemId}/update`, {

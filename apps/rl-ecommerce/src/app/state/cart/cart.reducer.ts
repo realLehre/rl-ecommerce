@@ -35,6 +35,7 @@ export interface CartState {
     update: LoadingOperation;
     delete: LoadingOperation;
     error: string | null;
+    productId: string | null;
   };
 }
 
@@ -65,6 +66,7 @@ export const initialState: CartState = {
     update: createInitialOperationState(),
     delete: createInitialOperationState(),
     error: null,
+    productId: null,
   },
 };
 
@@ -85,7 +87,7 @@ export const cartReducer = createReducer(
     error,
   })),
 
-  on(addToCart, (state) => ({
+  on(addToCart, (state, { product }) => ({
     ...state,
     loadingOperations: {
       ...state.loadingOperations,
@@ -94,6 +96,7 @@ export const cartReducer = createReducer(
         loading: true,
         status: 'pending',
       },
+      productId: product.id,
     },
   })),
 
@@ -125,6 +128,7 @@ export const cartReducer = createReducer(
           loading: false,
           status: 'success',
         },
+        productId: action.product.id,
       },
     };
   }),
@@ -170,7 +174,7 @@ export const cartReducer = createReducer(
     };
   }),
 
-  on(updateCartItem, (state) => ({
+  on(updateCartItem, (state, { product }) => ({
     ...state,
     loadingOperations: {
       ...state.loadingOperations,
@@ -179,6 +183,7 @@ export const cartReducer = createReducer(
         loading: true,
         status: 'pending',
       },
+      productId: product.id,
     },
   })),
 

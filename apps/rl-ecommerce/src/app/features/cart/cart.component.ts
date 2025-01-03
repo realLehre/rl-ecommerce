@@ -141,7 +141,7 @@ export class CartComponent implements OnInit {
       updateCartItem({
         itemId: item.id,
         unit: this.quantity,
-        productPrice: item.product.price,
+        product: item.product as IProduct,
       }),
     );
     // this.cartService

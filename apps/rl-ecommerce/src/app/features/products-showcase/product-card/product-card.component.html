@@ -127,6 +127,7 @@
               [quantity]="productInCart()?.unit!"
               [isLoading]="isUpdatingCart()"
               [productUnitsLeft]="product().unit"
+              [updateError]="updateError()"
               (quantityChanged)="onAdjustQuantity($event)"
             />
           }

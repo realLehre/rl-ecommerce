@@ -74,7 +74,6 @@ export class ProductDetailsComponent implements OnInit {
   );
   cart = toSignal(this.store.select(selectCart));
   productInCart = computed(() => {
-    console.log(this.id());
     return this.cart()?.cartItems?.find(
       (cartItem) => cartItem.productId === this.id(),
     );
@@ -121,7 +120,13 @@ export class ProductDetailsComponent implements OnInit {
           });
         }
       }),
-      map((operation) => (operation.error ? false : operation.add?.loading)),
+      map((operation) =>
+        this.id() == operation.productId
+          ? operation.error
+            ? false
+            : operation.add?.loading
+          : null,
+      ),
     ),
   );
   updateError = signal(false);
@@ -141,13 +146,16 @@ export class ProductDetailsComponent implements OnInit {
         }
       }),
       map((operation) => {
-        if (operation.error) {
-          this.updateError.set(true);
-        } else {
-          this.updateError.set(false);
-        }
+        if (this.id() == operation.productId) {
+          if (operation.error) {
+            this.updateError.set(true);
+          } else {
+            this.updateError.set(false);
+          }
 
-        return operation.error ? false : operation.update?.loading;
+          return operation.error ? false : operation.update?.loading;
+        }
+        return;
       }),
     ),
   );
@@ -232,7 +240,7 @@ export class ProductDetailsComponent implements OnInit {
         updateCartItem({
           itemId: this.productInCart()?.id!,
           unit: this.quantity,
-          productPrice: product.price!,
+          product: product,
         }),
       );
     }

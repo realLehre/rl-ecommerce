@@ -31,7 +31,6 @@ export class ProductQuantityComponent implements OnInit {
 
   ngOnInit() {
     this.quantityMain.set(this.quantity());
-    console.log(this.quantity());
   }
 
   onAdjustQuantity(action: string) {

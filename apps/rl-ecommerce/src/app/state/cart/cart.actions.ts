@@ -27,7 +27,7 @@ export const cartItemAdded = createAction(
 
 export const updateCartItem = createAction(
   '[Cart] Update Cart',
-  props<{ itemId: string; unit: number; productPrice: number }>(),
+  props<{ itemId: string; unit: number; product: IProduct }>(),
 );
 
 export const cartItemUpdated = createAction(
