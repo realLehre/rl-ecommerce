@@ -24,9 +24,7 @@ import { ProductReviewsComponent } from './product-reviews/product-reviews.compo
 import { LargeReviewsComponent } from './large-reviews/large-reviews.component';
 import { ReviewService } from '../../../shared/services/review.service';
 import { PricePercentageDecreasePipe } from '../../../shared/pipes/price-percentage-decrease.pipe';
-import { ICart, ICartItems } from '../../../shared/models/cart.interface';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { AuthService } from '../../auth/services/auth.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
 import {
@@ -65,7 +63,6 @@ export class ProductDetailsComponent implements OnInit {
   private reviewService = inject(ReviewService);
   private toast = inject(ToastService);
   private sanitizer = inject(DomSanitizer);
-  private authService = inject(AuthService);
   private store = inject(Store);
   activeProduct = this.productService.activeProduct;
   quantity: number = 1;

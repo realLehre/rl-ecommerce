@@ -42,7 +42,7 @@ export const removeItemFromCart = createAction(
 
 export const cartItemRemoved = createAction(
   '[Cart] Item Removed From Cart',
-  props<{ item: ICartItems }>(),
+  props<{ id: string }>(),
 );
 
 export const cartOperationError = createAction(

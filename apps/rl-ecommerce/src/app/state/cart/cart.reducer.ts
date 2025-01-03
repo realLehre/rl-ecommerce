@@ -55,8 +55,8 @@ const subTotal = (cart: ICart) => {
   return cart.cartItems.reduce((acc, item) => acc + item.total, 0);
 };
 
-const updateRemoveItemFromCart = (cart: ICart, changes: ICartItems) => {
-  return cart.cartItems.filter((items) => items.id !== changes.id);
+const updateRemoveItemFromCart = (cart: ICart, id: string) => {
+  return cart.cartItems.filter((items) => items.id !== id);
 };
 
 const updateCartItemFunc = (cart: ICart, updated: ICartItems) => {
@@ -173,10 +173,10 @@ export const cartReducer = createReducer(
     },
   })),
 
-  on(cartItemRemoved, (state, { item }) => {
+  on(cartItemRemoved, (state, { id }) => {
     const newCart = {
       ...state.cart!,
-      cartItems: [...updateRemoveItemFromCart(state.cart!, item)],
+      cartItems: [...updateRemoveItemFromCart(state.cart!, id)],
     };
     const newShippingCost = totalShippingCost(newCart);
     const newSubTotal = subTotal(newCart);

@@ -21,16 +21,14 @@ import {
 import {
   catchError,
   concatMap,
-  debounceTime,
   delay,
-  from,
   map,
   of,
   switchMap,
   tap,
   withLatestFrom,
 } from 'rxjs';
-import { selectCartLoadingOperations, selectCartState } from '../state';
+import { selectCartState } from '../state';
 import { ToastService } from '../../shared/services/toast.service';
 
 @Injectable()
@@ -94,7 +92,7 @@ export class CartEffects {
       ofType(removeItemFromCart),
       switchMap(({ id }) =>
         this.cartService.deleteCartItem(id).pipe(
-          map((res) => cartItemRemoved({ item: res })),
+          map(() => cartItemRemoved({ id })),
           catchError((err) =>
             of(
               cartOperationError({
@@ -161,9 +159,9 @@ export class CartEffects {
 
   resetOperations$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(cartItemAdded, cartItemRemoved, cartItemUpdated), // React to any operation's completion
-      delay(500), // Optional: Delay reset for toast display
-      map(() => resetOperations()), // Reset all operations
+      ofType(cartItemAdded, cartItemRemoved, cartItemUpdated),
+      delay(500),
+      map(() => resetOperations()),
     );
   });
 
