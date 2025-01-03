@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   input,
   OnInit,
@@ -22,17 +23,23 @@ export class ProductQuantityComponent implements OnInit {
   private toast = inject(ToastService);
   quantity = input.required<number>();
   productUnitsLeft = input.required<number>();
+  updateError = input(false);
   quantityMain = signal(1);
+  holdQuantity = computed(() => this.quantity());
   quantityChanged = output<number>();
   isLoading = input<boolean>(false);
 
   ngOnInit() {
     this.quantityMain.set(this.quantity());
+    console.log(this.quantity());
   }
 
   onAdjustQuantity(action: string) {
     if (this.isLoading()) {
       return;
+    }
+    if (this.updateError()) {
+      this.quantityMain.set(this.quantity());
     }
     if (action.toLowerCase() == 'increase') {
       if (this.quantityMain() == this.productUnitsLeft()) {

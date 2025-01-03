@@ -3,6 +3,7 @@ import {
   Component,
   inject,
   OnInit,
+  Signal,
   signal,
   WritableSignal,
 } from '@angular/core';
@@ -65,9 +66,11 @@ export class CartComponent implements OnInit {
   private store = inject(Store);
   cartState = toSignal(this.store.select(selectCartState));
   quantity: number = 1;
-  isUpdating = signal<boolean[]>([false]);
+  // isUpdating = signal<boolean[]>([false]);
+  isUpdatingIndex = signal<number | null>(null);
   showDeleteDialog = signal(false);
   activeCartItem!: ICartItems;
+  private lastToastStatus: string | null = null;
 
   isLoading = toSignal(
     this.store.select(selectCartLoadingOperations).pipe(
@@ -89,6 +92,38 @@ export class CartComponent implements OnInit {
       map((operation) => (operation.error ? false : operation.delete?.loading)),
     ),
   );
+  updateError = signal(false);
+  isUpdating: Signal<boolean[] | any> = toSignal(
+    this.store.select(selectCartLoadingOperations).pipe(
+      tap((res) => {
+        if (res.error && res.update.status == 'error') {
+          this.toast.showToast({
+            type: 'error',
+            message: res.error,
+          });
+        } else if (res.update?.status === 'success') {
+          this.toast.showToast({
+            type: 'success',
+            message: 'Quantity adjusted',
+          });
+        }
+      }),
+      map((operation) => {
+        let loadingStates = [];
+        loadingStates[this.isUpdatingIndex()!] = true;
+
+        if (operation.error) {
+          loadingStates[this.isUpdatingIndex()!] = false;
+          this.updateError.set(true);
+        } else {
+          loadingStates[this.isUpdatingIndex()!] = operation.update?.loading;
+          this.updateError.set(false);
+        }
+
+        return loadingStates;
+      }),
+    ),
+  );
   ngOnInit() {
     // if (!this.cart()) {
     //   const cartData: Partial<ICart> = {
@@ -100,9 +135,7 @@ export class CartComponent implements OnInit {
   }
 
   onAdjustQuantity(qty: number, item: ICartItems, idx: number) {
-    let loadings = [...this.isUpdating()];
-    loadings[idx] = true;
-    this.isUpdating.set(loadings);
+    this.isUpdatingIndex.set(idx);
     this.quantity = qty;
     this.store.dispatch(
       updateCartItem({

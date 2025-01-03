@@ -4,6 +4,7 @@ import {
   computed,
   inject,
   OnInit,
+  Signal,
   signal,
 } from '@angular/core';
 import { BreadcrumbComponent } from '../../../shared/components/breadcrumb/breadcrumb.component';
@@ -28,7 +29,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AuthService } from '../../auth/services/auth.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
-import { addToCart } from '../../../state/cart/cart.actions';
+import { addToCart, updateCartItem } from '../../../state/cart/cart.actions';
 import { selectCart, selectCartLoadingOperations } from '../../../state/state';
 
 @Component({
@@ -73,12 +74,12 @@ export class ProductDetailsComponent implements OnInit {
   );
   cart = toSignal(this.store.select(selectCart));
   productInCart = computed(() => {
+    console.log(this.id());
     return this.cart()?.cartItems?.find(
       (cartItem) => cartItem.productId === this.id(),
     );
   });
   id = signal(this.route.snapshot.queryParams['id']);
-  isUpdatingCart = signal(false);
   isLoading = signal(true);
   isError = signal(false);
   errorMessage = signal(undefined);
@@ -121,6 +122,33 @@ export class ProductDetailsComponent implements OnInit {
         }
       }),
       map((operation) => (operation.error ? false : operation.add?.loading)),
+    ),
+  );
+  updateError = signal(false);
+  isUpdatingCart: Signal<boolean | any> = toSignal(
+    this.store.select(selectCartLoadingOperations).pipe(
+      tap((res) => {
+        if (res.error && res.update.status == 'error') {
+          this.toast.showToast({
+            type: 'error',
+            message: res.error,
+          });
+        } else if (res.update?.status === 'success') {
+          this.toast.showToast({
+            type: 'success',
+            message: 'Quantity adjusted',
+          });
+        }
+      }),
+      map((operation) => {
+        if (operation.error) {
+          this.updateError.set(true);
+        } else {
+          this.updateError.set(false);
+        }
+
+        return operation.error ? false : operation.update?.loading;
+      }),
     ),
   );
 
@@ -200,55 +228,64 @@ export class ProductDetailsComponent implements OnInit {
   onAdjustQuantity(qty: number, product: IProduct) {
     this.quantity = qty;
     if (this.productInCart()) {
-      this.isUpdatingCart.set(true);
-
-      this.cartService
-        .updateCartItem({
+      this.store.dispatch(
+        updateCartItem({
           itemId: this.productInCart()?.id!,
-          unit: qty,
+          unit: this.quantity,
           productPrice: product.price!,
-        })
-        .subscribe({
-          next: (res) => {
-            this.isUpdatingCart.set(false);
-            const currentCart = this.cartService.cartSignal();
-            if (currentCart) {
-              const updatedItems = currentCart.cartItems.map((cartItem) => {
-                if (cartItem.id === this.productInCart()?.id!) {
-                  return {
-                    ...cartItem,
-                    unit: qty,
-                    total: qty * cartItem.product.price,
-                  };
-                }
-                return cartItem;
-              });
-
-              const newCart = { ...currentCart, cartItems: updatedItems };
-
-              // this.cart$ = of(newCart);
-              // this.cart.set(newCart);
-              this.cartService.cartSignal.set(newCart);
-              localStorage.setItem(
-                this.cartService.CART_KEY,
-                JSON.stringify(newCart),
-              );
-            }
-
-            this.toast.showToast({
-              type: 'success',
-              message: product.name + ' ' + 'quantity adjusted!',
-            });
-          },
-          error: (err) => {
-            this.isUpdatingCart.set(false);
-            this.toast.showToast({
-              type: 'error',
-              message: err.error.message,
-            });
-          },
-        });
+        }),
+      );
     }
+    // if (this.productInCart()) {
+    //   this.isUpdatingCart.set(true);
+    //
+    //   this.cartService
+    //     .updateCartItem({
+    //       itemId: this.productInCart()?.id!,
+    //       unit: qty,
+    //       productPrice: product.price!,
+    //     })
+    //     .subscribe({
+    //       next: (res) => {
+    //         this.isUpdatingCart.set(false);
+    //         const currentCart = this.cartService.cartSignal();
+    //         if (currentCart) {
+    //           const updatedItems = currentCart.cartItems.map((cartItem) => {
+    //             if (cartItem.id === this.productInCart()?.id!) {
+    //               return {
+    //                 ...cartItem,
+    //                 unit: qty,
+    //                 total: qty * cartItem.product.price,
+    //               };
+    //             }
+    //             return cartItem;
+    //           });
+    //
+    //           const newCart = { ...currentCart, cartItems: updatedItems };
+    //
+    //           // this.cart$ = of(newCart);
+    //           // this.cart.set(newCart);
+    //           this.cartService.cartSignal.set(newCart);
+    //           localStorage.setItem(
+    //             this.cartService.CART_KEY,
+    //             JSON.stringify(newCart),
+    //           );
+    //         }
+    //
+    //         this.toast.showToast({
+    //           type: 'success',
+    //           message: product.name + ' ' + 'quantity adjusted!',
+    //         });
+    //       },
+    //       error: (err) => {
+    //         this.isUpdatingCart.set(false);
+    //         this.toast.showToast({
+    //           type: 'error',
+    //           message: err.error.message,
+    //         });
+    //       },
+    //     });
+    // }
   }
 
   sanitizedDescription(desc: string): SafeHtml {

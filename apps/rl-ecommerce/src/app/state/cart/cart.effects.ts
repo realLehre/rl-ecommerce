@@ -15,12 +15,25 @@ import {
   resetOperations,
   updateCartItem,
 } from './cart.actions';
-import { catchError, concatMap, delay, from, map, of, switchMap } from 'rxjs';
+import {
+  catchError,
+  concatMap,
+  debounceTime,
+  delay,
+  from,
+  map,
+  of,
+  switchMap,
+  withLatestFrom,
+} from 'rxjs';
+import { selectCartLoadingOperations } from '../state';
+import { ToastService } from '../../shared/services/toast.service';
 
 @Injectable()
 export class CartEffects {
   private actions$ = inject(Actions);
   private cartService = inject(CartService);
+  private toast = inject(ToastService);
   private store = inject(Store);
 
   loadCart$ = createEffect(() => {
@@ -46,7 +59,12 @@ export class CartEffects {
             cartItemAdded({ item: res, product: actionRes.product }),
           ),
           catchError((err) =>
-            of(cartOperationError({ error: err.error.message })),
+            of(
+              cartOperationError({
+                error: err.error.message,
+                operation: 'add',
+              }),
+            ),
           ),
         ),
       ),
@@ -60,7 +78,12 @@ export class CartEffects {
         this.cartService.deleteCartItem(id).pipe(
           map((res) => cartItemRemoved({ item: res })),
           catchError((err) =>
-            of(cartOperationError({ error: err.error.message })),
+            of(
+              cartOperationError({
+                error: err.error.message,
+                operation: 'delete',
+              }),
+            ),
           ),
         ),
       ),
@@ -74,7 +97,12 @@ export class CartEffects {
         this.cartService.updateCartItem(res).pipe(
           map((res) => cartItemUpdated({ item: res })),
           catchError((err) =>
-            of(cartOperationError({ error: err.error.message })),
+            of(
+              cartOperationError({
+                error: err.error.message,
+                operation: 'update',
+              }),
+            ),
           ),
         ),
       ),
@@ -88,4 +116,23 @@ export class CartEffects {
       map(() => resetOperations()), // Reset all operations
     );
   });
+
+  // showToastNotification$ = createEffect(
+  //   () => {
+  //     return this.actions$.pipe(
+  //       ofType(cartOperationError),
+  //       withLatestFrom(this.store.select(selectCartLoadingOperations)),
+  //       debounceTime(300), // Debounce to prevent rapid successive toasts
+  //       map(([action, loadingOperations]) => {
+  //         if (loadingOperations.error) {
+  //           this.toast.showToast({
+  //             type: 'error',
+  //             message: loadingOperations.error,
+  //           });
+  //         }
+  //       }),
+  //     );
+  //   },
+  //   { dispatch: false },
+  // );
 }

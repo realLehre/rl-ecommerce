@@ -15,7 +15,6 @@ import {
 } from './cart.actions';
 
 export interface LoadingOperation {
-  error: string | null;
   loading: boolean;
   status: string | null;
 }
@@ -23,7 +22,6 @@ export interface LoadingOperation {
 const createInitialOperationState = (): LoadingOperation => {
   return {
     loading: false,
-    error: null,
     status: null,
   };
 };
@@ -94,7 +92,6 @@ export const cartReducer = createReducer(
       add: {
         ...state.loadingOperations.add,
         loading: true,
-        error: null,
         status: 'pending',
       },
     },
@@ -126,7 +123,6 @@ export const cartReducer = createReducer(
         add: {
           ...state.loadingOperations.add,
           loading: false,
-          error: null,
           status: 'success',
         },
       },
@@ -140,7 +136,6 @@ export const cartReducer = createReducer(
       delete: {
         ...state.loadingOperations.add,
         loading: true,
-        error: null,
         status: 'pending',
       },
     },
@@ -169,7 +164,6 @@ export const cartReducer = createReducer(
         delete: {
           ...state.loadingOperations.add,
           loading: false,
-          error: null,
           status: 'success',
         },
       },
@@ -183,7 +177,6 @@ export const cartReducer = createReducer(
       update: {
         ...state.loadingOperations.add,
         loading: true,
-        error: null,
         status: 'pending',
       },
     },
@@ -212,20 +205,36 @@ export const cartReducer = createReducer(
         update: {
           ...state.loadingOperations.add,
           loading: false,
-          error: null,
           status: 'success',
         },
       },
     };
   }),
 
-  on(cartOperationError, (state, { error }) => ({
-    ...state,
-    loadingOperations: {
-      ...state.loadingOperations,
-      error,
+  on(
+    cartOperationError,
+    (
+      state,
+      action: {
+        error: string;
+        operation: keyof CartState['loadingOperations'];
+      },
+    ) => {
+      const operationKey = action.operation;
+
+      return {
+        ...state,
+        loadingOperations: {
+          ...state.loadingOperations,
+          [operationKey]: {
+            loading: false,
+            status: 'error',
+          },
+          error: action.error,
+        },
+      };
     },
-  })),
+  ),
 
   on(resetOperations, (state) => {
     const resetOperationsState = { ...state.loadingOperations };

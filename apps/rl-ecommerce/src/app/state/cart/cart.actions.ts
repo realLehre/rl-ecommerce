@@ -1,6 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { ICart, ICartItems } from '../../shared/models/cart.interface';
 import { IProduct } from '../../features/products/model/product.interface';
+import { CartState } from './cart.reducer';
 
 export const loadCart = createAction('[Cart] Load Cart');
 
@@ -46,7 +47,7 @@ export const cartItemRemoved = createAction(
 
 export const cartOperationError = createAction(
   '[Cart] Cart Operation Error',
-  props<{ error: string }>(),
+  props<{ error: string; operation: keyof CartState['loadingOperations'] }>(),
 );
 
 export const resetOperations = createAction('[Cart] Reset Operations');
