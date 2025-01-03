@@ -112,9 +112,7 @@ export class CartService {
         productPrice: data.product.price,
       });
     } else {
-      console.log(this.guestCart);
-
-      return of({
+      const cartItem = {
         total: data.product.price * data.unit,
         unit: data.unit,
         cartId: this.guestCart.id,
@@ -124,7 +122,8 @@ export class CartService {
         productId: data.product.id,
         updatedAt: new Date().toString(),
         createdAt: new Date().toString(),
-      });
+      };
+      return of(cartItem);
     }
     // if (this.user()) {
     //   return this.http.post<ICartItems>(`${this.apiUrl}/add`, {
@@ -162,12 +161,10 @@ export class CartService {
       const updatedItem: ICartItems = {
         ...this.guestCart?.cartItems?.find((item) => item.id === data.itemId)!,
       };
+      updatedItem['unit'] = data.unit;
+      updatedItem['total'] = data.unit * data.product.price;
+      updatedItem['updatedAt'] = new Date().toString();
 
-      if (updatedItem) {
-        updatedItem.unit = data.unit;
-        updatedItem.total = data.unit * data.product.price;
-        updatedItem.updatedAt = new Date().toString();
-      }
       return of(updatedItem);
     }
     // if (this.user()) {
@@ -207,6 +204,16 @@ export class CartService {
     //   localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.guestCart));
     //   return of(this.guestCart);
     // }
+  }
+
+  setCartAfterOperations() {
+    if (this.user()) {
+      this.cart.set(JSON.parse(localStorage.getItem(this.CART_KEY)!));
+    } else {
+      this.guestCart = {
+        ...JSON.parse(localStorage.getItem(this.GUEST_CART_KEY)!),
+      };
+    }
   }
 
   onShowMergeCartDialog() {

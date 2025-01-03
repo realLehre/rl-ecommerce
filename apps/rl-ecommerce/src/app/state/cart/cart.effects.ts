@@ -151,6 +151,7 @@ export class CartEffects {
               }),
             );
           }
+          this.cartService.setCartAfterOperations();
         }),
       );
     },
