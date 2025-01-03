@@ -65,3 +65,5 @@ export const mergeCartFailure = createAction(
 export const resetOperations = createAction('[Cart] Reset Operations');
 
 export const logout_clearCart = createAction('[User] Logout');
+
+export const clearCartItems = createAction('[Cart] Clear Cart');

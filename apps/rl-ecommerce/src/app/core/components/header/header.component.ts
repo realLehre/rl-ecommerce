@@ -28,8 +28,7 @@ import { CartService } from '../../../shared/services/cart.service';
 import { StateAuthService } from '../../../shared/services/state-auth.service';
 import { Store } from '@ngrx/store';
 import { loadCart, logout_clearCart } from '../../../state/cart/cart.actions';
-import { cartReducer } from '../../../state/cart/cart.reducer';
-import { selectCart, selectCartState } from '../../../state/state';
+import { selectCartState } from '../../../state/state';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
@@ -62,9 +61,7 @@ export class HeaderComponent implements AfterViewInit, OnInit {
 
   ngOnInit() {
     this.cartService.cartSignal.set(null);
-    // this.cartService.getCart().subscribe();
     this.store.dispatch(loadCart());
-    // this.store.select(selectCartState).subscribe((res) => console.log(res));
   }
 
   ngAfterViewInit() {
@@ -77,7 +74,7 @@ export class HeaderComponent implements AfterViewInit, OnInit {
         filter(Boolean),
         debounceTime(500),
         distinctUntilChanged(),
-        map((data) => this.searchInput.nativeElement.value.toLowerCase()),
+        map(() => this.searchInput.nativeElement.value.toLowerCase()),
       )
       .subscribe((val) => {
         this.productService.searchedProductsSignal.set(null);

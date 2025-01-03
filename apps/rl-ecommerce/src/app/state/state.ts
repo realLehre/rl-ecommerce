@@ -16,11 +16,6 @@ export const selectCart = createSelector(
   (state: CartState) => state.cart,
 );
 
-export const selectCartLoading = createSelector(
-  selectCartState,
-  (state: CartState) => state.status,
-);
-
 export const selectCartLoadingOperations = createSelector(
   selectCartState,
   (state: CartState) => state.loadingOperations,

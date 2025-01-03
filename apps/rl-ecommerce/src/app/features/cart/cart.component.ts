@@ -2,10 +2,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  OnInit,
   Signal,
   signal,
-  WritableSignal,
 } from '@angular/core';
 import { BreadcrumbComponent } from '../../shared/components/breadcrumb/breadcrumb.component';
 import { Router, RouterLink } from '@angular/router';
@@ -13,9 +11,7 @@ import { EmptyCartComponent } from './empty-cart/empty-cart.component';
 import { SkeletonModule } from 'primeng/skeleton';
 import { CurrencyPipe } from '@angular/common';
 import { ProductQuantityComponent } from '../../shared/components/product-quantity/product-quantity.component';
-import { CartService } from '../../shared/services/cart.service';
 import {
-  ICart,
   ICartItemProduct,
   ICartItems,
 } from '../../shared/models/cart.interface';
@@ -33,7 +29,6 @@ import {
 } from '../../state/cart/cart.actions';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
-  selectCart,
   selectCartLoadingOperations,
   selectCartState,
 } from '../../state/state';
@@ -58,19 +53,16 @@ import { map, tap } from 'rxjs';
   styleUrl: './cart.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CartComponent implements OnInit {
-  private cartService = inject(CartService);
+export class CartComponent {
   private productService = inject(ProductsService);
   private router = inject(Router);
   private toast = inject(ToastService);
   private store = inject(Store);
   cartState = toSignal(this.store.select(selectCartState));
   quantity: number = 1;
-  // isUpdating = signal<boolean[]>([false]);
   isUpdatingIndex = signal<number | null>(null);
   showDeleteDialog = signal(false);
   activeCartItem!: ICartItems;
-  private lastToastStatus: string | null = null;
 
   isLoading = toSignal(
     this.store.select(selectCartLoadingOperations).pipe(
@@ -124,15 +116,6 @@ export class CartComponent implements OnInit {
       }),
     ),
   );
-  ngOnInit() {
-    // if (!this.cart()) {
-    //   const cartData: Partial<ICart> = {
-    //     cartItems: [],
-    //   };
-    //
-    //   this.cart.set(cartData as ICart);
-    // }
-  }
 
   onAdjustQuantity(qty: number, item: ICartItems, idx: number) {
     this.isUpdatingIndex.set(idx);

@@ -1,11 +1,12 @@
 import { ICart, ICartItems } from '../../shared/models/cart.interface';
-import { createAction, createReducer, on } from '@ngrx/store';
+import { createReducer, on } from '@ngrx/store';
 import {
   addToCart,
   cartItemAdded,
   cartItemRemoved,
   cartItemUpdated,
   cartOperationError,
+  clearCartItems,
   loadCart,
   loadCartFailure,
   loadCartSuccess,
@@ -282,6 +283,11 @@ export const cartReducer = createReducer(
       },
     };
   }),
+
+  on(clearCartItems, (state) => ({
+    ...state,
+    cart: { ...state.cart!, cartItems: [] },
+  })),
 
   on(logout_clearCart, (state) => {
     return {

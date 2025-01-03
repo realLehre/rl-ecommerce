@@ -8,6 +8,7 @@ import {
   cartItemRemoved,
   cartItemUpdated,
   cartOperationError,
+  clearCartItems,
   loadCart,
   loadCartFailure,
   loadCartSuccess,
@@ -135,6 +136,7 @@ export class CartEffects {
           cartItemRemoved,
           cartItemUpdated,
           mergeCartSuccess,
+          clearCartItems,
         ),
         withLatestFrom(this.store.select(selectCartState)),
         tap(([action, state]) => {

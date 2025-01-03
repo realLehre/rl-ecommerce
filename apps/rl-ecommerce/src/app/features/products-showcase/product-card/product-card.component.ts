@@ -9,7 +9,7 @@ import {
   Signal,
   signal,
 } from '@angular/core';
-import { CurrencyPipe, NgOptimizedImage, NgStyle } from '@angular/common';
+import { CurrencyPipe, NgStyle } from '@angular/common';
 import { Router } from '@angular/router';
 import { IProduct } from '../../products/model/product.interface';
 import { ProductsService } from '../../products/services/products.service';
@@ -20,7 +20,6 @@ import { ToastService } from '../../../shared/services/toast.service';
 import { UserAccountService } from '../../user/user-account/services/user-account.service';
 import { ReviewService } from '../../../shared/services/review.service';
 import { ProductQuantityComponent } from '../../../shared/components/product-quantity/product-quantity.component';
-import { ICart, ICartItems } from '../../../shared/models/cart.interface';
 import { PricePercentageDecreasePipe } from '../../../shared/pipes/price-percentage-decrease.pipe';
 import {
   addToCart,
@@ -42,7 +41,6 @@ import { map, tap } from 'rxjs';
     NgStyle,
     ProductQuantityComponent,
     PricePercentageDecreasePipe,
-    NgOptimizedImage,
   ],
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.scss',
@@ -59,12 +57,10 @@ export class ProductCardComponent implements OnInit {
   user = this.userService.user;
   product = input.required<IProduct>();
   productId = signal('');
-  // isAddingToCart = signal(false);
   stars = signal(
     Array.from({ length: 5 }, (_, i) => ({ star: i + 1, active: false })),
   );
   quantity: number = 1;
-  // isUpdatingCart = signal(false);
   cart = toSignal(this.store.select(selectCart));
   productInCart = computed(() => {
     return this.cart()?.cartItems?.find(
