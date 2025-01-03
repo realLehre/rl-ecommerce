@@ -24,9 +24,10 @@ import {
   map,
   of,
   switchMap,
+  tap,
   withLatestFrom,
 } from 'rxjs';
-import { selectCartLoadingOperations } from '../state';
+import { selectCartLoadingOperations, selectCartState } from '../state';
 import { ToastService } from '../../shared/services/toast.service';
 
 @Injectable()
@@ -108,6 +109,34 @@ export class CartEffects {
       ),
     );
   });
+
+  saveStateToStorage = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(
+          loadCartSuccess,
+          cartItemAdded,
+          cartItemRemoved,
+          cartItemUpdated,
+        ),
+        withLatestFrom(this.store.select(selectCartState)),
+        tap(([action, state]) => {
+          if (this.cartService.user()) {
+            localStorage.setItem(
+              this.cartService.CART_KEY,
+              JSON.stringify(state.cart),
+            );
+          } else {
+            localStorage.setItem(
+              this.cartService.GUEST_CART_KEY,
+              JSON.stringify(state.cart),
+            );
+          }
+        }),
+      );
+    },
+    { dispatch: false },
+  );
 
   resetOperations$ = createEffect(() => {
     return this.actions$.pipe(

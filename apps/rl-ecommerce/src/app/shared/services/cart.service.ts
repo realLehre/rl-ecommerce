@@ -24,40 +24,43 @@ export class CartService {
   guestCart: Partial<ICart> = {
     cartItems: [],
   };
-  STORAGE_KEY = 'hd30jlsncjefysakhs';
+  GUEST_CART_KEY = 'hd30jlsncjefysakhs';
   CART_KEY = 'sjshdy382nsj02shk02s';
+  cart = signal<ICart | null>(null);
   constructor() {
-    const guestCart = JSON.parse(localStorage.getItem(this.STORAGE_KEY)!);
+    const guestCart = JSON.parse(localStorage.getItem(this.GUEST_CART_KEY)!);
 
     if (guestCart) this.guestCart = guestCart;
 
     const cart = JSON.parse(localStorage.getItem(this.CART_KEY)!);
 
     if (cart && this.user()) {
-      this.cartSignal.set(cart);
-      this.cartTotal.set(cart.cartItems.length);
+      this.cart.set(cart);
     }
   }
 
-  getCart() {
-    return this.http.get<ICart>(`${this.apiUrl}/${this.user()?.id}`).pipe(
-      retry(3),
-      tap((res) => {
-        this.cartSignal.set(res);
-        this.cartTotal.set(res.cartItems.length);
-        const newSignIn = sessionStorage.getItem(
-          this.authService.NEW_SIGNUP_KEY,
-        );
-        if (newSignIn) {
-          this.mergeCart().subscribe((res) =>
-            sessionStorage.removeItem(this.authService.NEW_SIGNUP_KEY),
+  getCart(): Observable<any> {
+    if (this.user()) {
+      return this.cart()!
+        ? of(this.cart()!)
+        : this.http.get<ICart>(`${this.apiUrl}/${this.user()?.id}`).pipe(
+            retry(3),
+            tap((res) => {
+              const newSignIn = sessionStorage.getItem(
+                this.authService.NEW_SIGNUP_KEY,
+              );
+              if (newSignIn) {
+                this.mergeCart().subscribe((res) =>
+                  sessionStorage.removeItem(this.authService.NEW_SIGNUP_KEY),
+                );
+              } else {
+                this.onShowMergeCartDialog();
+              }
+            }),
           );
-        } else {
-          this.onShowMergeCartDialog();
-        }
-        localStorage.setItem(this.CART_KEY, JSON.stringify(res));
-      }),
-    );
+    } else {
+      return of(JSON.parse(localStorage.getItem(this.GUEST_CART_KEY)!));
+    }
     // if (this.user()) {
     //   return this.cartSignal()
     //     ? of(this.cartSignal())
@@ -172,7 +175,7 @@ export class CartService {
       .post<ICart>(`${this.apiUrl}/${this.user()?.id}/merge`, this.guestCart)
       .pipe(
         tap((res) => {
-          localStorage.removeItem(this.STORAGE_KEY);
+          localStorage.removeItem(this.GUEST_CART_KEY);
           localStorage.setItem(this.CART_KEY, JSON.stringify(res));
           this.cartSignal.set(res);
           this.cartTotal.set(res.cartItems.length);

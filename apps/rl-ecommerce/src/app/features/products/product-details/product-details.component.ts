@@ -173,60 +173,7 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   onAddToCart(product: IProduct) {
-    // this.isAddingToCart.set(true);
     this.store.dispatch(addToCart({ product: product, unit: this.quantity }));
-    // this.cartService
-    //   .addToCart({
-    //     product: product,
-    //     unit: this.quantity,
-    //   })!
-    //   .subscribe({
-    //     next: (res) => {
-    //       this.isAddingToCart.set(false);
-    //       const cartTotal = this.cartService.cartTotal;
-    //
-    //       this.cartService.cartTotal.set(cartTotal()! + 1);
-    //
-    //       //   this.cartService.cartSignal.set(null);
-    //       //
-    //       // this.cartService.getCart().subscribe();
-    //
-    //       const cart = this.cartService.cartSignal() || ({} as ICart);
-    //       this.cartService.cartSignal.set(null);
-    //       this.cartService.getCart().subscribe();
-    //       const newCartItem = {
-    //         ...res,
-    //         product: this.activeProduct() as IProduct,
-    //       };
-    //       this.cartService.cartSignal.set({
-    //         ...this.cartService.cartSignal()!,
-    //         cartItems: Array.isArray(cart?.cartItems!)
-    //           ? [...cart?.cartItems!, newCartItem as any]
-    //           : [newCartItem],
-    //       });
-    //
-    //       if (!this.authService.user()) {
-    //         this.cartService.guestCart.cartItems?.push(res as ICartItems);
-    //         localStorage.setItem(
-    //           this.cartService.STORAGE_KEY,
-    //           JSON.stringify(this.cartService.guestCart),
-    //         );
-    //         this.cartService.cartTotal.set(cartTotal()! + 1);
-    //       }
-    //
-    //       this.toast.showToast({
-    //         type: 'success',
-    //         message: `${product.name} added to cart!`,
-    //       });
-    //     },
-    //     error: (err) => {
-    //       this.isAddingToCart.set(false);
-    //       this.toast.showToast({
-    //         type: 'error',
-    //         message: err.error.message,
-    //       });
-    //     },
-    //   });
   }
 
   toggleCollapse() {
@@ -244,56 +191,6 @@ export class ProductDetailsComponent implements OnInit {
         }),
       );
     }
-    // if (this.productInCart()) {
-    //   this.isUpdatingCart.set(true);
-    //
-    //   this.cartService
-    //     .updateCartItem({
-    //       itemId: this.productInCart()?.id!,
-    //       unit: qty,
-    //       productPrice: product.price!,
-    //     })
-    //     .subscribe({
-    //       next: (res) => {
-    //         this.isUpdatingCart.set(false);
-    //         const currentCart = this.cartService.cartSignal();
-    //         if (currentCart) {
-    //           const updatedItems = currentCart.cartItems.map((cartItem) => {
-    //             if (cartItem.id === this.productInCart()?.id!) {
-    //               return {
-    //                 ...cartItem,
-    //                 unit: qty,
-    //                 total: qty * cartItem.product.price,
-    //               };
-    //             }
-    //             return cartItem;
-    //           });
-    //
-    //           const newCart = { ...currentCart, cartItems: updatedItems };
-    //
-    //           // this.cart$ = of(newCart);
-    //           // this.cart.set(newCart);
-    //           this.cartService.cartSignal.set(newCart);
-    //           localStorage.setItem(
-    //             this.cartService.CART_KEY,
-    //             JSON.stringify(newCart),
-    //           );
-    //         }
-    //
-    //         this.toast.showToast({
-    //           type: 'success',
-    //           message: product.name + ' ' + 'quantity adjusted!',
-    //         });
-    //       },
-    //       error: (err) => {
-    //         this.isUpdatingCart.set(false);
-    //         this.toast.showToast({
-    //           type: 'error',
-    //           message: err.error.message,
-    //         });
-    //       },
-    //     });
-    // }
   }
 
   sanitizedDescription(desc: string): SafeHtml {

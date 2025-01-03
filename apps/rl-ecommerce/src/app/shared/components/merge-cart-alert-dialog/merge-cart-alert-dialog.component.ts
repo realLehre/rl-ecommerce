@@ -38,7 +38,7 @@ export class MergeCartAlertDialogComponent {
     });
   }
   onCloseDialog() {
-    localStorage.removeItem(this.cartService.STORAGE_KEY);
+    localStorage.removeItem(this.cartService.GUEST_CART_KEY);
     this.cartService.guestCart.cartItems = [];
     this.ref.close();
   }

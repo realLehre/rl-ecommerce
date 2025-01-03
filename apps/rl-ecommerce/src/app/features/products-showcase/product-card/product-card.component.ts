@@ -144,52 +144,6 @@ export class ProductCardComponent implements OnInit {
     this.store.dispatch(
       addToCart({ product: this.product(), unit: this.quantity }),
     );
-    // if (this.user()) {
-    //   this.isAddingToCart.set(true);
-    // }
-    // this.cartService
-    //   .addToCart({
-    //     product: this.product(),
-    //     unit: 1,
-    //   })
-    //   .subscribe({
-    //     next: (res) => {
-    //       this.isAddingToCart.set(false);
-    //       const cartTotal = this.cartService.cartTotal;
-    //
-    //       this.cartService.cartTotal.set(cartTotal()! + 1);
-    //
-    //       const cart = { ...this.cartService.cartSignal() } || ({} as ICart);
-    //       this.cartService.cartSignal.set(null);
-    //       this.cartService.getCart().subscribe();
-    //       const newCartItem = { ...res, product: this.product() as IProduct };
-    //       this.cartService.cartSignal.set({
-    //         ...this.cartService.cartSignal()!,
-    //         cartItems: Array.isArray(cart?.cartItems!)
-    //           ? [...cart?.cartItems!, newCartItem as any]
-    //           : [newCartItem],
-    //       });
-    //       if (!this.user()) {
-    //         this.cartService.guestCart.cartItems?.push(res as ICartItems);
-    //         localStorage.setItem(
-    //           this.cartService.STORAGE_KEY,
-    //           JSON.stringify(this.cartService.guestCart),
-    //         );
-    //         this.cartService.cartTotal.set(cartTotal()! + 1);
-    //       }
-    //       this.toast.showToast({
-    //         type: 'success',
-    //         message: `${this.product().name} added to cart!`,
-    //       });
-    //     },
-    //     error: (err) => {
-    //       this.isAddingToCart.set(false);
-    //       this.toast.showToast({
-    //         type: 'error',
-    //         message: err.error.message,
-    //       });
-    //     },
-    //   });
   }
 
   onAdjustQuantity(qty: number) {
@@ -201,50 +155,6 @@ export class ProductCardComponent implements OnInit {
         product: this.product(),
       }),
     );
-    // this.cartService
-    //   .updateCartItem({
-    //     itemId: this.productInCart()?.id!,
-    //     unit: this.quantity,
-    //     productPrice: this.product()?.price!,
-    //   })
-    //   .subscribe({
-    //     next: () => {
-    //       this.isUpdatingCart.set(false);
-    //       const currentCart = this.cartService.cartSignal();
-    //       if (currentCart) {
-    //         const updatedItems = currentCart.cartItems.map((cartItem) => {
-    //           if (cartItem.id === this.productInCart()?.id!) {
-    //             return {
-    //               ...cartItem,
-    //               unit: qty,
-    //               total: qty * cartItem.product.price,
-    //             };
-    //           }
-    //           return cartItem;
-    //         });
-    //
-    //         const newCart = { ...currentCart, cartItems: updatedItems };
-    //
-    //         this.cartService.cartSignal.set(newCart);
-    //
-    //         localStorage.setItem(
-    //           this.cartService.CART_KEY,
-    //           JSON.stringify(newCart),
-    //         );
-    //       }
-    //       this.toast.showToast({
-    //         type: 'success',
-    //         message: this.product()?.name + ' ' + 'quantity adjusted!',
-    //       });
-    //     },
-    //     error: (err) => {
-    //       this.isUpdatingCart.set(false);
-    //       this.toast.showToast({
-    //         type: 'error',
-    //         message: err.error.message,
-    //       });
-    //     },
-    //   });
   }
 
   averageRating(): number {

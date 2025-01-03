@@ -144,53 +144,6 @@ export class CartComponent implements OnInit {
         product: item.product as IProduct,
       }),
     );
-    // this.cartService
-    //   .updateCartItem({
-    //     itemId: item.id,
-    //     unit: this.quantity,
-    //     productPrice: item.product.price,
-    //   })
-    //   .subscribe({
-    //     next: (res) => {
-    //       loadings[idx] = false;
-    //       this.isUpdating.set([...loadings]);
-    //       const currentCart = this.cartService.cartSignal();
-    //       if (currentCart) {
-    //         const updatedItems = currentCart.cartItems.map((cartItem) => {
-    //           if (cartItem.id === item.id) {
-    //             return {
-    //               ...cartItem,
-    //               unit: qty,
-    //               total: qty * cartItem.product.price,
-    //             };
-    //           }
-    //           return cartItem;
-    //         });
-    //
-    //         const newCart = { ...currentCart, cartItems: updatedItems };
-    //
-    //         // this.cart$ = of(newCart);
-    //         this.cart.set(newCart);
-    //         this.cartService.cartSignal.set(newCart);
-    //         localStorage.setItem(
-    //           this.cartService.CART_KEY,
-    //           JSON.stringify(newCart),
-    //         );
-    //       }
-    //       this.toast.showToast({
-    //         type: 'success',
-    //         message: item.product.name + ' ' + 'quantity adjusted!',
-    //       });
-    //     },
-    //     error: (err) => {
-    //       loadings[idx] = false;
-    //       this.isUpdating.set([...loadings]);
-    //       this.toast.showToast({
-    //         type: 'error',
-    //         message: err.error.message,
-    //       });
-    //     },
-    //   });
   }
 
   onDeleteDialogAction(action: string, item?: ICartItems) {
@@ -201,43 +154,7 @@ export class CartComponent implements OnInit {
   }
 
   onDeleteCartItem() {
-    // this.isLoading.set(true);
     this.store.dispatch(removeItemFromCart({ id: this.activeCartItem?.id }));
-    // this.cartService.deleteCartItem(this.activeCartItem?.id).subscribe({
-    //   next: (res) => {
-    //     this.isLoading.set(false);
-    //     this.showDeleteDialog.set(false);
-    //     const cart = this.cartService.cartSignal();
-    //     if (cart) {
-    //       const cartItems = cart?.cartItems.filter(
-    //         (item) => item.id !== this.activeCartItem?.id,
-    //       );
-    //
-    //       const newCart = { ...cart, cartItems };
-    //
-    //       // this.cart$ = of(newCart);
-    //       this.cart.set(newCart);
-    //       this.cartService.cartSignal.set(newCart);
-    //       this.cartService.cartTotal.set(cartItems.length);
-    //       localStorage.setItem(
-    //         this.cartService.CART_KEY,
-    //         JSON.stringify(newCart),
-    //       );
-    //     }
-    //     this.toast.showToast({
-    //       type: 'success',
-    //       message:
-    //         this.activeCartItem.product.name + ' ' + 'deleted from cart!',
-    //     });
-    //   },
-    //   error: (err) => {
-    //     this.isLoading.set(false);
-    //     this.toast.showToast({
-    //       type: 'error',
-    //       message: err.error.message,
-    //     });
-    //   },
-    // });
   }
 
   onViewProduct(product: ICartItemProduct) {
