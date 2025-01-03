@@ -11,6 +11,7 @@ import {
   loadCart,
   loadCartFailure,
   loadCartSuccess,
+  logout_clearCart,
   mergeCart,
   mergeCartFailure,
   mergeCartSuccess,
@@ -152,6 +153,18 @@ export class CartEffects {
             );
           }
           this.cartService.setCartAfterOperations();
+        }),
+      );
+    },
+    { dispatch: false },
+  );
+
+  logOut$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(logout_clearCart),
+        tap(() => {
+          this.cartService.resetCartOnLogout();
         }),
       );
     },

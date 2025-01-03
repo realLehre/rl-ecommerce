@@ -1,7 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
-import { UserAccountService } from '../../features/user/user-account/services/user-account.service';
 import { ICart, ICartItems } from '../models/cart.interface';
 import { Observable, of, retry, tap } from 'rxjs';
 import { IProduct } from '../../features/products/model/product.interface';
@@ -16,10 +15,9 @@ import { v4 as uuidv4 } from 'uuid';
 export class CartService {
   private apiUrl = environment.apiUrl + 'cart';
   private http = inject(HttpClient);
-  private userService = inject(UserAccountService);
   private authService = inject(AuthService);
   private dialogService = inject(DialogService);
-  user = this.userService.user;
+  user = this.authService.user;
   cartSignal = signal<ICart | null>(null);
   cartTotal = signal<number | null>(null);
   guestCart!: ICart;
@@ -41,6 +39,7 @@ export class CartService {
   }
 
   getCart(): Observable<any> {
+    console.log(this.cart());
     if (this.user()) {
       return this.cart()!
         ? of(this.cart()!)
@@ -52,10 +51,12 @@ export class CartService {
               );
               console.log(2);
               if (newSignIn) {
+                console.log('dont show merge');
                 this.mergeCart().subscribe((res) =>
                   sessionStorage.removeItem(this.authService.NEW_SIGNUP_KEY),
                 );
               } else {
+                console.log('show merge');
                 this.onShowMergeCartDialog();
               }
             }),
@@ -214,10 +215,21 @@ export class CartService {
         ...JSON.parse(localStorage.getItem(this.GUEST_CART_KEY)!),
       };
     }
+    console.log(JSON.parse(localStorage.getItem(this.CART_KEY)!));
+    console.log(this.cart());
+    console.log('guest cart', this.guestCart);
+  }
+
+  resetCartOnLogout() {
+    this.cart.set(null);
+    this.guestCart = {
+      ...JSON.parse(localStorage.getItem(this.GUEST_CART_KEY)!),
+    };
   }
 
   onShowMergeCartDialog() {
-    if (this.guestCart.cartItems?.length) {
+    console.log(this.guestCart);
+    if (this.guestCart?.cartItems?.length) {
       this.dialogService.open(MergeCartAlertDialogComponent, {
         width: '25rem',
         breakpoints: {
