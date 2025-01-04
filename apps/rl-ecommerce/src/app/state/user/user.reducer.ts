@@ -1,12 +1,8 @@
 import { IUser } from '../../features/user/models/user.interface';
 import { AuthApiError } from '@supabase/supabase-js';
 import { createReducer, on } from '@ngrx/store';
-import {
-  getUser,
-  getUserFailure,
-  getUserSuccess,
-  logout_clearUser,
-} from './user.actions';
+import { getUser, getUserFailure, getUserSuccess } from './user.actions';
+import { logout_clearState } from '../state.actions';
 
 export interface UserState {
   user: IUser | null;
@@ -42,5 +38,5 @@ export const userReducer = createReducer(
     error,
   })),
 
-  on(logout_clearUser, (state) => ({ ...initialUserState })),
+  on(logout_clearState, (state) => ({ ...initialUserState })),
 );

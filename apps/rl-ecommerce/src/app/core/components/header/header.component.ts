@@ -27,10 +27,11 @@ import { LoaderComponent } from '../../../shared/components/loader/loader.compon
 import { CartService } from '../../../shared/services/cart.service';
 import { StateAuthService } from '../../../shared/services/state-auth.service';
 import { Store } from '@ngrx/store';
-import { loadCart, logout_clearCart } from '../../../state/cart/cart.actions';
+import { loadCart } from '../../../state/cart/cart.actions';
 import { selectCartState } from '../../../state/state';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { UserAccountService } from '../../../features/user/user-account/services/user-account.service';
+import { logout_clearState } from '../../../state/state.actions';
 
 @Component({
   selector: 'app-header',
@@ -101,7 +102,7 @@ export class HeaderComponent implements AfterViewInit, OnInit {
 
   onSignOut() {
     this.authService.signOut();
-    this.store.dispatch(logout_clearCart());
+    this.store.dispatch(logout_clearState());
     this.router.navigate(['/']).then(() => {
       this.stateAuthService.resetState();
     });
