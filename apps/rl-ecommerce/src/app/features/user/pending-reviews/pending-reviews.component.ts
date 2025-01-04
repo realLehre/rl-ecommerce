@@ -41,7 +41,6 @@ export class PendingReviewsComponent implements OnInit {
 
     this.ref.onClose.subscribe((event) => {
       if (event) {
-        this.reviewService.pendingReviewsSignal.set(null);
         this.orders$ = this.reviewService.getPendingReviews();
         this.cdr.detectChanges();
       }

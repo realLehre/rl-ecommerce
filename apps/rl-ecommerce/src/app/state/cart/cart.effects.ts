@@ -25,6 +25,7 @@ import {
   concatMap,
   delay,
   map,
+  mergeMap,
   of,
   switchMap,
   tap,
@@ -71,7 +72,7 @@ export class CartEffects {
   addItemToCart$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(addToCart),
-      switchMap((actionRes) =>
+      concatMap((actionRes) =>
         this.cartService.addToCart(actionRes).pipe(
           map((res) =>
             cartItemAdded({ item: res, product: actionRes.product }),
@@ -92,7 +93,7 @@ export class CartEffects {
   removeItemFromCart$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(removeItemFromCart),
-      switchMap(({ id }) =>
+      mergeMap(({ id }) =>
         this.cartService.deleteCartItem(id).pipe(
           map(() => cartItemRemoved({ id })),
           catchError((err) =>

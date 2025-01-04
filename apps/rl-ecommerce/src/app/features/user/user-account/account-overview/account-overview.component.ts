@@ -27,11 +27,11 @@ export class AccountOverviewComponent {
   private addressService = inject(AddressService);
   private router = inject(Router);
   address$ = this.addressService.getAddress();
-  user$ = this.userAccountService.getUser();
+  user$ = this.userAccountService.getUser('sfsjf');
 
   onCancelProfileEdit() {
     this.isEditingProfile.set(false);
-    this.user$ = of(this.userAccountService.userSignal());
+    // this.user$ = of(this.userAccountService.userSignal());
   }
 
   onEditAddress(address: IAddress) {

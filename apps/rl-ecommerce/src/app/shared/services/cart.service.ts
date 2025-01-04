@@ -18,7 +18,6 @@ export class CartService {
   private authService = inject(AuthService);
   private dialogService = inject(DialogService);
   user = this.authService.user;
-  cartSignal = signal<ICart | null>(null);
   cartTotal = signal<number | null>(null);
   guestCart!: ICart;
   GUEST_CART_KEY = 'hd30jlsncjefysakhs';

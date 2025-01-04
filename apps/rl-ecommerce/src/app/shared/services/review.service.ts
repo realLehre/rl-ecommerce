@@ -14,7 +14,6 @@ export class ReviewService {
   user = this.authService.user;
   private readonly url = environment.apiUrl + 'review';
   seeingFullReview = signal(false);
-  pendingReviewsSignal = signal<IOrder[] | null>(null);
   constructor() {}
 
   createReview(data: any) {
@@ -22,12 +21,11 @@ export class ReviewService {
   }
 
   getPendingReviews() {
-    return this.pendingReviewsSignal()
-      ? of(this.pendingReviewsSignal())
-      : this.http.get<IOrder[]>(`${this.url}/pending/${this.user()?.id}`).pipe(
-          map((res) => res.filter((order) => order.orderItems.length > 0)),
-          tap((res) => this.pendingReviewsSignal.set(res)),
-          retry(3),
-        );
+    return this.http
+      .get<IOrder[]>(`${this.url}/pending/${this.user()?.id}`)
+      .pipe(
+        map((res) => res.filter((order) => order.orderItems.length > 0)),
+        retry(3),
+      );
   }
 }

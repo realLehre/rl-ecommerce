@@ -24,7 +24,7 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { SliderModule } from 'primeng/slider';
 import { ToastService } from '../../../shared/services/toast.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IUser } from '../../auth/services/auth.service';
+import { IUser } from '../../user/models/user.interface';
 
 @Component({
   selector: 'app-admin-users',

@@ -1,7 +1,6 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { AuthService, IUser } from '../../features/auth/services/auth.service';
-import { CookieService } from 'ngx-cookie-service';
+import { AuthService } from '../../features/auth/services/auth.service';
 
 export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);

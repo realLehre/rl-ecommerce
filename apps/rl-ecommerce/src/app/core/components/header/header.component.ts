@@ -30,6 +30,7 @@ import { Store } from '@ngrx/store';
 import { loadCart, logout_clearCart } from '../../../state/cart/cart.actions';
 import { selectCartState } from '../../../state/state';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { UserAccountService } from '../../../features/user/user-account/services/user-account.service';
 
 @Component({
   selector: 'app-header',
@@ -41,13 +42,15 @@ import { toSignal } from '@angular/core/rxjs-interop';
 })
 export class HeaderComponent implements AfterViewInit, OnInit {
   private authService = inject(AuthService);
+  private userAccountService = inject(UserAccountService);
   private productService = inject(ProductsService);
   private cartService = inject(CartService);
   private stateAuthService = inject(StateAuthService);
   private store = inject(Store);
-  user = this.authService.user;
+  user = computed(() => this.userAccountService.userSignal);
   userName = computed(() => {
-    return this.user()?.fullName.split(' ')[0]!;
+    console.log(this.userAccountService.userSignal());
+    return this.userAccountService.userSignal()?.name!.split(' ')[0]!;
   });
   private layoutService = inject(LayoutService);
   private router = inject(Router);
@@ -60,7 +63,6 @@ export class HeaderComponent implements AfterViewInit, OnInit {
   products = this.productService.searchedProductsSignal;
 
   ngOnInit() {
-    this.cartService.cartSignal.set(null);
     this.store.dispatch(loadCart());
   }
 

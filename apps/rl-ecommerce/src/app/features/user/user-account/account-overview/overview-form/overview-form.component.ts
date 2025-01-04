@@ -14,14 +14,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { NgClass } from '@angular/common';
-import { AuthService, IUser } from '../../../../auth/services/auth.service';
 import { AddressService } from '../../../address/services/address.service';
 import { UserAccountService } from '../../services/user-account.service';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { catchError, switchMap, tap } from 'rxjs';
 import { LoaderComponent } from '../../../../../shared/components/loader/loader.component';
 import { ToastService } from '../../../../../shared/services/toast.service';
-import { CookieService } from 'ngx-cookie-service';
+import { IUser } from '../../../models/user.interface';
 
 @Component({
   selector: 'app-overview-form',
@@ -40,7 +37,6 @@ export class OverviewFormComponent implements OnInit {
   private addressService = inject(AddressService);
   private toastService = inject(ToastService);
   private userAccountService = inject(UserAccountService);
-  private cookieService = inject(CookieService);
   user = input.required<IUser | null>();
   profileForm!: FormGroup;
   cancelEdit = output<void>();
@@ -72,7 +68,6 @@ export class OverviewFormComponent implements OnInit {
             this.userAccountService.USER_ACCOUNT_STORAGE_KEY,
             JSON.stringify(res),
           );
-          // const user = this.cookieService.get(this.USER_STORAGE_KEY);
           this.isLoading.set(false);
           this.toastService.showToast({
             type: 'success',

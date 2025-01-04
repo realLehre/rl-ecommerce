@@ -10,15 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-
-export interface IUser {
-  id: string;
-  fullName: string;
-  name?: string;
-  phoneNumber: string | null;
-  email: string;
-  token?: string;
-}
+import { IUser } from '../../user/models/user.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -122,8 +114,7 @@ export class AuthService {
           email: session?.user.email!,
           phoneNumber: session?.user.phone!,
           id: session?.user?.id!,
-          fullName: session?.user.user_metadata?.['full_name'],
-          token: session?.access_token,
+          name: session?.user.user_metadata?.['full_name'],
         };
         this.user.set(data);
 
@@ -144,7 +135,7 @@ export class AuthService {
         }
 
         this.http
-          .get<IUser>(`${this.baseUrl}users/${this.user()?.id}`)
+          .get<IUser>(`${this.baseUrl}users/single/${this.user()?.id}`)
           .pipe(
             tap((res) => {
               this.setUser(res);
@@ -168,7 +159,7 @@ export class AuthService {
       email: res?.email!,
       phoneNumber: res?.phoneNumber!,
       id: res?.id!,
-      fullName: res?.name!,
+      name: res?.name!,
     };
     this.user.set(data);
     this.cookieService.set(this.USER_STORAGE_KEY, JSON.stringify(data), {

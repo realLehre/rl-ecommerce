@@ -113,7 +113,16 @@ export class ProductsService {
     }
   }
 
-  private handleError(error: any) {
-    return throwError(() => new Error('An error occurred! Try again later'));
+  getProductCartStarWidth(starIndex: number, averageRating: number) {
+    const fullStars = Math.floor(averageRating);
+    const partialFill = (averageRating % 1) * 100;
+
+    if (starIndex < fullStars) {
+      return '100%';
+    } else if (starIndex === fullStars) {
+      return `${partialFill}%`;
+    } else {
+      return '0%';
+    }
   }
 }

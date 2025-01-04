@@ -1,10 +1,11 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { AuthService, IUser } from '../../../auth/services/auth.service';
+import { AuthService } from '../../../auth/services/auth.service';
 import { HttpClient } from '@angular/common/http';
 
 import { environment } from '../../../../../environments/environment.development';
 import { of, tap } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
+import { IUser } from '../../models/user.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +23,7 @@ export class UserAccountService {
     const user = JSON.parse(
       localStorage.getItem(this.USER_ACCOUNT_STORAGE_KEY)!,
     );
-
+    console.log(user);
     if (user) {
       this.userSignal.set(user);
     } else {
@@ -30,10 +31,10 @@ export class UserAccountService {
     }
   }
 
-  getUser() {
+  getUser(id: string) {
     return this.userSignal()
       ? of(this.userSignal())
-      : this.http.get<IUser>(`${this.baseUrl}users/${this.user()?.id}`).pipe(
+      : this.http.get<IUser>(`${this.baseUrl}users/single/${id}`).pipe(
           tap((res) => {
             this.setUser(res);
           }),
@@ -52,12 +53,13 @@ export class UserAccountService {
 
   setUser(res: any) {
     this.userSignal.set(res);
+    console.log(this.userSignal());
     localStorage.setItem(this.USER_ACCOUNT_STORAGE_KEY, JSON.stringify(res));
     const data: IUser = {
       email: res?.email!,
       phoneNumber: res?.phoneNumber!,
       id: res?.id!,
-      fullName: res?.name!,
+      name: res?.name!,
     };
     this.authService.user.set(data);
     this.cookieService.set(

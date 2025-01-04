@@ -123,6 +123,13 @@ export class ProductCardComponent implements OnInit {
       }),
     ),
   );
+  averageRating = computed(() => {
+    const totalRating = this.product().ratings.reduce(
+      (acc: number, rating: any) => acc + rating.rating,
+      0,
+    );
+    return totalRating / this.product().ratings.length || 0;
+  });
 
   ngOnInit() {
     this.productId.set(this.product().id);
@@ -165,24 +172,10 @@ export class ProductCardComponent implements OnInit {
     );
   }
 
-  averageRating(): number {
-    const totalRating = this.product().ratings.reduce(
-      (acc: number, rating: any) => acc + rating.rating,
-      0,
-    );
-    return totalRating / this.product().ratings.length || 0;
-  }
-
   getStarWidth(starIndex: number): string {
-    const fullStars = Math.floor(this.averageRating());
-    const partialFill = (this.averageRating() % 1) * 100;
-
-    if (starIndex < fullStars) {
-      return '100%';
-    } else if (starIndex === fullStars) {
-      return `${partialFill}%`;
-    } else {
-      return '0%';
-    }
+    return this.productService.getProductCartStarWidth(
+      starIndex,
+      this.averageRating(),
+    );
   }
 }
