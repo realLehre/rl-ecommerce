@@ -12,3 +12,5 @@ export const getUserFailure = createAction(
   '[User] Get User Failure',
   props<{ error: string }>(),
 );
+
+export const logout_clearUser = createAction('[User] Logout');

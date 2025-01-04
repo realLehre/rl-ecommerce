@@ -11,6 +11,8 @@ import { CookieService } from 'ngx-cookie-service';
 import { tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { IUser } from '../../user/models/user.interface';
+import { Store } from '@ngrx/store';
+import { getUser } from '../../../state/user/user.actions';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +22,7 @@ export class AuthService {
   private route = inject(ActivatedRoute);
   private cookieService = inject(CookieService);
   private http = inject(HttpClient);
+  private store = inject(Store);
   private baseUrl = environment.apiUrl;
   supabase!: SupabaseClient;
   user = signal<IUser | null>(null);
@@ -116,6 +119,7 @@ export class AuthService {
           id: session?.user?.id!,
           name: session?.user.user_metadata?.['full_name'],
         };
+        this.store.dispatch(getUser({ id: session?.user?.id }));
         this.user.set(data);
 
         this.cookieService.set(this.USER_STORAGE_KEY, JSON.stringify(data), {
@@ -133,7 +137,6 @@ export class AuthService {
         if (this.cachedAuthEvent()) {
           return;
         }
-
         this.http
           .get<IUser>(`${this.baseUrl}users/single/${this.user()?.id}`)
           .pipe(
