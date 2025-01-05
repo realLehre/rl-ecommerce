@@ -54,7 +54,6 @@ export class HeaderComponent implements AfterViewInit, OnInit {
   cartData = toSignal(this.store.select(selectCartState));
   user = toSignal(this.store.select(selectUserState));
   userName = computed(() => this.user()?.user?.name?.split(' ')[0]);
-
   products = this.productService.searchedProductsSignal;
 
   ngOnInit() {

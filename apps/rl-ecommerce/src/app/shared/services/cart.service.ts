@@ -57,6 +57,9 @@ export class CartService {
             }),
           );
     } else {
+      if (!this.user() && !this.guestCart.hasOwnProperty('id')) {
+        this.createGuestCart();
+      }
       return of(this.guestCart);
     }
   }
