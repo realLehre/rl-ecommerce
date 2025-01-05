@@ -8,8 +8,6 @@ import {
 import { environment } from '../../../../environments/environment.development';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-import { tap } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
 import { IUser } from '../../user/models/user.interface';
 import { Store } from '@ngrx/store';
 import { getUser } from '../../../state/user/user.actions';
@@ -22,12 +20,10 @@ export class AuthService {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private cookieService = inject(CookieService);
-  private http = inject(HttpClient);
   private store = inject(Store);
   private baseUrl = environment.apiUrl;
   supabase!: SupabaseClient;
   user = signal<IUser | null>(null);
-  USER_STORAGE_KEY = 'shshyeo948dnsks7h0';
   USER_ACCOUNT_STORAGE_KEY = 'hdjeyu7830nsk083hd';
   NEW_SIGNUP_KEY = 'djd38sJDjd29qldds';
   savedReturnUrl: string = 'djdhw923jsjhak9';
@@ -124,13 +120,6 @@ export class AuthService {
         this.store.dispatch(getUser({ id: session?.user?.id! }));
         this.user.set(data);
 
-        this.cookieService.set(this.USER_STORAGE_KEY, JSON.stringify(data), {
-          path: '/',
-          secure: true,
-          sameSite: 'Strict',
-          expires: session?.expires_in,
-        });
-
         const savedUrl = JSON.parse(localStorage.getItem(this.savedReturnUrl)!);
         if (savedUrl) {
           this.router.navigate([...savedUrl]);
@@ -139,38 +128,14 @@ export class AuthService {
         if (this.cachedAuthEvent()) {
           return;
         }
-        this.http
-          .get<IUser>(`${this.baseUrl}users/single/${this.user()?.id}`)
-          .pipe(
-            tap((res) => {
-              this.setUser(res);
-            }),
-          )
-          .subscribe();
 
         this.cachedAuthEvent.set(true);
-        // localStorage.removeItem('sb-tentdyesixetvyacewwr-auth-token');
         localStorage.removeItem(this.savedReturnUrl);
       } else if (event === 'SIGNED_OUT') {
-        this.cookieService.deleteAll('/');
+        localStorage.removeItem(this.USER_ACCOUNT_STORAGE_KEY);
+        this.store.dispatch(logout_clearState());
         this.user.set(null);
       }
-    });
-  }
-
-  setUser(res: any) {
-    localStorage.setItem(this.USER_ACCOUNT_STORAGE_KEY, JSON.stringify(res));
-    const data: IUser = {
-      email: res?.email!,
-      phoneNumber: res?.phoneNumber!,
-      id: res?.id!,
-      name: res?.name!,
-    };
-    this.user.set(data);
-    this.cookieService.set(this.USER_STORAGE_KEY, JSON.stringify(data), {
-      path: '/',
-      secure: true,
-      sameSite: 'Strict',
     });
   }
 
