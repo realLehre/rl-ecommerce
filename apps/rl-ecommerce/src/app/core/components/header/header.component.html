@@ -159,12 +159,18 @@
         </div>
         @if (user()?.status === 'success') {
           <div class="items-center space-x-1 hidden mobile:flex">
-            <p
-              class="text-sm text-type_title_gray group-hover:text-primary font-semibold capitalize"
+            <div
+              class="text-sm text-type_title_gray group-hover:text-primary font-semibold capitalize truncate break-words flex items-center"
             >
-              Hi,
-              <span class="truncate break-words">{{ userName() }}</span>
-            </p>
+              <span>Hi,</span>
+
+              <span
+                class="block max-w-[100px] text-ellipsis whitespace-nowrap overflow-hidden"
+              >
+                {{ userName() }}
+              </span>
+            </div>
+
             <i class="fa fa-angle-down group-hover:text-primary"></i>
           </div>
         }
