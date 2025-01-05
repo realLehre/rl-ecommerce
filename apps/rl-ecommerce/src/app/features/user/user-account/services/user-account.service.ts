@@ -41,6 +41,7 @@ export class UserAccountService {
   }
 
   updateUser(data: { name: string; phoneNumber: string }) {
+    console.log(data);
     return this.http
       .patch<any | IUser>(`${this.baseUrl}users/${this.user()?.id}`, data)
       .pipe(

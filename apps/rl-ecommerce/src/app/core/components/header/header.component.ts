@@ -30,7 +30,6 @@ import { Store } from '@ngrx/store';
 import { loadCart } from '../../../state/cart/cart.actions';
 import { selectCartState, selectUserState } from '../../../state/state';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { UserAccountService } from '../../../features/user/user-account/services/user-account.service';
 import { logout_clearState } from '../../../state/state.actions';
 
 @Component({
@@ -56,6 +55,8 @@ export class HeaderComponent implements AfterViewInit, OnInit {
   cart$ = this.store.select(selectCartState);
   cartData = toSignal(this.cart$);
   user = toSignal(this.store.select(selectUserState));
+  userName = computed(() => 'djdsudidsdhdusidjsdhsdhdsds');
+  // this.user()?.user?.name?.split(' ')[0]
   products = this.productService.searchedProductsSignal;
 
   ngOnInit() {

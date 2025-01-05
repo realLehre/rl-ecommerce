@@ -21,6 +21,9 @@ import { ToastService } from '../../../../../shared/services/toast.service';
 import { IUser } from '../../../models/user.interface';
 import { Store } from '@ngrx/store';
 import { updateUser } from '../../../../../state/user/user.actions';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { selectUserUpdateOperations } from '../../../../../state/state';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-overview-form',
@@ -43,7 +46,26 @@ export class OverviewFormComponent implements OnInit {
   user = input.required<IUser | null>();
   profileForm!: FormGroup;
   cancelEdit = output<void>();
-  isLoading = signal(false);
+  isLoading = toSignal(
+    this.store.select(selectUserUpdateOperations).pipe(
+      tap((res) => {
+        if (res?.error) {
+          this.toastService.showToast({
+            type: 'error',
+            message: res?.error,
+          });
+        } else if (res?.status === 'success') {
+          this.toastService.showToast({
+            type: 'success',
+            message: 'Profile updated!',
+          });
+          this.cancelEdit.emit();
+        }
+        console.log(res);
+        return res?.loading;
+      }),
+    ),
+  );
 
   ngOnInit() {
     this.profileForm = this.fb.group({
@@ -63,7 +85,6 @@ export class OverviewFormComponent implements OnInit {
         phoneNumber: this.profileForm.value.phoneNumber,
       };
 
-      this.isLoading.set(true);
       this.store.dispatch(updateUser(data));
       // this.userAccountService.updateUser(data).subscribe({
       //   next: (res) => {

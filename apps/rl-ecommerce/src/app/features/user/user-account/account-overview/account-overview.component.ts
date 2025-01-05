@@ -6,12 +6,13 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { OverviewFormComponent } from './overview-form/overview-form.component';
-import { UserAccountService } from '../services/user-account.service';
-import { of } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { SkeletonModule } from 'primeng/skeleton';
 import { AddressService } from '../../address/services/address.service';
 import { IAddress } from '../../models/address.interface';
+import { Store } from '@ngrx/store';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { selectUserState } from '../../../../state/state';
 
 @Component({
   selector: 'app-account-overview',
@@ -23,15 +24,14 @@ import { IAddress } from '../../models/address.interface';
 })
 export class AccountOverviewComponent {
   isEditingProfile = signal(false);
-  private userAccountService = inject(UserAccountService);
   private addressService = inject(AddressService);
   private router = inject(Router);
+  private store = inject(Store);
+  user = toSignal(this.store.select(selectUserState));
   address$ = this.addressService.getAddress();
-  user$ = this.userAccountService.getUser('sfsjf');
 
   onCancelProfileEdit() {
     this.isEditingProfile.set(false);
-    // this.user$ = of(this.userAccountService.userSignal());
   }
 
   onEditAddress(address: IAddress) {

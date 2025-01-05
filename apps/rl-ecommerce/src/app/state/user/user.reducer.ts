@@ -65,6 +65,10 @@ export const userReducer = createReducer(
 
   on(updateUserSuccess, (state, { user }) => ({
     ...state,
+    user: {
+      ...state.user,
+      ...user,
+    },
     userOperation: {
       ...state.userOperation,
       loading: false,

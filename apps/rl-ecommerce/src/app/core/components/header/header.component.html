@@ -162,7 +162,8 @@
             <p
               class="text-sm text-type_title_gray group-hover:text-primary font-semibold capitalize"
             >
-              Hi, {{ user()?.user?.name }}
+              Hi,
+              <span class="truncate break-words">{{ userName() }}</span>
             </p>
             <i class="fa fa-angle-down group-hover:text-primary"></i>
           </div>

@@ -25,3 +25,8 @@ export const selectCartLoadingOperations = createSelector(
 );
 
 export const selectUserState = (state: State) => state.user;
+
+export const selectUserUpdateOperations = createSelector(
+  selectUserState,
+  (state: UserState) => state.userOperation,
+);
