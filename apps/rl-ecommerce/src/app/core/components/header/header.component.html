@@ -96,12 +96,6 @@
             }
           </div>
         </div>
-        <!--        <img-->
-        <!--          src="assets/images/icons/close.svg"-->
-        <!--          alt=""-->
-        <!--          class="w-4 min-w-4 h-4 min-h-4 tablet:hidden block"-->
-        <!--          (click)="onToggleSearch()"-->
-        <!--        />-->
       </div>
     </div>
 
@@ -116,7 +110,7 @@
         class="cursor-pointer relative group w-8 h-8 flex items-center justify-center"
         routerLink="/cart"
       >
-        @if (cartData()?.status == 'success') {
+        @if (cartData()?.status == 'success' && cartData()?.cart?.userId) {
           <span
             class="absolute -top-1 -right-1 h-4 w-4 flex items-center justify-center bg-primary text-white p-[10px] text-[10px] font-medium rounded-full"
             >{{ cartData()?.cart?.cartItems?.length }}</span
