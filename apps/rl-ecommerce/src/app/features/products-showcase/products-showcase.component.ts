@@ -88,6 +88,7 @@ export class ProductsShowcaseComponent implements OnInit {
   }
 
   onRetryLoad() {
+    this.productService.productSignal.set(null);
     this.refreshTrigger.update((count) => count + 1);
   }
 
