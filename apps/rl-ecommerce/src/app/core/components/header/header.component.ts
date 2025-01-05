@@ -30,7 +30,6 @@ import { Store } from '@ngrx/store';
 import { loadCart } from '../../../state/cart/cart.actions';
 import { selectCartState, selectUserState } from '../../../state/state';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { logout_clearState } from '../../../state/state.actions';
 
 @Component({
   selector: 'app-header',
@@ -52,8 +51,7 @@ export class HeaderComponent implements AfterViewInit, OnInit {
   searchShown = signal(false);
   isSearching = this.productService.isSearchingProducts;
   cartItems = this.cartService.cartTotal;
-  cart$ = this.store.select(selectCartState);
-  cartData = toSignal(this.cart$);
+  cartData = toSignal(this.store.select(selectCartState));
   user = toSignal(this.store.select(selectUserState));
   userName = computed(() => this.user()?.user?.name?.split(' ')[0]);
 
@@ -98,7 +96,6 @@ export class HeaderComponent implements AfterViewInit, OnInit {
 
   onSignOut() {
     this.authService.signOut();
-    this.store.dispatch(logout_clearState());
     this.router.navigate(['/']).then(() => {
       this.stateAuthService.resetState();
     });

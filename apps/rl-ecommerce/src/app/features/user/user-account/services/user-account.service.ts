@@ -3,8 +3,7 @@ import { AuthService } from '../../../auth/services/auth.service';
 import { HttpClient } from '@angular/common/http';
 
 import { environment } from '../../../../../environments/environment.development';
-import { of, tap } from 'rxjs';
-import { CookieService } from 'ngx-cookie-service';
+import { of } from 'rxjs';
 import { IUser } from '../../models/user.interface';
 
 @Injectable({
@@ -12,7 +11,6 @@ import { IUser } from '../../models/user.interface';
 })
 export class UserAccountService {
   private authService = inject(AuthService);
-  private cookieService = inject(CookieService);
   private http = inject(HttpClient);
   user = this.authService.user;
   private baseUrl = environment.apiUrl;
@@ -33,43 +31,13 @@ export class UserAccountService {
   getUser(id: string) {
     return this.userSignal()
       ? of(this.userSignal())
-      : this.http.get<IUser>(`${this.baseUrl}users/single/${id}`).pipe(
-          tap((res) => {
-            this.setUser(res);
-          }),
-        );
+      : this.http.get<IUser>(`${this.baseUrl}users/single/${id}`).pipe();
   }
 
   updateUser(data: { name: string; phoneNumber: string }) {
-    console.log(data);
-    return this.http
-      .patch<any | IUser>(`${this.baseUrl}users/${this.user()?.id}`, data)
-      .pipe(
-        tap((res) => {
-          this.setUser(res);
-        }),
-      );
-  }
-
-  setUser(res: any) {
-    this.userSignal.set(res);
-    console.log(this.userSignal());
-    localStorage.setItem(this.USER_ACCOUNT_STORAGE_KEY, JSON.stringify(res));
-    const data: IUser = {
-      email: res?.email!,
-      phoneNumber: res?.phoneNumber!,
-      id: res?.id!,
-      name: res?.name!,
-    };
-    this.authService.user.set(data);
-    this.cookieService.set(
-      this.authService.USER_STORAGE_KEY,
-      JSON.stringify(data),
-      {
-        path: '/',
-        secure: true,
-        sameSite: 'Strict',
-      },
+    return this.http.patch<any | IUser>(
+      `${this.baseUrl}user/${this.user()?.id}`,
+      data,
     );
   }
 }

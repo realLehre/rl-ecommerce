@@ -13,6 +13,7 @@ import { HttpClient } from '@angular/common/http';
 import { IUser } from '../../user/models/user.interface';
 import { Store } from '@ngrx/store';
 import { getUser } from '../../../state/user/user.actions';
+import { logout_clearState } from '../../../state/state.actions';
 
 @Injectable({
   providedIn: 'root',
@@ -39,7 +40,7 @@ export class AuthService {
     );
     this.onAuthStateChanged();
 
-    const user = this.cookieService.get(this.USER_STORAGE_KEY);
+    const user = localStorage.getItem(this.USER_ACCOUNT_STORAGE_KEY);
     if (user) {
       const userObj = JSON.parse(user);
       this.user.set(userObj);
@@ -104,6 +105,7 @@ export class AuthService {
 
   signOut() {
     this.supabase.auth.signOut();
+    this.store.dispatch(logout_clearState());
     localStorage.clear();
     sessionStorage.clear();
     this.cookieService.deleteAll('/');

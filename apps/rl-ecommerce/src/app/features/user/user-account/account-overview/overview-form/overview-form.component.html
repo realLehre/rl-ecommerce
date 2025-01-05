@@ -85,7 +85,7 @@
       Cancel</button
     ><button
       class="px-4 py-2 flex items-center space-x-2 bg-primary h-11 text-white rounded-md hover:bg-opacity-80 focus:outline-none disabled:bg-type_grey"
-      [disabled]="profileForm.invalid"
+      [disabled]="profileForm.invalid || isLoading()"
       type="submit"
     >
       @if (isLoading()) {

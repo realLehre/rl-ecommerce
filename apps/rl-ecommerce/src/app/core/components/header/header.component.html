@@ -187,7 +187,7 @@
 >
   <ng-template pTemplate="start">
     <div class="py-3">
-      @if (!user()) {
+      @if (!user()?.user) {
         <div
           class="w-full items-center flex justify-center pt-3 border-b-[1px] border-border_subtle"
         >
