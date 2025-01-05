@@ -12,7 +12,6 @@ import {
   loadCart,
   loadCartFailure,
   loadCartSuccess,
-  logout_clearCart,
   mergeCart,
   mergeCartFailure,
   mergeCartSuccess,
@@ -33,6 +32,7 @@ import {
 } from 'rxjs';
 import { selectCartState } from '../state';
 import { ToastService } from '../../shared/services/toast.service';
+import { logout_clearState } from '../state.actions';
 
 @Injectable()
 export class CartEffects {
@@ -165,7 +165,7 @@ export class CartEffects {
   logOut$ = createEffect(
     () => {
       return this.actions$.pipe(
-        ofType(logout_clearCart),
+        ofType(logout_clearState),
         tap(() => {
           this.cartService.resetCartOnLogout();
         }),

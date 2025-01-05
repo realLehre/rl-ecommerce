@@ -119,7 +119,7 @@ export class AuthService {
           id: session?.user?.id!,
           name: session?.user.user_metadata?.['full_name'],
         };
-        this.store.dispatch(getUser({ id: session?.user?.id }));
+        this.store.dispatch(getUser({ id: session?.user?.id! }));
         this.user.set(data);
 
         this.cookieService.set(this.USER_STORAGE_KEY, JSON.stringify(data), {
