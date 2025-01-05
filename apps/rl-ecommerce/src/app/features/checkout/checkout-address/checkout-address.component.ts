@@ -31,17 +31,18 @@ import { tap } from 'rxjs';
 export class CheckoutAddressComponent {
   private addressService = inject(AddressService);
   isLoading = signal(true);
+  selectedAddressEmit = output<IAddress>();
+  selectedAddress!: IAddress;
   addresses = toSignal(
     this.addressService.getAddress().pipe(
       tap((res) => {
         this.isLoading.set(false);
         this.selectedAddress = res.find((address) => address.isDefault)!;
+
         this.selectedAddressEmit.emit(this.selectedAddress);
       }),
     ),
   );
-  selectedAddress!: IAddress;
-  selectedAddressEmit = output<IAddress>();
 
   onEditAddress(address: IAddress) {
     this.addressService.activeAddress.set(address);

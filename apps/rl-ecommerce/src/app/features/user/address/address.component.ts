@@ -33,6 +33,7 @@ export class AddressComponent implements CanComponentDeactivate {
   private addressService = inject(AddressService);
   isAddingAddress: boolean = false;
   addressFormMode: string = 'add';
+  isAddressTouched = false;
   isLoading = signal(true);
   refreshTrigger = signal(0);
   addresses = toSignal(
@@ -46,8 +47,6 @@ export class AddressComponent implements CanComponentDeactivate {
       ),
     ),
   );
-
-  isAddressTouched = false;
 
   constructor() {
     this.checkRoute();
