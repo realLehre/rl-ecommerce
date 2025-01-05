@@ -26,9 +26,6 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
-import { CanComponentDeactivate } from '../../../../shared/guards/has-unsaved-changes.guard';
-import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { UnsavedChangesAlertComponent } from '../../../../shared/components/unsaved-changes-alert/unsaved-changes-alert.component';
 import { IAddress } from '../../models/address.interface';
 declare const google: any;
 
@@ -54,8 +51,6 @@ export class AddressFormComponent implements OnInit, AfterViewInit, OnDestroy {
   private toast = inject(ToastService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
-  private ref!: DynamicDialogRef;
-  private dialogService = inject(DialogService);
   closeForm = output<void>();
   formMode = input<string>();
   addressForm!: FormGroup;
@@ -67,12 +62,10 @@ export class AddressFormComponent implements OnInit, AfterViewInit, OnDestroy {
   address$ = this.addressService.getAddress();
   fromCheckout = signal(false);
 
-  constructor() {}
-
   ngOnInit() {
     const addresses: IAddress[] = this.addressService.addressSignal()!;
     let preDefault = false;
-    if (!addresses.length && !this.activeAddress) {
+    if (!addresses?.length && !this.activeAddress) {
       preDefault = true;
     }
 
@@ -152,7 +145,7 @@ export class AddressFormComponent implements OnInit, AfterViewInit, OnDestroy {
 
       if (!this.activeAddress) {
         this.addressService.addAddress({ ...formValue, name }).subscribe({
-          next: (res) => {
+          next: () => {
             this.isLoading.set(false);
 
             this.toast.showToast({
@@ -181,7 +174,7 @@ export class AddressFormComponent implements OnInit, AfterViewInit, OnDestroy {
         this.addressService
           .editAddress({ ...formValue, name }, this.activeAddress.id!)
           .subscribe({
-            next: (res) => {
+            next: () => {
               this.isLoading.set(false);
 
               this.toast.showToast({

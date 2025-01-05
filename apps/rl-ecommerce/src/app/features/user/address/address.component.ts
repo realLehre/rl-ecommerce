@@ -3,14 +3,16 @@ import {
   Component,
   HostListener,
   inject,
+  signal,
 } from '@angular/core';
 import { AddressService } from './services/address.service';
 import { AddressCardComponent } from './address-card/address-card.component';
 import { AddressFormComponent } from './address-form/address-form.component';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { AsyncPipe } from '@angular/common';
 import { SkeletonModule } from 'primeng/skeleton';
 import { CanComponentDeactivate } from '../../../shared/guards/has-unsaved-changes.guard';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-address',
@@ -19,7 +21,6 @@ import { CanComponentDeactivate } from '../../../shared/guards/has-unsaved-chang
     AddressCardComponent,
     AddressFormComponent,
     RouterLink,
-    AsyncPipe,
     SkeletonModule,
   ],
   templateUrl: './address.component.html',
@@ -32,7 +33,20 @@ export class AddressComponent implements CanComponentDeactivate {
   private addressService = inject(AddressService);
   isAddingAddress: boolean = false;
   addressFormMode: string = 'add';
-  addresses$ = this.addressService.getAddress();
+  isLoading = signal(true);
+  refreshTrigger = signal(0);
+  addresses = toSignal(
+    toObservable(this.refreshTrigger).pipe(
+      switchMap(() =>
+        this.addressService.getAddress().pipe(
+          tap(() => {
+            this.isLoading.set(false);
+          }),
+        ),
+      ),
+    ),
+  );
+
   isAddressTouched = false;
 
   constructor() {
@@ -41,12 +55,12 @@ export class AddressComponent implements CanComponentDeactivate {
 
   onCloseForm() {
     this.isAddingAddress = false;
-    this.addresses$ = this.addressService.getAddress();
+    this.refreshTrigger.update((count) => count + 1);
     this.router.navigateByUrl('/user/address-management');
   }
 
   onReloadAddress() {
-    this.addresses$ = this.addressService.getAddress();
+    this.refreshTrigger.update((count) => count + 1);
   }
 
   checkRoute() {
