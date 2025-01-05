@@ -23,7 +23,6 @@ export class UserAccountService {
     const user = JSON.parse(
       localStorage.getItem(this.USER_ACCOUNT_STORAGE_KEY)!,
     );
-    console.log(user);
     if (user) {
       this.userSignal.set(user);
     } else {

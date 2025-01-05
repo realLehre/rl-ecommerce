@@ -28,7 +28,7 @@ import { CartService } from '../../../shared/services/cart.service';
 import { StateAuthService } from '../../../shared/services/state-auth.service';
 import { Store } from '@ngrx/store';
 import { loadCart } from '../../../state/cart/cart.actions';
-import { selectCartState } from '../../../state/state';
+import { selectCartState, selectUserState } from '../../../state/state';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { UserAccountService } from '../../../features/user/user-account/services/user-account.service';
 import { logout_clearState } from '../../../state/state.actions';
@@ -43,16 +43,10 @@ import { logout_clearState } from '../../../state/state.actions';
 })
 export class HeaderComponent implements AfterViewInit, OnInit {
   private authService = inject(AuthService);
-  private userAccountService = inject(UserAccountService);
   private productService = inject(ProductsService);
   private cartService = inject(CartService);
   private stateAuthService = inject(StateAuthService);
   private store = inject(Store);
-  user = computed(() => this.userAccountService.userSignal);
-  userName = computed(() => {
-    console.log(this.userAccountService.userSignal());
-    return this.userAccountService.userSignal()?.name!.split(' ')[0]!;
-  });
   private layoutService = inject(LayoutService);
   private router = inject(Router);
   @ViewChild('input', { static: true }) searchInput!: ElementRef;
@@ -61,6 +55,7 @@ export class HeaderComponent implements AfterViewInit, OnInit {
   cartItems = this.cartService.cartTotal;
   cart$ = this.store.select(selectCartState);
   cartData = toSignal(this.cart$);
+  user = toSignal(this.store.select(selectUserState));
   products = this.productService.searchedProductsSignal;
 
   ngOnInit() {
@@ -107,6 +102,7 @@ export class HeaderComponent implements AfterViewInit, OnInit {
       this.stateAuthService.resetState();
     });
   }
+
   onToggleSearch() {
     if (this.searchInput.nativeElement.value) {
       this.searchInput.nativeElement.value = '';

@@ -157,12 +157,12 @@
             />
           </svg>
         </div>
-        @if (user()) {
+        @if (user()?.status === 'success') {
           <div class="items-center space-x-1 hidden mobile:flex">
             <p
               class="text-sm text-type_title_gray group-hover:text-primary font-semibold capitalize"
             >
-              Hi, {{ userName() }}
+              Hi, {{ user()?.user?.name }}
             </p>
             <i class="fa fa-angle-down group-hover:text-primary"></i>
           </div>
