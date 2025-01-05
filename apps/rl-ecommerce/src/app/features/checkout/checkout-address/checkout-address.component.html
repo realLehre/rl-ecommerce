@@ -1,6 +1,6 @@
 <div class="space-y-4 pt-5 w-full">
   @if (!isLoading()) {
-    @for (address of addresses; track address.id; let i = $index) {
+    @for (address of addresses(); track address.id; let i = $index) {
       <div
         class="bg-bg_subtle rounded-lg shadow-md p-4 flex items-start justify-between h-full w-full space-x-3"
       >
