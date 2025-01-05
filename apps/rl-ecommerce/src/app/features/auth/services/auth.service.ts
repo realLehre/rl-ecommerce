@@ -21,7 +21,6 @@ export class AuthService {
   private route = inject(ActivatedRoute);
   private cookieService = inject(CookieService);
   private store = inject(Store);
-  private baseUrl = environment.apiUrl;
   supabase!: SupabaseClient;
   user = signal<IUser | null>(null);
   USER_ACCOUNT_STORAGE_KEY = 'hdjeyu7830nsk083hd';
