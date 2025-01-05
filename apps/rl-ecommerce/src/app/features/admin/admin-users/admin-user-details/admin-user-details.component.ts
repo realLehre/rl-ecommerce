@@ -1,5 +1,4 @@
 import { Component, computed, inject, input } from '@angular/core';
-import { User } from '@prisma/client';
 import { AdminUserService, IAdminSingleUser } from '../admin-user.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { switchMap } from 'rxjs';
