@@ -36,7 +36,7 @@ export class UserAccountService {
 
   updateUser(data: { name: string; phoneNumber: string }) {
     return this.http.patch<any | IUser>(
-      `${this.baseUrl}user/${this.user()?.id}`,
+      `${this.baseUrl}users/${this.user()?.id}`,
       data,
     );
   }

@@ -50,10 +50,9 @@ export class UserEffects {
   saveUser$ = createEffect(
     () => {
       return this.actions$.pipe(
-        ofType(getUserSuccess),
+        ofType(getUserSuccess, updateUserSuccess),
         withLatestFrom(this.store.select(selectUserState)),
         tap(([action, state]) => {
-          console.log(state);
           localStorage.setItem(
             this.userAccountService.USER_ACCOUNT_STORAGE_KEY,
             JSON.stringify(state.user),
