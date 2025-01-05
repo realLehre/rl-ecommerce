@@ -133,41 +133,41 @@ export class AdminProductsComponent implements OnInit {
       sessionStorage.getItem(this.productService.PRODUCT_QUERY_STORED_KEY)!,
     );
 
-    this.filter.set({ ...this.filter(), ...savedFilters });
-    this.holdFilter.set({
-      ...this.holdFilter(),
-      ...this.filter(),
-    });
-
-    this.filterNumber = this.productService.findFilterNumber(savedFilters);
-    if (savedFilters?.minPrice && savedFilters?.maxPrice) {
-      this.rangeValues = [savedFilters?.minPrice!, savedFilters?.maxPrice!];
-    }
-
-    if (savedFilters?.category) {
-      this.selectedCategory = savedFilters?.category;
-      this.subCategories = [...savedFilters?.category?.subCategories];
-    }
-
-    if (savedFilters?.subCategory) {
-      this.selectedSubCategory = savedFilters?.subCategory;
-    }
-    if (savedFilters?.minDate && savedFilters?.maxDate) {
-      const minDate = this.productService.formatDateToLocale(
-        savedFilters.minDate,
-      );
-      const maxDate = this.productService.formatDateToLocale(
-        savedFilters.maxDate,
-      );
-      this.rangeDates = [minDate, maxDate];
-    }
-    const newRouteQueries = Object.fromEntries(
-      Object.entries(
-        this.productService.createRouteQuery(this.filter()),
-      ).filter(([_, value]) => value !== undefined),
-    );
-
     if (!this.injecting()) {
+      this.filter.set({ ...this.filter(), ...savedFilters });
+      this.holdFilter.set({
+        ...this.holdFilter(),
+        ...this.filter(),
+      });
+
+      this.filterNumber = this.productService.findFilterNumber(savedFilters);
+      if (savedFilters?.minPrice && savedFilters?.maxPrice) {
+        this.rangeValues = [savedFilters?.minPrice!, savedFilters?.maxPrice!];
+      }
+
+      if (savedFilters?.category) {
+        this.selectedCategory = savedFilters?.category;
+        this.subCategories = [...savedFilters?.category?.subCategories];
+      }
+
+      if (savedFilters?.subCategory) {
+        this.selectedSubCategory = savedFilters?.subCategory;
+      }
+      if (savedFilters?.minDate && savedFilters?.maxDate) {
+        const minDate = this.productService.formatDateToLocale(
+          savedFilters.minDate,
+        );
+        const maxDate = this.productService.formatDateToLocale(
+          savedFilters.maxDate,
+        );
+        this.rangeDates = [minDate, maxDate];
+      }
+      const newRouteQueries = Object.fromEntries(
+        Object.entries(
+          this.productService.createRouteQuery(this.filter()),
+        ).filter(([_, value]) => value !== undefined),
+      );
+
       this.router.navigate([], {
         queryParams: newRouteQueries,
         relativeTo: this.route,
