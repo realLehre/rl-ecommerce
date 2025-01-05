@@ -1,7 +1,14 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { UserAccountService } from '../../features/user/user-account/services/user-account.service';
-import { getUser, getUserFailure, getUserSuccess } from './user.actions';
+import {
+  getUser,
+  getUserFailure,
+  getUserSuccess,
+  updateUser,
+  updateUserFailure,
+  updateUserSuccess,
+} from './user.actions';
 import { catchError, map, of, switchMap, tap, withLatestFrom } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectUserState } from '../state';
@@ -20,6 +27,20 @@ export class UserEffects {
           map((user) => getUserSuccess({ user: user! })),
           catchError((error) =>
             of(getUserFailure({ error: error.error.message })),
+          ),
+        ),
+      ),
+    );
+  });
+
+  updateUser$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(updateUser),
+      switchMap((res) =>
+        this.userAccountService.updateUser(res).pipe(
+          map((user) => updateUserSuccess({ user: user! })),
+          catchError((error) =>
+            of(updateUserFailure({ error: error.error.message })),
           ),
         ),
       ),

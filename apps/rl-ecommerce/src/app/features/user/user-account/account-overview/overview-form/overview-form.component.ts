@@ -19,6 +19,8 @@ import { UserAccountService } from '../../services/user-account.service';
 import { LoaderComponent } from '../../../../../shared/components/loader/loader.component';
 import { ToastService } from '../../../../../shared/services/toast.service';
 import { IUser } from '../../../models/user.interface';
+import { Store } from '@ngrx/store';
+import { updateUser } from '../../../../../state/user/user.actions';
 
 @Component({
   selector: 'app-overview-form',
@@ -37,6 +39,7 @@ export class OverviewFormComponent implements OnInit {
   private addressService = inject(AddressService);
   private toastService = inject(ToastService);
   private userAccountService = inject(UserAccountService);
+  private store = inject(Store);
   user = input.required<IUser | null>();
   profileForm!: FormGroup;
   cancelEdit = output<void>();
@@ -61,28 +64,28 @@ export class OverviewFormComponent implements OnInit {
       };
 
       this.isLoading.set(true);
-
-      this.userAccountService.updateUser(data).subscribe({
-        next: (res) => {
-          localStorage.setItem(
-            this.userAccountService.USER_ACCOUNT_STORAGE_KEY,
-            JSON.stringify(res),
-          );
-          this.isLoading.set(false);
-          this.toastService.showToast({
-            type: 'success',
-            message: 'Profile updated!',
-          });
-          this.cancelEdit.emit();
-        },
-        error: (err) => {
-          this.isLoading.set(false);
-          this.toastService.showToast({
-            type: 'error',
-            message: err.error.message,
-          });
-        },
-      });
+      this.store.dispatch(updateUser(data));
+      // this.userAccountService.updateUser(data).subscribe({
+      //   next: (res) => {
+      //     localStorage.setItem(
+      //       this.userAccountService.USER_ACCOUNT_STORAGE_KEY,
+      //       JSON.stringify(res),
+      //     );
+      //     this.isLoading.set(false);
+      //     this.toastService.showToast({
+      //       type: 'success',
+      //       message: 'Profile updated!',
+      //     });
+      //     this.cancelEdit.emit();
+      //   },
+      //   error: (err) => {
+      //     this.isLoading.set(false);
+      //     this.toastService.showToast({
+      //       type: 'error',
+      //       message: err.error.message,
+      //     });
+      //   },
+      // });
     }
   }
 
