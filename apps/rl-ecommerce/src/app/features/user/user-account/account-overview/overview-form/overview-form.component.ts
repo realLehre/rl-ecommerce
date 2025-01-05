@@ -1,10 +1,10 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   inject,
   input,
   OnInit,
   output,
-  signal,
 } from '@angular/core';
 import { ErrorMessageDirective } from '../../../address/address-form/directives/error-message.directive';
 import {
@@ -14,14 +14,15 @@ import {
   Validators,
 } from '@angular/forms';
 import { NgClass } from '@angular/common';
-import { AuthService, IUser } from '../../../../auth/services/auth.service';
 import { AddressService } from '../../../address/services/address.service';
-import { UserAccountService } from '../../services/user-account.service';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { catchError, switchMap, tap } from 'rxjs';
 import { LoaderComponent } from '../../../../../shared/components/loader/loader.component';
 import { ToastService } from '../../../../../shared/services/toast.service';
-import { CookieService } from 'ngx-cookie-service';
+import { IUser } from '../../../models/user.interface';
+import { Store } from '@ngrx/store';
+import { updateUser } from '../../../../../state/user/user.actions';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { selectUserUpdateOperations } from '../../../../../state/state';
+import { map, tap } from 'rxjs';
 
 @Component({
   selector: 'app-overview-form',
@@ -34,17 +35,35 @@ import { CookieService } from 'ngx-cookie-service';
   ],
   templateUrl: './overview-form.component.html',
   styleUrl: './overview-form.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OverviewFormComponent implements OnInit {
   private fb = inject(FormBuilder);
   private addressService = inject(AddressService);
   private toastService = inject(ToastService);
-  private userAccountService = inject(UserAccountService);
-  private cookieService = inject(CookieService);
+  private store = inject(Store);
   user = input.required<IUser | null>();
   profileForm!: FormGroup;
   cancelEdit = output<void>();
-  isLoading = signal(false);
+  isLoading = toSignal(
+    this.store.select(selectUserUpdateOperations).pipe(
+      tap((res) => {
+        if (res?.error) {
+          this.toastService.showToast({
+            type: 'error',
+            message: res?.error,
+          });
+        } else if (res?.status === 'success') {
+          this.toastService.showToast({
+            type: 'success',
+            message: 'Profile updated!',
+          });
+          this.cancelEdit.emit();
+        }
+      }),
+      map((res) => res?.loading),
+    ),
+  );
 
   ngOnInit() {
     this.profileForm = this.fb.group({
@@ -64,30 +83,7 @@ export class OverviewFormComponent implements OnInit {
         phoneNumber: this.profileForm.value.phoneNumber,
       };
 
-      this.isLoading.set(true);
-
-      this.userAccountService.updateUser(data).subscribe({
-        next: (res) => {
-          localStorage.setItem(
-            this.userAccountService.USER_ACCOUNT_STORAGE_KEY,
-            JSON.stringify(res),
-          );
-          // const user = this.cookieService.get(this.USER_STORAGE_KEY);
-          this.isLoading.set(false);
-          this.toastService.showToast({
-            type: 'success',
-            message: 'Profile updated!',
-          });
-          this.cancelEdit.emit();
-        },
-        error: (err) => {
-          this.isLoading.set(false);
-          this.toastService.showToast({
-            type: 'error',
-            message: err.error.message,
-          });
-        },
-      });
+      this.store.dispatch(updateUser(data));
     }
   }
 

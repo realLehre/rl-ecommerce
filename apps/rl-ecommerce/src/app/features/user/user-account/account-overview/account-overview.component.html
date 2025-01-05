@@ -7,7 +7,7 @@
     <div
       class="gap-6 grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] mobile:grid-cols-[repeat(auto-fill,minmax(305px,1fr))]"
     >
-      @if (user$ | async; as user) {
+      @if (user()?.status == 'success') {
         <div
           class="rounded-lg bg-bg_subtle shadow-sm transform transition-all duration-300 ease-in-out overflow-hidden"
         >
@@ -44,17 +44,19 @@
               <div class="flex items-center space-x-1">
                 <p class="text-sm font-medium text-gray-500">Name:</p>
                 <p class="text-base capitalize w-full break-words">
-                  {{ user.name }}
+                  {{ user()?.user?.name }}
                 </p>
               </div>
               <div class="flex items-center space-x-1">
                 <p class="text-sm font-medium text-gray-500">Email:</p>
-                <p class="text-base w-full break-words">{{ user.email }}</p>
+                <p class="text-base w-full break-words">
+                  {{ user()?.user?.email }}
+                </p>
               </div>
               <div class="flex items-center space-x-1">
                 <p class="text-sm font-medium text-gray-500">Phone:</p>
                 <p class="text-base w-full break-words">
-                  {{ user.phoneNumber }}
+                  {{ user()?.user?.phoneNumber }}
                 </p>
               </div>
             </div>
@@ -164,7 +166,7 @@
     <div>
       <app-overview-form
         (cancelEdit)="onCancelProfileEdit()"
-        [user]="user$ | async"
+        [user]="user()?.user!"
       />
     </div>
   }

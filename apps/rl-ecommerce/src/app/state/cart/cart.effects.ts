@@ -12,7 +12,6 @@ import {
   loadCart,
   loadCartFailure,
   loadCartSuccess,
-  logout_clearCart,
   mergeCart,
   mergeCartFailure,
   mergeCartSuccess,
@@ -25,6 +24,7 @@ import {
   concatMap,
   delay,
   map,
+  mergeMap,
   of,
   switchMap,
   tap,
@@ -32,6 +32,7 @@ import {
 } from 'rxjs';
 import { selectCartState } from '../state';
 import { ToastService } from '../../shared/services/toast.service';
+import { logout_clearState } from '../state.actions';
 
 @Injectable()
 export class CartEffects {
@@ -71,7 +72,7 @@ export class CartEffects {
   addItemToCart$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(addToCart),
-      switchMap((actionRes) =>
+      concatMap((actionRes) =>
         this.cartService.addToCart(actionRes).pipe(
           map((res) =>
             cartItemAdded({ item: res, product: actionRes.product }),
@@ -92,7 +93,7 @@ export class CartEffects {
   removeItemFromCart$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(removeItemFromCart),
-      switchMap(({ id }) =>
+      mergeMap(({ id }) =>
         this.cartService.deleteCartItem(id).pipe(
           map(() => cartItemRemoved({ id })),
           catchError((err) =>
@@ -164,7 +165,7 @@ export class CartEffects {
   logOut$ = createEffect(
     () => {
       return this.actions$.pipe(
-        ofType(logout_clearCart),
+        ofType(logout_clearState),
         tap(() => {
           this.cartService.resetCartOnLogout();
         }),

@@ -27,8 +27,8 @@ import { LoaderComponent } from '../../../shared/components/loader/loader.compon
 import { CartService } from '../../../shared/services/cart.service';
 import { StateAuthService } from '../../../shared/services/state-auth.service';
 import { Store } from '@ngrx/store';
-import { loadCart, logout_clearCart } from '../../../state/cart/cart.actions';
-import { selectCartState } from '../../../state/state';
+import { loadCart } from '../../../state/cart/cart.actions';
+import { selectCartState, selectUserState } from '../../../state/state';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
@@ -45,22 +45,19 @@ export class HeaderComponent implements AfterViewInit, OnInit {
   private cartService = inject(CartService);
   private stateAuthService = inject(StateAuthService);
   private store = inject(Store);
-  user = this.authService.user;
-  userName = computed(() => {
-    return this.user()?.fullName.split(' ')[0]!;
-  });
   private layoutService = inject(LayoutService);
   private router = inject(Router);
   @ViewChild('input', { static: true }) searchInput!: ElementRef;
   searchShown = signal(false);
   isSearching = this.productService.isSearchingProducts;
   cartItems = this.cartService.cartTotal;
-  cart$ = this.store.select(selectCartState);
-  cartData = toSignal(this.cart$);
+  cartData = toSignal(this.store.select(selectCartState));
+  user = toSignal(this.store.select(selectUserState));
+  userName = computed(() => this.user()?.user?.name?.split(' ')[0]);
+
   products = this.productService.searchedProductsSignal;
 
   ngOnInit() {
-    this.cartService.cartSignal.set(null);
     this.store.dispatch(loadCart());
   }
 
@@ -99,11 +96,11 @@ export class HeaderComponent implements AfterViewInit, OnInit {
 
   onSignOut() {
     this.authService.signOut();
-    this.store.dispatch(logout_clearCart());
     this.router.navigate(['/']).then(() => {
       this.stateAuthService.resetState();
     });
   }
+
   onToggleSearch() {
     if (this.searchInput.nativeElement.value) {
       this.searchInput.nativeElement.value = '';

@@ -1,13 +1,11 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { IOrderItem } from '../../models/order.interface';
 import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { ProductsService } from '../../../features/products/services/products.service';
 import { ReviewService } from '../../services/review.service';
 import { ToastService } from '../../services/toast.service';
 import { NgClass } from '@angular/common';
@@ -27,7 +25,6 @@ import { ImagePreloadDirective } from '../../directives/image-preload.directive'
   styleUrl: './review-form-dialog.component.scss',
 })
 export class ReviewFormDialogComponent implements OnInit {
-  private productService = inject(ProductsService);
   private reviewService = inject(ReviewService);
   private toast = inject(ToastService);
   selectedOrderItem = inject(DynamicDialogConfig<any>);
@@ -97,13 +94,12 @@ export class ReviewFormDialogComponent implements OnInit {
     };
 
     this.reviewService.createReview(reviewData).subscribe({
-      next: (res) => {
+      next: () => {
         this.toast.showToast({
           type: 'success',
           message: 'Review submitted successfully!',
         });
         this.ref.close('submitted');
-        this.reviewService.pendingReviewsSignal.set(null);
         this.isSubmitting.set(false);
       },
       error: (err) => {

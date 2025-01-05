@@ -10,7 +10,6 @@ import {
   loadCart,
   loadCartFailure,
   loadCartSuccess,
-  logout_clearCart,
   mergeCart,
   mergeCartFailure,
   mergeCartSuccess,
@@ -18,6 +17,7 @@ import {
   resetOperations,
   updateCartItem,
 } from './cart.actions';
+import { logout_clearState } from '../state.actions';
 
 export interface LoadingOperation {
   loading: boolean;
@@ -289,7 +289,7 @@ export const cartReducer = createReducer(
     cart: { ...state.cart!, cartItems: [] },
   })),
 
-  on(logout_clearCart, (state) => {
+  on(logout_clearState, (state) => {
     return {
       ...state,
       ...initialState,

@@ -20,21 +20,12 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { CookieService } from 'ngx-cookie-service';
 import { tokenInterceptor } from './shared/interceptors/token.interceptor';
-import { createReducer, on, provideStore } from '@ngrx/store';
+import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
-import { cartReducer } from './state/cart/cart.reducer';
 import { CartEffects } from './state/cart/cart.effects';
 import { appReducer } from './state/state';
-import { ICart, ICartItems } from './shared/models/cart.interface';
-import {
-  cartItemAdded,
-  cartItemRemoved,
-  cartItemUpdated,
-  loadCart,
-  loadCartFailure,
-  loadCartSuccess,
-} from './state/cart/cart.actions';
+import { UserEffects } from './state/user/user.effects';
 
 const scrollConfig: InMemoryScrollingOptions = {
   anchorScrolling: 'enabled',
@@ -58,7 +49,7 @@ export const appConfig: ApplicationConfig = {
     DynamicDialogRef,
     CookieService,
     provideStore(appReducer),
-    provideEffects(CartEffects),
+    provideEffects(CartEffects, UserEffects),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
   ],
 };
