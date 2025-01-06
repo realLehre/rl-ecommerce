@@ -26,7 +26,6 @@
         ],
         "styles": [
           "apps/rl-ecommerce/src/styles.scss",
-          "node_modules/primeicons/primeicons.css",
           "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
           "node_modules/primeng/resources/primeng.min.css",
           "node_modules/quill/dist/quill.core.css",
@@ -95,9 +94,7 @@
           "apps/rl-ecommerce/src/favicon.ico",
           "apps/rl-ecommerce/src/assets"
         ],
-        "styles": ["apps/rl-ecommerce/src/styles.scss",  "node_modules/primeicons/primeicons.css",
-          "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
-          "node_modules/primeng/resources/primeng.min.css"],
+        "styles": ["apps/rl-ecommerce/src/styles.scss"],
         "scripts": []
       }
     }
