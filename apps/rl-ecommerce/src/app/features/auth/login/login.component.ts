@@ -47,7 +47,6 @@ export class LoginComponent implements OnInit {
 
     const returnUrl = this.route.snapshot.queryParams['returnUrl'];
     if (returnUrl) {
-      console.log(returnUrl);
       this.authService.RETURN_URL.set(returnUrl);
     }
   }
@@ -77,7 +76,6 @@ export class LoginComponent implements OnInit {
         const user = this.authService.user;
 
         const returnUrl = this.authService.RETURN_URL();
-        console.log(returnUrl);
         if (user()?.id !== '8133ae62-c817-4339-a62d-dc718ce99568') {
           this.router.navigateByUrl(returnUrl || '/');
         } else {

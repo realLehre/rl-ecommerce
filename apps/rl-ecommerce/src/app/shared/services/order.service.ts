@@ -78,7 +78,7 @@ export class OrderService {
     const orderData = {
       userId: this.user()?.id,
       cart: data.cart,
-      shippingInfoId: data.address.id,
+      shippingInformation: data.address,
       orderAmount: this.getTotalItemAmount(data.cart),
       shippingCost: this.getShippingCost(data.cart),
       totalAmount:

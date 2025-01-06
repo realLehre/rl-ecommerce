@@ -44,10 +44,11 @@ export interface IOrder {
   id: string;
   userId: string;
   cartOrder: ICartOrder;
-  shippingInfoId: string;
+  shippingInfoId?: string;
   orderAmount: number;
   shippingCost: number;
-  shippingInfo: ShippingIfo;
+  shippingInfo?: ShippingIfo;
+  shippingInformation?: ShippingIfo;
   totalAmount: number;
   paymentMethod: string;
   orderStatus: string;

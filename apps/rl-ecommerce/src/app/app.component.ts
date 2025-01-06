@@ -8,11 +8,12 @@ import {
 import { RouterOutlet } from '@angular/router';
 import { AuthService } from './features/auth/services/auth.service';
 import { ToastService } from './shared/services/toast.service';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, ToastModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

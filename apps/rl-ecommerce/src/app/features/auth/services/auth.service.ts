@@ -76,7 +76,6 @@ export class AuthService {
           redirectTo: returnRoute,
         },
       });
-      console.log(1);
     } else {
       await this.supabase.auth.signInWithOAuth({
         provider: 'google',

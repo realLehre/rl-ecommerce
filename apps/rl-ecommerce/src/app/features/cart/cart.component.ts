@@ -18,7 +18,6 @@ import {
 import { SubtotalPipe } from '../../shared/pipes/subtotal.pipe';
 import { DialogModule } from 'primeng/dialog';
 import { LoaderComponent } from '../../shared/components/loader/loader.component';
-import { PrimeTemplate } from 'primeng/api';
 import { ProductsService } from '../products/services/products.service';
 import { IProduct } from '../products/model/product.interface';
 import { ToastService } from '../../shared/services/toast.service';
@@ -47,7 +46,6 @@ import { map, tap } from 'rxjs';
     SubtotalPipe,
     DialogModule,
     LoaderComponent,
-    PrimeTemplate,
   ],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.scss',
