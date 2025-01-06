@@ -46,12 +46,13 @@ export class CheckoutComponent {
   private router = inject(Router);
   private store = inject(Store);
   cartState = toSignal(this.store.select(selectCartState));
-  selectedAddress!: IAddress;
+  selectedAddress = signal<IAddress | null>(null);
   selectPaymentMethod!: string;
   isLoading = signal(false);
   isInitiatingPayment = signal(false);
+
   onSelectedAddress(address: IAddress) {
-    this.selectedAddress = address;
+    this.selectedAddress.set(address);
   }
 
   onSelectPaymentMethod(method: string) {
@@ -105,7 +106,7 @@ export class CheckoutComponent {
     this.isLoading.set(true);
     this.orderService
       .placeOrder({
-        address: this.selectedAddress,
+        address: this.selectedAddress()!,
         cart: this.cartState()?.cart!,
         paymentMethod: this.selectPaymentMethod,
       })

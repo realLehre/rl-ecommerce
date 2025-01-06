@@ -50,7 +50,13 @@
                   "maximumError": "4kb"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "fileReplacements": [
+                {
+                  "replace": "apps/rl-ecommerce/src/environments/environment.development.ts",
+                  "with": "apps/rl-ecommerce/src/environments/environment.ts"
+                }
+              ]
             },
             "development": {
               "optimization": false,

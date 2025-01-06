@@ -33,12 +33,11 @@ export class CheckoutAddressComponent {
   isLoading = signal(true);
   selectedAddressEmit = output<IAddress>();
   selectedAddress!: IAddress;
-  addresses = toSignal(
+  addresses = toSignal<IAddress[]>(
     this.addressService.getAddress().pipe(
       tap((res) => {
         this.isLoading.set(false);
         this.selectedAddress = res.find((address) => address.isDefault)!;
-
         this.selectedAddressEmit.emit(this.selectedAddress);
       }),
     ),
