@@ -8,6 +8,8 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { MergeCartAlertDialogComponent } from '../components/merge-cart-alert-dialog/merge-cart-alert-dialog.component';
 import { AuthService } from '../../features/auth/services/auth.service';
 import { v4 as uuidv4 } from 'uuid';
+import { Store } from '@ngrx/store';
+import { mergeCart } from '../../state/cart/cart.actions';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +19,7 @@ export class CartService {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
   private dialogService = inject(DialogService);
+  private store = inject(Store);
   user = this.authService.user;
   cartTotal = signal<number | null>(null);
   guestCart!: ICart;
@@ -44,16 +47,7 @@ export class CartService {
         : this.http.get<ICart>(`${this.apiUrl}/${this.user()?.id}`).pipe(
             retry(3),
             tap(() => {
-              const newSignIn = sessionStorage.getItem(
-                this.authService.NEW_SIGNUP_KEY,
-              );
-              if (newSignIn) {
-                this.mergeCart().subscribe((res) =>
-                  sessionStorage.removeItem(this.authService.NEW_SIGNUP_KEY),
-                );
-              } else {
-                this.onShowMergeCartDialog();
-              }
+              this.checkTimeToShowDialog();
             }),
           );
     } else {
@@ -61,6 +55,20 @@ export class CartService {
         this.createGuestCart();
       }
       return of(this.guestCart);
+    }
+  }
+
+  checkTimeToShowDialog() {
+    const registrationDateValue = this.user()?.createdAt;
+    const registrationDate = new Date(registrationDateValue!);
+    const tenMinutesLater = new Date(
+      registrationDate.getTime() + 5 * 60 * 1000,
+    );
+    const now = new Date();
+    if (now > tenMinutesLater) {
+      this.onShowMergeCartDialog();
+    } else {
+      this.store.dispatch(mergeCart());
     }
   }
 
@@ -156,6 +164,7 @@ export class CartService {
         breakpoints: {
           '450px': '90vw',
         },
+        closable: false,
         focusOnShow: false,
       });
     }

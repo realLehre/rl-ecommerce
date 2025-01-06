@@ -41,7 +41,6 @@ import { UserAccountService } from '../../user/user-account/services/user-accoun
 })
 export class SignUpComponent implements OnInit {
   private authService = inject(AuthService);
-  private cdr = inject(ChangeDetectorRef);
   private toastService = inject(ToastService);
   fb = inject(FormBuilder);
   private vcr = inject(ViewContainerRef);
@@ -50,7 +49,6 @@ export class SignUpComponent implements OnInit {
   isLoading = signal<boolean>(false);
   signupForm!: FormGroup;
   showPassword: boolean[] = [];
-  passwordMatch: boolean = true;
 
   constructor() {}
 
@@ -82,8 +80,7 @@ export class SignUpComponent implements OnInit {
           type: 'success',
           message: 'Sign up successfully!',
         });
-        sessionStorage.setItem(this.authService.NEW_SIGNUP_KEY, 'new');
-        const returnUrl = this.route.snapshot.queryParams['returnUrl'];
+        const returnUrl = this.authService.RETURN_URL();
         this.router.navigateByUrl(returnUrl || '/');
       } catch (error: any) {
         this.toastService.showToast({
@@ -97,7 +94,6 @@ export class SignUpComponent implements OnInit {
   }
 
   async onSignInWithGoogle() {
-    sessionStorage.setItem(this.authService.NEW_SIGNUP_KEY, 'new');
     await this.authService.continueWithGoogle();
   }
 

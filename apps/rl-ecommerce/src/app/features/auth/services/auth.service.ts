@@ -24,8 +24,8 @@ export class AuthService {
   supabase!: SupabaseClient;
   user = signal<IUser | null>(null);
   USER_ACCOUNT_STORAGE_KEY = 'hdjeyu7830nsk083hd';
-  NEW_SIGNUP_KEY = 'djd38sJDjd29qldds';
   savedReturnUrl: string = 'djdhw923jsjhak9';
+  RETURN_URL = signal<string | null>(null);
   cachedAuthEvent = signal(false);
 
   constructor() {
@@ -76,6 +76,7 @@ export class AuthService {
           redirectTo: returnRoute,
         },
       });
+      console.log(1);
     } else {
       await this.supabase.auth.signInWithOAuth({
         provider: 'google',
@@ -115,10 +116,10 @@ export class AuthService {
           phoneNumber: session?.user.phone!,
           id: session?.user?.id!,
           name: session?.user.user_metadata?.['full_name'],
+          createdAt: session?.user?.created_at!,
         };
         this.store.dispatch(getUser({ id: session?.user?.id! }));
         this.user.set(data);
-
         const savedUrl = JSON.parse(localStorage.getItem(this.savedReturnUrl)!);
         if (savedUrl) {
           this.router.navigate([...savedUrl]);
