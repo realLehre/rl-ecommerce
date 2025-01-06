@@ -31,7 +31,7 @@ export class AuthService {
   constructor() {
     this.supabase = createClient(
       environment.supabaseUrl!,
-      environment.supabaseKey,
+      environment.supabaseKey!,
     );
     this.onAuthStateChanged();
 
