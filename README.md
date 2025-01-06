@@ -53,6 +53,7 @@ Toyspot is an e-commerce application with separate user and admin dashboards. It
     - PrimeNG
     - ApexCharts
     - NgRx
+    - NGX Quill Rich Text Editor
 
 ---
 
