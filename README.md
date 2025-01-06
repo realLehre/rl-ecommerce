@@ -57,6 +57,22 @@ Toyspot is an e-commerce application with separate user and admin dashboards. It
 
 ---
 
+## Screenshots
+
+### User/shop
+![Homepage](screenshots/homepage.png)
+![Product details](screenshots/product-details.png)
+![Cart](screenshots/cart.png)
+![Checkout](screenshots/checkout.png)
+![Pending reviews](screenshots/pending-reviews.png)
+
+### Admin 
+![Admin dashboard](screenshots/admin-dashboard.png)
+![Add product](screenshots/add-product.png)
+![Products table](screenshots/product-table.png)
+![Orders table](screenshots/orders-table.png)
+![Order details](screenshots/order-details.png)
+
 ## Development Server
 
 Run `nx serve rl-ecommerce` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
