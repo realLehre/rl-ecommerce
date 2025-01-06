@@ -3,7 +3,6 @@ import {
   Component,
   computed,
   inject,
-  OnInit,
   signal,
 } from '@angular/core';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';

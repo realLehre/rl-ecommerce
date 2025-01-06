@@ -3,7 +3,6 @@ import {
   Component,
   inject,
   signal,
-  WritableSignal,
 } from '@angular/core';
 
 import { BreadcrumbComponent } from '../../shared/components/breadcrumb/breadcrumb.component';
@@ -22,6 +21,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { selectCartState } from '../../state/state';
 import { SkeletonModule } from 'primeng/skeleton';
 import { clearCartItems } from '../../state/cart/cart.actions';
+import { AddressService } from '../user/address/services/address.service';
 
 @Component({
   selector: 'app-checkout',
@@ -40,20 +40,17 @@ import { clearCartItems } from '../../state/cart/cart.actions';
 })
 export class CheckoutComponent {
   private cartService = inject(CartService);
+  private addressService = inject(AddressService);
   private orderService = inject(OrderService);
   private paymentService = inject(PaymentService);
   private toast = inject(ToastService);
   private router = inject(Router);
   private store = inject(Store);
   cartState = toSignal(this.store.select(selectCartState));
-  selectedAddress = signal<IAddress | null>(null);
+  selectedAddress = this.addressService.checkoutAddress;
   selectPaymentMethod!: string;
   isLoading = signal(false);
   isInitiatingPayment = signal(false);
-
-  onSelectedAddress(address: IAddress) {
-    this.selectedAddress.set(address);
-  }
 
   onSelectPaymentMethod(method: string) {
     this.selectPaymentMethod = method;

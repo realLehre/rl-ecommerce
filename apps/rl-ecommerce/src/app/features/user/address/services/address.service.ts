@@ -15,6 +15,7 @@ export class AddressService {
   authService = inject(AuthService);
   private http = inject(HttpClient);
   activeAddress = signal<IAddress | null>(null);
+  checkoutAddress = signal<IAddress | null>(null);
   addressSignal = signal<IAddress[] | null>(null);
 
   constructor() {}

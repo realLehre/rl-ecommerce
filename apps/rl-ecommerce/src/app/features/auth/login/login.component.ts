@@ -13,16 +13,14 @@ import {
 } from '@angular/forms';
 
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { NgClass } from '@angular/common';
 import { AuthService } from '../services/auth.service';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 import { ToastService } from '../../../shared/services/toast.service';
-import { UserAccountService } from '../../user/user-account/services/user-account.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, NgClass, LoaderComponent],
+  imports: [ReactiveFormsModule, RouterLink, LoaderComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
