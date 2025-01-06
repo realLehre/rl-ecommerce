@@ -143,7 +143,7 @@
               {{ productDetailsData().category.name }}
             </p>
           </div>
-          @if (!productDetailsData().isSoldOut && cart()) {
+          @if (!productDetailsData().isSoldOut) {
             <div class="space-y-2 mt-5">
               <h3 class="text-xs text-type_title font-semibold">QUANTITY</h3>
               <div>
@@ -193,21 +193,6 @@
                   </button>
                 }
               }
-            </div>
-          } @else {
-            <div class="mt-5">
-              <p-skeleton width="10rem" height="2rem" />
-            </div>
-
-            <div
-              class="flex items-center justify-between mt-8 flex-wrap gap-x-3 gap-y-2 text-sm mobile:text-base"
-            >
-              <div class="flex-1">
-                <p-skeleton width="100%" height="3rem" borderRadius="50px" />
-              </div>
-              <div class="flex-1">
-                <p-skeleton width="100%" height="3rem" borderRadius="50px" />
-              </div>
             </div>
           }
         </div>
