@@ -166,7 +166,7 @@ export class AdminAddProductComponent
 
   onCancelEdit() {
     this.editCanceled.set(true);
-    this.ignoreCanDeactivate.set(false);
+    this.ignoreCanDeactivate.set(true);
     this.isEditing.set(false);
     localStorage.removeItem('selectedProduct');
     this.location.back();
@@ -191,7 +191,10 @@ export class AdminAddProductComponent
 
   @HostListener('window:beforeunload', ['$event'])
   beforeUnloadNotification($event: any) {
-    if (!this.ignoreCanDeactivate() && !this.canDeactivate()) {
+    if (this.ignoreCanDeactivate()) {
+      $event.returnValue = true;
+    }
+    if (!this.canDeactivate()) {
       $event.returnValue = true;
     }
   }

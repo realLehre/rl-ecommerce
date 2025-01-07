@@ -68,9 +68,9 @@ export class AdminProductFormComponent implements OnInit {
   ngOnInit() {
     this.productForm = this.fb.group({
       name: [null, Validators.required],
-      price: [null, Validators.required],
-      previousPrice: [null],
-      unit: [null, Validators.required],
+      price: [null, [Validators.required, Validators.min(1)]],
+      previousPrice: [null, Validators.min(0)],
+      unit: [null, [Validators.required, Validators.min(0)]],
       categoryId: [null, Validators.required],
       subCategoryId: [null, Validators.required],
       description: [null, Validators.required],
