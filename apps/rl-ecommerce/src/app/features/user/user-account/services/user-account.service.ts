@@ -3,7 +3,7 @@ import { AuthService } from '../../../auth/services/auth.service';
 import { HttpClient } from '@angular/common/http';
 
 import { environment } from '../../../../../environments/environment.development';
-import { of } from 'rxjs';
+import { of, retry } from 'rxjs';
 import { IUser } from '../../models/user.interface';
 
 @Injectable({
@@ -31,7 +31,9 @@ export class UserAccountService {
   getUser(id: string) {
     return this.userSignal()
       ? of(this.userSignal())
-      : this.http.get<IUser>(`${this.baseUrl}users/single/${id}`).pipe();
+      : this.http
+          .get<IUser>(`${this.baseUrl}users/single/${id}`)
+          .pipe(retry(3));
   }
 
   updateUser(data: { name: string; phoneNumber: string }) {
