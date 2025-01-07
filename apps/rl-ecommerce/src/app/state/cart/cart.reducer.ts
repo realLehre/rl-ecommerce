@@ -79,7 +79,7 @@ export const initialState: CartState = {
   },
   merge: {
     error: null,
-    status: 'no-merge',
+    status: 'success',
   },
 };
 
