@@ -22,8 +22,9 @@
     <div class="space-y-4 grow w-full min-[750px]:w-[40%]">
       <h3 class="font-semibold text-type_title">Your order</h3>
       @if (
-        cartState()?.status == 'success' ||
-        cartState()?.merge?.status == 'success'
+        cartState()?.status == 'success' &&
+        (cartState()?.merge?.status !== 'merge' ||
+          cartState()?.merge?.status == 'success')
       ) {
         <app-order-summary [cart]="cartState()?.cart!" />
       } @else {
