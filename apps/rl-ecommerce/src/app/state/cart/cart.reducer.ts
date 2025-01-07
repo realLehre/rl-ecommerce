@@ -45,6 +45,7 @@ export interface CartState {
   merge: {
     error: string | null;
     status: string;
+    isIdle: boolean;
   };
 }
 
@@ -79,7 +80,8 @@ export const initialState: CartState = {
   },
   merge: {
     error: null,
-    status: 'success',
+    status: 'pending',
+    isIdle: true,
   },
 };
 
@@ -102,18 +104,18 @@ export const cartReducer = createReducer(
 
   on(mergeCart, (state) => ({
     ...state,
-    merge: { ...state.merge, status: 'loading' },
+    merge: { ...state.merge, status: 'loading', isIdle: false },
   })),
 
   on(mergeCartSuccess, (state, { cart }) => ({
     ...state,
     cart: cart!,
-    merge: { ...state.merge, status: 'success', error: null },
+    merge: { ...state.merge, status: 'success', error: null, isIdle: true },
   })),
 
   on(mergeCartFailure, (state, { error }) => ({
     ...state,
-    merge: { ...state.merge, status: 'error', error },
+    merge: { ...state.merge, status: 'error', error, isIdle: true },
   })),
 
   on(addToCart, (state, { product }) => ({
