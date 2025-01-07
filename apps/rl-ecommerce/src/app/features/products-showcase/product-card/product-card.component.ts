@@ -72,16 +72,18 @@ export class ProductCardComponent implements OnInit {
   isAddingToCart = toSignal(
     this.store.select(selectCartLoadingOperations).pipe(
       tap((res) => {
-        if (res.error) {
-          this.toast.showToast({
-            type: 'error',
-            message: res.error,
-          });
-        } else if (res.add?.status === 'success') {
-          this.toast.showToast({
-            type: 'success',
-            message: `${this.product()?.name} added to cart!`,
-          });
+        if (this.productId() == res.productId) {
+          if (res.error) {
+            this.toast.showToast({
+              type: 'error',
+              message: res.error,
+            });
+          } else if (res.add?.status === 'success') {
+            this.toast.showToast({
+              type: 'success',
+              message: `${this.product()?.name} added to cart!`,
+            });
+          }
         }
       }),
       map((operation) =>
