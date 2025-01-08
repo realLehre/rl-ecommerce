@@ -70,7 +70,9 @@ export class AdminUserService {
   }
 
   getUserById(id: string) {
-    return this.http.get<IAdminSingleUser>(`${this.apiUrl}/${id}`);
+    return this.http.get<IAdminSingleUser>(
+      `${this.apiUrl}/single/with-order/${id}`,
+    );
   }
 
   createRouteQuery(filter: IAdminUserFilter) {

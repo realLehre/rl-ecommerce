@@ -22,7 +22,7 @@
       <h3 class="text-type_title font-semibold">USER DETAILS</h3>
     </div>
   </div>
-  @if (userData()) {
+  @if (!isLoading() && !isError()) {
     <div>
       <h3
         class="text-base mobile:text-lg text-type_title_gray mb-6 font-semibold capitalize"
@@ -97,7 +97,7 @@
         <div class="text-sm">
           <h5 class="text-type_caption">Email</h5>
           <p class="text-type_title_gray font-semibold">
-            {{ userData()?.name }}
+            {{ userData()?.email }}
           </p>
         </div>
 
@@ -115,6 +115,10 @@
           </p>
         </div>
       </div>
+    </div>
+  } @else if (isError()) {
+    <div class="flex flex-col items-center justify-center">
+      <p class="text-type_caption text-center">{{ errorMessage() }}</p>
     </div>
   } @else {
     <div>

@@ -14,7 +14,6 @@ import {
 } from './admin-user.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { GenericTableComponent } from '../../../shared/components/generic-table/generic-table.component';
-import { PaginationInstance } from 'ngx-pagination';
 import { catchError, Observable, of, switchMap, tap } from 'rxjs';
 import { CalendarModule } from 'primeng/calendar';
 import { DatePipe, NgClass } from '@angular/common';
