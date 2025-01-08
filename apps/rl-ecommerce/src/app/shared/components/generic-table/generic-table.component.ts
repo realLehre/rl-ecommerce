@@ -3,28 +3,16 @@ import {
   Component,
   computed,
   ContentChild,
-  inject,
   input,
   OnInit,
   output,
-  SimpleChanges,
   TemplateRef,
-  ViewChild,
 } from '@angular/core';
-import { AdminProductsService } from '../../../features/admin/admin-products/services/admin-products.service';
 import { NgClass, NgTemplateOutlet } from '@angular/common';
-import { IProduct } from '../../../features/products/model/product.interface';
-import { NgxPaginationModule, PaginationInstance } from 'ngx-pagination';
+import { NgxPaginationModule } from 'ngx-pagination';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Menu } from 'primeng/menu';
 import { SkeletonModule } from 'primeng/skeleton';
-import {
-  debounceTime,
-  distinctUntilChanged,
-  filter,
-  map,
-  switchMap,
-} from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 
 @Component({
   selector: 'app-generic-table',

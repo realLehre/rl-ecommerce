@@ -28,7 +28,7 @@
         </div>
       } @else if (product().previousPrice) {
         <div
-          class="absolute shadow-md top-0 right-0 p-[2px] bg-primary text-white text-sm bg-opacity-75"
+          class="absolute shadow-md top-0 right-0 p-[2px] bg-primary text-white text-sm bg-opacity-75 z-[104]"
         >
           -{{
             product().price | pricePercentageDecrease: product().previousPrice
