@@ -9,7 +9,6 @@ import { BreadcrumbComponent } from '../../shared/components/breadcrumb/breadcru
 import { CheckoutAddressComponent } from './checkout-address/checkout-address.component';
 import { OrderSummaryComponent } from './order-summary/order-summary.component';
 import { PaymentOptionsComponent } from './payment-options/payment-options.component';
-import { IAddress } from '../user/models/address.interface';
 import { CartService } from '../../shared/services/cart.service';
 import { Router } from '@angular/router';
 import { OrderService } from '../../shared/services/order.service';
