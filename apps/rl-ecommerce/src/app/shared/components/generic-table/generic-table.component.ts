@@ -7,6 +7,7 @@ import {
   input,
   OnInit,
   output,
+  SimpleChanges,
   TemplateRef,
   ViewChild,
 } from '@angular/core';

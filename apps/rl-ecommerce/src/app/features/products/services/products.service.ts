@@ -15,7 +15,7 @@ export class ProductsService {
   productSignal = signal<IProductResponse | null>(null);
   activeProduct = signal<IProduct | null>(null);
   paginationConfig = signal<PaginationInstance | null>(null);
-  pageSize = signal(10);
+  pageSize = signal(12);
   searchedProductsSignal = signal<IProduct[] | null>(null);
   isSearchingProducts = signal(false);
   averageRating = computed(() => {
@@ -58,7 +58,6 @@ export class ProductsService {
               totalItems: res.totalItems,
               id: 'productPagination',
             });
-
             this.productSignal.set(res);
           }),
         );
