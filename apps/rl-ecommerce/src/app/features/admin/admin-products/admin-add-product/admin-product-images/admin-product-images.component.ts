@@ -103,10 +103,15 @@ export class AdminProductImagesComponent implements OnInit {
     // Validate file type and size
     if (file) {
       const maxSize = 5 * 1024 * 1024; // 5MB
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+      const allowedTypes = [
+        'image/jpeg',
+        'image/png',
+        'image/avif',
+        'image/webp',
+      ];
 
       if (!allowedTypes.includes(file.type)) {
-        alert('Only JPEG, PNG, and GIF images are allowed');
+        alert('Only JPEG, PNG, AVIF, WEBP images are allowed');
         return;
       }
 
