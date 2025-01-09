@@ -68,6 +68,7 @@ export class ProductCardComponent implements OnInit {
     );
   });
   seeDetails = output();
+  ProductCard = '';
 
   isAddingToCart = toSignal(
     this.store.select(selectCartLoadingOperations).pipe(
