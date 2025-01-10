@@ -1,14 +1,24 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PageNotFoundComponent } from './page-not-found.component';
+import { provideRouter } from '@angular/router';
+import { provideStore } from '@ngrx/store';
+import { provideHttpClient } from '@angular/common/http';
+import { DialogService } from 'primeng/dynamicdialog';
 
-describe('PageNotFoundComponent', () => {
+fdescribe('PageNotFoundComponent', () => {
   let component: PageNotFoundComponent;
   let fixture: ComponentFixture<PageNotFoundComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [PageNotFoundComponent],
+      providers: [
+        provideRouter([]),
+        provideStore(),
+        provideHttpClient(),
+        DialogService,
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(PageNotFoundComponent);
@@ -18,5 +28,10 @@ describe('PageNotFoundComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should have title', () => {
+    expect(component.title).toBeDefined();
+    expect(component.title).toEqual('test');
   });
 });

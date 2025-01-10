@@ -12,7 +12,7 @@ import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { provideStore } from '@ngrx/store';
 import { DialogService } from 'primeng/dynamicdialog';
 
-fdescribe('ProductCardComponent', () => {
+describe('ProductCardComponent', () => {
   let component: ProductCardComponent;
   let fixture: ComponentFixture<ProductCardComponent>;
 
@@ -35,6 +35,7 @@ fdescribe('ProductCardComponent', () => {
 
     fixture = TestBed.createComponent(ProductCardComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('required', 'test');
     fixture.detectChanges();
   });
 
