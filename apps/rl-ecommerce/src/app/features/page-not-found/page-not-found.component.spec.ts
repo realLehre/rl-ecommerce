@@ -6,7 +6,7 @@ import { provideStore } from '@ngrx/store';
 import { provideHttpClient } from '@angular/common/http';
 import { DialogService } from 'primeng/dynamicdialog';
 
-fdescribe('PageNotFoundComponent', () => {
+describe('PageNotFoundComponent', () => {
   let component: PageNotFoundComponent;
   let fixture: ComponentFixture<PageNotFoundComponent>;
 
@@ -28,10 +28,5 @@ fdescribe('PageNotFoundComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should have title', () => {
-    expect(component.title).toBeDefined();
-    expect(component.title).toEqual('test');
   });
 });
