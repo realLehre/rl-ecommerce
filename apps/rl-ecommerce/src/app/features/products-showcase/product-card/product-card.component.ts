@@ -30,6 +30,7 @@ import { Store } from '@ngrx/store';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { selectCart, selectCartLoadingOperations } from '../../../state/state';
 import { map, tap } from 'rxjs';
+import { ICart } from '../../../shared/models/cart.interface';
 
 @Component({
   selector: 'app-product-card',
@@ -61,18 +62,19 @@ export class ProductCardComponent implements OnInit {
     Array.from({ length: 5 }, (_, i) => ({ star: i + 1, active: false })),
   );
   quantity: number = 1;
-  cart = toSignal(this.store.select(selectCart));
+  cart = toSignal(this.store.select(selectCart), { initialValue: {} as ICart });
   productInCart = computed(() => {
     return this.cart()?.cartItems?.find(
       (cartItem) => cartItem.productId === this.product().id,
     );
   });
   seeDetails = output();
+  ProductCard = '';
 
   isAddingToCart = toSignal(
     this.store.select(selectCartLoadingOperations).pipe(
       tap((res) => {
-        if (this.productId() == res.productId) {
+        if (this.productId() == res?.productId) {
           if (res.error) {
             this.toast.showToast({
               type: 'error',
@@ -87,7 +89,7 @@ export class ProductCardComponent implements OnInit {
         }
       }),
       map((operation) =>
-        this.productId() == operation.productId
+        this.productId() == operation?.productId
           ? operation.error
             ? false
             : operation.add?.loading

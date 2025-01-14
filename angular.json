@@ -74,6 +74,20 @@
             }
           },
           "defaultConfiguration": "development"
+        },
+        "test": {
+          "executor": "@angular-devkit/build-angular:karma",
+          "options": {
+            "polyfills": ["zone.js", "zone.js/testing"],
+            "tsConfig": "apps/rl-ecommerce/tsconfig.spec.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "apps/rl-ecommerce/src/favicon.ico",
+              "apps/rl-ecommerce/src/assets"
+            ],
+            "styles": ["apps/rl-ecommerce/src/styles.scss"],
+            "scripts": []
+          }
         }
       }
     }

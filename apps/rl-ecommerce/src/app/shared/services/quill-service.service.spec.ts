@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { QuillServiceService } from './quill-service.service';
+import { MQuillService } from './quill-service.service';
 
-describe('QuillServiceService', () => {
-  let service: QuillServiceService;
+describe('MQuillService', () => {
+  let service: MQuillService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(QuillServiceService);
+    service = TestBed.inject(MQuillService);
   });
 
   it('should be created', () => {
