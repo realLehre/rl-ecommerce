@@ -78,25 +78,23 @@ export class ProductsService {
 
   getSearchedProducts(input: string) {
     this.isSearchingProducts.set(true);
-    return this.searchedProductsSignal()
-      ? of(this.searchedProductsSignal())
-      : this.http
-          .get<IProduct[]>(`${this.baseUrl}?search=${input}`)
-          .pipe(
-            tap((res) => {
-              this.searchedProductsSignal.set(res);
-              this.isSearchingProducts.set(false);
-            }),
-          )
-          .subscribe();
+    return this.http
+      .get<IProduct[]>(`${this.baseUrl}?search=${input}`)
+      .pipe(
+        tap((res) => {
+          this.searchedProductsSignal.set(res);
+          this.isSearchingProducts.set(false);
+        }),
+      )
+      .subscribe();
   }
 
   createSlug(name: string): any {
     if (!name) return;
     return name
       .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-') // Replace spaces and special characters with hyphen
-      .replace(/^-+|-+$/g, ''); // Trim leading or trailing hyphens
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
   }
 
   getStarWidth(starIndex: number): string {

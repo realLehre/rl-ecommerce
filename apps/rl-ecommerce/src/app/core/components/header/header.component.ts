@@ -73,7 +73,6 @@ export class HeaderComponent implements AfterViewInit, OnInit {
         map(() => this.searchInput.nativeElement.value.toLowerCase()),
       )
       .subscribe((val) => {
-        this.productService.searchedProductsSignal.set(null);
         if (val !== '') {
           this.productService.getSearchedProducts(val);
         }

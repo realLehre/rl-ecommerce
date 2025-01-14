@@ -68,7 +68,6 @@ export class ProductDetailsComponent implements OnInit {
   quantity: number = 1;
   isCollapsed = signal(true);
   limit = 200;
-  productId!: string;
   isShowingFullReview = this.reviewService.seeingFullReview;
   stars = signal(
     Array.from({ length: 5 }, (_, i) => ({ star: i + 1, active: false })),
@@ -80,12 +79,15 @@ export class ProductDetailsComponent implements OnInit {
     );
   });
   id = signal(this.route.snapshot.queryParams['id']);
+  productId = computed(() =>
+    this.activeProduct() ? this.activeProduct()?.id : this.id(),
+  );
   isLoading = signal(true);
   isError = signal(false);
   errorMessage = signal(undefined);
   refreshTrigger = signal(0);
   refresh = computed(() => ({
-    id: this.id(),
+    id: this.productId(),
     refresh: this.refreshTrigger(),
   }));
   productDetails$: Observable<IProduct | any> = toObservable(this.refresh).pipe(
