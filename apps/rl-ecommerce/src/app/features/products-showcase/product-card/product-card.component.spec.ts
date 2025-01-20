@@ -1,58 +1,3 @@
-// import { ComponentFixture, TestBed } from '@angular/core/testing';
-//
-// import { ProductCardComponent } from './product-card.component';
-// import { provideHttpClientTesting } from '@angular/common/http/testing';
-// import { ProductsService } from '../../products/services/products.service';
-// import { provideHttpClient } from '@angular/common/http';
-// import { ToastService } from '../../../shared/services/toast.service';
-// import { CartService } from '../../../shared/services/cart.service';
-// import { UserAccountService } from '../../user/user-account/services/user-account.service';
-// import { ReviewService } from '../../../shared/services/review.service';
-// import { provideRouter } from '@angular/router';
-// import { provideStore } from '@ngrx/store';
-// import { DialogService } from 'primeng/dynamicdialog';
-//
-// fdescribe('ProductCardComponent', () => {
-//   let component: ProductCardComponent;
-//   let fixture: ComponentFixture<ProductCardComponent>;
-//
-//   beforeEach(async () => {
-//     await TestBed.configureTestingModule({
-//       imports: [ProductCardComponent],
-//       providers: [
-//         provideHttpClientTesting(),
-//         provideHttpClient(),
-//         ProductsService,
-//         ToastService,
-//         CartService,
-//         UserAccountService,
-//         ReviewService,
-//         provideRouter([]),
-//         provideStore(),
-//         DialogService,
-//       ],
-//     }).compileComponents();
-//
-//     fixture = TestBed.createComponent(ProductCardComponent);
-//     component = fixture.componentInstance;
-//     fixture.componentRef.setInput('product', {
-//       id: 1,
-//       name: 'whatever',
-//       ratings: [],
-//     });
-//     await fixture.whenStable();
-//     fixture.detectChanges();
-//   });
-//
-//   it('should create', () => {
-//     expect(component).toBeTruthy();
-//   });
-//
-//   it('should have a title', () => {
-//     expect(component.ProductCard).toBeDefined();
-//   });
-// });
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ProductCardComponent } from './product-card.component';
 import { Router } from '@angular/router';
@@ -74,6 +19,9 @@ import { ProductQuantityComponent } from '../../../shared/components/product-qua
 import { PricePercentageDecreasePipe } from '../../../shared/pipes/price-percentage-decrease.pipe';
 import { provideHttpClient } from '@angular/common/http';
 import { signal, WritableSignal } from '@angular/core';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { ICart } from '../../../shared/models/cart.interface';
+import { IUser } from '../../user/models/user.interface';
 
 fdescribe('ProductCardComponent', () => {
   let component: ProductCardComponent;
@@ -85,6 +33,7 @@ fdescribe('ProductCardComponent', () => {
   let userServiceSpy: jasmine.SpyObj<UserAccountService>;
   let reviewServiceSpy: jasmine.SpyObj<ReviewService>;
   let storeSpy: jasmine.SpyObj<Store>;
+  let store: MockStore;
 
   const mockProduct: IProduct = {
     id: 'd36b53fb-f08b-4b6f-9360-a904c52f2eb8',
@@ -143,6 +92,13 @@ fdescribe('ProductCardComponent', () => {
     ],
   };
 
+  const mockUser: IUser = {
+    id: '1',
+    email: 'test@test.com',
+    name: 'test test',
+    phoneNumber: '91272911',
+  };
+
   const initialCartState = {
     cart: {
       id: '1',
@@ -176,6 +132,27 @@ fdescribe('ProductCardComponent', () => {
   let activeProductSignal: WritableSignal<IProduct | null>;
   let seeingFullReviewSignal: WritableSignal<boolean>;
   beforeEach(async () => {
+    const initialState = {
+      cart: {
+        id: '1',
+        cartItems: [],
+        total: 0,
+      },
+      error: null,
+      status: 'pending',
+      loadingOperations: {
+        add: { loading: false, status: 'idle' },
+        update: { loading: false, status: 'idle' },
+        delete: { loading: false, status: 'idle' },
+        error: null,
+        productId: null,
+      },
+      merge: {
+        error: null,
+        status: 'pending',
+        isIdle: true,
+      },
+    };
     const routerSpyObj = jasmine.createSpyObj('Router', ['navigate']);
     const productServiceSpyObj = jasmine.createSpyObj('ProductsService', [
       'createSlug',
@@ -188,24 +165,28 @@ fdescribe('ProductCardComponent', () => {
     const cartServiceSpyObj = jasmine.createSpyObj(
       'CartService',
       ['createGuestCart'],
-      { user: of(null), guestCart: {} },
+      { user: signal(null), guestCart: {} },
     );
+    cartServiceSpy = jasmine.createSpyObj('CartService', ['createGuestCart'], {
+      user: signal(null),
+      guestCart: {},
+    });
     const userServiceSpyObj = jasmine.createSpyObj('UserAccountService', [], {
       user: of(null),
     });
     const reviewServiceSpyObj = jasmine.createSpyObj('ReviewService', [], {
       seeingFullReview: seeingFullReviewSignal,
     });
-    const storeSpyObj = jasmine.createSpyObj('Store', ['dispatch', 'select']);
-    storeSpyObj.select.and.callFake((selector: any) => {
-      if (selector.name === 'selectCart') {
-        return cartState$.pipe(map((state) => state.cart));
-      }
-      if (selector.name === 'selectCartLoadingOperations') {
-        return loadingOperations$;
-      }
-      return of(null);
-    });
+    // const storeSpyObj = jasmine.createSpyObj('Store', ['dispatch', 'select']);
+    // storeSpyObj.select.and.callFake((selector: any) => {
+    //   if (selector.name === 'selectCart') {
+    //     return cartState$.pipe(map((state) => state.cart));
+    //   }
+    //   if (selector.name === 'selectCartLoadingOperations') {
+    //     return loadingOperations$;
+    //   }
+    //   return of(null);
+    // });
 
     await TestBed.configureTestingModule({
       imports: [
@@ -218,13 +199,15 @@ fdescribe('ProductCardComponent', () => {
       ],
       providers: [
         provideHttpClient(),
+        provideMockStore({
+          initialState,
+        }),
         { provide: Router, useValue: routerSpyObj },
         { provide: ProductsService, useValue: productServiceSpyObj },
         { provide: ToastService, useValue: toastServiceSpyObj },
-        { provide: CartService, useValue: cartServiceSpyObj },
+        { provide: CartService, useValue: cartServiceSpy },
         { provide: UserAccountService, useValue: userServiceSpyObj },
         { provide: ReviewService, useValue: reviewServiceSpyObj },
-        { provide: Store, useValue: storeSpyObj },
       ],
     }).compileComponents();
 
@@ -243,6 +226,7 @@ fdescribe('ProductCardComponent', () => {
       ReviewService,
     ) as jasmine.SpyObj<ReviewService>;
     storeSpy = TestBed.inject(Store) as jasmine.SpyObj<Store>;
+    store = TestBed.inject(MockStore);
 
     fixture = TestBed.createComponent(ProductCardComponent);
     component = fixture.componentInstance;
@@ -260,5 +244,13 @@ fdescribe('ProductCardComponent', () => {
 
   it('should calculate average rating correctly', () => {
     expect(component.averageRating()).toBe(3);
+  });
+
+  it('should create a guest cart and load it if no user or guest cart exists', () => {
+    cartServiceSpy.user.set(null);
+    cartServiceSpy.guestCart = {} as ICart;
+    spyOn(store, 'dispatch').and.callThrough();
+    component.onAddToCart();
+    expect(cartServiceSpy.createGuestCart).toHaveBeenCalled();
   });
 });
