@@ -22,6 +22,8 @@ import { signal, WritableSignal } from '@angular/core';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { ICart } from '../../../shared/models/cart.interface';
 import { IUser } from '../../user/models/user.interface';
+import { addToCart, loadCart } from '../../../state/cart/cart.actions';
+import { selectCart } from '../../../state/state';
 
 fdescribe('ProductCardComponent', () => {
   let component: ProductCardComponent;
@@ -99,36 +101,6 @@ fdescribe('ProductCardComponent', () => {
     phoneNumber: '91272911',
   };
 
-  const initialCartState = {
-    cart: {
-      id: '1',
-      cartItems: [],
-      total: 0,
-    },
-    error: null,
-    status: 'pending',
-    loadingOperations: {
-      add: { loading: false, status: 'idle' },
-      update: { loading: false, status: 'idle' },
-      delete: { loading: false, status: 'idle' },
-      error: null,
-      productId: null,
-    },
-    merge: {
-      error: null,
-      status: 'pending',
-      isIdle: true,
-    },
-  };
-
-  const cartState$ = new BehaviorSubject(initialCartState);
-  const loadingOperations$ = new BehaviorSubject({
-    add: { loading: false, status: 'idle' },
-    update: { loading: false, status: 'idle' },
-    delete: { loading: false, status: 'idle' },
-    error: null,
-    productId: null,
-  });
   let activeProductSignal: WritableSignal<IProduct | null>;
   let seeingFullReviewSignal: WritableSignal<boolean>;
   beforeEach(async () => {
@@ -162,11 +134,6 @@ fdescribe('ProductCardComponent', () => {
     const toastServiceSpyObj = jasmine.createSpyObj('ToastService', [
       'showToast',
     ]);
-    const cartServiceSpyObj = jasmine.createSpyObj(
-      'CartService',
-      ['createGuestCart'],
-      { user: signal(null), guestCart: {} },
-    );
     cartServiceSpy = jasmine.createSpyObj('CartService', ['createGuestCart'], {
       user: signal(null),
       guestCart: {},
@@ -177,16 +144,6 @@ fdescribe('ProductCardComponent', () => {
     const reviewServiceSpyObj = jasmine.createSpyObj('ReviewService', [], {
       seeingFullReview: seeingFullReviewSignal,
     });
-    // const storeSpyObj = jasmine.createSpyObj('Store', ['dispatch', 'select']);
-    // storeSpyObj.select.and.callFake((selector: any) => {
-    //   if (selector.name === 'selectCart') {
-    //     return cartState$.pipe(map((state) => state.cart));
-    //   }
-    //   if (selector.name === 'selectCartLoadingOperations') {
-    //     return loadingOperations$;
-    //   }
-    //   return of(null);
-    // });
 
     await TestBed.configureTestingModule({
       imports: [
@@ -250,7 +207,23 @@ fdescribe('ProductCardComponent', () => {
     cartServiceSpy.user.set(null);
     cartServiceSpy.guestCart = {} as ICart;
     spyOn(store, 'dispatch').and.callThrough();
+    // store.overrideSelector(selectCart, {
+    //   items: [{ product: component.product(), unit: component.quantity }],
+    // });
     component.onAddToCart();
     expect(cartServiceSpy.createGuestCart).toHaveBeenCalled();
+    expect(store.dispatch).toHaveBeenCalledWith(loadCart());
+    expect(store.dispatch).toHaveBeenCalledWith(
+      addToCart({ product: component.product(), unit: component.quantity }),
+    );
+  });
+
+  it('should add item to cart if user is logged in', () => {
+    cartServiceSpy.user.set(mockUser);
+    spyOn(store, 'dispatch').and.callThrough();
+    component.onAddToCart();
+    expect(store.dispatch).toHaveBeenCalledWith(
+      addToCart({ product: component.product(), unit: component.quantity }),
+    );
   });
 });
