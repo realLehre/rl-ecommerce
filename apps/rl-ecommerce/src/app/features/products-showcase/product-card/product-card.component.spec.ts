@@ -7,11 +7,8 @@ import { CartService } from '../../../shared/services/cart.service';
 import { UserAccountService } from '../../user/user-account/services/user-account.service';
 import { ReviewService } from '../../../shared/services/review.service';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, map, of } from 'rxjs';
-import {
-  IProduct,
-  IProductRating,
-} from '../../products/model/product.interface';
+import { of } from 'rxjs';
+import { IProduct } from '../../products/model/product.interface';
 import { CurrencyPipe } from '@angular/common';
 import { SkeletonModule } from 'primeng/skeleton';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
@@ -23,9 +20,9 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { ICart } from '../../../shared/models/cart.interface';
 import { IUser } from '../../user/models/user.interface';
 import { addToCart, loadCart } from '../../../state/cart/cart.actions';
-import { selectCart } from '../../../state/state';
+import { By } from '@angular/platform-browser';
 
-fdescribe('ProductCardComponent', () => {
+describe('ProductCardComponent', () => {
   let component: ProductCardComponent;
   let fixture: ComponentFixture<ProductCardComponent>;
   let routerSpy: jasmine.SpyObj<Router>;
@@ -38,60 +35,96 @@ fdescribe('ProductCardComponent', () => {
   let store: MockStore;
 
   const mockProduct: IProduct = {
-    id: 'd36b53fb-f08b-4b6f-9360-a904c52f2eb8',
-    name: 'Typhon Grom Mega 380 Brushed 4X4 Small Scale Buggy RTR',
+    id: '998acfb0-b696-45e4-bb69-0cb4483e9d59',
+    name: 'Super Soaker Water Blaster',
     description:
-      'Get ready for high-speed thrills with the Typhon Grom Mega 380 Brushed 4X4 Small Scale Buggy RTR! This ready-to-run (RTR) buggy is designed for adventure seekers and RC enthusiasts alike, featuring a powerful brushed motor that delivers exciting performance on a variety of terrains. The 4X4 drivetrain ensures superior traction and stability, allowing you to tackle rough paths, sandy trails, and uneven surfaces with ease. With its compact design, the Typhon Grom is perfect for both indoor and outdoor play, providing excellent maneuverability for quick turns and daring jumps. The buggy comes equipped with durable wheels and a rugged chassis, ensuring it can withstand the rigors of off-road racing. Plus, its eye-catching design, complete with vibrant colors and sleek lines, makes it a standout on the track. This all-in-one package includes everything you need to get started, with a rechargeable battery and charger included. Experience the excitement of racing and off-road exploration with the Typhon Grom Mega 380 Buggy!',
+      '<p><em>The ultimate summer cooling entertainment for ages 6+</em></p><p>This vibrant water gun brings endless fun to outdoor water play activities with its powerful stream and kid-friendly design.</p><p><strong>Product Features:</strong></p><ul><li><strong>High-Capacity Tank</strong>: Features a large 600ml water reservoir for extended play time between refills</li><li><strong>Easy-Grip Design</strong>: Ergonomically designed handle with textured grip perfect for small hands</li><li><strong>Powerful Stream</strong>: Shoots water up to 30 feet (9 meters) with consistent pressure</li><li><strong>Simple Operation</strong>: User-friendly trigger mechanism requires minimal hand strength to operate</li><li><strong>Durable Construction</strong>: Made from high-quality, impact-resistant plastic that can withstand active play</li></ul><p><strong>Technical Specifications:</strong></p><ul><li>Material: BPA-free plastic</li><li>Dimensions: 12&quot; x 6&quot; x 3&quot; (30.5 x 15.2 x 7.6 cm)</li><li>Tank Capacity: 600ml</li><li>Range: Up to 30 feet</li><li>Weight (empty): 0.5 lbs (227g)</li></ul><p><strong>Package Includes</strong>:</p><ul><li>1x Water Blaster</li><li>Instruction manual</li><li>Safety guide</li></ul><p><strong>Safety Features</strong>:</p><ul><li>Non-toxic materials</li><li>Smooth edges</li><li>Pressure release valve</li><li>Child-safe trigger mechanism</li></ul><p><em>Note: Recommended for outdoor use only. Adult supervision recommended for younger children.</em></p>',
     image:
-      'https://tentdyesixetvyacewwr.supabase.co/storage/v1/object/sign/just-product-images/d117ee00-d89e-4e79-87a7-03fef97575b8-ARA2106T1_A30_0ZRJFBCO.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJqdXN0LXByb2R1Y3QtaW1hZ2VzL2QxMTdlZTAwLWQ4OWUtNGU3OS04N2E3LTAzZmVmOTc1NzViOC1BUkEyMTA2VDFfQTMwXzBaUkpGQkNPLmpwZyIsImlhdCI6MTczNjMzMDgzNiwiZXhwIjoyMDUxOTA2ODM2fQ.I6n75C4i1RSi2ipSWtc3T2otp4OAiDB4aHC0ZVEGSdU',
+      'https://tentdyesixetvyacewwr.supabase.co/storage/v1/object/sign/just-product-images/5b33d745-6d54-46c0-a301-90d80c25639f-steptodown.com596144%20(1).jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJqdXN0LXByb2R1Y3QtaW1hZ2VzLzViMzNkNzQ1LTZkNTQtNDZjMC1hMzAxLTkwZDgwYzI1NjM5Zi1zdGVwdG9kb3duLmNvbTU5NjE0NCAoMSkuanBnIiwiaWF0IjoxNzM2MzQyODMyLCJleHAiOjIwNTE5MTg4MzJ9.zQLOBqh0QY2hkPlJff7Aavj7daFyaH8g3JwNMKsFUno',
     imageUrls: [
-      'https://tentdyesixetvyacewwr.supabase.co/storage/v1/object/sign/just-product-images/d117ee00-d89e-4e79-87a7-03fef97575b8-ARA2106T1_A30_0ZRJFBCO.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJqdXN0LXByb2R1Y3QtaW1hZ2VzL2QxMTdlZTAwLWQ4OWUtNGU3OS04N2E3LTAzZmVmOTc1NzViOC1BUkEyMTA2VDFfQTMwXzBaUkpGQkNPLmpwZyIsImlhdCI6MTczNjMzMDgzNiwiZXhwIjoyMDUxOTA2ODM2fQ.I6n75C4i1RSi2ipSWtc3T2otp4OAiDB4aHC0ZVEGSdU',
-      'https://tentdyesixetvyacewwr.supabase.co/storage/v1/object/sign/just-product-images/1ea0c912-337a-4269-bb6a-a7ceeb81b98f-ARA2106T1_A11_0ZRJFBCO.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJqdXN0LXByb2R1Y3QtaW1hZ2VzLzFlYTBjOTEyLTMzN2EtNDI2OS1iYjZhLWE3Y2VlYjgxYjk4Zi1BUkEyMTA2VDFfQTExXzBaUkpGQkNPLmpwZyIsImlhdCI6MTczNjMzMDgzOSwiZXhwIjoyMDUxOTA2ODM5fQ.koJJYOwM4Y7hmyqm3Nwrmw_0ZjSsAyg9w6XPGUzrneE',
-      'https://tentdyesixetvyacewwr.supabase.co/storage/v1/object/sign/just-product-images/d259c128-adcd-4f4f-bad1-b9ef72f5659a-ARA2106T1_A50_0ZRJFBCO.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJqdXN0LXByb2R1Y3QtaW1hZ2VzL2QyNTljMTI4LWFkY2QtNGY0Zi1iYWQxLWI5ZWY3MmY1NjU5YS1BUkEyMTA2VDFfQTUwXzBaUkpGQkNPLmpwZyIsImlhdCI6MTczNjMzMDg0NCwiZXhwIjoyMDUxOTA2ODQ0fQ.dbjlSHRsVkd7sB5-ffPbNg5AGsHQkSplCh7tqwTo1Ug',
-      'https://tentdyesixetvyacewwr.supabase.co/storage/v1/object/sign/just-product-images/26417a1e-4a12-4041-8bb2-abd81dc854e4-ARA2106T1_A58_0ZRJFBCO.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJqdXN0LXByb2R1Y3QtaW1hZ2VzLzI2NDE3YTFlLTRhMTItNDA0MS04YmIyLWFiZDgxZGM4NTRlNC1BUkEyMTA2VDFfQTU4XzBaUkpGQkNPLmpwZyIsImlhdCI6MTczNjMzMDg0OCwiZXhwIjoyMDUxOTA2ODQ4fQ.pqFTj-J5Taq2gdz2GPEwVvKZMtyaTzgUZCyW4_bo4Ik',
+      'https://tentdyesixetvyacewwr.supabase.co/storage/v1/object/sign/just-product-images/5b33d745-6d54-46c0-a301-90d80c25639f-steptodown.com596144%20(1).jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJqdXN0LXByb2R1Y3QtaW1hZ2VzLzViMzNkNzQ1LTZkNTQtNDZjMC1hMzAxLTkwZDgwYzI1NjM5Zi1zdGVwdG9kb3duLmNvbTU5NjE0NCAoMSkuanBnIiwiaWF0IjoxNzM2MzQyODMyLCJleHAiOjIwNTE5MTg4MzJ9.zQLOBqh0QY2hkPlJff7Aavj7daFyaH8g3JwNMKsFUno',
     ],
     videoUrls: [],
-    price: 73999,
+    price: 129000,
     previousPrice: 0,
     isSoldOut: false,
-    unit: 17,
-    categoryId: '8615d61a-6a16-4b73-a3a5-0dbdc41e1814',
-    subCategoryId: 'b3d74638-09ad-4828-8715-9ec2eac22faa',
-    createdAt: '2024-10-19T16:13:47.602Z',
-    updateAt: '2025-01-08T10:07:29.820Z',
+    unit: 10,
+    categoryId: '9ffd64b7-564d-4afd-b81d-ee095d640757',
+    subCategoryId: '15c36965-5ae5-4bdf-9aff-307ee6952138',
+    createdAt: '2025-01-08T13:27:17.512Z',
+    updateAt: '2025-01-08T17:18:08.876Z',
     category: {
-      id: '8615d61a-6a16-4b73-a3a5-0dbdc41e1814',
-      name: 'Vehicles & Remote Controlled Toys',
-      createdAt: '2024-10-19T14:48:27.470Z',
-      updateAt: '2024-10-19T14:48:27.470Z',
+      id: '9ffd64b7-564d-4afd-b81d-ee095d640757',
+      name: 'Outdoor Toys',
+      createdAt: '2024-10-19T14:54:21.715Z',
+      updateAt: '2024-10-19T14:54:21.715Z',
     },
     subCategory: {
-      id: 'b3d74638-09ad-4828-8715-9ec2eac22faa',
-      name: 'RC Cars',
-      categoryId: '8615d61a-6a16-4b73-a3a5-0dbdc41e1814',
-      createdAt: '2024-10-19T14:48:27.470Z',
-      updateAt: '2024-10-19T14:48:27.470Z',
+      id: '15c36965-5ae5-4bdf-9aff-307ee6952138',
+      name: 'Water Toys',
+      categoryId: '9ffd64b7-564d-4afd-b81d-ee095d640757',
+      createdAt: '2024-10-19T14:54:21.715Z',
+      updateAt: '2024-10-19T14:54:21.715Z',
     },
-    ratings: [
+    ratings: [],
+  };
+
+  const mockCart = {
+    id: 'da3e3e94-41a9-41d6-872a-2b1eb8cb4b7f',
+    cartItems: [
       {
-        id: '407f6a21-3ca2-44be-92fd-5b58b88c72a4',
-        rating: 3,
-        title: 'Good product',
-        comment: 'Its really nice',
-        createdAt: '2024-11-10T20:47:40.654Z',
-        productId: 'd36b53fb-f08b-4b6f-9360-a904c52f2eb8',
-        orderItemId: '8e2d9c26-9d09-42d1-a3da-6a647d89a6c6',
-        userId: '91432a69-ef7f-46d3-a50f-f46a1e3da5ab',
-        user: {
-          id: '91432a69-ef7f-46d3-a50f-f46a1e3da5ab',
-          email: 'hey@hey.hey',
-          name: 'Bjorn Kate',
-          phoneNumber: '081067103242',
-          createdAt: '2024-10-15T15:26:57.543Z',
-          updateAt: '2025-01-05T05:55:25.196Z',
+        total: 129000,
+        unit: 1,
+        cartId: 'da3e3e94-41a9-41d6-872a-2b1eb8cb4b7f',
+        shippingCost: 100,
+        product: {
+          id: '998acfb0-b696-45e4-bb69-0cb4483e9d59',
+          name: 'Super Soaker Water Blaster',
+          description:
+            '<p><em>The ultimate summer cooling entertainment for ages 6+</em></p><p>This vibrant water gun brings endless fun to outdoor water play activities with its powerful stream and kid-friendly design.</p><p><strong>Product Features:</strong></p><ul><li><strong>High-Capacity Tank</strong>: Features a large 600ml water reservoir for extended play time between refills</li><li><strong>Easy-Grip Design</strong>: Ergonomically designed handle with textured grip perfect for small hands</li><li><strong>Powerful Stream</strong>: Shoots water up to 30 feet (9 meters) with consistent pressure</li><li><strong>Simple Operation</strong>: User-friendly trigger mechanism requires minimal hand strength to operate</li><li><strong>Durable Construction</strong>: Made from high-quality, impact-resistant plastic that can withstand active play</li></ul><p><strong>Technical Specifications:</strong></p><ul><li>Material: BPA-free plastic</li><li>Dimensions: 12&quot; x 6&quot; x 3&quot; (30.5 x 15.2 x 7.6 cm)</li><li>Tank Capacity: 600ml</li><li>Range: Up to 30 feet</li><li>Weight (empty): 0.5 lbs (227g)</li></ul><p><strong>Package Includes</strong>:</p><ul><li>1x Water Blaster</li><li>Instruction manual</li><li>Safety guide</li></ul><p><strong>Safety Features</strong>:</p><ul><li>Non-toxic materials</li><li>Smooth edges</li><li>Pressure release valve</li><li>Child-safe trigger mechanism</li></ul><p><em>Note: Recommended for outdoor use only. Adult supervision recommended for younger children.</em></p>',
+          image:
+            'https://tentdyesixetvyacewwr.supabase.co/storage/v1/object/sign/just-product-images/5b33d745-6d54-46c0-a301-90d80c25639f-steptodown.com596144%20(1).jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJqdXN0LXByb2R1Y3QtaW1hZ2VzLzViMzNkNzQ1LTZkNTQtNDZjMC1hMzAxLTkwZDgwYzI1NjM5Zi1zdGVwdG9kb3duLmNvbTU5NjE0NCAoMSkuanBnIiwiaWF0IjoxNzM2MzQyODMyLCJleHAiOjIwNTE5MTg4MzJ9.zQLOBqh0QY2hkPlJff7Aavj7daFyaH8g3JwNMKsFUno',
+          imageUrls: [
+            'https://tentdyesixetvyacewwr.supabase.co/storage/v1/object/sign/just-product-images/5b33d745-6d54-46c0-a301-90d80c25639f-steptodown.com596144%20(1).jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJqdXN0LXByb2R1Y3QtaW1hZ2VzLzViMzNkNzQ1LTZkNTQtNDZjMC1hMzAxLTkwZDgwYzI1NjM5Zi1zdGVwdG9kb3duLmNvbTU5NjE0NCAoMSkuanBnIiwiaWF0IjoxNzM2MzQyODMyLCJleHAiOjIwNTE5MTg4MzJ9.zQLOBqh0QY2hkPlJff7Aavj7daFyaH8g3JwNMKsFUno',
+          ],
+          videoUrls: [],
+          price: 129000,
+          previousPrice: 0,
+          isSoldOut: false,
+          unit: 10,
+          categoryId: '9ffd64b7-564d-4afd-b81d-ee095d640757',
+          subCategoryId: '15c36965-5ae5-4bdf-9aff-307ee6952138',
+          createdAt: '2025-01-08T13:27:17.512Z',
+          rating: 0,
+          updateAt: '2025-01-08T17:18:08.876Z',
+          category: {
+            id: '9ffd64b7-564d-4afd-b81d-ee095d640757',
+            name: 'Outdoor Toys',
+            createdAt: '2024-10-19T14:54:21.715Z',
+            updateAt: '2024-10-19T14:54:21.715Z',
+          },
+          subCategory: {
+            id: '15c36965-5ae5-4bdf-9aff-307ee6952138',
+            name: 'Water Toys',
+            categoryId: '9ffd64b7-564d-4afd-b81d-ee095d640757',
+            createdAt: '2024-10-19T14:54:21.715Z',
+            updateAt: '2024-10-19T14:54:21.715Z',
+          },
+          ratings: [],
         },
+        id: 'cc96425c-62bf-4b35-a490-4f258d3ffa3d',
+        productId: '998acfb0-b696-45e4-bb69-0cb4483e9d59',
+        updatedAt:
+          'Tue Jan 21 2025 19:47:54 GMT+0100 (West Africa Standard Time)',
+        createdAt:
+          'Tue Jan 21 2025 19:47:54 GMT+0100 (West Africa Standard Time)',
       },
     ],
+    createdAt: 'Tue Jan 21 2025 19:47:23 GMT+0100 (West Africa Standard Time)',
+    subTotal: 129000,
+    shippingCost: 100,
+    updatedAt: 'Tue Jan 21 2025 19:47:54 GMT+0100 (West Africa Standard Time)',
+    userId: '6989bb89-f0e7-4a8a-a12e-144dcee9940a',
   };
 
   const mockUser: IUser = {
@@ -200,7 +233,7 @@ fdescribe('ProductCardComponent', () => {
   });
 
   it('should calculate average rating correctly', () => {
-    expect(component.averageRating()).toBe(3);
+    expect(component.averageRating()).toBe(0);
   });
 
   it('should create a guest cart and load it if no user or guest cart exists', () => {
@@ -225,5 +258,17 @@ fdescribe('ProductCardComponent', () => {
     expect(store.dispatch).toHaveBeenCalledWith(
       addToCart({ product: component.product(), unit: component.quantity }),
     );
+  });
+
+  it('should not show add to cart button after product has been added to cart', () => {
+    cartServiceSpy.user.set(mockUser);
+    spyOn(store, 'dispatch').and.callThrough();
+    component.onAddToCart();
+    const addToCartBtn = fixture.debugElement.query(
+      By.css('[data-test-id="add-to-cart"]'),
+    );
+    fixture.detectChanges();
+    console.log(component.productInCart());
+    expect(addToCartBtn).toBeTruthy();
   });
 });

@@ -98,6 +98,7 @@
           @if (!productInCart()) {
             <button
               class="flex items-center rounded-full justify-between space-x-2 border-[2px] border-primary px-3 py-2 whitespace-nowrap text-xs w-full mobile:w-auto min-w-[100px] text-type_title_gray group/add-btn hover:bg-primary hover:text-white"
+              data-test-id="add-to-cart"
               [disabled]="isAddingToCart()"
               (click)="onAddToCart()"
               type="button"
